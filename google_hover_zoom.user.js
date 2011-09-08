@@ -5,7 +5,7 @@
 // @author         SkyArrow
 // @website        http://userscripts.org/scripts/show/106681
 // @namespace      http://zespia.twbbs.org
-// @version        1.2.3.2
+// @version        1.2.4
 // @include        https://plus.google.com/*
 // ==/UserScript==
 
@@ -20,7 +20,7 @@ function hoverzoom(){
 		$content = $('#content').parent(),
 		wWidth = $window.width(),
 		wHeight = $window.height(),
-		version = '1.2.3.2',
+		version = '1.2.4',
 		picRegex = /\.(jpg|jpeg|gif|bmp|png|tiff)/i,
 		picasaRegex = /\/\w\d+(-\w\d*)*\/([^\/]+)$/;
 		
@@ -682,7 +682,7 @@ function hoverzoom(){
 			$(document).unbind('keydown');
 			$(document).bind('keydown', function(e){
 				var code = e.keyCode || e.which;
-				if ( code == options['hz_fullscreen'] || 27 ) {
+				if ( code == options['hz_fullscreen'] || code == 27 ) {
 					exit();
 				} else if ( code == options['hz_dl_key'] ) {
 					open(url);
