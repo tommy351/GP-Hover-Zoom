@@ -1179,14 +1179,16 @@ function hoverzoom(){
 				newVer = hz_newVersion.version.split('.'),
 				newContent = hz_newVersion.content[options['hz_language']] || hz_newVersion.content['en'],
 				subVer = ( nowVer.length > newVer.length ) ? nowVer.length : newVer.length;
-				
-			for ( var i=0; i<subVer; i++ ) {
-				if ( typeof nowVer[i] == 'undefined' )
+			
+			for ( var i=0; i<subVer; i++ ) {	
+				if (typeof nowVer[i] == 'undefined')
 					nowVer[i] = 0;
 				
-				if ( newVer[i] > nowVer[i] ) {
+				if (newVer[i] > nowVer[i]) {
 					main(hz_newVersion.version, newContent, false);
-					return false;
+					break;
+				} else if (nowVer[i] > newVer[i]) {
+					break;
 				}
 			}
 			
@@ -1199,7 +1201,7 @@ function hoverzoom(){
 			$content.append('<div id="hz_update" class="hz_settings"><h3>'+locale_update_1+'</h3><small></small><div title="'+locale_set_close+'" class="closeButton" id="hz_update_close"></div>'+content+'<a id="hz_update_install" class="button_style greenButton" href="http://userscripts.org/scripts/source/106681.user.js" title="'+locale_update_1+'">'+locale_update_1+'</a><div id="hz_update_cancel" class="button_style whiteButton" title="'+locale_update_4+'">'+locale_update_4+'</div></div>');
 			
 			if ( latest == true ) {
-				$('#hz_update_install').hide();
+				$('#hz_update_install').remove();
 				$('#hz_update small').html('<strong>'+version+'</strong> '+locale_update_6);
 			} else {
 				$('#hz_update small').html(locale_update_2+'<strong>'+newVer+'</strong> / '+locale_update_3+'<strong>'+version+'</strong>');
