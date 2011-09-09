@@ -1,3 +1,6 @@
+/* Functions */
+/* Variables */
+/* Main */
 #hoverzoom {
   position: fixed;
   padding: 5px;
@@ -9,7 +12,7 @@
   display: none;
   min-width: 40px;
   min-height: 40px;
-  background: #ffffff no-repeat center center url(https://lh6.googleusercontent.com/-jsVBH41t1_I/ThrqDM0Lq6I/AAAAAAAAAlo/rMdhmf-QV9E/s0/ajax-loader.gif);
+  background: rgba(255, 255, 255, 0.8) no-repeat center center url(https://lh4.googleusercontent.com/-ojhuYU3X2hk/Tmo0HHoNodI/AAAAAAAACFc/0z2zQ4P7MNM/s0/ajax-loader.gif);
 }
 #hoverzoom small {
   display: block;
