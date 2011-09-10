@@ -706,7 +706,12 @@ function hoverzoom(){
 			$('#hoverzoom_info .right span:eq(1) a').attr('href', img.src);
 			$fs.show();
 			
-			if (picCount > 1) continous();
+			if (picCount > 1) {
+				continous();
+				$('#hoverzoom_info .right span:eq(4)').show();
+			} else {
+				$('#hoverzoom_info .right span:eq(4)').hide();
+			}
 			
 			$('#hoverzoom_fs_01').click(screenSize);
 			$('#hoverzoom_fs_02').click(pageWidth);
@@ -797,6 +802,14 @@ function hoverzoom(){
 				$('#hoverzoom_info .right span:eq(4)').html('<strong>'+parseInt(now+1)+'</strong> / '+picCount);
 				
 				$('#hoverzoom_fs').click(next);
+				$(document).bind('keypress', function(e){
+					var code = e.keyCode || e.which;
+					if (code == 39){
+						next();
+					} else if (code == 37){
+						prev();
+					}
+				});
 				
 				function next(){
 					var next = (now+1)%picCount,
@@ -817,12 +830,32 @@ function hoverzoom(){
 						screenSize();
 					}
 				}
+				
+				function prev(){
+					var prev = (now == 0) ? picCount-1 : (now-1)%picCount,
+						prevUrl = ( links[prev].match(/\?sz|\/proxy/) ) ? links[prev].replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : links[prev].replace(picasaRegex,'/s0/$2');
+					now=prev;
+					$('#hoverzoom_info .right span:eq(4)').html('<strong>'+parseInt(prev+1)+'</strong> / '+picCount);
+					
+					var prevImg = new Image();
+					prevImg.src = prevUrl;
+					
+					$('#hoverzoom_info .right span:eq(3)').text(locale_fs_4);
+					$('#hoverzoom_info .right span:eq(1) a').attr('href', prevImg.src);
+					
+					prevImg.onload = function(){
+						nWidth = prevImg.naturalWidth;
+						nHeight = prevImg.naturalHeight;
+						fs.src = prevImg.src;
+						screenSize();
+					}
+				}
 			}
 			
 			function exit(){
 				$('#hoverzoom_info, #hoverzoom_fs, #hz_set_back, #hoverzoom_navi_next, #hoverzoom_navi_prev').fadeOut(300);
 				$fs.attr('src', '');
-				$(document).unbind('keydown');
+				$(document).unbind('keydown, keypress');
 				$(document).scrollTop(xScroll);
 			}
 		}
