@@ -802,7 +802,7 @@ function hoverzoom(){
 				$('#hoverzoom_info .right span:eq(4)').html('<strong>'+parseInt(now+1)+'</strong> / '+picCount);
 				
 				$('#hoverzoom_fs').click(next);
-				$(document).bind('keypress', function(e){
+				$(document).bind('keyup', function(e){
 					var code = e.keyCode || e.which;
 					if (code == 39){
 						next();
