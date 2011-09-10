@@ -791,8 +791,7 @@ function hoverzoom(){
 			}
 			
 			function continous(){
-				var now;
-				links = new Array();
+				var now, links = new Array();
 				
 				for (var i=0; i<picCount; i++){
 					links[i] = self.parent().parent().children('div[data-content-type^="image"]').eq(i).children('img').attr('src');
@@ -802,7 +801,7 @@ function hoverzoom(){
 				
 				$('#hoverzoom_info .right span:eq(4)').html('<strong>'+parseInt(now+1)+'</strong> / '+picCount);
 				
-				$('#hoverzoom_fs').click(next);
+				$fs.bind('click', next);
 				$(document).bind('keyup', function(e){
 					var code = e.keyCode || e.which;
 					if (code == 39){
@@ -815,7 +814,8 @@ function hoverzoom(){
 				function next(){
 					var next = (now+1)%picCount,
 						nextUrl = ( links[next].match(/\?sz|\/proxy/) ) ? links[next].replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : links[next].replace(picasaRegex,'/s0/$2');
-					now=next;
+					now = next;
+					xScroll = $(document).scrollTop();
 					$('#hoverzoom_info .right span:eq(4)').html('<strong>'+parseInt(next+1)+'</strong> / '+picCount);
 					
 					var nextImg = new Image();
@@ -835,7 +835,8 @@ function hoverzoom(){
 				function prev(){
 					var prev = (now == 0) ? picCount-1 : (now-1)%picCount,
 						prevUrl = ( links[prev].match(/\?sz|\/proxy/) ) ? links[prev].replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : links[prev].replace(picasaRegex,'/s0/$2');
-					now=prev;
+					now = prev;
+					xScroll = $(document).scrollTop();
 					$('#hoverzoom_info .right span:eq(4)').html('<strong>'+parseInt(prev+1)+'</strong> / '+picCount);
 					
 					var prevImg = new Image();
@@ -855,8 +856,8 @@ function hoverzoom(){
 			
 			function exit(){
 				$('#hoverzoom_info, #hoverzoom_fs, #hz_set_back, #hoverzoom_navi_next, #hoverzoom_navi_prev').fadeOut(300);
-				$fs.attr('src', '');
-				$(document).unbind('keydown, keypress');
+				$fs.attr('src', '').unbind('click');
+				$(document).unbind('keydown, keyup');
 				$(document).scrollTop(xScroll);
 			}
 		}
