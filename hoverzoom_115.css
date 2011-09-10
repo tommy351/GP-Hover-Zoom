@@ -249,6 +249,7 @@
 }
 .in-albumDownload {
   margin: 25px 18px 25px 0;
+  background: none;
 }
 .picDownload {
   background: #bbb;
@@ -366,6 +367,7 @@
   background-color: #D14836;
   color: #fff;
   text-shadow: 0 1px rgba(0, 0, 0, 0.1);
+  border: 1px solid transparent;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#dd4b39), to(#d14836));
   background-image: -webkit-linear-gradient(top, #dd4b39, #d14836);
   background-image: -moz-linear-gradient(top, #dd4b39, #d14836);
@@ -416,6 +418,9 @@
 }
 .yt-in-post {
   margin: 3px 0;
+}
+.maxPic {
+  margin-bottom: 10px;
 }
 .closeYT {
   cursor: pointer;
