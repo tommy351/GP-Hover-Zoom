@@ -5,7 +5,7 @@
 // @author         SkyArrow
 // @website        http://userscripts.org/scripts/show/106681
 // @namespace      http://zespia.twbbs.org
-// @version        1.2.4
+// @version        1.2.5
 // @include        https://plus.google.com/*
 // ==/UserScript==
 
@@ -20,7 +20,7 @@ function hoverzoom(){
 		$content = $('#content').parent(),
 		wWidth = $window.width(),
 		wHeight = $window.height(),
-		version = '1.2.4',
+		version = '1.2.5',
 		picRegex = /\.(jpg|jpeg|gif|bmp|png|tiff)/i,
 		picasaRegex = /\/\w\d+(-\w\d*)*\/([^\/]+)$/;
 		
@@ -791,7 +791,8 @@ function hoverzoom(){
 			}
 			
 			function continous(){
-				var now, links = {};
+				var now;
+				links = new Array();
 				
 				for (var i=0; i<picCount; i++){
 					links[i] = self.parent().parent().children('div[data-content-type^="image"]').eq(i).children('img').attr('src');
