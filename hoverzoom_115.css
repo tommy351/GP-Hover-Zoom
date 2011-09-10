@@ -180,50 +180,121 @@
 #hoverzoom_info {
   position: fixed;
   top: 0;
-  left: 0;
-  width: 100%;
-  height: auto;
-  display: none;
+  right: 20px;
   z-index: 10002;
-}
-#hoverzoom_info span {
-  background: rgba(0, 0, 0, 0.75);
-  color: #fff;
-  padding: 5px 10px;
-  float: right;
-  margin-left: 2px;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(150, 150, 150, 0.15)), to(rgba(175, 175, 175, 0.5)));
+  background-image: -webkit-linear-gradient(top, rgba(150, 150, 150, 0.15), rgba(175, 175, 175, 0.5));
+  background-image: -moz-linear-gradient(top, rgba(150, 150, 150, 0.15), rgba(175, 175, 175, 0.5));
+  background-image: -ms-linear-gradient(top, rgba(150, 150, 150, 0.15), rgba(175, 175, 175, 0.5));
+  background-image: -o-linear-gradient(top, rgba(150, 150, 150, 0.15), rgba(175, 175, 175, 0.5));
+  background-image: linear-gradient(top, rgba(150, 150, 150, 0.15), rgba(175, 175, 175, 0.5));
+  border-radius: 0 0 5px 5px;
   cursor: pointer;
-  position: relative;
+  display: none;
 }
-#hoverzoom_info .right {
-  position: absolute;
-  top: 0;
-  right: 0;
+#hoverzoom_info .prev {
+  float: left;
+  border-style: solid;
+  border-width: 10px;
+  border-color: transparent rgba(255, 255, 255, 0.5) transparent transparent;
+  height: 0;
+  width: 0;
+  margin: 5px 0;
+  transition: 0.25s;
+  -moz-transition: 0.25s;
+  -webkit-transition: 0.25s;
+  -o-transition: 0.25s;
 }
-#hoverzoom_info a {
+#hoverzoom_info .prev:hover {
+  border-color: transparent rgba(255, 255, 255, 0.8) transparent transparent;
+}
+#hoverzoom_info .next {
+  float: left;
+  border-style: solid;
+  border-width: 10px;
+  border-color: transparent transparent transparent rgba(255, 255, 255, 0.5);
+  height: 0;
+  width: 0;
+  margin: 5px 0;
+  transition: 0.25s;
+  -moz-transition: 0.25s;
+  -webkit-transition: 0.25s;
+  -o-transition: 0.25s;
+}
+#hoverzoom_info .next:hover {
+  border-color: transparent transparent transparent rgba(255, 255, 255, 0.8);
+}
+#hoverzoom_info .info {
+  float: left;
+  border-left: 1px solid rgba(175, 175, 175, 0.15);
+  border-right: 1px solid rgba(175, 175, 175, 0.15);
+  height: 30px;
+  margin: 0 10px;
+  text-shadow: 0 1px 2px rgba(50, 50, 50, 0.5);
+  text-align: center;
   color: #fff;
-  outline: none;
+  padding: 2px 10px;
+  position: relative;
+  min-width: 120px;
 }
-#hoverzoom_info ul {
+#hoverzoom_info .info small {
   display: block;
-  right: 0;
-  top: 0;
-  list-style: none;
+}
+#hoverzoom_info .info span {
+  line-height: 30px;
+}
+#hoverzoom_info .info small + span {
+  line-height: normal;
+}
+#hoverzoom_info .info a {
+  color: #fff;
+  text-decoration: none;
+  display: block;
+}
+#hoverzoom_info .info ul {
   position: absolute;
+  background: rgba(175, 175, 175, 0.5);
+  left: 0;
+  top: 100%;
   padding: 0;
+  margin: 0;
+  list-style: none;
+  text-align: left;
+  width: 100%;
+  border-radius: 0 0 5px 5px;
+  height: 0;
+  line-height: 15px;
+  overflow: hidden;
+  font-size: 12px;
   white-space: nowrap;
-  opacity: 0;
+  transition: 0.5s;
+  -moz-transition: 0.5s;
+  -webkit-transition: 0.5s;
+  -o-transition: 0.5s;
 }
-#hoverzoom_info li {
-  margin-bottom: 2px;
-  background: rgba(0, 0, 0, 0.75);
-  padding: 5px 10px 5px 10px;
+#hoverzoom_info .info ul:last-child {
+  border-radius: 0 0 5px 5px;
 }
-#hoverzoom_info li:hover {
-  background: #000;
+#hoverzoom_info .info ul li {
+  padding: 5px 10px;
+  border-top: 1px solid rgba(175, 175, 175, 0.15);
+  transition: 0.25s;
+  -moz-transition: 0.25s;
+  -webkit-transition: 0.25s;
+  -o-transition: 0.25s;
 }
-#hoverzoom_info li.current {
+#hoverzoom_info .info ul li:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+#hoverzoom_info .info ul li.current {
   font-weight: bold;
+}
+#hoverzoom_info .info:hover ul {
+  height: 130px;
+}
+#hoverzoom_info.normal .info {
+  border: none;
+  padding: 0;
 }
 #hz_functions {
   position: fixed;
