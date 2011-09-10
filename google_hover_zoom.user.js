@@ -108,6 +108,7 @@ function hoverzoom(){
 		locale_yt_1 = 'Remove',
 		locale_allpic_1 = 'Download All Photos',
 		locale_piclink_1 = 'Download Photos:',
+		locale_maxPic_1 = 'Zoom',
 		locale_update_1 = 'Update',
 		locale_update_2 = 'New: ',
 		locale_update_3 = 'Current: ',
@@ -184,6 +185,7 @@ function hoverzoom(){
 			locale_yt_1 = '移除',
 			locale_allpic_1 = '下載本頁所有圖片',
 			locale_piclink_1 = '圖片下載：',
+			locale_maxPic_1 = '縮小',
 			locale_update_1 = '更新',
 			locale_update_2 = '更新版本：',
 			locale_update_3 = '目前版本：',
@@ -258,6 +260,7 @@ function hoverzoom(){
 			locale_yt_1 = '移除',
 			locale_allpic_1 = '下载本页所有图片',
 			locale_piclink_1 = '图片下载：',
+			locale_maxPic_1 = '缩小',
 			locale_update_1 = '更新',
 			locale_update_2 = '更新版本：',
 			locale_update_3 = '当前版本：',
@@ -1262,17 +1265,30 @@ function hoverzoom(){
 		timer = setInterval(function(){
 			$('div[data-content-type^="image"] img').each(function(){
 				var width = $(this).parent().parent().width();
-				if ($(this).width() < width){
+				if (!$(this).parent().hasClass('maxPic')){
 					var url = $(this).attr('src');
 					
-					$(this).attr('src', ( url.match(/\?sz|\/proxy/) ) ? url.replace(/resize_\D?=\d+/, 'resize_w='+width) : url.replace(picasaRegex,'/w'+width+'/$2'));
+					$(this).attr('original', url).attr('src', ( url.match(/\?sz|\/proxy/) ) ? url.replace(/resize_\D?=\d+/, 'resize_w='+width) : url.replace(picasaRegex,'/w'+width+'/$2'));
 					
 					$(this).parent().css({'maxHeight': 'none', 'maxWidth': width, 'width': 'auto'});
 					$(this).css('maxWidth', width);
+					
+					if (!$(this).parent().parent().hasClass('maxPicAdded')){
+						$(this).parentsUntil('.Ve').find('.dl').append('<span class="a-j maxPicRemove" title="'+locale_maxPic_1+'"> - '+locale_maxPic_1+'</span>');
+						$(this).parent().parent().addClass('maxPicAdded');
+					}
 				}
 				$(this).parent().addClass('maxPic');
 			});
 		}, 2500);
+		
+		$('.maxPicRemove').live('click', function(){
+			$(this).parent().parent().find('.maxPic').each(function(){
+				$(this).attr('style', '');
+				$(this).children('img').attr('src', $(this).children('img').attr('original'));
+			});
+			$(this).remove();
+		});
 	}
 }
 
