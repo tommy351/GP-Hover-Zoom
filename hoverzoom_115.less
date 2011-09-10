@@ -199,6 +199,7 @@
 	border-radius: 0 0 5px 5px;
 	cursor: pointer;
 	display: none;
+	box-shadow: @shadow1;
 	.prev{
 		float: left;
 		border-style: solid;
@@ -250,6 +251,9 @@
 			color: #fff;
 			text-decoration: none;
 			display: block;
+			outline: none;
+			margin: -5px -10px;
+			padding: 5px 10px;
 		}
 		ul{
 			position: absolute;
@@ -290,6 +294,12 @@
 	&.normal .info{
 		border: none;
 		padding: 0;
+	}
+	&.status01 .info:hover ul{
+		height: 104px;
+	}
+	&.status02 .info:hover ul{
+		height: 52px;
 	}
 }
 #hz_functions {

@@ -191,6 +191,7 @@
   border-radius: 0 0 5px 5px;
   cursor: pointer;
   display: none;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 #hoverzoom_info .prev {
   float: left;
@@ -250,6 +251,9 @@
   color: #fff;
   text-decoration: none;
   display: block;
+  outline: none;
+  margin: -5px -10px;
+  padding: 5px 10px;
 }
 #hoverzoom_info .info ul {
   position: absolute;
@@ -295,6 +299,12 @@
 #hoverzoom_info.normal .info {
   border: none;
   padding: 0;
+}
+#hoverzoom_info.status01 .info:hover ul {
+  height: 104px;
+}
+#hoverzoom_info.status02 .info:hover ul {
+  height: 52px;
 }
 #hz_functions {
   position: fixed;
