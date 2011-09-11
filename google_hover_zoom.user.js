@@ -76,7 +76,8 @@ function hoverzoom(){
 		'hz_allpics': localStorage['hz_allpics'] || 'false',
 		'hz_update': localStorage['hz_update'] || 'true',
 		'hz_dl_link': localStorage['hz_dl_link'] || 'true',
-		'hz_maxpic': localStorage['hz_maxpic'] || 'false'
+		'hz_maxpic': localStorage['hz_maxpic'] || 'false',
+		'hz_maxpic_option': localStorage['hz_maxpic_option'] || '0'
 	};
 	
 	enable();
@@ -157,7 +158,9 @@ function hoverzoom(){
 		locale_set_19 = 'Enable "Download All Photos in This Page"',
 		locale_set_20 = 'Enable Auto Update',
 		locale_set_21 = 'Display download links below pictures',
-		locale_set_22 = 'Display photos as stream width';
+		locale_set_22_1 = 'Display photos as stream width',
+		locale_set_22_2 = 'Apply to all photos',
+		locale_set_22_3 = 'Only apply to the first photo in album';
 	
 	switch (locale)
 	{
@@ -234,7 +237,9 @@ function hoverzoom(){
 			locale_set_19 = '啟用「下載本頁所有圖片」',
 			locale_set_20 = '啟用自動更新',
 			locale_set_21 = '在圖片下顯示下載連結',
-			locale_set_22 = '以訊息串寬度顯示圖片';
+			locale_set_22_1 = '以訊息串寬度顯示圖片',
+			locale_set_22_2 = '套用至所有圖片',
+			locale_set_22_3 = '僅套用至相簿第一張圖片';
 			break;
 		
 		case 'zh-CN':
@@ -309,7 +314,9 @@ function hoverzoom(){
 			locale_set_19 = '启用「下载本页所有图片」',
 			locale_set_20 = '启用自动更新',
 			locale_set_21 = '在图片下显示下载链结',
-			locale_set_22 = '以讯息流显示图片';
+			locale_set_22_1 = '以讯息流宽度显示图片',
+			locale_set_22_2 = '套用至所有图片',
+			locale_set_22_3 = '仅套用至相簿第一张图片';
 			break;
 	}
 	
@@ -344,7 +351,7 @@ function hoverzoom(){
 			'</div><div class="hz_set_tab" style="display: none;">'+
 			'<label for="hz_language">'+locale_set_17+'</label><select id="hz_language"></select><br />'+
 			'<input id="hz_update" type="checkbox"/><label for="hz_update">'+locale_set_20+'</label> <a id="hz_checkupdate" href="javascript:void(0)">('+locale_update_5+')</a><br />'+
-			'<input id="hz_maxpic" type="checkbox"/><label for="hz_maxpic">'+locale_set_22+'</label><br />'+
+			'<input id="hz_maxpic" type="checkbox"/><label for="hz_maxpic">'+locale_set_22_1+'</label><select id="hz_maxpic_option"></select><br />'+
 			'<input id="hz_direct" type="checkbox"/><label for="hz_direct">'+locale_set_8+'</label><input id="hz_direct_max" type="text" maxlength="4"/><label for="hz_direct_max">'+locale_set_3_2+'</label><br />'+
 			'<input id="hz_direct_yt" type="checkbox"/><label for="hz_direct_yt">'+locale_set_16_1+'</label><select id="hz_direct_ytaspect"><option value="1">4:3</option><option value="2">16:9</option><option value="3">16:10</option></select><label for="hz_direct_ytaspect">'+locale_set_16_2+'</label><input id="hz_direct_ytmaxwidth" type="text" maxlength="4"/><label for="hz_direct_ytmaxwidth">'+locale_set_3_2+'</label><br />'+
 			'<input id="hz_album" type="checkbox"/><label for="hz_album">'+locale_set_15+'</label><br />'+
@@ -365,6 +372,11 @@ function hoverzoom(){
 			'<option value="en">'+locale_lang_01+'</option>'+
 			'<option value="zh-TW">'+locale_lang_02+'</option>'+
 			'<option value="zh-CN">'+locale_lang_03+'</option>'
+			);
+			
+			$('#hz_maxpic_option').append(
+			'<option value="0">'+locale_set_22_2+'</option>'+
+			'<option value="1">'+locale_set_22_3+'</option>'
 			);
 			
 			$('#disable_hz').toggle(function(){
@@ -545,7 +557,7 @@ function hoverzoom(){
 				fullscreen();
 				history();
 			} else if ( code == options['hz_dl_key'] ) {
-				open(url, 'hz_dlwindow');
+				window.open(url, 'hz_dlwindow');
 				history();
 			}
 		});
@@ -698,7 +710,7 @@ function hoverzoom(){
 				if ( code == options['hz_fullscreen'] || code == 27 ) {
 					exit();
 				} else if ( code == options['hz_dl_key'] ) {
-					open(url, 'hz_dlwindow');
+					window.open(url, 'hz_dlwindow');
 				}
 			});
 			
@@ -922,7 +934,7 @@ function hoverzoom(){
 					if ( options['hz_direct_max'] > 0 ) {
 						$(this).children().css('maxWidth', options['hz_direct_max']);
 					}
-					$(this).next().remove();
+					$(this).next('br').remove();
 				}
 			});
 		}, 2500);
@@ -1331,6 +1343,10 @@ function hoverzoom(){
 					if (!$(this).parent().parent().hasClass('maxPicAdded')){
 						$(this).parentsUntil('.Ve').find('.dl').append('<span class="a-j maxPicRemove" title="'+locale_maxPic_1+'"> - '+locale_maxPic_1+'</span>');
 						$(this).parent().parent().addClass('maxPicAdded');
+					}
+					
+					if ($(this).parent().parent().children('div[data-content-type^="image"]').length > 1 && options['hz_maxpic_option'] == '1'){
+						$(this).parent().parent().children('div[data-content-type^="image"]').addClass('maxPic');
 					}
 				}
 				$(this).parent().addClass('maxPic');
