@@ -507,12 +507,12 @@ function hoverzoom(){
 	if ( options['hz_his'] === 'true' ) init.history();
 	if ( options['hz_album'] === 'true' ) init.album();
 	if ( options['hz_allpics'] === 'true' ) init.allPic();
-	if ( options['hz_direct'] === 'true' ) directPic();
 	if ( options['hz_direct_yt'] === 'true' ) directYT();
 	if ( options['hz_update'] === 'true' ) autoUpdate();
 	if ( options['hz_dl_link'] === 'true' ) picLink();
 	if ( options['hz_maxpic'] === 'true' ) maxPic();
 	init.copyArea();
+	timer();
 	
 	function main(url){
 		var tag = $(this).prop('tagName'),
@@ -926,53 +926,7 @@ function hoverzoom(){
 		$('#picbefore').hide();
 	}
 	
-	function directPic(){
-		var timer;
-		clearInterval(timer);
-		timer = setInterval(function(){
-			$('.zj .ot-anchor').each(function(){
-				uri = $(this).attr('href');
-				if ( uri.match(picRegex) && !$(this).children().hasClass('img-in-post')) {
-					this.innerHTML = '<img class="img-in-post" src="'+uri+'"/>';
-					if ( options['hz_direct_max'] > 0 ) {
-						$(this).children().css('maxWidth', options['hz_direct_max']);
-					}
-					$(this).next('br').remove();
-				}
-			});
-		}, 2500);
-	}
-	
 	function directYT(){
-		var timer;
-		clearInterval(timer);
-		timer = setInterval(function(){
-			$('.zj .ot-anchor').each(function(){
-				uri = $(this).attr('href'),
-				maxWidth = ( options['hz_direct_ytmaxwidth'] > 0 ) ? options['hz_direct_ytmaxwidth'] : $(this).parent().parent().width();
-				switch (options['hz_direct_ytaspect'])
-				{
-					case 1:
-						aspect = 3/4;
-						break;
-					case 3:
-						aspect = 10/16;
-						break;
-					case 2:
-					default:
-						aspect = 9/16;
-						break;
-				}
-				if ( uri.match(/youtube.com\/watch\?v=/) && !$(this).hasClass('yt-in-post')) {
-					$(this).css({'display': 'block', 'fontWeight': 'bold', 'marginRight': '11px'}).addClass('yt-in-post');
-					
-					url = uri.replace(/(.*)watch\?v=(.*)/, '$1v/$2').replace(/&(.*)/g, '') + '?version=3&autohide=1&feature=player_embedded';
-					
-					$(this).after('<div class="closeYT" title="'+locale_yt_1+'">X</div><object style="height: '+maxWidth*aspect+'px; width: '+maxWidth+'px"><param name="movie" value="'+url+'"><param name="allowFullScreen" value="true"><param name="allowScriptAccess" value="always"><embed src="'+url+'" type="application/x-shockwave-flash" allowfullscreen="true" allowScriptAccess="always" width="'+maxWidth+'" height="'+maxWidth*aspect+'"></object>');
-				}
-			});
-		}, 2500);
-		
 		$('.closeYT').live('click', function(){
 			$(this).next().remove();
 			$(this).prev().removeAttr('style');
@@ -981,40 +935,6 @@ function hoverzoom(){
 	}
 	
 	function picLink(){
-		var timer;
-		clearInterval(timer);
-		timer = setInterval(function(){
-			$('.Jm').each(function(){
-				if ( $(this).children().children().hasClass('B-u-ac') && !$(this).hasClass('pic-in-post') ) {
-					var count = $(this).children('div:eq(0)').children('div[data-content-type^="image"]').length;
-					
-					if ( count > 1 ) {
-						$(this).parentsUntil('.Ve').find('.dl').append(' - <span class="a-j picStacks" tabindex="0" role="button">'+locale_fs_3+' ('+count+')</span><div class="clickDetail"><div class="triangle_out"><div class="triangle_01"></div><div class="triangle_02"></div></div><div class="closeButton" title="'+locale_set_close+'"></div><strong>'+locale_piclink_1+'</strong><br/></div>');
-						
-						$(this).find('div[data-content-type^="image"]').each(function(i){
-							var url = $(this).children('img').attr('src');
-							
-							url = ( url.match(/\?sz|\/proxy/) ) ? url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : url.replace(picasaRegex,'/s0/$2');
-							
-							content = '<a class="a-j" tabindex="0" role="button" href="'+url+'" target="_blank">'+parseInt(i+1)+'</a>';
-							
-							( i == 0 ) ? $(this).parentsUntil('.Ve').find('.clickDetail').append(content) : $(this).parentsUntil('.Ve').find('.clickDetail').append(' - ' + content);
-						});
-					} else if ( count == 1 ) {
-						$(this).find('div[data-content-type^="image"]').each(function(i){
-							var url = $(this).children('img').attr('src');
-							
-							url = ( url.match(/\?sz|\/proxy/) ) ? url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : url.replace(picasaRegex,'/s0/$2');
-							
-							$(this).parentsUntil('.Ve').find('.dl').append(' - <a class="a-j picStacks" tabindex="0" role="button" href="'+url+'">'+locale_fs_3+'</a>');
-						});
-					}
-
-					$(this).addClass('pic-in-post');
-				}
-			});
-		}, 2500);
-
 		$('.picStacks').live('click', function(){
 			( $(this).next().is(':hidden') ) ? $(this).next().fadeIn(300).offset({'left': $(this).offset().left + 10, 'top': $(this).offset().top + 25}) : $(this).next().fadeOut(300);
 		});
@@ -1168,39 +1088,7 @@ function hoverzoom(){
 	}
 	
 	function albumDL(){
-		var timer,
-			xScroll;
-		clearInterval(timer);
-		timer = setInterval(function(){
-			var url = location.href.replace(/\?(.*)/, '');
-			if ( url.match(/\/photos\/\w+\/albums\/\w+/) ) {
-				$main = ( $('#contentPane').children().length > 1 ) ? $('#contentPane').children(':eq(1)').children(':eq(0)').children(':eq(0)').children(':eq(0)').children(':eq(0)') : $('#contentPane').children(':eq(0)').children(':eq(0)').children(':eq(0)').children(':eq(0)').children(':eq(0)');
-				
-				$main.each(function(){
-					if ( !$(this).hasClass('album-in-post') || $('.albumDownload').attr('title') == ' ()') {
-						$('.albumDownload').remove();
-						$title = ( $main.children().length > 2 ) ? $main.children(':eq(0)').children(':eq(0)').children(':eq(0)') : $main.children(':eq(0)');
-						$count = $main.parent().parent().children(':eq(1)').children(':eq(0)').children(':eq(0)').children(':eq(1)').children(':eq(0)');
-						
-						var title = $title.text() + ' (' + $count.text() + ')',
-							content = '<div tabindex="0" class="albumDownload in-albumDownload button_style blueButton" id="'+url+'" role="button" title="'+title+'">'+locale_al_1+'</div>';
-							
-						( $(this).children().length > 2 ) ? $(this).children().eq(1).after(content) : $(this).children().eq(0).after(content);
-						$(this).addClass('album-in-post');
-					}
-				});
-			} else {
-				$('.B-u-Y-j').each(function(){
-					var url = $(this).attr('href'),
-						title = $(this).text();
-					if ( url.match(/albums/) && !$(this).hasClass('album-in-post') ) {
-						$(this).parentsUntil('.Ve').find('.dl').append(' - <span class="a-j albumDownload" tabindex="0" id="'+url+'" role="button" title="'+title+'">'+locale_fs_3+'</span>');
-						$(this).addClass('album-in-post');
-					}
-				});
-			}
-		}, 2500);
-		
+		var xScroll;
 		$('.albumDownload').live('click', function(){
 			var album = $(this).attr('title'),
 				userid = $(this).attr('id').replace(/(.*)\/photos\/(\d+)\/albums\/(\d+)/, '$2'),
@@ -1351,32 +1239,6 @@ function hoverzoom(){
 	}
 	
 	function maxPic(){
-		var timer;
-		clearInterval(timer);
-		timer = setInterval(function(){
-			$('div[data-content-type^="image"] img').each(function(){
-				var width = $(this).parent().parent().parent().width();
-				if (!$(this).parent().hasClass('maxPic')){
-					var url = $(this).attr('src');
-					
-					$(this).attr('original', url).attr('src', ( url.match(/\?sz|\/proxy/) ) ? url.replace(/resize_\D?=\d+/, 'resize_w='+width) : url.replace(picasaRegex,'/w'+width+'/$2'));
-					
-					$(this).parent().css({'maxHeight': 'none', 'maxWidth': width, 'width': 'auto', 'paddingBottom': '5px'});
-					$(this).css('maxWidth', width);
-					
-					if (!$(this).parent().parent().hasClass('maxPicAdded')){
-						$(this).parentsUntil('.Ve').find('.dl').append('<span class="a-j maxPicRemove" title="'+locale_maxPic_1+'"> - '+locale_maxPic_1+'</span>');
-						$(this).parent().parent().addClass('maxPicAdded');
-					}
-					
-					if ($(this).parent().parent().children('div[data-content-type^="image"]').length > 1 && options['hz_maxpic_option'] == '1'){
-						$(this).parent().parent().children('div[data-content-type^="image"]').addClass('maxPic');
-					}
-				}
-				$(this).parent().addClass('maxPic');
-			});
-		}, 2500);
-		
 		$('.maxPicRemove').live('click', function(){
 			$(this).parent().parent().find('.maxPic').each(function(){
 				$(this).attr('style', '');
@@ -1385,6 +1247,135 @@ function hoverzoom(){
 			});
 			$(this).remove();
 		});
+	}
+	
+	function timer(){
+		timer = setInterval(function(){
+			if (options['hz_direct'] === 'true'){
+				$('.zj .ot-anchor').each(function(){
+					var uri = $(this).attr('href');
+					if ( uri.match(picRegex) && !$(this).children().hasClass('img-in-post')) {
+						this.innerHTML = '<img class="img-in-post" src="'+uri+'"/>';
+						if ( options['hz_direct_max'] > 0 ) {
+							$(this).children().css('maxWidth', options['hz_direct_max']);
+						}
+						$(this).next('br').remove();
+					}
+				});
+			}
+			if (options['hz_album'] === 'true'){
+				var pageUrl = location.href.replace(/\?(.*)/, '');
+				if ( pageUrl.match(/\/photos\/\w+\/albums\/\w+/) ) {
+					$main = ( $('#contentPane').children().length > 1 ) ? $('#contentPane').children(':eq(1)').children(':eq(0)').children(':eq(0)').children(':eq(0)').children(':eq(0)') : $('#contentPane').children(':eq(0)').children(':eq(0)').children(':eq(0)').children(':eq(0)').children(':eq(0)');
+					
+					$main.each(function(){
+						if ( !$(this).hasClass('album-in-post') || $('.albumDownload').attr('title') == ' ()') {
+							$('.albumDownload').remove();
+							$title = ( $main.children().length > 2 ) ? $main.children(':eq(0)').children(':eq(0)').children(':eq(0)') : $main.children(':eq(0)');
+							$count = $main.parent().parent().children(':eq(1)').children(':eq(0)').children(':eq(0)').children(':eq(1)').children(':eq(0)');
+							
+							var title = $title.text() + ' (' + $count.text() + ')',
+								content = '<div tabindex="0" class="albumDownload in-albumDownload button_style blueButton" id="'+url+'" role="button" title="'+title+'">'+locale_al_1+'</div>';
+								
+							( $(this).children().length > 2 ) ? $(this).children().eq(1).after(content) : $(this).children().eq(0).after(content);
+							$(this).addClass('album-in-post');
+						}
+					});
+				} else {
+					$('.B-u-Y-j').each(function(){
+						var url = $(this).attr('href'),
+							title = $(this).text();
+						if ( url.match(/albums/) && !$(this).hasClass('album-in-post') ) {
+							$(this).parentsUntil('.Ve').find('.dl').append(' - <span class="a-j albumDownload" tabindex="0" id="'+url+'" role="button" title="'+title+'">'+locale_fs_3+'</span>');
+							$(this).addClass('album-in-post');
+						}
+					});
+				}
+			}
+			if (options['hz_dl_link'] === 'true'){
+				$('.Jm').each(function(){
+					if ( $(this).children().children().hasClass('B-u-ac') && !$(this).hasClass('pic-in-post') ) {
+						var count = $(this).children('div:eq(0)').children('div[data-content-type^="image"]').length;
+						
+						if ( count > 1 ) {
+							$(this).parentsUntil('.Ve').find('.dl').append(' - <span class="a-j picStacks" tabindex="0" role="button">'+locale_fs_3+' ('+count+')</span><div class="clickDetail"><div class="triangle_out"><div class="triangle_01"></div><div class="triangle_02"></div></div><div class="closeButton" title="'+locale_set_close+'"></div><strong>'+locale_piclink_1+'</strong><br/></div>');
+							
+							$(this).find('div[data-content-type^="image"]').each(function(i){
+								var url = $(this).children('img').attr('src');
+								
+								url = ( url.match(/\?sz|\/proxy/) ) ? url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : url.replace(picasaRegex,'/s0/$2');
+								
+								content = '<a class="a-j" tabindex="0" role="button" href="'+url+'" target="_blank">'+parseInt(i+1)+'</a>';
+								
+								( i == 0 ) ? $(this).parentsUntil('.Ve').find('.clickDetail').append(content) : $(this).parentsUntil('.Ve').find('.clickDetail').append(' - ' + content);
+							});
+						} else if ( count == 1 ) {
+							$(this).find('div[data-content-type^="image"]').each(function(i){
+								var url = $(this).children('img').attr('src');
+								
+								url = ( url.match(/\?sz|\/proxy/) ) ? url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : url.replace(picasaRegex,'/s0/$2');
+								
+								$(this).parentsUntil('.Ve').find('.dl').append(' - <a class="a-j picStacks" tabindex="0" role="button" href="'+url+'">'+locale_fs_3+'</a>');
+							});
+						}
+	
+						$(this).addClass('pic-in-post');
+					}
+				});
+			}
+			if (options['hz_direct_yt'] === 'true'){
+				$('.zj .ot-anchor').each(function(){
+					var uri = $(this).attr('href'),
+					maxWidth = ( options['hz_direct_ytmaxwidth'] > 0 ) ? options['hz_direct_ytmaxwidth'] : $(this).parent().parent().width();
+					switch (options['hz_direct_ytaspect'])
+					{
+						case 1:
+							aspect = 3/4;
+							break;
+						case 3:
+							aspect = 10/16;
+							break;
+						case 2:
+						default:
+							aspect = 9/16;
+							break;
+					}
+					if ( uri.match(/youtube.com\/watch\?v=/) && !$(this).hasClass('yt-in-post')) {
+						$(this).css({'display': 'block', 'fontWeight': 'bold', 'marginRight': '11px'}).addClass('yt-in-post');
+						
+						url = uri.replace(/(.*)watch\?v=(.*)/, '$1v/$2').replace(/&(.*)/g, '') + '?version=3&autohide=1&feature=player_embedded';
+						
+						$(this).after('<div class="closeYT" title="'+locale_yt_1+'">X</div><object style="height: '+maxWidth*aspect+'px; width: '+maxWidth+'px"><param name="movie" value="'+url+'"><param name="allowFullScreen" value="true"><param name="allowScriptAccess" value="always"><embed src="'+url+'" type="application/x-shockwave-flash" allowfullscreen="true" allowScriptAccess="always" width="'+maxWidth+'" height="'+maxWidth*aspect+'"></object>');
+					}
+				});
+			}
+			if (options['hz_maxpic'] === 'true'){
+				$('div[data-content-type^="image"] img').each(function(){
+					var width = $(this).parent().parent().parent().width();
+					if (!$(this).parent().hasClass('maxPic')){
+						var url = $(this).attr('src');
+						
+						$(this).attr('original', url).attr('src', ( url.match(/\?sz|\/proxy/) ) ? url.replace(/resize_\D?=\d+/, 'resize_w='+width) : url.replace(picasaRegex,'/w'+width+'/$2'));
+						
+						$(this).parent().css({'maxHeight': 'none', 'maxWidth': width, 'width': 'auto', 'paddingBottom': '5px'});
+						$(this).css('maxWidth', width);
+						
+						if (!$(this).parent().parent().hasClass('maxPicAdded')){
+							$(this).parentsUntil('.Ve').find('.dl').append('<span class="a-j maxPicRemove" title="'+locale_maxPic_1+'"> - '+locale_maxPic_1+'</span>');
+							$(this).parent().parent().addClass('maxPicAdded');
+						}
+						
+						if ($(this).parent().parent().children('div[data-content-type^="image"]').length > 1 && options['hz_maxpic_option'] == '1'){
+							$(this).parent().parent().children('div[data-content-type^="image"]').addClass('maxPic');
+						}
+					}
+					$(this).parent().addClass('maxPic');
+				});
+			}
+		}, 2500);
+	}
+	
+	function newTab(object){
 	}
 }
 
