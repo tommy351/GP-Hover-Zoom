@@ -1111,17 +1111,20 @@ function hoverzoom(){
 			$('#hz_albums_picasa').attr('href', 'picasa://downloadfeed/?url=https://picasaweb.google.com/data/feed/back_compat/user/'+userid+'/albumid/'+albumid);
 					
 			$.getJSON(aUrl, function(json){
-				var albumLink;
+				var albumLink,
+					author = json.feed.author[0].name.$t,
+					authorLink = json.feed.author[0].uri.$t;
+				
 				$(json.feed.entry).each(function(i, item){
-					var url = item.link[0].href;
+					var url = item.gphoto$id.$t;
 						
-					if ( url.match(albumid) ) {
+					if ( url == albumid ) {
 						albumLink = item.link[1].href;
 					}
 				});
 				
-				if (typeof albumLink != 'undefined')
-					$('#hz_albums_page small').html('<a href="'+albumLink+'" target="_blank"><strong>'+album+'</strong></a>');
+				(typeof albumLink != 'undefined') ? 
+					$('#hz_albums_page small').html('<a href="'+authorLink+'">'+author+'</a> > <a href="'+albumLink+'" target="_blank"><strong>'+album+'</strong></a>') : $('#hz_albums_page small').html('<a href="'+authorLink+'">'+author+'</a> > '+locale_al_7);
 			});
 			
 			$.ajax({
