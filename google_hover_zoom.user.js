@@ -107,6 +107,7 @@ function hoverzoom(){
 		locale_al_4 = 'If you can\'t download this album directly, please open it with Picasa. (Require Picasa)',
 		locale_al_5 = 'Copy Links',
 		locale_al_6 = 'Open in New Tab',
+		locale_al_7 = 'This album is private and can\'t be fetched. Please use "Open with Picasa" button to download this album.',
 		locale_yt_1 = 'Remove',
 		locale_allpic_1 = 'Download All Photos',
 		locale_piclink_1 = 'Download Photos:',
@@ -187,6 +188,7 @@ function hoverzoom(){
 			locale_al_4 = '若您無法直接下載本相簿，請使用 Picasa 開啟。(需安裝 Picasa)',
 			locale_al_5 = '複製網址',
 			locale_al_6 = '開啟於新分頁',
+			locale_al_7 = '此相簿為私密相簿，無法取得相簿內容，請使用右上角的「以 Picasa 開啟」按鈕下載此相簿。',
 			locale_yt_1 = '移除',
 			locale_allpic_1 = '下載本頁所有圖片',
 			locale_piclink_1 = '圖片下載：',
@@ -265,6 +267,7 @@ function hoverzoom(){
 			locale_al_4 = '若您无法直接下载本相簿，请使用 Picasa 开启。(需安装 Picasa)',
 			locale_al_5 = '复制网址',
 			locale_al_6 = '開啟於新分頁',
+			locale_al_7 = '此相簿为私密相簿，无法取得相簿内容，请使用右上角的「以 Picasa 开启」按钮下载此相簿。',
 			locale_yt_1 = '移除',
 			locale_allpic_1 = '下载本页所有图片',
 			locale_piclink_1 = '图片下载：',
@@ -1093,8 +1096,8 @@ function hoverzoom(){
 			var album = $(this).attr('title'),
 				userid = $(this).attr('id').replace(/(.*)\/photos\/(\d+)\/albums\/(\d+)/, '$2'),
 				albumid = $(this).attr('id').replace(/(.*)\/photos\/(\d+)\/albums\/(\d+)/, '$3'),
-				url = 'https://picasaweb.google.com/data/feed/api/user/'+userid+'/albumid/'+albumid+'?fields=entry(media:group(media:content,media:title))&alt=json&callback=?',
-				aUrl = 'https://picasaweb.google.com/data/feed/api/user/'+userid+'?alt=json&callback=?';
+				url = 'https://picasaweb.google.com/data/feed/base/user/'+userid+'/albumid/'+albumid+'?fields=entry(media:group(media:content,media:title))&alt=json',
+				aUrl = 'https://picasaweb.google.com/data/feed/api/user/'+userid+'?alt=json';
 			
 			xScroll = $(document).scrollTop();
 			
@@ -1116,7 +1119,9 @@ function hoverzoom(){
 						albumLink = item.link[1].href;
 					}
 				});
-				$('#hz_albums_page small').html('<a href="'+albumLink+'" target="_blank"><strong>'+album+'</strong></a>');
+				
+				if (typeof albumLink != 'undefined')
+					$('#hz_albums_page small').html('<a href="'+albumLink+'" target="_blank"><strong>'+album+'</strong></a>');
 			});
 			
 			$.ajax({
@@ -1125,6 +1130,9 @@ function hoverzoom(){
 				type: 'GET',
 				beforeSend: function(){
 					$('#hz_albums_page small').html('<strong>'+locale_fs_4+'</strong>');
+				},
+				error: function(){
+					$('#hz_albums_page small').html(locale_al_7);
 				},
 				success: function(json){
 					$(json.feed.entry).each(function(i, data){
@@ -1266,7 +1274,7 @@ function hoverzoom(){
 			if (options['hz_album'] === 'true'){
 				var pageUrl = location.href.replace(/\?(.*)/, '');
 				if ( pageUrl.match(/\/photos\/\w+\/albums\/\w+/) ) {
-					$main = ( $('#contentPane').children().length > 1 ) ? $('#contentPane').children(':eq(1)').children(':eq(0)').children(':eq(0)').children(':eq(0)').children(':eq(0)') : $('#contentPane').children(':eq(0)').children(':eq(0)').children(':eq(0)').children(':eq(0)').children(':eq(0)');
+					$main = ( $('#contentPane').children().length > 1 ) ? $('#contentPane div:eq(1) div:eq(0) div:eq(0) div:eq(0) div:eq(0)') : $('#contentPane div:eq(0) div:eq(0) div:eq(0) div:eq(0) div:eq(0)');
 					
 					$main.each(function(){
 						if ( !$(this).hasClass('album-in-post') || $('.albumDownload').attr('title') == ' ()') {
@@ -1275,7 +1283,7 @@ function hoverzoom(){
 							$count = $main.parent().parent().children(':eq(1)').children(':eq(0)').children(':eq(0)').children(':eq(1)').children(':eq(0)');
 							
 							var title = $title.text() + ' (' + $count.text() + ')',
-								content = '<div tabindex="0" class="albumDownload in-albumDownload button_style blueButton" id="'+url+'" role="button" title="'+title+'">'+locale_al_1+'</div>';
+								content = '<div tabindex="0" class="albumDownload in-albumDownload button_style blueButton" id="'+pageUrl+'" role="button" title="'+title+'">'+locale_al_1+'</div>';
 								
 							( $(this).children().length > 2 ) ? $(this).children().eq(1).after(content) : $(this).children().eq(0).after(content);
 							$(this).addClass('album-in-post');
