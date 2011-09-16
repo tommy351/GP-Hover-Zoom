@@ -13,9 +13,6 @@ function hoverzoom(){
 	// jQuery masonry
 	(function(a,b,c){var d=b.event,e;d.special.smartresize={setup:function(){b(this).bind("resize",d.special.smartresize.handler)},teardown:function(){b(this).unbind("resize",d.special.smartresize.handler)},handler:function(a,b){var c=this,d=arguments;a.type="smartresize",e&&clearTimeout(e),e=setTimeout(function(){jQuery.event.handle.apply(c,d)},b==="execAsap"?0:100)}},b.fn.smartresize=function(a){return a?this.bind("smartresize",a):this.trigger("smartresize",["execAsap"])},b.Mason=function(a,c){this.element=b(c),this._create(a),this._init()};var f=["position","height"];b.Mason.settings={isResizable:!0,isAnimated:!1,animationOptions:{queue:!1,duration:500},gutterWidth:0,isRTL:!1,isFitWidth:!1},b.Mason.prototype={_filterFindBricks:function(a){var b=this.options.itemSelector;return b?a.filter(b).add(a.find(b)):a},_getBricks:function(a){var b=this._filterFindBricks(a).css({position:"absolute"}).addClass("masonry-brick");return b},_create:function(c){this.options=b.extend(!0,{},b.Mason.settings,c),this.styleQueue=[],this.reloadItems();var d=this.element[0].style;this.originalStyle={};for(var e=0,g=f.length;e<g;e++){var h=f[e];this.originalStyle[h]=d[h]||""}this.element.css({position:"relative"}),this.horizontalDirection=this.options.isRTL?"right":"left",this.offset={};var i=b(document.createElement("div"));this.element.prepend(i),this.offset.y=Math.round(i.position().top),this.options.isRTL?(i.css({"float":"right",display:"inline-block"}),this.offset.x=Math.round(this.element.outerWidth()-i.position().left)):this.offset.x=Math.round(i.position().left),i.remove();var j=this;setTimeout(function(){j.element.addClass("masonry")},0),this.options.isResizable&&b(a).bind("smartresize.masonry",function(){j.resize()})},_init:function(a){this._getColumns("masonry"),this._reLayout(a)},option:function(a,c){b.isPlainObject(a)&&(this.options=b.extend(!0,this.options,a))},layout:function(a,c){var d,e,f,g,h,i;for(var j=0,k=a.length;j<k;j++){d=b(a[j]),e=Math.ceil(d.outerWidth(!0)/this.columnWidth),e=Math.min(e,this.cols);if(e===1)this._placeBrick(d,this.colYs);else{f=this.cols+1-e,g=[];for(i=0;i<f;i++)h=this.colYs.slice(i,i+e),g[i]=Math.max.apply(Math,h);this._placeBrick(d,g)}}var l={};l.height=Math.max.apply(Math,this.colYs)-this.offset.y,this.options.isFitWidth&&(l.width=this.cols*this.columnWidth-this.options.gutterWidth),this.styleQueue.push({$el:this.element,style:l});var m=this.isLaidOut?this.options.isAnimated?"animate":"css":"css",n=this.options.animationOptions,o;for(j=0,k=this.styleQueue.length;j<k;j++)o=this.styleQueue[j],o.$el[m](o.style,n);this.styleQueue=[],c&&c.call(a),this.isLaidOut=!0},_getColumns:function(){var a=this.options.isFitWidth?this.element.parent():this.element,b=a.width();this.columnWidth=this.options.columnWidth||this.$bricks.outerWidth(!0)||b,this.columnWidth+=this.options.gutterWidth,this.cols=Math.floor((b+this.options.gutterWidth)/this.columnWidth),this.cols=Math.max(this.cols,1)},_placeBrick:function(a,b){var c=Math.min.apply(Math,b),d=0;for(var e=0,f=b.length;e<f;e++)if(b[e]===c){d=e;break}var g={top:c};g[this.horizontalDirection]=this.columnWidth*d+this.offset.x,this.styleQueue.push({$el:a,style:g});var h=c+a.outerHeight(!0),i=this.cols+1-f;for(e=0;e<i;e++)this.colYs[d+e]=h},resize:function(){var a=this.cols;this._getColumns("masonry"),this.cols!==a&&this._reLayout()},_reLayout:function(a){var b=this.cols;this.colYs=[];while(b--)this.colYs.push(this.offset.y);this.layout(this.$bricks,a)},reloadItems:function(){this.$bricks=this._getBricks(this.element.children())},reload:function(a){this.reloadItems(),this._init(a)},appended:function(a,b,c){if(b){this._filterFindBricks(a).css({top:this.element.height()});var d=this;setTimeout(function(){d._appended(a,c)},1)}else this._appended(a,c)},_appended:function(a,b){var c=this._getBricks(a);this.$bricks=this.$bricks.add(c),this.layout(c,b)},remove:function(a){this.$bricks=this.$bricks.not(a),a.remove()},destroy:function(){this.$bricks.removeClass("masonry-brick").each(function(){this.style.position="",this.style.top="",this.style.left=""});var c=this.element[0].style;for(var d=0,e=f.length;d<e;d++){var g=f[d];c[g]=this.originalStyle[g]}this.element.unbind(".masonry").removeClass("masonry").removeData("masonry"),b(a).unbind(".masonry")}},b.fn.imagesLoaded=function(a){var b=this.find("img"),c=[],d=this,e=b.length;if(!b.length){a.call(this);return this}b.one("load error",function(){--e===0&&(e=b.length,b.one("load error",function(){--e===0&&a.call(d)}).each(function(){this.src=c.shift()}))}).each(function(){c.push(this.src),this.src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="});return this};var g=function(a){this.console&&console.error(a)};b.fn.masonry=function(a){if(typeof a=="string"){var c=Array.prototype.slice.call(arguments,1);this.each(function(){var d=b.data(this,"masonry");if(!d)g("cannot call methods on masonry prior to initialization; attempted to call method '"+a+"'");else{if(!b.isFunction(d[a])||a.charAt(0)==="_"){g("no such method '"+a+"' for masonry instance");return}d[a].apply(d,c)}})}else this.each(function(){var c=b.data(this,"masonry");c?(c.option(a||{}),c._init()):b.data(this,"masonry",new b.Mason(a,this))});return this}})(window,jQuery);
 	
-	// jQuery atteeeeention
-	$.fn.atteeeeention=function(a){return this.each(function(){var k=$.extend({margin:12,hideLastRow:false},a),l=$(this),f=l.find("img"),e=k.margin,c=f.length,g=0,m=l.innerWidth(),n,h=[],d=0,b=1000,o=0,i=0,j=function(){var s=m-(d-n)+e,q=Math.floor(s/o),t=s-(q*o),r=0;$.each(h,function(w,x){var v=$(f[i]),u=v.parent();r=x+q;u.height(b);if(o===(w+1)){u.css("margin-right",0);v.width(r+t);}else{v.width(r);}i++;});},p=function(){var r=0,q=o;if(k.hideLastRow===true){for(;r<q;r++){$(f[i]).parent().hide();i++;}}else{for(;r<q;r++){$(f[i]).parent().height(b);i++;}}};l.addClass("clearfix");f.css({border:0,margin:0,padding:0}).parent().css({"float":"left",display:"inline","margin-top":0,"margin-right":e,"margin-bottom":e,"margin-left":0,overflow:"hidden","vertical-align":"top"});f.each(function(){var q=$(this),r=q.attr("src");q.attr("src","").load(function(){g++;if(g===c){f.each(function(u){var t=$(this),s=t.width(),v=t.height();n=s+e;d=d+n;if(v<b){b=v;}if(d>m){j();d=n;b=v;h=[s];o=1;}else{h.push(s);o++;}if((c-1)===u){p();}});}}).attr("src",r);});});};
-	
 	var $window = $(window),
 		$content = $('#content').parent(),
 		wWidth = $window.width(),
@@ -523,33 +520,26 @@ function hoverzoom(){
 		
 		if ( tag == 'IMG' ) {
 			var url = $(this).attr('src');
-
 			url = ( url.match(/\?sz|\/proxy/) ) ? $(this).attr('src').replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : $(this).attr('src').replace(picasaRegex,'/s0/$2');
 		} else if ( tag == 'A' ) {
 			var url = $(this).attr('href');
-			
-			if ( url.match(picRegex) == null )
-				return false;
+			if ( url.match(picRegex) == null ) return false;
 		} else {
 			return false;
 		}
 		
 		var img = new Image();
-			img.src = url;
-		
-		var nWidth, nHeight, timer1, timer2, timerSC;
+			img.src = url,
+			nWidth, nHeight, timer1, timer2, timerSC;
 		
 		img.onload = function(){
 			nWidth = img.naturalWidth;
 			nHeight = img.naturalHeight;
-			
 			if ( options['hz_resolution'] === 'true' ) {
 				$zoom.children('small').remove();
 				$zoom.append('<small>'+nWidth+' x '+nHeight+'</small>');
 			}
 		}
-		
-		
 		trigger();
 		$('#picbefore').attr('href', url).show();
 		
@@ -607,17 +597,12 @@ function hoverzoom(){
 			}
 			
 			target.onload = function(){
-				if ( options['hz_complete'] === 'true' ) {
+				if ( options['hz_complete'] === 'true' )
 					$zoom.children('img').show();
-				}
-				
-				if ( options['hz_drift'] === 'true' ) {
-					if ( mouse.x > wWidth / 2 )
-						resize.left();
-					else
-						resize.right();
-				}
-				
+					
+				if ( options['hz_drift'] === 'true' )
+					(mouse.x > wWidth / 2) ? resize.left() : resize.right();
+					
 				history();
 			}
 		}
@@ -700,8 +685,6 @@ function hoverzoom(){
 			$shortcut.children('a:eq(1)').click(fullscreen);
 			
 			$shortcut.fadeIn(300);
-			var timer;
-			clearTimeout(timer);
 			timer = setTimeout(function(){
 				$shortcut.offset({'top': mouse.y + 20, 'left': mouse.x + 20});
 				history();
@@ -751,13 +734,9 @@ function hoverzoom(){
 			function screenSize(){
 				$fs.css('maxHeight', wHeight - 20).css('maxWidth', wWidth - 20);
 				
-				var timer;
-				clearTimeout(timer);
 				timer = setTimeout(function(){
 					$fs.offset({'top': xScroll + wHeight / 2 - $fs.height() / 2, 'left': wWidth / 2 - $fs.width() / 2});
-					
 					detect();
-					
 					$('#hoverzoom_info .info span').text(nWidth+' x '+nHeight + ' ('+parseInt($fs.width()/nWidth*100)+'%)');
 				}, 0);
 
@@ -984,8 +963,6 @@ function hoverzoom(){
 				}
 			});
 			
-			var timer;
-			clearTimeout(timer);
 			timer = setTimeout(function(){
 				$('#hz_allpic img').width((wWidth - 200) / options['hz_his_columns'] - 10);
 				$('#hz_allpic').imagesLoaded(function(){
@@ -998,14 +975,11 @@ function hoverzoom(){
 		});
 		
 		$('#hz_allpic_list').click(function(){
-			copyArea( $('#hz_allpic') );
+			copyArea($('#hz_allpic'));
 		});
 		
 		$('#hz_allpic_newtab').click(function(){
-			var count = $('#hz_allpic').children('a').length;
-			for (var i=0; i<count; i++){
-				window.open($('#hz_allpic a:eq('+i+')').attr('href'), 'newtab'+i);
-			}
+			newTab($('#hz_allpic'));
 		});
 		
 		$('#hz_set_back, #hz_allpic_close').click(function(){
@@ -1039,14 +1013,11 @@ function hoverzoom(){
 		});
 		
 		$('#hz_history_list').click(function(){
-			copyArea( $('#hz_history') );
+			copyArea($('#hz_history'));
 		});
 		
 		$('#hz_his_newtab').click(function(){
-			var count = $('#hz_history').children('a').length;
-			for (var i=0; i<count; i++){
-				window.open($('#hz_history a:eq('+i+')').attr('href'), 'newtab'+i);
-			}
+			newTab($('#hz_history'));
 		});
 		
 		$('#hz_his_close, #hz_set_back').click(function(){
@@ -1146,8 +1117,6 @@ function hoverzoom(){
 						$('#hz_albums').append('<a href="'+original+'" title="'+title+'"><img src="'+thumbnail+'"/></a>');
 					});
 					
-					var timer;
-					clearTimeout(timer);
 					timer = setTimeout(function(){
 						$('#hz_albums img').width((wWidth - 200) / options['hz_his_columns'] - 10);
 						
@@ -1162,14 +1131,11 @@ function hoverzoom(){
 		});
 		
 		$('#hz_albums_list').click(function(){
-			copyArea( $('#hz_albums') );
+			copyArea($('#hz_albums'));
 		});
 		
 		$('#hz_albums_newtab').click(function(){
-			var count = $('#hz_albums').children('a').length;
-			for (var i=0; i<count; i++){
-				window.open($('#hz_albums a:eq('+i+')').attr('href'), 'newtab'+i);
-			}
+			newTab($('#hz_albums'));
 		});
 		
 		$('#hz_albums_close, #hz_set_back').click(function(){
@@ -1358,14 +1324,14 @@ function hoverzoom(){
 			}
 			if (options['hz_maxpic'] === 'true'){
 				$('div[data-content-type^="image"] img').each(function(){
-					var width = $(this).parent().parent().parent().width();
+					var width = $(this).parent().parent().width();
 					if (!$(this).parent().hasClass('maxPic')){
 						var url = $(this).attr('src');
 						
 						$(this).attr('original', url).attr('src', ( url.match(/\?sz|\/proxy/) ) ? url.replace(/resize_\D?=\d+/, 'resize_w='+width) : url.replace(picasaRegex,'/w'+width+'/$2'));
 						
-						$(this).parent().css({'maxHeight': 'none', 'maxWidth': width, 'width': 'auto', 'paddingBottom': '5px'});
-						$(this).css('maxWidth', width);
+						$(this).parent().css({'maxHeight': 'none', 'maxWidth': 'none', 'width': 'auto', 'paddingBottom': '5px'});
+						$(this).css('width', '100%');
 						
 						if (!$(this).parent().parent().hasClass('maxPicAdded')){
 							$(this).parentsUntil('.Ve').find('.dl').append('<span class="a-j maxPicRemove" title="'+locale_maxPic_1+'"> - '+locale_maxPic_1+'</span>');
@@ -1383,6 +1349,10 @@ function hoverzoom(){
 	}
 	
 	function newTab(object){
+		var count = object.children('a').length;
+		for (var i=0; i<conut; i++){
+			window.open(object.children('a').eq(i).attr('href'), 'newtab'+i);
+		}
 	}
 }
 
