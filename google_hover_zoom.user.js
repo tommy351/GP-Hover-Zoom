@@ -1095,8 +1095,11 @@ function hoverzoom(){
 					}
 				});
 				
-				(typeof albumLink != 'undefined') ? 
-					$('#hz_albums_page small').html('<a href="'+authorLink+'">'+author+'</a> &raquo; <a href="'+albumLink+'" target="_blank"><strong>'+albumTitle+'</strong></a> ('+albumCounts+' '+locale_his_count_2+')') : $('#hz_albums_page small').html('<a href="'+authorLink+'">'+author+'</a> &raquo; '+locale_al_7);
+				if (typeof albumLink != 'undefined'){
+					(parseInt(albumCounts) > 1) ? $('#hz_albums_page small').html('<a href="'+authorLink+'">'+author+'</a> &raquo; <a href="'+albumLink+'" target="_blank"><strong>'+albumTitle+'</strong></a> ('+albumCounts+' '+locale_his_count_2+')') : $('#hz_albums_page small').html('<a href="'+authorLink+'">'+author+'</a> &raquo; <a href="'+albumLink+'" target="_blank"><strong>'+albumTitle+'</strong></a> ('+albumCounts+' '+locale_his_count_1+')')
+				} else {
+					$('#hz_albums_page small').html('<a href="'+authorLink+'">'+author+'</a> &raquo; '+locale_al_7);
+				}
 			});
 			
 			$.ajax({
