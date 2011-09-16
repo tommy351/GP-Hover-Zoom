@@ -529,8 +529,8 @@ function hoverzoom(){
 		}
 		
 		var img = new Image();
-			img.src = url,
-			nWidth, nHeight, timer1, timer2, timerSC;
+			img.src = url;
+		var nWidth, nHeight, timer1, timer2, timerSC;
 		
 		img.onload = function(){
 			nWidth = img.naturalWidth;
@@ -539,7 +539,7 @@ function hoverzoom(){
 				$zoom.children('small').remove();
 				$zoom.append('<small>'+nWidth+' x '+nHeight+'</small>');
 			}
-		}
+		};
 		trigger();
 		$('#picbefore').attr('href', url).show();
 		
