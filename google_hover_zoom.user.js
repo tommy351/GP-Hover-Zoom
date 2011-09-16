@@ -1093,11 +1093,10 @@ function hoverzoom(){
 	function albumDL(){
 		var xScroll;
 		$('.albumDownload').live('click', function(){
-			var album = $(this).attr('title'),
-				userid = $(this).attr('id').replace(/(.*)\/photos\/(\d+)\/albums\/(\d+)/, '$2'),
+			var	userid = $(this).attr('id').replace(/(.*)\/photos\/(\d+)\/albums\/(\d+)/, '$2'),
 				albumid = $(this).attr('id').replace(/(.*)\/photos\/(\d+)\/albums\/(\d+)/, '$3'),
-				url = 'https://picasaweb.google.com/data/feed/base/user/'+userid+'/albumid/'+albumid+'?fields=entry(media:group(media:content,media:title))&alt=json',
-				aUrl = 'https://picasaweb.google.com/data/feed/api/user/'+userid+'?alt=json';
+				url = 'https://picasaweb.google.com/data/feed/api/user/'+userid+'/albumid/'+albumid+'?fields=entry(media:group(media:content,media:title))&alt=json&callback=?',
+				aUrl = 'https://picasaweb.google.com/data/feed/api/user/'+userid+'?alt=json&callback=?';
 			
 			xScroll = $(document).scrollTop();
 			
@@ -1111,7 +1110,7 @@ function hoverzoom(){
 			$('#hz_albums_picasa').attr('href', 'picasa://downloadfeed/?url=https://picasaweb.google.com/data/feed/back_compat/user/'+userid+'/albumid/'+albumid);
 					
 			$.getJSON(aUrl, function(json){
-				var albumLink,
+				var albumLink, albumTitle, albumCounts,
 					author = json.feed.author[0].name.$t,
 					authorLink = json.feed.author[0].uri.$t;
 				
@@ -1120,11 +1119,13 @@ function hoverzoom(){
 						
 					if ( url == albumid ) {
 						albumLink = item.link[1].href;
+						albumTitle = item.media$group.media$title.$t;
+						albumCounts = item.gphoto$numphotos.$t;
 					}
 				});
 				
 				(typeof albumLink != 'undefined') ? 
-					$('#hz_albums_page small').html('<a href="'+authorLink+'">'+author+'</a> > <a href="'+albumLink+'" target="_blank"><strong>'+album+'</strong></a>') : $('#hz_albums_page small').html('<a href="'+authorLink+'">'+author+'</a> > '+locale_al_7);
+					$('#hz_albums_page small').html('<a href="'+authorLink+'">'+author+'</a> &raquo; <a href="'+albumLink+'" target="_blank"><strong>'+albumTitle+'</strong></a> ('+albumCounts+' '+locale_his_count_2+')') : $('#hz_albums_page small').html('<a href="'+authorLink+'">'+author+'</a> &raquo; '+locale_al_7);
 			});
 			
 			$.ajax({
@@ -1133,9 +1134,6 @@ function hoverzoom(){
 				type: 'GET',
 				beforeSend: function(){
 					$('#hz_albums_page small').html('<strong>'+locale_fs_4+'</strong>');
-				},
-				error: function(){
-					$('#hz_albums_page small').html(locale_al_7);
 				},
 				success: function(json){
 					$(json.feed.entry).each(function(i, data){
@@ -1285,8 +1283,7 @@ function hoverzoom(){
 							$title = ( $main.children().length > 2 ) ? $main.children(':eq(0)').children(':eq(0)').children(':eq(0)') : $main.children(':eq(0)');
 							$count = $main.parent().parent().children(':eq(1)').children(':eq(0)').children(':eq(0)').children(':eq(1)').children(':eq(0)');
 							
-							var title = $title.text() + ' (' + $count.text() + ')',
-								content = '<div tabindex="0" class="albumDownload in-albumDownload button_style blueButton" id="'+pageUrl+'" role="button" title="'+title+'">'+locale_al_1+'</div>';
+							var	content = '<div tabindex="0" class="albumDownload in-albumDownload button_style blueButton" id="'+pageUrl+'" role="button" title="'+locale_al_1+'">'+locale_al_1+'</div>';
 								
 							( $(this).children().length > 2 ) ? $(this).children().eq(1).after(content) : $(this).children().eq(0).after(content);
 							$(this).addClass('album-in-post');
@@ -1294,10 +1291,9 @@ function hoverzoom(){
 					});
 				} else {
 					$('.B-u-Y-j').each(function(){
-						var url = $(this).attr('href'),
-							title = $(this).text();
+						var url = $(this).attr('href');
 						if ( url.match(/albums/) && !$(this).hasClass('album-in-post') ) {
-							$(this).parentsUntil('.Ve').find('.dl').append(' - <span class="a-j albumDownload" tabindex="0" id="'+url+'" role="button" title="'+title+'">'+locale_fs_3+'</span>');
+							$(this).parentsUntil('.Ve').find('.dl').append(' - <span class="a-j albumDownload" tabindex="0" id="'+url+'" role="button" title="'+locale_al_1+'">'+locale_fs_3+'</span>');
 							$(this).addClass('album-in-post');
 						}
 					});
