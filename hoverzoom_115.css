@@ -79,6 +79,9 @@
   box-shadow: 0 0 150px #999 inset;
   display: none;
 }
+#hz_set_page {
+  height: 322px;
+}
 .hz_settings {
   position: fixed;
   width: 550px;
@@ -157,6 +160,20 @@
 .hz_settings .hz_menu li:hover {
   color: #dd4839;
 }
+.hz_settings .tabP :first-child {
+  left: 0;
+}
+.hz_settings .tabP :nth-child(2) {
+  left: 570px;
+}
+.hz_settings .tabP :last-child {
+  left: 1140px;
+}
+.hz_settings .buttonP {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
 .hz_settings .update {
   line-height: 2;
   margin: 0 -20px;
@@ -164,9 +181,13 @@
 }
 .hz_set_tab {
   border-top: 1px solid #ddd;
-  margin: -15px -20px 15px;
-  padding: 15px 20px 0;
   overflow: hidden;
+  height: 100%;
+  position: absolute;
+  margin-top: -15px;
+  padding: 15px 0 0 20px;
+  width: 570px;
+  height: auto;
 }
 #hz_set_save,
 #hz_set_clear,
