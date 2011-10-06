@@ -476,7 +476,7 @@ var hoverzoom = function(){
 				if ( second < 10 ) second = '0' + second;
 				
 			var date = month+'/'+day+' '+hour+':'+minute+':'+second,
-				histories = localStorage['hz_histories'].split('|||');
+				histories = (typeof localStorage['hz_histories'] != 'undefined') ? localStorage['hz_histories'].split('|||') : new Array();
 			for (i=0; i<histories.length; i++){
 				var item = histories[i].split(';');
 				if (item[0] == url){
@@ -886,7 +886,7 @@ var hoverzoom = function(){
 				picWidth = (window.innerWidth - 200) / options['hz_his_columns'] - 10,
 				newhistories = new Array(),
 				prepends = '';
-				
+			
 			if (count > 0){
 				for (var i=max; i<his; i++){
 					var indiv = histories[i].split(';'),
@@ -1021,14 +1021,17 @@ var hoverzoom = function(){
 				button.className = 'a-j';
 				button.title = lang['set10'];
 				button.innerHTML = ' - '+lang['set10'];
-				button.onclick = function(){
+				button.onclick = function(e){
+					var clone = $(iframe).clone()
 					$(iframe).nextAll().show();
 					$(iframe).parent().attr('style', 'height:226px;').click(function(){
-						$(iframe).show();
-						$(iframe).nextAll().hide();
+						$(this).children().hide();
+						$(this).attr('style', 'max-height: none; max-width: none; width: 100%;').prepend(clone);
+						iframe = this.childNodes[0];
 						$(iframe).parentsUntil('.Ve').find('.dl').append(button);
+						return false;
 					});
-					$(iframe).hide();
+					$(iframe).remove();
 					$(this).remove();
 				};
 				$(iframe).parentsUntil('.Ve').find('.dl').append(button);
