@@ -5,13 +5,13 @@
 // @author         SkyArrow
 // @website        http://userscripts.org/scripts/show/106681
 // @namespace      http://zespia.twbbs.org
-// @version        1.2.8
+// @version        1.2.9
 // @include        https://plus.google.com/*
 // ==/UserScript==
 
 var hoverzoom = function(){
 	var content = document.getElementById('content'),
-		version = '1.2.8',
+		version = '1.2.9',
 		picRegex = /\.(jpg|jpeg|gif|bmp|png|tiff)/i,
 		picasaRegex = /\/\w\d+(-\w\d*)*\/([^\/]+)$/,
 		mouse = new Array(),
@@ -44,7 +44,9 @@ var hoverzoom = function(){
 			hz_dl_link: localStorage['hz_dl_link'] || 'true',
 			hz_maxpic: localStorage['hz_maxpic'] || 'false',
 			hz_maxpic_option: localStorage['hz_maxpic_option'] || '0',
-			hz_hovering: localStorage['hz_hovering'] || 'false'
+			hz_hovering: localStorage['hz_hovering'] || 'false',
+			hz_maxyt: localStorage['hz_maxyt'] || 'false',
+			hz_maxyt_aspect: parseInt(localStorage['hz_maxyt_aspect']) || 2
 		},
 		locale = {
 			'en-US': {
@@ -100,15 +102,15 @@ var hoverzoom = function(){
 				set22: '(0: Unlimited)',
 				set23: 'Trigger:',
 				set24: 'None',
-				set25: 'Show Picture Links in Comments Directly, Max Width:',
+				set25: 'Show photos links in comments directly, max width:',
 				set26: 'Show Resolution',
 				set27: 'Full Screen Mode:',
 				set28: 'Download Shortcut:',
 				set30: 'Not to move pictures with cursor',
 				set31: 'Show Shortcuts',
 				set32: 'Enable Album Download (Only for public albums)',
-				set33: 'Show Youtube Links in Comments Directly, Video Aspect:',
-				set34: ', Max Width:',
+				set33: 'Show Youtube links in comments directly, video aspect:',
+				set34: ', max width:',
 				set35: 'Language:',
 				set36: 'Enable:',
 				set37: 'Contents',
@@ -120,7 +122,8 @@ var hoverzoom = function(){
 				set43: 'Display photos as stream width',
 				set44: 'Apply to all photos',
 				set45: 'Only apply to the first photo in album',
-				set46: 'Not hide photo when hovered'
+				set46: 'Not hide photo when hovered',
+				set47: 'Display Youtube video as stream width, video aspect:'
 			},
 			'zh-TW': {
 				menu01: '停用 Hover Zoom',
@@ -195,7 +198,8 @@ var hoverzoom = function(){
 				set43: '以訊息串寬度顯示圖片',
 				set44: '套用至所有圖片',
 				set45: '僅套用至相簿第一張圖片',
-				set46: '滑鼠移入大圖時不隱藏'
+				set46: '滑鼠移入大圖時不隱藏',
+				set47: '以訊息串寬度顯示 Youtube 影片，影片長寬比例：'
 			},
 			'zh-CN': {
 				menu01: '停用 Hover Zoom',
@@ -227,7 +231,7 @@ var hoverzoom = function(){
 				update05: '检查更新',
 				update06: '已是最新版本！',
 				set01: 'Hover Zoom 设置',
-				set02: '储存并重载页面',
+				set02: '保存并重载页面',
 				set03: '重设',
 				set04: '您确定要重设所有设定值吗？',
 				set05: 'Hover Zoom 记录',
@@ -270,7 +274,8 @@ var hoverzoom = function(){
 				set43: '以讯息流宽度显示图片',
 				set44: '套用至所有图片',
 				set45: '仅套用至相簿第一张图片',
-				set46: '鼠标移入大图时不隐藏'
+				set46: '鼠标移入大图时不隐藏',
+				set47: '以讯息流宽度显示 Youtube 视频，视频长宽比例：'
 			},
 			'ja-JP': {
 				menu01: 'Hover Zoom を無効にする',
@@ -345,7 +350,8 @@ var hoverzoom = function(){
 				set43: 'ストリーム幅で画像表示',
 				set44: '全ての画像に適用する',
 				set45: 'アルバムの一つ目の画像に適用する',
-				set46: 'カーソルが画像と重ねる時、画像隠しなし'
+				set46: '画像にカーソルを重ねた時に画像を隠さない',
+				set47: 'ストリームの幅で Youtube 動画表示、長さと幅の比：'
 			},
 			'index': ['English', '正體中文', '简体中文', '日本語']
 		},
@@ -420,6 +426,7 @@ var hoverzoom = function(){
 	'<label for="hz_language">'+lang['set35']+'</label><select id="hz_language"></select><br />'+
 	'<input id="hz_update" type="checkbox"/><label for="hz_update">'+lang['set41']+'</label> <a id="hz_checkupdate" href="javascript:void(0)">('+lang['update05']+')</a><br />'+
 	'<input id="hz_maxpic" type="checkbox"/><label for="hz_maxpic">'+lang['set43']+'</label><select id="hz_maxpic_option"></select><br />'+
+	'<input id="hz_maxyt" type="checkbox"/><label for="hz_maxyt">'+lang['set47']+'</label><select id="hz_maxyt_aspect"><option value="1">4:3</option><option value="2">16:9</option><option value="3">16:10</option></select><br />'+
 	'<input id="hz_direct" type="checkbox"/><label for="hz_direct">'+lang['set25']+'</label><input id="hz_direct_max" type="text" maxlength="4"/><label for="hz_direct_max">'+lang['set18']+'</label><br />'+
 	'<input id="hz_direct_yt" type="checkbox"/><label for="hz_direct_yt">'+lang['set33']+'</label><select id="hz_direct_ytaspect"><option value="1">4:3</option><option value="2">16:9</option><option value="3">16:10</option></select><label for="hz_direct_ytaspect">'+lang['set34']+'</label><input id="hz_direct_ytmaxwidth" type="text" maxlength="4"/><label for="hz_direct_ytmaxwidth">'+lang['set18']+'</label><br />'+
 	'<input id="hz_album" type="checkbox"/><label for="hz_album">'+lang['set32']+'</label><br />'+
@@ -812,20 +819,20 @@ var hoverzoom = function(){
 	}
 	
 	var enable = function(){
-		if ( options['hz_enable_main'] === 'true' )
+		if (options['hz_enable_main'] === 'true')
 			$('div[data-content-type^="image"] img').live('mouseenter', main);
-		if ( options['hz_enable_icon'] === 'true' )
+		if (options['hz_enable_icon'] === 'true')
 			$('.Nm img').live('mouseenter', main);
-		if ( options['hz_enable_link'] === 'true' )
+		if (options['hz_enable_link'] === 'true')
 			$('.ot-anchor').live('mouseenter', main);
 	};
 	
 	var disable = function(){
-		if ( options['hz_enable_main'] === 'true' )
+		if (options['hz_enable_main'] === 'true')
 			$('div[data-content-type^="image"] img').die('mouseenter', main);
-		if ( options['hz_enable_icon'] === 'true' )
+		if (options['hz_enable_icon'] === 'true')
 			$('.Nm img').die('mouseenter', main);
-		if ( options['hz_enable_link'] === 'true' )
+		if (options['hz_enable_link'] === 'true')
 			$('.ot-anchor').die('mouseenter', main);
 		db.style.display = 'none';
 	};
@@ -996,6 +1003,39 @@ var hoverzoom = function(){
 		return false;
 	};
 	
+	var ytDL = function(){
+		$('div[data-content-type$="flash"]').live('click', function(){
+			var width = $(this).parent().parent().width();
+			if (options['hz_maxyt_aspect'] == 1) {
+				var aspect = 3/4;
+			} else if (options['hz_maxyt_aspect'] == 3) {
+				var aspect = 10/16;
+			} else {
+				var aspect = 9/16;
+			}
+			this.setAttribute('style', 'max-height: none; max-width: none; width: 100%;');
+			$(this).children('iframe').bind('load', function(){
+				var iframe = this;
+				$(iframe).width(width).height(width*aspect);
+				var button = document.createElement('span');
+				button.className = 'a-j';
+				button.title = lang['set10'];
+				button.innerHTML = ' - '+lang['set10'];
+				button.onclick = function(){
+					$(iframe).nextAll().show();
+					$(iframe).parent().attr('style', 'height:226px;').click(function(){
+						$(iframe).show();
+						$(iframe).nextAll().hide();
+						$(iframe).parentsUntil('.Ve').find('.dl').append(button);
+					});
+					$(iframe).hide();
+					$(this).remove();
+				};
+				$(iframe).parentsUntil('.Ve').find('.dl').append(button);
+			});
+		});
+	};
+	
 	var autoUpdate = function(manual){
 		var main = function(newVer, content, latest){
 			$('#content').parent().append('<div id="hz_update" class="hz_settings"><h3>'+lang['update01']+'</h3><small></small><div title="'+lang['set10']+'" class="closeButton" id="hz_update_close"></div>'+content+'<a id="hz_update_install" class="button_style greenButton" href="http://userscripts.org/scripts/source/106681.user.js" title="'+lang['update01']+'">'+lang['update01']+'</a><div id="hz_update_cancel" class="button_style whiteButton" title="'+lang['update04']+'">'+lang['update04']+'</div></div>');
@@ -1043,7 +1083,6 @@ var hoverzoom = function(){
 	}
 
 	var timer = {
-		// !Todo: 通知區域內無反應
 		inComment: function(){
 			var commLinks = document.querySelectorAll('.zj .ot-anchor');
 			for (a=0; a<commLinks.length; a++){
@@ -1107,7 +1146,6 @@ var hoverzoom = function(){
 				}
 			}
 		},
-		// !Todo: 通知區域內無反應
 		picLink: function(){
 			var Jm = document.getElementsByClassName('Jm');
 			for (b=0; b<Jm.length; b++){
@@ -1337,7 +1375,8 @@ var hoverzoom = function(){
 	if (options['hz_his'] === 'true') init.history();
 	if (options['hz_allpics'] === 'true') init.allPic();
 	if (options['hz_album'] === 'true') init.album();
-	if ( options['hz_update'] === 'true' ) autoUpdate();
+	if (options['hz_update'] === 'true') autoUpdate();
+	if (options['hz_maxyt'] === 'true') ytDL();
 	$('#hz_checkupdate').click(function(){autoUpdate(true);});
 	enable();
 	timer.main();
