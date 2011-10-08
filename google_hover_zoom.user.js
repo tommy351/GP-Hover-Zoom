@@ -879,7 +879,7 @@ var hoverzoom = function(){
 		$('#hz_history_open').click(function(){
 			$('#hz_set_back, #hz_history_page').fadeIn(300);
 			
-			var	histories = localStorage['hz_histories'].split('|||'),
+			var	histories = (typeof localStorage['hz_histories'] != 'undefined') ? localStorage['hz_histories'].split('|||') : new Array(),
 				his = histories.length,
 				max = (his >= options['hz_his_max']) ? his-options['hz_his_max'] : 0,
 				count = (his > options['hz_his_max']) ? options['hz_his_max'] : his,
