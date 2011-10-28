@@ -5,13 +5,14 @@
 // @author         SkyArrow
 // @website        http://userscripts.org/scripts/show/106681
 // @namespace      http://zespia.twbbs.org
-// @version        1.2.9.1
+// @version        1.2.9.2
 // @include        https://plus.google.com/*
+// @exclude        https://plus.google.com/ripples/*
 // ==/UserScript==
 
 var hoverzoom = function(){
 	var content = document.getElementById('content'),
-		version = '1.2.9.1',
+		version = '1.2.9.2',
 		picRegex = /\.(jpg|jpeg|gif|bmp|png|tiff)/i,
 		picasaRegex = /\/\w\d+(-\w\d*)*\/([^\/]+)$/,
 		mouse = new Array(),
