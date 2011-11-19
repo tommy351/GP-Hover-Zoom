@@ -37,7 +37,7 @@ $shadow: 0 4px 16px rgba(0,0,0,0.2);
 	@include border-radius(50%);
 	@include animation(loading infinite 0.8s linear);
 }
-#hz_dl_link{
+#hoverzoom_db{
 	position: fixed;
 	top: 45%;
 	right: 0;
@@ -223,7 +223,7 @@ $shadow: 0 4px 16px rgba(0,0,0,0.2);
 		}
 	}
 }
-#hz_fullscreen{
+#hoverzoom_fs{
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -317,20 +317,6 @@ $shadow: 0 4px 16px rgba(0,0,0,0.2);
 			}
 		}
 	}
-	/*
-	.meta{
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 50px;
-		@include background-image(linear-gradient(top, rgba(0,0,0,0.5), rgba(0,0,0,0)));
-		span{
-			font: 300 16px "HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
-			display: inline-block;
-		}
-	}
-	*/
 	.meta{
 		position: absolute;
 		top: -100%;
@@ -339,12 +325,134 @@ $shadow: 0 4px 16px rgba(0,0,0,0.2);
 		display: none;
 	}
 }
+.hz_settings{
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: none;
+	.back{
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(255,255,255,0.75);
+		z-index: 10000;
+	}
+	.main{
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: 550px;
+		height: 315px;
+		margin-top: -250px;
+		margin-left: -285px;
+		background: #fff;
+		border: 1px solid #acacac;
+		border-bottom: 1px solid #999;
+		box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+		z-index: 10001;
+		border-radius: 2px;
+		padding: 20px;
+		overflow: hidden;
+		h3{
+			font-size: 20px;
+			font-weight: normal;
+			margin: 0;
+		}
+		small{
+			color: #666;
+		}
+		.close{
+			background: url(https://ssl.gstatic.com/s2/oz/images/dialogx.png) no-repeat;
+			cursor: pointer;
+			height: 15px;
+			width: 15px;
+			position: absolute;
+			right: 16px;
+			top: 16px;
+		}
+		.menu{
+			background: #f5f5f5;
+			border-bottom: 1px solid #ebebeb;
+			border-top: 1px solid #ebebeb;
+			padding: 0 5px 0 10px;
+			margin: 15px -20px;
+			li{
+				display: inline-block;
+				padding: 7px 12px;
+				color: #666;
+				cursor: pointer;
+				&.current{
+					font-weight: bold;
+					color: #dd4839;
+				}
+				&:hover{
+					color: #dd4839;
+				}
+			}
+		}
+		.tabs{
+			border-top: 1px solid #ddd;
+			//overflow: hidden;
+			//height: 200px;
+			position: absolute;
+			left: 0;
+			top: 105px;
+			width: 590 * 3px;
+			div{
+				float: left;
+				width: 550px;
+				padding: 15px 20px 0;
+			}
+		}
+		input[type="text"]{
+			border: 1px solid #d9d9d9;
+			padding: 2px 5px;
+			margin-right: 5px;
+			width: 50px;
+		}
+		input[type="checkbox"]{
+			margin: 0 5px 0 0;
+		}
+		label{
+			line-height: 2;
+			margin-right: 5px;
+			display: inline-block;
+			min-width: 120px;
+		}
+		input + label, select + label{
+			min-width: 0;
+		}
+		textarea{
+			border: 1px solid #ccc;
+			font-family: Consolas, Monaco, "Courier New", Courier, monospace !important;
+			font-size: 12px;
+			height: 310px;
+			width: 540px;
+			padding: 10px 0 0 10px;
+			margin-top: 10px;
+		}
+		.functions{
+			float: right;
+			&.bottom{
+				position: absolute;
+				right: 20px;
+				bottom: 20px;
+			}
+			div:last-child{
+				margin-right: 0;
+			}
+		}
+	}
+}
 .closeButton{
 	background: url(https://ssl.gstatic.com/ui/v1/icons/common/x_8px.png) no-repeat;
 	cursor: pointer;
 	height: 21px;
 	width: 21px;
-	//margin: 1px;
 	position: absolute;
 	right: 2px;
 	top: 2px;
