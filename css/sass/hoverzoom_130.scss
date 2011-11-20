@@ -472,6 +472,16 @@ $shadow: 0 4px 16px rgba(0,0,0,0.2);
 		z-index: 10001;
 	}
 }
+#hz_album_page{
+	.blue, .green{
+		display: none;
+	}
+	&.success{
+		.blue, .green{
+			display: block;
+		}
+	}
+}
 .closeButton{
 	background: url(https://ssl.gstatic.com/ui/v1/icons/common/x_8px.png) no-repeat;
 	cursor: pointer;
