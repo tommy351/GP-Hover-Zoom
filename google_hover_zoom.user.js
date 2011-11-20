@@ -1024,19 +1024,18 @@ var hoverzoom = function(){
 		}
 
 		var maxPic = function(){
-			var width = $('div[id^="update"]:visible').children().width();
+			var dWidth = $('div[id^="update"]:visible').children().width();
 
 			$('#content div[id^="update"] div[data-content-type^="image"] img').each(function(){
 				if (!$(this).parent().hasClass('maxPic')){
 					var url = this.src,
-						$parent = $(this).parent().parent();
-					
-					if (width === null) width = $parent.width();
+						$parent = $(this).parent().parent(),
+						width = $parent.width() == 0 ? dWidth : $parent.width();
 
 					$(this).attr({
 						original: url,
 						src: url.match(/\?sz|\/proxy/) ? url.replace(/resize_\D?=\d+/, 'resize_w='+width) : url.replace(picasaRegex,'/w'+width+'/$2')
-					});
+					}).css({width: width, height: 'auto'});
 
 					if (!$parent.hasClass('maxPicAdded')) {
 						var zoom = $('<span>');
@@ -1209,7 +1208,6 @@ var hoverzoom = function(){
 			$('#hoverzoom_db').mouseenter(function(){
 				$(this).attr('href', $(this).data('url'));
 			});
-			
 		},
 		fs: function(){
 			var $page = $('#hoverzoom_fs');
