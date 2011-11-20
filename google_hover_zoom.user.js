@@ -1035,7 +1035,7 @@ var hoverzoom = function(){
 					$(this).attr({
 						original: url,
 						src: url.match(/\?sz|\/proxy/) ? url.replace(/resize_\D?=\d+/, 'resize_w='+width) : url.replace(picasaRegex,'/w'+width+'/$2')
-					}).css({width: width, height: 'auto'});
+					}).css('maxWidth', width);
 
 					if (!$parent.hasClass('maxPicAdded')) {
 						var zoom = $('<span>');
