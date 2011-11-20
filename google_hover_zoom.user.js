@@ -10,7 +10,7 @@
 // @exclude        https://plus.google.com/ripples/*
 // ==/UserScript==
 
-// Todo: 記錄頁面、Youtube最大化、全螢幕瀏覽、浮動下載快捷鍵
+// Todo: 記錄頁面、全螢幕瀏覽、浮動下載快捷鍵
 var hoverzoom = function(){
 	var	version = '1.3.0',
 		picRegex = /\.(jpg|jpeg|gif|bmp|png|tiff)/i,
@@ -828,6 +828,38 @@ var hoverzoom = function(){
 		});
 	}
 
+	var maxYT = function(){
+		$content.on('click', 'div[data-content-type$="flash"]', function(){
+			var width = $(this).parent().parent().width();
+			if (options.hz_maxyt_aspect == 1) {
+				var aspect = 3/4;
+			} else if (options.hz_maxyt_aspect == 3) {
+				var aspect = 10/16;
+			} else {
+				var aspect = 9/16;
+			}
+
+			$(this).attr('style', 'max-height: none; max-width: none; width: 100%;').children('iframe').load(function(){
+				var iframe = $(this),
+					button = $('<span>');
+
+				button.addClass('a-j').attr('title', lang.set10).html(' - '+lang.set10).click(function(){
+					iframe.nextAll().show().parent().attr('style', 'height: 226px;').click(function(){
+						$(this).children().hide();
+						$(this).attr('style', 'max-height: none; max-width: none; width: 100%;').prepend(iframe);
+						button.show();
+						return false;
+					});
+
+					iframe.remove();
+					$(this).hide();
+				});
+
+				iframe.attr({width: width, height: width * aspect}).parentsUntil('.Ve').find('.dl').append(button);
+			});
+		});
+	}
+
 	var timer = new function(){
 		var interval;
 
@@ -1199,6 +1231,7 @@ var hoverzoom = function(){
 
 	enable();
 	if (options.hz_update === 'true') update();
+	if (options.hz_maxyt === 'true') maxYT();
 
 	/**
 	 * jQuery Masonry v2.0.111015
