@@ -13,11 +13,17 @@ Nightly: 1.3.0
 
 ##Features
 
-* Enlarge thumbnails & profile icons on mouse hover.
-* Display pictures in comments directly.
-* Download albums quickly.
+* Enlarge thumbnails & profile icons on hover.
+* Display picture and Youtube video links in comments directly.
+* Download public albums.
 
-## Usages
+##Contribution
+
+You can help me by forking or translating.
+
+**Localization**: <http://goo.gl/4IyfO>  
+
+##Usages
 
 * **Firefox**: Install [Greasemonkey] or [Scriptish] first, then install the script.
 * **Chrome**: Install the script directly.
@@ -27,7 +33,7 @@ Nightly: 1.3.0
 [Scriptish]: https://addons.mozilla.org/firefox/addon/scriptish/
 [NinjaKit]: http://d.hatena.ne.jp/os0x/20100612/1276330696
 
-## Screenshots
+##Screenshots
 ![Enlarge thumbnails](https://lh3.googleusercontent.com/-JEICSe4YpwA/Tj5CB0HBJ1I/AAAAAAAABYI/no36sypOX04/s0/iehweC.jpg)
 
 ![Settings](https://lh3.googleusercontent.com/-al32Pu0IP54/Tj5B6ZU3KtI/AAAAAAAABYA/4N4c5-tLbOY/s0/new_settings_page_01.png)
@@ -38,10 +44,18 @@ Nightly: 1.3.0
 
 ![Download all photos in the page](https://lh4.googleusercontent.com/-q_mfJ8pakxQ/TlB4Y62sc8I/AAAAAAAABwI/poH_4OFb1jo/s800/allpic.jpg)
 
-## Changelog
+##Changelog
 
-**English**
+###English
 
+- 1.3.0
+	- Rebuild Structure and improve efficient.
+	- jQuery update to ver. 1.7.
+	- Terminal all functions after disabled.
+	- Changed loading icon and the appearance of download shortcut.
+	- Fixed the problem that album download link can't be added to photo pages.
+	- *Display photos as stream width*: Picture certainly fits the width of the stream.
+	- *Fullscreen mode*: Update interface.
 * 1.2.9.3
 	- Fixed the problem of sharing Google+ Pages.
 * 1.2.9
@@ -156,8 +170,16 @@ Nightly: 1.3.0
 * 1.0.2
 	* Modified RegExp.
  
-**中文**
+###中文
 
+- 1.3.0
+	- 重建架構並增進效能。
+	- jQuery更新至1.7版。
+	- 停用後停止所有功能。
+	- 更改載入圖示、下載快捷鍵的外觀。
+	- 修復相片頁面中，無法新增下載相簿連結的問題。
+	- *以訊息串寬度顯示圖片*：使圖片寬度必定符合訊息串寬度。
+	- *全螢幕模式*：介面更新。
 * 1.2.9.3
 	- 修復分享Google+ Pages的錯誤。
 * 1.2.9
