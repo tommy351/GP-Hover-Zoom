@@ -10,7 +10,7 @@
 // @exclude        https://plus.google.com/ripples/*
 // ==/UserScript==
 
-// Todo: 記錄頁面、全螢幕瀏覽、浮動下載快捷鍵
+// Todo: 全螢幕瀏覽、浮動下載快捷鍵、觸發鍵（熱鍵）
 var hoverzoom = function(){
 	var	version = '1.3.0',
 		picRegex = /\.(jpg|jpeg|gif|bmp|png|tiff)/i,
@@ -561,6 +561,7 @@ var hoverzoom = function(){
 		var show = function(){
 			$loading.show().offset({top: mouse.y - 10, left: mouse.x - 10});
 			if (options.hz_download === 'true') $('#hoverzoom_db').data('url', url);
+			history();
 			
 			$('<img>').attr('src', url).load(function(){
 				if (trigger1 == true){
@@ -644,6 +645,30 @@ var hoverzoom = function(){
 			}
 		}
 
+		var history = function(){
+			var time = new Date(),
+				month = time.getMonth() + 1,
+				day = time.getDate(),
+				hour = time.getHours(),
+				minute = time.getMinutes(),
+				second = time.getSeconds();
+			if ( minute < 10 ) minute = '0' + minute;
+			if ( second < 10 ) second = '0' + second;
+			
+			var date = month+'/'+day+' '+hour+':'+minute+':'+second,
+				storage = localStorage.hz_histories !== '' && typeof localStorage.hz_histories !== 'undefined' ? localStorage.hz_histories.split('|||') : [];
+			
+			for (var i=0; i<storage.length; i++){
+				var item = storage[i].split(';');
+				if (item[0] === url){
+					storage.splice(i, 1);
+				}
+			}
+
+			storage.push(url+';'+date);
+			localStorage.hz_histories = storage.join('|||');
+		}
+
 		var fullscreen = function(){
 			hide();
 			var $fs = $('#hz_fullscreen'),
@@ -704,7 +729,34 @@ var hoverzoom = function(){
 	var history = function(){
 		var $page = $('#hz_history_page'),
 			width = parseInt(($page.width() - 200) / options.hz_his_columns - 10),
-			fragment = document.createDocumentFragment();
+			storage = localStorage.hz_histories !== '' && typeof localStorage.hz_histories !== 'undefined' ? localStorage.hz_histories.split('|||') : [],
+			length = storage.length,
+			max = length >= options.hz_his_max ? his - options.hz_his_max : 0,
+			count = length > options.hz_his_max ? options.hz_his_max : length,
+			width = parseInt(($page.width() - 200) / options.hz_his_columns - 10),
+			fragment = document.createDocumentFragment(),
+			newarr = [];
+
+		if (storage.length > 0){
+			for (var i=max; i<storage.length; i++){
+				if (storage[i] !== '') newarr.push(storage[i]);
+			}
+
+			localStorage.hz_histories = newarr.join('|||');
+
+			for (var a=newarr.length-1; a>=0; a--){
+				var img = document.createElement('a'),
+					item = newarr[a].split(';'),
+					thumbnail = item[0].match(/googleusercontent/) && item[0].match(picasaRegex) ? item[0].replace(picasaRegex, '/w'+parseInt(width)+'/$2') : item[0];
+				
+				$(img).attr({href: item[0], title: item[1]}).html('<img src="'+thumbnail+'" width="'+width+'">');
+				fragment.appendChild(img);
+			}
+		}
+
+		count > 1 ? $page.find('small').html('<strong>'+count+'</strong> / '+options.hz_his_max + lang.set08) : $page.find('small').html('<strong>'+count+'</strong> / '+options.hz_his_max + lang.set07);
+
+		sortPic($page, fragment);
 	}
 
 	var albumDL = function(){
@@ -713,7 +765,7 @@ var hoverzoom = function(){
 			data = $(this).data('url'),
 			userid = data.replace(/(.*)\/photos\/(\d+)\/albums\/(\d+)/, '$2'),
 			albumid = data.replace(/(.*)\/photos\/(\d+)\/albums\/(\d+)/, '$3'),
-			width = parseInt((window.innerWidth - 200) / options['hz_his_columns'] - 10),
+			width = parseInt(($page.width() - 200) / options.hz_his_columns - 10),
 			fragment = document.createDocumentFragment();
 
 		$page.fadeIn(300).find('.orange').attr('href', 'picasa://downloadfeed/?url=https://picasaweb.google.com/data/feed/back_compat/user/'+userid+'/albumid/'+albumid);
@@ -974,7 +1026,7 @@ var hoverzoom = function(){
 		var maxPic = function(){
 			var width = $('div[id^="update"]:visible').children().width();
 
-			$('div[id^="update"] div[data-content-type^="image"] img').each(function(){
+			$('#content div[id^="update"] div[data-content-type^="image"] img').each(function(){
 				if (!$(this).parent().hasClass('maxPic')){
 					var url = this.src,
 						$parent = $(this).parent().parent();
@@ -1167,15 +1219,17 @@ var hoverzoom = function(){
 			});
 		},
 		his: function(){
-			var $page = $('hz_history_page');
+			var $page = $('#hz_history_page');
 
 			$('#hz_history_open').on('click', history);
+			
 			$page.on('click', '.back, .close', function(){
 				$page.fadeOut(300, function(){
 					$(this).find('.inner').empty();
 				});
 			}).on('click', '.white', function(){
 				$page.find('.inner').empty();
+				$page.find('small').html('<strong>0</strong> / '+options.hz_his_max + lang.set07);
 				localStorage.hz_histories = '';
 			}).on('click', '.blue', copyLink)
 			.on('click', '.green', newTab);
