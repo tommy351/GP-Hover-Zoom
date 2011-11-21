@@ -4,14 +4,12 @@
 	animation: $property;
 	-moz-animation: $property;
 	-webkit-animation: $property;
-	-o-animation: $property;
 }
 
 @mixin user-select($property){
 	user-select: $property;
 	-moz-user-select: $property;
 	-webkit-user-select: $property;
-	-o-user-select: $property;
 }
 
 $shadow: 0 4px 16px rgba(0,0,0,0.2);
@@ -242,6 +240,19 @@ $shadow: 0 4px 16px rgba(0,0,0,0.2);
 	color: #fff;
 	z-index: 10010;
 	display: none;
+	&.multi{
+		.prev, .next, .left{
+			display: block;
+		}
+	}
+	&.load{
+		.loading{
+			opacity: 1;
+		}
+	}
+	.prev, .next, .left{
+		display: none;
+	}
 	.back{
 		position: absolute;
 		top: 0;
@@ -260,13 +271,12 @@ $shadow: 0 4px 16px rgba(0,0,0,0.2);
 		}
 	}
 	.ctrlbar{
-		display: none;
 		.prev, .next{
 			position: absolute;
 			top: 10%;
-			width: 50px;
+			width: 50%;
 			height: 80%;
-			opacity: 0.3;
+			opacity: 0;
 			z-index: 10020;
 			cursor: pointer;
 			@include transition(0.5s);
@@ -300,7 +310,7 @@ $shadow: 0 4px 16px rgba(0,0,0,0.2);
 		.close{
 			position: absolute;
 			top: 10px;
-			right: 15px;
+			left: 10px;
 			width: 32px;
 			height: 32px;
 			z-index: 10020;
@@ -329,10 +339,25 @@ $shadow: 0 4px 16px rgba(0,0,0,0.2);
 	}
 	.meta{
 		position: absolute;
-		top: -100%;
-		left: -100%;
-		font: 300 13px "HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
-		display: none;
+		.left{
+			float: left;
+		}
+		.right{
+			float: right;
+		}
+	}
+	.loading{
+		background: url(https://lh6.googleusercontent.com/-lVm07OtuEfI/TskgkNnQOvI/AAAAAAAADOc/r7xtzlwKOvE/ajax-loader%2525281%252529.gif) no-repeat center #fff;
+		border-radius: 50%;
+		width: 50px;
+		height: 50px;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		margin-top: -25px;
+		margin-left: -25px;
+		opacity: 0;
+		@include transition(0.3s);
 	}
 }
 .hz_settings{
@@ -419,11 +444,8 @@ $shadow: 0 4px 16px rgba(0,0,0,0.2);
 		}
 		.tabs{
 			border-top: 1px solid #ddd;
-			//overflow: hidden;
-			//height: 200px;
 			position: absolute;
 			left: 0;
-			//top: 105px;
 			width: 590 * 3px;
 			div{
 				float: left;
@@ -586,6 +608,10 @@ $shadow: 0 4px 16px rgba(0,0,0,0.2);
 		border-bottom: 9px dashed #fff;
 		content: ""; 
 	}
+}
+@keyframes loading{
+	0% {transform: rotate(0deg)}
+	100% {transform: rotate(360deg)}
 }
 @-webkit-keyframes loading{
 	0% {-webkit-transform: rotate(0deg)}

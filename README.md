@@ -54,8 +54,11 @@ You can help me by forking or translating.
 	- Terminal all functions after disabled.
 	- Changed loading icon and the appearance of download shortcut.
 	- Fixed the problem that album download link can't be added to photo pages.
-	- *Display photos as stream width*: Picture certainly fits the width of the stream.
-	- *Fullscreen mode*: Update interface.
+	- Fix the problem that the script didn't affect when sharing others' albums.
+	- *Display photos as stream width*: Picture fits the width of the stream.
+	- *Fullscreen mode*:
+		- Update interface.
+		- Minify structure and improve efficient.
 * 1.2.9.3
 	- Fixed the problem of sharing Google+ Pages.
 * 1.2.9
@@ -178,8 +181,11 @@ You can help me by forking or translating.
 	- 停用後停止所有功能。
 	- 更改載入圖示、下載快捷鍵的外觀。
 	- 修復相片頁面中，無法新增下載相簿連結的問題。
-	- *以訊息串寬度顯示圖片*：使圖片寬度必定符合訊息串寬度。
-	- *全螢幕模式*：介面更新。
+	- 修復分享他人相簿時，功能無法生效的問題。
+	- *以訊息串寬度顯示圖片*：使圖片寬度符合訊息串寬度。
+	- *全螢幕模式*：
+		- 介面更新。
+		- 簡化結構並提昇效能。
 * 1.2.9.3
 	- 修復分享Google+ Pages的錯誤。
 * 1.2.9
