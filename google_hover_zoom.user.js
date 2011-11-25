@@ -10,7 +10,6 @@
 // @exclude        https://plus.google.com/ripples/*
 // ==/UserScript==
 
-// Todo: 浮動下載快捷鍵
 var hoverzoom = function(){
 	var	version = '1.3.0',
 		picRegex = /\.(jpg|jpeg|gif|bmp|png|tiff)/i,
@@ -1238,14 +1237,12 @@ var hoverzoom = function(){
 					}).css('maxWidth', width);
 
 					if (!$parent.hasClass('maxPicAdded')) {
-						var zoom = $('<span>');
-						zoom.attr({class: 'a-j', title: lang.maxpic01}).html(' - '+lang.maxpic01).click(function(){
+						var zoom = $('<span>').attr({class: 'a-j', title: lang.maxpic01}).html(' - '+lang.maxpic01).click(function(){
 							$(img).parent().parent().find('.maxPic').each(function(){
-								$(img).attr('style', '');
-								$(img).children('img').attr('src', $(img).children('img').attr('original'));
+								$(this).attr('style', '').children('img').attr('src', $(this).children('img').attr('original'));
 							});
-							$(document).scrollTop($(img).parent().parent().parent().parent().offset().top - 100);
-							$(img).remove();
+							$(document).scrollTop($(this).parent().parent().parent().parent().offset().top - 100);
+							$(this).remove();
 						});
 
 						$(img).parentsUntil('.Ve').find('.dl').append(zoom);
