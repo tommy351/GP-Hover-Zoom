@@ -38,7 +38,7 @@ $main: #dd4839;
 	width: 20px;
 	height: 20px;
 	box-shadow: 0 -2px 1px 1px $main;
-	position: fixed;
+	position: absolute;
 	pointer-events: none;
 	z-index: 10000;
 	display: none;
@@ -68,7 +68,7 @@ $main: #dd4839;
 		height: 25px;
 		background: #aaa;
 		@include border-radius(50%);
-		@include transition(0.5s);
+		@include transition(0.3s);
 		&:before, &:after{
 			position: absolute;
 			content: "";
@@ -152,7 +152,6 @@ $main: #dd4839;
 	}
 }
 .hz_button{
-	//display: inline-block;
 	position: relative;
 	cursor: pointer;
 	font-size: 11px;
@@ -182,7 +181,6 @@ $main: #dd4839;
 		}
 		&:focus, &:active{
 			box-shadow: 0 0 0 1px #fff inset;
-			//outline: none;
 		}
 	}
 	&.blue{
@@ -197,7 +195,6 @@ $main: #dd4839;
 		}
 		&:focus, &:active{
 			box-shadow: 0 0 0 1px #fff inset;
-			//outline: none;
 		}
 	}
 	&.white{
@@ -255,7 +252,7 @@ $main: #dd4839;
 	}
 	&.load{
 		.loading{
-			opacity: 1;
+			opacity: 0.8;
 		}
 	}
 	&.multi{
@@ -294,6 +291,7 @@ $main: #dd4839;
 			box-shadow: $shadow;
 			max-width: 0;
 			max-height: 0;
+			display: block;
 		}
 	}
 	.ctrl{
@@ -302,26 +300,10 @@ $main: #dd4839;
 		width: 100%;
 		height: 100px;
 		margin-top: -50px;
-		//opacity: 1;
-		//
-		/*
-		@include transition(opacity 0.5s);
-		&.hide{
-			opacity: 0;
-		}
-		*/
 		@include transition(margin 0.5s);
+		@include background-image(linear-gradient(top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 50%));
 		&:hover{
 			margin-top: 0;
-		}
-		&:before{
-			content: "";
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 50px;
-			@include background-image(linear-gradient(top, rgba(0,0,0,0.8), rgba(0,0,0,0)));
 		}
 		div{
 			@include transition(0.3s);
@@ -398,7 +380,6 @@ $main: #dd4839;
 			float: right;
 			margin: 15px 25px;
 			position: relative;
-			//display: none;
 			a{
 				color: #ccc;
 				margin-left: 20px;
@@ -459,10 +440,11 @@ $main: #dd4839;
 		}
 	}
 	.loading{
-		background: url(https://lh3.googleusercontent.com/-srn6SdhecMY/TstzMmUVv6I/AAAAAAAADPY/qknn7QLzEc8/ajax-loader.gif) no-repeat center #000;
+		background: #000;
 		border-radius: 50%;
 		width: 50px;
 		height: 50px;
+		overflow: hidden;
 		position: absolute;
 		top: 50%;
 		left: 50%;
@@ -470,6 +452,27 @@ $main: #dd4839;
 		margin-left: -25px;
 		opacity: 0;
 		@include transition(0.3s);
+		@include animation(loading 2s infinite linear);
+		&:before, &:after{
+			position: absolute;
+			content: "";
+		}
+		&:before{
+			border: 5px solid #fff;
+			border-radius: 50%;
+			height: 24px;
+			width: 24px;
+			top: 8px;
+			left: 8px;
+		}
+		&:after{
+			background: #000;
+			content: "";
+			height: 12px;
+			width: 36px;
+			top: 30px;
+			left: 7px;
+		}
 	}
 }
 .hz_settings{
@@ -493,9 +496,6 @@ $main: #dd4839;
 		overflow-x: hidden;
 		overflow-y: auto;
 		margin: 10px 0;
-		.inner{
-			//display: block;
-		}
 		img{
 			margin-right: 10px;
 			margin-top: 5px;
@@ -586,7 +586,6 @@ $main: #dd4839;
 		textarea{
 			border: 1px solid #ccc;
 			font: 12px Consolas, Monaco, "Courier New", Courier, monospace !important;
-			//font-size: 12px;
 			height: 265px;
 			width: 540px;
 			padding: 10px 0 0 10px;
@@ -594,9 +593,7 @@ $main: #dd4839;
 			resize: none;
 		}
 		.functions{
-			//float: right;
 			position: absolute;
-			//right: 20px;
 			&.top{
 				top: 20px;
 				right: 50px;
