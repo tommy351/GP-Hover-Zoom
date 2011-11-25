@@ -798,11 +798,19 @@ var hoverzoom = function(){
 						getSize();
 						$(item).css('maxWidth', wWidth);
 						$func.css('fontWeight', 'normal').eq(1).css('fontWeight', 'bold');
-						main(0, (wWidth - $(item).width()) / 2);
+						if ($(item).height() > wHeight){
+							main(0, (wWidth - $(item).width()) / 2);
+						} else {
+							main((wHeight - $(item).height()) / 2, (wWidth - $(item).width()) / 2);
+						}
 					}, function(){
 						$(item).css({maxWidth: 'none', maxHeight: 'none'});
 						$func.css('fontWeight', 'normal').eq(2).css('fontWeight', 'bold');
-						main(0, 0);
+						if ($(item).height() > wHeight){
+							main(0, 0);
+						} else {
+							main((wHeight - $(item).height()) / 2, 0);
+						}
 					}
 				]
 
