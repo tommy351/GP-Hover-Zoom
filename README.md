@@ -6,9 +6,6 @@
 
 ##Download
 
-Latest: 1.2.9.4  
-Nightly: 1.3.0
-
 <http://userscripts.org/scripts/show/106681>
 
 ##Features
@@ -52,7 +49,7 @@ You can help me by forking or translating.
 	- Rebuild Structure and improve efficient.
 	- jQuery update to ver. 1.7.
 	- Terminal all functions after disabled.
-	- Changed loading icon and the appearance of download shortcut.
+	- Changed loading icon and the appearance of download button.
 	- Fixed the problem that album download link can't be added to photo pages.
 	- Fix the problem that the script didn't affect when sharing others' albums.
 	- *Display photos as stream width*: Picture fits the width of the stream.
@@ -179,7 +176,7 @@ You can help me by forking or translating.
 	- 重建架構並增進效能。
 	- jQuery更新至1.7版。
 	- 停用後停止所有功能。
-	- 更改載入圖示、下載快捷鍵的外觀。
+	- 更改載入圖示、下載按鈕的外觀。
 	- 修復相片頁面中，無法新增下載相簿連結的問題。
 	- 修復分享他人相簿時，功能無法生效的問題。
 	- *以訊息串寬度顯示圖片*：使圖片寬度符合訊息串寬度。
