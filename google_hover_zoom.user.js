@@ -5,13 +5,13 @@
 // @author         SkyArrow
 // @website        http://userscripts.org/scripts/show/106681
 // @namespace      http://zespia.twbbs.org
-// @version        1.3.0
+// @version        1.3.0.1
 // @include        https://plus.google.com/*
 // @exclude        https://plus.google.com/ripples/*
 // ==/UserScript==
 
 var hoverzoom = function(){
-	var	version = '1.3.0',
+	var	version = '1.3.0.1',
 		picRegex = /\.(jpg|jpeg|gif|bmp|png|tiff)/i,
 		picasaRegex = /\/\w\d+(-\w\d*)*\/([^\/]+)$/,
 		mouse = [];
@@ -691,8 +691,8 @@ var hoverzoom = function(){
 			if ( second < 10 ) second = '0' + second;
 			
 			var date = month+'/'+day+' '+hour+':'+minute+':'+second,
-				storage = localStorage.hz_histories !== '' && typeof localStorage.hz_histories !== 'undefined' ? localStorage.hz_histories.split('|||') : [];
-			
+				storage = localStorage.hz_histories == null || localStorage.hz_histories == '' ? [] : localStorage.hz_histories.split('|||');
+
 			for (var i=0; i<storage.length; i++){
 				var item = storage[i].split(';');
 				if (item[0] === url){
@@ -934,7 +934,7 @@ var hoverzoom = function(){
 	var history = function(){
 		var $page = $('#hz_history_page'),
 			width = parseInt(($page.width() - 200) / options.hz_his_columns - 10),
-			storage = localStorage.hz_histories !== '' && typeof localStorage.hz_histories !== 'undefined' ? localStorage.hz_histories.split('|||') : [],
+			storage = localStorage.hz_histories == null || localStorage.hz_histories == '' ? [] : localStorage.hz_histories.split('|||'),
 			length = storage.length,
 			max = length >= options.hz_his_max ? length - options.hz_his_max : 0,
 			count = length > options.hz_his_max ? options.hz_his_max : length,
@@ -1170,7 +1170,7 @@ var hoverzoom = function(){
 				if (!$main.hasClass('album-in-page')){
 					var button = $('<div>').attr('title', lang.al01).data('url', page).addClass('in-albumDownload hz_button blue').html(lang.al01).click(albumDL);
 
-					$main.children().length > 1 ? $main.children().eq(1).after(button) : $main.append(button);
+					$main.children().length > 2 ? $main.children().eq(1).after(button) : $main.children().eq(0).after(button);
 
 					$main.addClass('album-in-page');
 				}
@@ -1426,7 +1426,7 @@ var hoverzoom = function(){
 			}).on('click', '.white', function(){
 				$page.find('.inner').empty();
 				$page.find('small').html('<strong>0</strong> / '+options.hz_his_max + lang.set07);
-				localStorage.hz_histories = '';
+				localStorage['hz_histories'] = '';
 			}).on('click', '.blue', copyLink)
 			.on('click', '.green', newTab);
 		},
