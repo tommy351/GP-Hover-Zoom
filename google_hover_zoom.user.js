@@ -5,13 +5,13 @@
 // @author         SkyArrow
 // @website        http://userscripts.org/scripts/show/106681
 // @namespace      http://zespia.twbbs.org
-// @version        1.3.0.1
+// @version        1.3.0.2
 // @include        https://plus.google.com/*
 // @exclude        https://plus.google.com/ripples/*
 // ==/UserScript==
 
 var hoverzoom = function(){
-	var	version = '1.3.0.1',
+	var	version = '1.3.0.2',
 		picRegex = /\.(jpg|jpeg|gif|bmp|png|tiff)/i,
 		picasaRegex = /\/\w\d+(-\w\d*)*\/([^\/]+)$/,
 		mouse = [];
@@ -1232,11 +1232,10 @@ var hoverzoom = function(){
 			var dWidth = $('div[id^="update"]:visible').children().width();
 
 			$content.find('div[id^="update"]').find('div[data-content-type^="image"], div[data-content-url*="picasa"]').each(function(){
-				var img = this.childNodes[0];
-
-				if (!$(img).parent().hasClass('maxPic')){
-					var url = img.src,
-						$parent = $(img).parent().parent(),
+				if (!$(this).hasClass('maxPic')){
+					var img = this.childNodes[0],
+						url = img.src,
+						$parent = $(this).parent(),
 						width = $parent.width() == 0 ? dWidth : $parent.width();
 
 					$(img).attr({
@@ -1260,8 +1259,7 @@ var hoverzoom = function(){
 					if (options.hz_maxpic_option === '1') {
 						$parent.find('div[data-content-type^="image"], div[data-content-url*="picasa"]').addClass('maxPic');
 					}
-
-					$(img).parent().addClass('maxPic').css({height: 'auto', width: 'auto', maxHeight: 'none', maxWidth: 'none', marginBottom: 5});
+					$(this).addClass('maxPic').css({height: 'auto', width: '100%', maxHeight: 'none', maxWidth: 'none', marginBottom: 5}).next('div').css('display', 'block');
 				}
 			});
 		}
