@@ -5,13 +5,13 @@
 // @author         SkyArrow
 // @website        http://userscripts.org/scripts/show/106681
 // @namespace      http://zespia.twbbs.org
-// @version        1.3.0.2
+// @version        1.3.0.3
 // @include        https://plus.google.com/*
 // @exclude        https://plus.google.com/ripples/*
 // ==/UserScript==
 
 var hoverzoom = function(){
-	var	version = '1.3.0.2',
+	var	version = '1.3.0.3',
 		picRegex = /\.(jpg|jpeg|gif|bmp|png|tiff)/i,
 		picasaRegex = /\/\w\d+(-\w\d*)*\/([^\/]+)$/,
 		mouse = [];
@@ -1241,7 +1241,7 @@ var hoverzoom = function(){
 					$(img).attr({
 						original: url,
 						src: url.match(/\?sz|\/proxy/) ? url.replace(/resize_\D?=\d+/, 'resize_w='+width) : url.replace(picasaRegex,'/w'+width+'/$2')
-					}).css('maxWidth', width);
+					}).css({maxWidth: width, height: 'auto'});
 
 					if (!$parent.hasClass('maxPicAdded')) {
 						var zoom = $('<span>').attr({class: 'a-j', title: lang.maxpic01}).html(' - '+lang.maxpic01).click(function(){
