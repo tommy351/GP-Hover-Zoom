@@ -5,13 +5,13 @@
 // @author         SkyArrow
 // @website        http://userscripts.org/scripts/show/106681
 // @namespace      http://zespia.twbbs.org
-// @version        1.3.0.4
+// @version        1.3.0.5
 // @include        https://plus.google.com/*
 // @exclude        https://plus.google.com/ripples/*
 // ==/UserScript==
 
 var hoverzoom = function(){
-	var	version = '1.3.0.4',
+	var	version = '1.3.0.5',
 		picRegex = /\.(jpg|jpeg|gif|bmp|png|tiff)/i,
 		picasaRegex = /\/\w\d+(-\w\d*)*\/([^\/]+)$/,
 		mouse = [];
@@ -1175,10 +1175,10 @@ var hoverzoom = function(){
 					$main.addClass('album-in-page');
 				}
 			} else {
-				$('.B-u-Y-j').each(function(){
-					var url = this.href;
+				$('.B-u-Y').each(function(){
+					var url = $(this).children().attr('href');
 
-					if (url.match(/albums/) && !$(this).hasClass('album-in-post')){
+					if (url.match(/\/photos\/\w+\/albums\/\w+/) && !$(this).hasClass('album-in-post')){
 						var button = $('<span>');
 						button.data('url', url).addClass('a-j albumDownload').html(lang.fs03).attr('title', lang.al01).click(albumDL);
 						$(this).addClass('album-in-post').parentsUntil('.Ve').find('.dl').append(button);
