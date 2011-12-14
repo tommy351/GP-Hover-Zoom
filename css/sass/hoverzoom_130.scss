@@ -630,16 +630,6 @@ $main: #dd4839;
 		z-index: 10001;
 	}
 }
-#hz_album_page{
-	.blue, .green{
-		display: none;
-	}
-	&.success{
-		.blue, .green{
-			display: block;
-		}
-	}
-}
 #hz_update_note{
 	z-index: 10001;
 	.main{
