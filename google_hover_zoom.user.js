@@ -967,14 +967,12 @@ var history = function(){
 
 var albumDL = function(){
 	var $page = $('#hz_album_page'),
-		data = $(this).data('url'),
-		userid = data.replace(/(.*)\/photos\/(\d+)\/albums\/(\d+)/, '$2'),
-		albumid = data.replace(/(.*)\/photos\/(\d+)\/albums\/(\d+)/, '$3'),
+		data = $(this).data('url').split('/'),
 		width = parseInt(($page.width() - 200) / options.hz_his_columns - 10),
 		fragment = document.createDocumentFragment();
 
 	$page.find('small').html(lang.fs04).end()
-	.find('.orange').attr('href', 'picasa://downloadfeed/?url=https://picasaweb.google.com/data/feed/back_compat/user/'+userid+'/albumid/'+albumid);
+	.find('.orange').attr('href', 'picasa://downloadfeed/?url=https://picasaweb.google.com/data/feed/back_compat/user/'+data[6]+'/albumid/'+data[8]);
 
 	var meta = function(length, author, album){
 		var text;
@@ -988,7 +986,7 @@ var albumDL = function(){
 
 	GM_xmlhttpRequest({
 		method: 'GET',
-		url: 'https://picasaweb.google.com/data/feed/api/user/'+userid+'/albumid/'+albumid+'?alt=json',
+		url: 'https://picasaweb.google.com/data/feed/api/user/'+data[6]+'/albumid/'+data[8]+'?alt=json',
 		onerror: function(){
 			$page.find('small').html(lang.al07);
 			sortPic($page, fragment);
@@ -1402,7 +1400,7 @@ var init = {
 					gap = 590 * (i - $current.attr('tabid')),
 					height = $set.find('.tabs div').eq(i).height();
 
-				$set.children('.main').animate({height: height + 140}, 500).children('.tabs').animate({left: '-='+gap}, 500);
+				$set.children('.main').animate({height: height + 140}, 300).children('.tabs').animate({left: '-='+gap}, 300);
 				$current.removeClass('current');
 				$(this).addClass('current');
 			});
