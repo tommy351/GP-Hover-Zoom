@@ -510,7 +510,6 @@ $main: #dd4839;
 	}
 	.wrap{
 		display: inline-block;
-		overflow-x: hidden;
 		overflow-y: auto;
 		margin: 10px 0;
 		img{
@@ -628,16 +627,6 @@ $main: #dd4839;
 #hz_copyarea{
 	.back{
 		z-index: 10001;
-	}
-}
-#hz_album_page{
-	.blue, .green{
-		display: none;
-	}
-	&.success{
-		.blue, .green{
-			display: block;
-		}
 	}
 }
 #hz_update_note{
