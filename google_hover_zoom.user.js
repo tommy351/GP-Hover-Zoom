@@ -83,10 +83,10 @@ var locale = {
 		al01: 'Download Album',
 		al02: 'Browse',
 		al03: 'Open with Picasa',
-		al04: 'If you can\'t download this album directly, please open it with Picasa. (Require Picasa)',
+		al04: 'Open with Picasa (Require Picasa)',
 		al05: 'Copy Links',
 		al06: 'Open in New Tab',
-		al07: 'This album is private and can\'t be fetched. Please use "Open with Picasa" button to download this album.',
+		al07: 'This album is private and can\'t be fetched. Please click "Open with Picasa" button to download this album.',
 		yt01: 'Remove',
 		allpic01: 'Batch Download',
 		piclink01: 'Download Photos:',
@@ -158,10 +158,10 @@ var locale = {
 		al01: '下載相簿',
 		al02: '瀏覽',
 		al03: '以 Picasa 開啟',
-		al04: '若您無法直接下載本相簿，請使用 Picasa 開啟。(需安裝 Picasa)',
+		al04: '以 Picasa 開啟 (需安裝 Picasa)',
 		al05: '複製網址',
 		al06: '開啟於新分頁',
-		al07: '此相簿為私密相簿，無法取得相簿內容，請使用右上角的「以 Picasa 開啟」按鈕下載此相簿。',
+		al07: '此相簿為私密相簿，無法取得相簿內容，請點擊右上角的「以 Picasa 開啟」按鈕下載此相簿。',
 		yt01: '移除',
 		allpic01: '批次下載',
 		piclink01: '圖片下載：',
@@ -216,7 +216,7 @@ var locale = {
 		set44: '套用至所有圖片',
 		set45: '僅套用至相簿第一張圖片',
 		set46: '滑鼠移入大圖時不隱藏',
-		set47: '以訊息串寬度顯示 Youtube 影片，影片長寬比例：'
+		set47: '以訊息串寬度顯示影片，影片長寬比例：'
 	},
 	'zh-CN': {
 		menu01: '停用',
@@ -233,10 +233,10 @@ var locale = {
 		al01: '下载相簿',
 		al02: '浏览',
 		al03: '以 Picasa 开启',
-		al04: '若您无法直接下载本相簿，请使用 Picasa 开启。(需安装 Picasa)',
+		al04: '以 Picasa 开启 (需安装 Picasa)',
 		al05: '复制网址',
 		al06: '开启于新分页',
-		al07: '此相簿为私密相簿，无法取得相簿内容，请使用右上角的「以 Picasa 开启」按钮下载此相簿。',
+		al07: '此相簿为私密相簿，无法取得相簿内容，请点击右上角的「以 Picasa 开启」按钮下载此相簿。',
 		yt01: '移除',
 		allpic01: '批量下载',
 		piclink01: '图片下载：',
@@ -291,7 +291,7 @@ var locale = {
 		set44: '套用至所有图片',
 		set45: '仅套用至相簿第一张图片',
 		set46: '鼠标移入大图时不隐藏',
-		set47: '以讯息流宽度显示 Youtube 视频，视频长宽比例：'
+		set47: '以讯息流宽度显示视频，视频长宽比例：'
 	},
 	'ja-JP': {
 		menu01: 'オフ',
@@ -308,7 +308,7 @@ var locale = {
 		al01: 'アルバムダウンロード',
 		al02: '閲覧する',
 		al03: 'Picasa で閲覧',
-		al04: 'このアルバムをダウンロードできない場合、Picasa でアクセスして下さい。(Picasa インストール必要)',
+		al04: 'Picasa で閲覧 (Picasa インストール必要)',
 		al05: 'リンクをコビー',
 		al06: '新しいタブで開け',
 		al07: 'プライベートアルバムの為、アルバムをアクセスできない。右上辺りの「Picasa で閲覧」ボタンを押して、アルバムをダウンロードして下さい。',
@@ -366,7 +366,7 @@ var locale = {
 		set44: '全ての画像に適用する',
 		set45: 'アルバムの一つ目の画像に適用する',
 		set46: '画像にカーソルを重ねた時に画像を隠さない',
-		set47: 'ストリームの幅で Youtube 動画表示、長さと幅の比：'
+		set47: 'ストリームの幅で動画表示、長さと幅の比：'
 	},
 	'index': ['English', '正體中文', '简体中文', '日本語']
 };
@@ -1019,7 +1019,7 @@ var allPic = function(){
 		width = parseInt(($page.width() - 200) / options.hz_his_columns - 10),
 		fragment = document.createDocumentFragment();
 
-	$('div[data-content-type^="image"] img, div[data-content-url*="picasa"] img, .ot-anchor, .Sl img, .ru img').each(function(){
+	$('div[data-content-type^="image"] img, div[data-content-url*="picasa"] img, .ot-anchor, .Sl img, .ru img').filter(':visible').each(function(){
 		var tag = $(this).prop('tagName');
 		
 		if (tag === 'IMG') {
@@ -1133,7 +1133,7 @@ var timer = new function(){
 					var aspect = 9/16;
 				}
 				var maxWidth = (options.hz_direct_ytmaxwidth > 0) ? options.hz_direct_ytmaxwidth : $(this).parent().parent().width();
-					url = url.replace(/(.*)watch\?v=(.*)/, '$1v/$2').replace(/&(.*)/g, '') + '?version=3&autohide=1&feature=player_embedded';
+					url = url.replace(/(http:|https:)(.*)watch\?v=(.*)(&.*)/, 'https:$2v/$3') + '?version=3&autohide=1&feature=player_embedded';
 
 				var close = document.createElement('div'),
 					object = document.createElement('object'),
@@ -1273,39 +1273,49 @@ var timer = new function(){
 }
 
 var update = function(manual){
-	var main = function(news, log, latest){
-		var $page = $('#hz_update_note');
+	var main = function(news, content, latest){
+		var $page = $('#hz_update_note'),
+			appends = '';
 
-		if (latest === true){
-			$page.find('.green').hide();
-			$page.find('small').html('<strong>'+version+'</strong> '+lang.update06);
+		if (latest == true){
+			$page.find('.green').hide().end()
+			.find('small').html('<strong>'+version+'</strong> '+lang.update06);
 		} else {
-			$page.find('.green').show();
-			$page.find('small').html(lang.update02+'<strong>'+news+'</strong> / '+lang.update03+'<strong>'+version+'</strong>');
+			$page.find('.green').hide().end()
+			.find('small').html(lang.update02+'<strong>'+news+'</strong> / '+lang.update03+'<strong>'+version+'</strong>');
 		}
 
-		$page.fadeIn(300).find('p').html(log);
+		for (var i=0; i<content.length; i++){
+			appends += '<li>'+content[i]+'</li>';
+		}
+
+		$page.fadeIn(300).find('p').html('<ul>'+appends+'</ul>');
 	}
 
-	$.getScript('https://sites.google.com/site/hoverzoomplus/sources/version.js', function(){
-		var now = version.split('.'),
-			news = hz_newVersion.version.split('.'),
-			log = hz_newVersion.content[options.hz_language] || hz_newVersion.content['en-US'],
-			sub = ( now.length > news.length ) ? now.length : news.length;
+	GM_xmlhttpRequest({
+		method: 'GET',
+		url: 'https://sites.google.com/site/hoverzoomplus/sources/version.json',
+		onload: function(data){
+			var feed = JSON.parse(data.responseText),
+				nowVer = version.split('.'),
+				newVer = feed.version.split('.'),
+				content = feed.content[options.hz_language] || feed.content['en-US'],
+				length = nowVer.length > newVer.length ? nowVer.length : newVer.length;
+			
+			for (var i=0; i<length; i++) {
+				if (typeof nowVer[i] == 'undefined') nowVer[i] = 0;
 
-		for (var i=0; i<sub; i++){
-			if (typeof now[i] == 'undefined') now[i] = 0;
-
-			if (news[i] > now[i]) {
-				main(hz_newVersion.version, log, false);
-				break;
-			} else if (now[i] > news[i]) {
-				break;
+				if (newVer[i] > nowVer[i]){
+					main(feed.version, content, false);
+					break;
+				} else if (nowVer[i] > newVer[i]){
+					break;
+				}
 			}
-		}
 
-		if (manual == true) {
-			main(version, log, true);
+			if (manual == true){
+				main(version, content, true);
+			}
 		}
 	});
 }
@@ -1335,7 +1345,7 @@ var init = {
 				if (options[$(this).attr('id')] === 'true')
 					$(this).prop('checked', true);
 			});
-		}).on('click', '#hz_history_open', history).on('click', '#Hz_allpic_dl', allPic);
+		}).on('click', '#hz_history_open', history).on('click', '#hz_allpic_dl', allPic);
 
 		// Settings page
 		var	keys = '<option value="0">'+lang['set24']+'</option><option value="16">Shift</option><option value="17">Ctrl</option>';
@@ -1405,8 +1415,6 @@ var init = {
 	},
 	his: function(){
 		var $page = $('#hz_history_page');
-
-		$('#hz_history_open').on('click', history);
 		
 		$page.on('click', '.back, .close', function(){
 			$page.fadeOut(300, function(){
@@ -1432,7 +1440,6 @@ var init = {
 	allPic: function(){
 		var $page = $('#hz_allpic_page');
 
-		$('#hz_allpic_dl').on('click', allPic);
 		$page.on('click', '.back, .close', function(){
 			$page.fadeOut(300, function(){
 				$(this).find('.inner').empty();
@@ -1453,9 +1460,7 @@ var init = {
 		var $page = $('#hz_update_note');
 
 		$page.on('click', '.back, .close, .white', function(){
-			$page.fadeOut(300, function(){
-				$()
-			});
+			$page.fadeOut(300);
 		});
 	}
 }
