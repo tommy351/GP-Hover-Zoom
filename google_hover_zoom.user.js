@@ -1281,7 +1281,7 @@ var update = function(manual){
 			$page.find('.green').hide().end()
 			.find('small').html('<strong>'+version+'</strong> '+lang.update06);
 		} else {
-			$page.find('.green').hide().end()
+			$page.find('.green').show().end()
 			.find('small').html(lang.update02+'<strong>'+news+'</strong> / '+lang.update03+'<strong>'+version+'</strong>');
 		}
 
