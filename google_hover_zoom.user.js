@@ -1222,14 +1222,12 @@ var timer = new function(){
 	}
 
 	var maxPic = function(){
-		var dWidth = $('div[id^="update"]:visible').children().width();
-
-		$content.find('div[id^="update"]').find('div[data-content-type^="image"], div[data-content-url*="picasa"]').each(function(){
+		$content.find('div[id^="update"]').find('div[data-content-type^="image"], div[data-content-url*="picasa"]').filter(':visible').each(function(){
 			if (!$(this).hasClass('maxPic')){
 				var img = this.childNodes[0],
 					url = img.src,
 					$parent = $(this).parent(),
-					width = $parent.width() == 0 ? dWidth : $parent.width();
+					width = $parent.width();
 
 				$(img).attr({
 					original: url,
