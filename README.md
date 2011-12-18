@@ -33,14 +33,14 @@
 [NinjaKit]: http://d.hatena.ne.jp/os0x/20100612/1276330696
 
 ##Screenshots
-![Enlarge thumbnails on hover](https://lh6.googleusercontent.com/-88Qim359NXo/Tu1sqvDWK5I/AAAAAAAADkA/6Te2qZs5V2o/s0/%2525E8%25259E%2525A2%2525E5%2525B9%252595%2525E5%2525BF%2525AB%2525E7%252585%2525A7%2525202011-12-18%25252012.31.03.PNG)
+![Enlarge thumbnails on hover](https://lh6.googleusercontent.com/-V4nm0sX5bz4/Tu11CsVux-I/AAAAAAAADkY/vhrjKHMb3QY/s0/%2525E8%25259E%2525A2%2525E5%2525B9%252595%2525E5%2525BF%2525AB%2525E7%252585%2525A7%2525202011-12-18%25252012.31.03.jpg)
 
-![Settings](https://lh5.googleusercontent.com/-Niy78YTn-IU/Tu1rvCGH1CI/AAAAAAAADjg/9B4gc7nzA60/s0/settings.png)
+![Settings](https://lh5.googleusercontent.com/-RpnLqvGBS04/Tu11DVEq1wI/AAAAAAAADkw/lvadwBD3mMs/s0/settings.jpg)
 
-![History](https://lh4.googleusercontent.com/-8_jCjsQLH0Y/Tu1rtf5FxSI/AAAAAAAADjU/YmMXW7lKLOA/s0/history.png)
+![History](https://lh5.googleusercontent.com/-86_zo45XLOQ/Tu11DD5rxDI/AAAAAAAADko/8eBSHn4kbN4/s0/history.jpg)
 
-![Album Download](https://lh6.googleusercontent.com/-Zotb8byArik/Tu1ruco3dyI/AAAAAAAADjc/iYY6FDEK8Qc/s0/album.png)
+![Album Download](https://lh4.googleusercontent.com/-eoDI886EDjU/Tu11DzpDjII/AAAAAAAADk4/drUt_W5h0AE/s0/album.jpg)
 
-![Batch Download](https://lh4.googleusercontent.com/-3O4fUlLHFgo/Tu1rvDsi2vI/AAAAAAAADjo/ZXglR_PY888/s0/batchdownload.png)
+![Batch Download](https://lh5.googleusercontent.com/-mcfB0R466LU/Tu11CZpG5JI/AAAAAAAADkQ/RjnMS20OC8g/s0/batchdownload.jpg)
 
-![Fullscreen Mode](https://lh6.googleusercontent.com/-uc8q_ZrKokc/Tu1ruEKcO1I/AAAAAAAADjY/S14Kdik2W3s/s0/Google%25252B%2525202011-12-18%25252011-58-17.png)
+![Fullscreen Mode](https://lh6.googleusercontent.com/-K8qLgAtmq4g/Tu11C0pBycI/AAAAAAAADkg/WuKmlYarNC8/s0/Google%252520%2525202011-12-18%25252011-58-17.jpg)
