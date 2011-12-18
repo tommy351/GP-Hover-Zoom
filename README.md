@@ -15,12 +15,11 @@
 * Resize photos and videos to width of stream.
 * Download Picasa albums.
 * Batch download photos.
-* Record the photos you have browsered.
+* Record the photos you have browsed.
 
 ##Contribution
 
-You can help me by forking or translating.
-
+**GitHub**: <https://github.com/tommy351/GP-Hover-Zoom>   
 **Localization**: <http://goo.gl/4IyfO>  
 
 ##Usages
@@ -34,12 +33,14 @@ You can help me by forking or translating.
 [NinjaKit]: http://d.hatena.ne.jp/os0x/20100612/1276330696
 
 ##Screenshots
-![Enlarge thumbnails](https://lh3.googleusercontent.com/-JEICSe4YpwA/Tj5CB0HBJ1I/AAAAAAAABYI/no36sypOX04/s0/iehweC.jpg)
+![Enlarge thumbnails on hover](https://lh6.googleusercontent.com/-88Qim359NXo/Tu1sqvDWK5I/AAAAAAAADkA/6Te2qZs5V2o/s0/%2525E8%25259E%2525A2%2525E5%2525B9%252595%2525E5%2525BF%2525AB%2525E7%252585%2525A7%2525202011-12-18%25252012.31.03.PNG)
 
-![Settings](https://lh3.googleusercontent.com/-al32Pu0IP54/Tj5B6ZU3KtI/AAAAAAAABYA/4N4c5-tLbOY/s0/new_settings_page_01.png)
+![Settings](https://lh5.googleusercontent.com/-Niy78YTn-IU/Tu1rvCGH1CI/AAAAAAAADjg/9B4gc7nzA60/s0/settings.png)
 
-![History](https://lh3.googleusercontent.com/-3pKYnabk6-c/Tj5B6fxzReI/AAAAAAAABYE/nXA643DvURE/s800/new_history_page_01.jpg)
+![History](https://lh4.googleusercontent.com/-8_jCjsQLH0Y/Tu1rtf5FxSI/AAAAAAAADjU/YmMXW7lKLOA/s0/history.png)
 
-![Album download](https://lh6.googleusercontent.com/-mW5ZAj5FbN4/Tj5Ef-1opUI/AAAAAAAABYM/a9k_ebcclgw/s800/new_albums.jpg)
+![Album Download](https://lh6.googleusercontent.com/-Zotb8byArik/Tu1ruco3dyI/AAAAAAAADjc/iYY6FDEK8Qc/s0/album.png)
 
-![Download all photos in the page](https://lh4.googleusercontent.com/-q_mfJ8pakxQ/TlB4Y62sc8I/AAAAAAAABwI/poH_4OFb1jo/s800/allpic.jpg)
+![Batch Download](https://lh4.googleusercontent.com/-3O4fUlLHFgo/Tu1rvDsi2vI/AAAAAAAADjo/ZXglR_PY888/s0/batchdownload.png)
+
+![Fullscreen Mode](https://lh6.googleusercontent.com/-uc8q_ZrKokc/Tu1ruEKcO1I/AAAAAAAADjY/S14Kdik2W3s/s0/Google%25252B%2525202011-12-18%25252011-58-17.png)
