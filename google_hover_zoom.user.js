@@ -1119,8 +1119,6 @@ var maxYT = function(){
 }
 
 var timer = new function(){
-	var interval;
-
 	if (options.hz_direct_ytaspect == 1) {
 		var aspect = 3/4;
 	} else if (options.hz_direct_ytaspect == 3) {
@@ -1169,21 +1167,20 @@ var timer = new function(){
 		if (page.match(/\/photos\/\w+\/albums\/\w+/)) {
 			var $main = $('.Pk:visible');
 
-			if (!$main.hasClass('album-in-page')){
+			if (!$main.data('class')){
 				var button = $('<div>').attr('title', lang.al01).data('url', page).addClass('in-albumDownload hz_button blue').html(lang.al01).click(albumDL);
 
 				$main.children().length > 2 ? $main.children().eq(1).after(button) : $main.children().eq(0).after(button);
-
-				$main.addClass('album-in-page');
+				$main.data('class', true);
 			}
 		} else {
 			$('.B-u-Y').each(function(){
 				var url = $(this).children().attr('href');
 
-				if (url.match(/\/photos\/\w+\/albums\/\w+/) && !$(this).hasClass('album-in-post')){
+				if (url.match(/\/photos\/\w+\/albums\/\w+/) && !$(this).data('class')){
 					var button = $('<span>');
 					button.data('url', url).addClass('a-j albumDownload').html(lang.fs03).attr('title', lang.al01).click(albumDL);
-					$(this).addClass('album-in-post').parentsUntil('.Ve').find('.dl').append(button);
+					$(this).data('class', true).parentsUntil('.Ve').find('.dl').append(button);
 				}
 			});
 		}
@@ -1207,41 +1204,39 @@ var timer = new function(){
 
 	var links = function(){
 		$('.Jm').each(function(){
-			if (!$(this).hasClass('pic-in-post')){
+			if (!$(this).data('class')){
 				var target = $(this).find('div[data-content-type^="image"], div[data-content-url*="picasa"]'),
 					count = target.length;
-					fragment = document.createDocumentFragment();
 				
 				if (count > 1) {
-					var stacks = document.createElement('span');
-					$(stacks).addClass('a-j picStacks').html(lang.fs03+' ('+count+')').click(function(){
-						$(this).next().is(':hidden') ? $(this).next().fadeIn(300).offset({left: $(this).offset().left + 10, top: $(this).offset().top + 25}) : $(this).next().fadeOut(300);
-					});
-					fragment.appendChild(stacks);
+					var link = $('<span>').addClass('a-j picStacks').html(lang.fs03+' ('+count+')').click(function(){
+						if (!$(this).next().hasClass('clickDetail')){
+							console.log('exeing');
 
-					var popup = document.createElement('div'),
-						popInner = '<div class="closeButton" title="'+lang.set10+'"></div><strong>'+lang.piclink01+'</strong><br>';
-					
-					for (var i=0; i<count; i++){
-						var url = target[i].childNodes[0].src,
-							number = i + 1;
-						url = url.match(/\?sz|\/proxy/) ? url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : url.replace(picasaRegex,'/s0/$2');
-						popInner += i == 0 ? '<a class="a-j" tabindex="0" role="button" href="'+url+'">'+number+'</a>' : ' - <a class="a-j" tabindex="0" role="button" href="'+url+'">'+number+'</a>';
-					}
-					
-					$(popup).addClass('clickDetail').html(popInner + '</div>').on('click', '.closeButton', function(){
-						$(this).parent().fadeOut(300);
+							var popInner = '<div class="closeButton" title="'+lang.set10+'"></div><strong>'+lang.piclink01+'</strong><br>';
+						
+							for (var i=0; i<count; i++){
+								var url = target[i].childNodes[0].src,
+									number = i + 1;
+								url = url.match(/\?sz|\/proxy/) ? url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : url.replace(picasaRegex,'/s0/$2');
+								popInner += i == 0 ? '<a class="a-j" href="'+url+'">'+number+'</a>' : ' - <a class="a-j" href="'+url+'">'+number+'</a>';
+							}
+
+							var popup = $('<div>').addClass('clickDetail').html(popInner + '</div>').on('click', '.closeButton', function(){
+								$(this).parent().fadeOut(300);
+							});
+
+							$(this).after(popup).next().fadeIn(300).offset({left: $(this).offset().left + 10, top: $(this).offset().top + 25});
+						} else {
+							$(this).next().is(':hidden') ? $(this).next().fadeIn(300).offset({left: $(this).offset().left + 10, top: $(this).offset().top + 25}) : $(this).next().fadeOut(300);
+						}
 					});
-					fragment.appendChild(popup);
 				} else if (count === 1) {
-					var url = target[0].childNodes[0].src,
-						link = document.createElement('a');
+					var url = target[0].childNodes[0].src;
 					url = url.match(/\?sz|\/proxy/) ? url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : url.replace(picasaRegex,'/s0/$2');
-
-					$(link).addClass('a-j picStacks').attr({tabindex: 0, role: 'button', href: url}).html(lang.fs03);
-					fragment.appendChild(link);
+					var link = $('<a>').addClass('a-j picStacks').attr('href', url).html(lang.fs03);
 				}
-				$(this).addClass('pic-in-post').parentsUntil('.Ve').find('.dl').append(fragment);
+				$(this).data('class', true).parentsUntil('.Ve').find('.dl').append(link);
 			}
 		});
 	}
@@ -1257,7 +1252,7 @@ var timer = new function(){
 				$(img).attr({
 					original: url,
 					src: url.match(/\?sz|\/proxy/) ? url.replace(/resize_\D?=\d+/, 'resize_w='+width) : url.replace(picasaRegex,'/w'+width+'/$2')
-				}).css({maxWidth: width, height: 'auto'});
+				}).css({maxWidth: '100%', height: 'auto'});
 
 				if (!$parent.hasClass('maxPicAdded')) {
 					var zoom = $('<span>').attr({class: 'a-j', title: lang.maxpic01}).html(' - '+lang.maxpic01).click(function(){
@@ -1280,18 +1275,22 @@ var timer = new function(){
 		});
 	}
 
+	var timeout;
+	var main = function(){
+		comment();
+		if (options.hz_album === 'true') album();
+		if (options.hz_direct_post === 'true') post();
+		if (options.hz_dl_link === 'true') links();
+		if (options.hz_maxpic === 'true') maxPic();
+		timeout = setTimeout(main, 2500);
+	}
+
 	return {
 		start: function(){
-			interval = setInterval(function(){
-				comment();
-				if (options.hz_album === 'true') album();
-				if (options.hz_direct_post === 'true') post();
-				if (options.hz_dl_link === 'true') links();
-				if (options.hz_maxpic === 'true') maxPic();
-			}, 2500);
+			timeout = setTimeout(main, 2500);
 		},
 		stop: function(){
-			clearInterval(interval);
+			clearTimeout(timeout);
 		}
 	}
 }
@@ -1488,6 +1487,7 @@ var init = {
 		});
 	}
 }
+
 init.normal();
 if (options.hz_download === 'true') init.dl();
 if (options.hz_his === 'true') init.his();
