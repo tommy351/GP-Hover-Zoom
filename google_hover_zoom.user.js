@@ -1239,35 +1239,34 @@ var timer = new function(){
 	}
 
 	var maxPic = function(){
-		$content.find('div[id^="update"]').find('div[data-content-type^="image"], div[data-content-url*="picasa"]').filter(':visible').each(function(){
+		$content.find('.B-u-C:visible').each(function(){
 			if (!$(this).data('class')){
-				var img = this.childNodes[0],
-					url = img.src,
-					$parent = $(this).parent(),
-					width = $parent.width();
+				var children = $(this).children('div[data-content-type^="image"], div[data-content-url*="picasa"]'),
+					width = $(this).width();
 
-				$(img).attr({
-					original: url,
-					src: url.match(/\?sz|\/proxy/) ? url.replace(/resize_\D?=\d+/, 'resize_w='+width) : url.replace(picasaRegex,'/w'+width+'/$2')
-				}).css({maxWidth: '100%', height: 'auto'});
+				if (options.hz_maxpic_option === '1') children = children.eq(0);
 
-				if (!$parent.data('class')){
-					var zoom = $('<span>').attr({class: 'a-j', title: lang.maxpic01}).html(' - '+lang.maxpic01).click(function(){
-						$(img).parent().parent().find('.maxPic').each(function(){
-							$(this).attr('style', '').children('img').attr('src', $(this).children('img').attr('original'));
-						});
-						$(document).scrollTop($(this).parent().parent().parent().parent().offset().top - 100);
-						$(this).remove();
+				children.each(function(i){
+					var img = $(this).children('img'),
+						src = img.attr('src'),
+						url = src.match(/\?sz|\/proxy/) ? src.replace(/resize_\D?=\d+/, 'resize_w='+width) : src.replace(picasaRegex,'/w'+width+'/$2');
+					
+					$(this).data('original', src).css({height: 'auto', width: '100%', maxHeight: 'none', maxWidth: 'none', marginBottom: 5}).next('div').next('div').css('display', 'block');
+					img.attr('src', url).css({maxWidth: '100%', height: 'auto'});
+				});
+
+				var zoom = $('<span>').attr({class: 'a-j', title: lang.maxpic01}).html(' - '+lang.maxpic01).click(function(){
+					children.each(function(){
+						var data = $(this).data('original');
+						if (typeof data != 'undefined'){
+							$(this).attr('style', '').children('img').attr('src', data);
+						}
 					});
+					$(document).scrollTop($(this).parent().parent().parent().parent().offset().top - 100);
+					$(this).remove();
+				})
 
-					$(img).parentsUntil('.Ve').find('.dl').append(zoom);
-					$parent.data('class', true);
-				}
-
-				if (options.hz_maxpic_option === '1') {
-					$parent.find('div[data-content-type^="image"], div[data-content-url*="picasa"]').addClass('maxPic');
-				}
-				$(this).data('class', true).css({height: 'auto', width: '100%', maxHeight: 'none', maxWidth: 'none', marginBottom: 5}).next('div').css('display', 'block');
+				$(this).data('class', true).parentsUntil('.Ve').find('.dl').append(zoom);
 			}
 		});
 	}
