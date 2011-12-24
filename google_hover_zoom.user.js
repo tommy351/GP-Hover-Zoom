@@ -1244,29 +1244,33 @@ var timer = new function(){
 				var children = $(this).children('div[data-content-type^="image"], div[data-content-url*="picasa"]'),
 					width = $(this).width();
 
-				if (options.hz_maxpic_option === '1') children = children.eq(0);
+				if (children.length > 0){
+					if (options.hz_maxpic_option === '1') children = children.eq(0);
 
-				children.each(function(i){
-					var img = $(this).children('img'),
-						src = img.attr('src'),
-						url = src.match(/\?sz|\/proxy/) ? src.replace(/resize_\D?=\d+/, 'resize_w='+width) : src.replace(picasaRegex,'/w'+width+'/$2');
-					
-					$(this).data('original', src).css({height: 'auto', width: '100%', maxHeight: 'none', maxWidth: 'none', marginBottom: 5}).next('div').next('div').css('display', 'block');
-					img.attr('src', url).css({maxWidth: '100%', height: 'auto'});
-				});
-
-				var zoom = $('<span>').attr({class: 'a-j', title: lang.maxpic01}).html(' - '+lang.maxpic01).click(function(){
-					children.each(function(){
-						var data = $(this).data('original');
-						if (typeof data != 'undefined'){
-							$(this).attr('style', '').children('img').attr('src', data);
-						}
+					children.each(function(i){
+						var img = $(this).children('img'),
+							src = img.attr('src'),
+							url = src.match(/\?sz|\/proxy/) ? src.replace(/resize_\D?=\d+/, 'resize_w='+width) : src.replace(picasaRegex,'/w'+width+'/$2');
+						
+						$(this).data('original', src).css({height: 'auto', width: '100%', maxHeight: 'none', maxWidth: 'none', marginBottom: 5}).next('div').next('div').css('display', 'block');
+						img.attr('src', url).css({maxWidth: '100%', height: 'auto'});
 					});
-					$(document).scrollTop($(this).parent().parent().parent().parent().offset().top - 100);
-					$(this).remove();
-				})
 
-				$(this).data('class', true).parentsUntil('.Ve').find('.dl').append(zoom);
+					var zoom = $('<span>').attr({class: 'a-j', title: lang.maxpic01}).html(' - '+lang.maxpic01).click(function(){
+						children.each(function(){
+							var data = $(this).data('original');
+							if (typeof data != 'undefined'){
+								$(this).attr('style', '').children('img').attr('src', data);
+							}
+						});
+						$(document).scrollTop($(this).parent().parent().parent().parent().offset().top - 100);
+						$(this).remove();
+					});
+
+					$(this).parentsUntil('.Ve').find('.dl').append(zoom);
+				}
+
+				$(this).data('class', true);
 			}
 		});
 	}
