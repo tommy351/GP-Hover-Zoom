@@ -1331,20 +1331,21 @@ var update = function(manual){
 				newVer = feed.version.split('.'),
 				content = feed.content[options.hz_language] || feed.content['en-US'],
 				length = nowVer.length > newVer.length ? nowVer.length : newVer.length;
-			
-			for (var i=0; i<length; i++) {
-				if (typeof nowVer[i] == 'undefined') nowVer[i] = 0;
 
-				if (newVer[i] > nowVer[i]){
-					main(feed.version, content, false);
-					break;
-				} else if (nowVer[i] > newVer[i]){
-					break;
-				}
-			}
-
-			if (manual == true){
+			if (version == feed.version && manual == true){
 				main(version, content, true);
+			} else {
+				for (var i=0; i<length; i++) {
+					if (typeof nowVer[i] == 'undefined') nowVer[i] = 0;
+
+					if ( newVer[i] > nowVer[i] ){
+						main(feed.version, content, false);
+						break;
+					} else if (nowVer[i] > newVer[i]){
+						if (manual == true)	main(version, content, true);
+						break;
+					}
+				}
 			}
 		}
 	});
