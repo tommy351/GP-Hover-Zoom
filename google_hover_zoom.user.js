@@ -1187,10 +1187,17 @@ var timer = new function(){
 
 	var post = function(){
 		$('.vg .ot-anchor').each(function(){
-			var url = this.href,
-				auto = $(this).parentsUntil('.Bx').find('div[data-content-type^="image"]').attr('data-content-url');
-			
+			var url = this.href;
+
 			if (url.match(picRegex) && !$(this).data('class')){
+				var auto = $(this).parentsUntil('.Bx').find('div[data-content-type^="image"]');
+				
+				if (auto.attr('data-content-url').match(picRegex)){
+					auto = auto.attr('data-content-url');
+				} else {
+					auto = auto.children('img').attr('src').replace(/(http:|https:)?(.*)/, 'https:$2').replace(picasaRegex, '/s0/$2');
+				}
+
 				if (url != auto){
 					var img = $('<img>').attr('src', url);
 					if (options.hz_direct_post_max > 0) img.css('maxWidth', options.hz_direct_post_max);
