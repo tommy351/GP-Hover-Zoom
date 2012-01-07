@@ -930,12 +930,41 @@ var disable = function(){
 
 var sortPic = function(obj, fragment){
 	var wWidth = obj.width(),
-		wHeight = obj.height();
+		wHeight = obj.height(),
+		$inner = obj.find('.inner'),
+		counts = 1;
+
+	if (fragment.length > 0){
+		var trigger = false;
+		for (var i=0; i<50; i++){
+			$inner.append(fragment[i]);
+		}
+	}
+
+	var autoLoad = function(){
+		if ($(this).scrollTop() >= $(this)[0].scrollHeight - $(this).height() - 200 && trigger == false){
+			var start = 50 * counts,
+				end = fragment.length < 50 * (counts + 1) ? fragment.length : 50 * (counts + 1);
+			
+			trigger = true;
+			counts++;
+
+			for (var i=start; i<end; i++){
+				$inner.append(fragment[i]);
+			}
+
+			$inner.imagesLoaded(function(){
+				$(this).masonry('reload');
+				trigger = false;
+			});
+		}
+	}
 
 	obj.fadeIn(300).children('.main').css({width: wWidth - 200, height: wHeight - 140, marginLeft: -(wWidth / 2) + 100, marginTop: -(wHeight / 2) + 50})
-	.children('.wrap').css({width: wWidth - 180, height: wHeight - 190})
-	.children('.inner').css('width', wWidth - 200).append(fragment).imagesLoaded(function(){
+	.children('.wrap').css({width: wWidth - 180, height: wHeight - 190}).scrollTop(0).on('scroll', autoLoad)
+	.children('.inner').css('width', wWidth - 200).imagesLoaded(function(){
 		$(this).hasClass('masonry') ? $(this).masonry('reload') : $(this).masonry({isFitWidth: true});
+		trigger = false;
 	});
 }
 
@@ -978,7 +1007,7 @@ var albumDL = function(){
 		userid = data.replace(/(.*)\/photos\/(\d+)\/albums\/(\d+)/, '$2'),
 		albumid = data.replace(/(.*)\/photos\/(\d+)\/albums\/(\d+)/, '$3'),
 		width = parseInt(($page.width() - 200) / options.hz_his_columns - 10),
-		fragment = document.createDocumentFragment();
+		fragment = [];
 
 	$page.find('small').html(lang.fs04).end()
 	.find('.orange').attr('href', 'picasa://downloadfeed/?url=https://picasaweb.google.com/data/feed/back_compat/user/'+userid+'/albumid/'+albumid);
@@ -1010,10 +1039,9 @@ var albumDL = function(){
 					url = a.media$content[0].url,
 					original = url.replace(/(.*)\//, '$1/s0/'),
 					thumbnail = url.replace(/(.*)\//, '$1/w'+width+'/'),
-					item = document.createElement('a');
+					item = $('<a>').attr({href: original, title: title}).html('<img src="'+thumbnail+'" width="'+width+'">');
 				
-				$(item).attr({href: original, title: title}).html('<img src="'+thumbnail+'" width="'+width+'">');
-				fragment.appendChild(item);
+				fragment.push(item);
 			});
 			meta(entry.length, [feed.author[0].name.$t, feed.author[0].uri.$t], [feed.title.$t, feed.link[3].href]);
 			sortPic($page, fragment);
