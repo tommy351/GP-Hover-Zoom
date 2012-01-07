@@ -1214,22 +1214,27 @@ var timer = new function(){
 
 	var post = function(){
 		$('.vg .ot-anchor').each(function(){
-			var url = this.href;
+			if (!$(this).data('class')){
+				var url = this.href;
 
-			if (url.match(picRegex) && !$(this).data('class')){
-				var auto = $(this).parentsUntil('.Bx').find('div[data-content-type^="image"]');
+				if (url.match(picRegex)){
+					var auto = $(this).parentsUntil('.Bx').find('div[data-content-type^="image"]');
+
+					if (typeof auto[0] != 'undefined'){
+						if (auto.attr('data-content-url').match(picRegex)){
+							auto = auto.attr('data-content-url');
+						} else {
+							auto = auto.children('img').attr('src').replace(/(http:|https:)?(.*)/, 'https:$2').replace(picasaRegex, '/s0/$2');
+						}
+					}
+
+					if (url != auto){
+						var img = $('<img>').attr('src', url);
+						if (options.hz_direct_post_max > 0) img.css('maxWidth', options.hz_direct_post_max);
+						$(this).html(img).addClass('img-in-post');
+					}
+				}
 				
-				if (auto.attr('data-content-url').match(picRegex)){
-					auto = auto.attr('data-content-url');
-				} else {
-					auto = auto.children('img').attr('src').replace(/(http:|https:)?(.*)/, 'https:$2').replace(picasaRegex, '/s0/$2');
-				}
-
-				if (url != auto){
-					var img = $('<img>').attr('src', url);
-					if (options.hz_direct_post_max > 0) img.css('maxWidth', options.hz_direct_post_max);
-					$(this).html(img).addClass('img-in-post');
-				}
 				$(this).data('class', true);
 			}
 		});
