@@ -935,8 +935,9 @@ var sortPic = function(obj, fragment){
 		counts = 1;
 
 	if (fragment.length > 0){
-		var trigger = false;
-		for (var i=0; i<50; i++){
+		var trigger = false,
+			max = fragment.length >= 50 ? 50 : fragment.length; 
+		for (var i=0; i<max; i++){
 			$inner.append(fragment[i]);
 		}
 	}
@@ -977,7 +978,7 @@ var history = function(){
 		max = length >= options.hz_his_max ? length - options.hz_his_max : 0,
 		count = length > options.hz_his_max ? options.hz_his_max : length,
 		width = parseInt(($page.width() - 200) / options.hz_his_columns - 10),
-		fragment = document.createDocumentFragment(),
+		fragment = [],
 		newarr = [];
 
 	if (storage.length > 0){
@@ -988,12 +989,11 @@ var history = function(){
 		localStorage.hz_histories = newarr.join('|||');
 
 		for (var a=newarr.length-1; a>=0; a--){
-			var img = document.createElement('a'),
-				item = newarr[a].split(';'),
-				thumbnail = item[0].match(/googleusercontent/) && item[0].match(picasaRegex) ? item[0].replace(picasaRegex, '/w'+parseInt(width)+'/$2') : item[0];
+			var	item = newarr[a].split(';'),
+				thumbnail = item[0].match(/googleusercontent/) && item[0].match(picasaRegex) ? item[0].replace(picasaRegex, '/w'+parseInt(width)+'/$2') : item[0],
+				img = $('<a>').attr({href: item[0], title: item[1]}).html('<img src="'+thumbnail+'" width="'+width+'">');
 			
-			$(img).attr({href: item[0], title: item[1]}).html('<img src="'+thumbnail+'" width="'+width+'">');
-			fragment.appendChild(img);
+			fragment.push(img);
 		}
 	}
 
@@ -1053,27 +1053,28 @@ var albumDL = function(){
 var allPic = function(){
 	var $page = $('#hz_allpic_page'),
 		width = parseInt(($page.width() - 200) / options.hz_his_columns - 10),
-		fragment = document.createDocumentFragment();
+		fragment = [];
 
 	$('div[data-content-type^="image"] img, div[data-content-url*="picasa"] img, .ot-anchor, .Sl img, .ru img').filter(':visible').each(function(){
-		var tag = $(this).prop('tagName');
+		var tag = $(this).prop('tagName'),
+			img = $('<a>');
 		
 		if (tag === 'IMG') {
-			var img = document.createElement('a'),
-				url = this.src;
+			//var img = $('<a>'),
+			var	url = this.src;
 			
 			url = url.match(/\?sz|\/proxy/) ? this.src.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : this.src.replace(picasaRegex,'/s0/$2');
 			thumbnail = url.match(/googleusercontent/) && url.match(picasaRegex) ? url.replace(picasaRegex, '/w'+width+'/$2') : url;
 			
-			$(img).attr('href', url).html('<img src="'+thumbnail+'" width="'+width+'">');
-			fragment.appendChild(img);
+			img.attr('href', url).html('<img src="'+thumbnail+'" width="'+width+'">');
+			fragment.push(img);
 		} else if (tag === 'A') {
-			var img = document.createElement('a'),
-				url = $(this).attr('href');
+			//var img = $('<a>'),
+			var	url = $(this).attr('href');
 			
 			if (url.match(picRegex)) {
-				$(img).attr('href', url).html('<img src="'+thumbnail+'" width="'+width+'">');
-				fragment.appendChild(img);
+				img.attr('href', url).html('<img src="'+thumbnail+'" width="'+width+'">');
+				fragment.push(img);
 			}
 		}
 	});
