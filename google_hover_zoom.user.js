@@ -92,6 +92,12 @@ var locale = {
 		yt01: 'Remove',
 		allpic01: 'Batch Download',
 		piclink01: 'Download Photos:',
+		ytdl01: 'Download Video:',
+		ytdl02: 'Low',
+		ytdl03: 'Standard',
+		ytdl04: 'Original',
+		ytdl05: 'HD',
+		ytdl06: 'Full HD',
 		maxpic01: 'Zoom',
 		update01: 'Update',
 		update02: 'New: ',
@@ -168,6 +174,12 @@ var locale = {
 		yt01: '移除',
 		allpic01: '批次下載',
 		piclink01: '圖片下載：',
+		ytdl01: '影片下載：',
+		ytdl02: '低畫質',
+		ytdl03: '標準畫質',
+		ytdl04: '原始畫質',
+		ytdl05: 'HD',
+		ytdl06: 'Full HD',
 		maxpic01: '縮放',
 		update01: '更新',
 		update02: '更新版本：',
@@ -244,6 +256,12 @@ var locale = {
 		yt01: '移除',
 		allpic01: '批量下载',
 		piclink01: '图片下载：',
+		ytdl01: '视频下载：',
+		ytdl02: '低品质',
+		ytdl03: '标清',
+		ytdl04: '原始',
+		ytdl05: '高清',
+		ytdl06: '全高清',
 		maxpic01: '缩放',
 		update01: '更新',
 		update02: '更新版本：',
@@ -320,6 +338,12 @@ var locale = {
 		yt01: '削除',
 		allpic01: 'バッチダウンロード',
 		piclink01: '画像をダウンロード：',
+		ytdl01: 'ビデオをダウンロード：',
+		ytdl02: '低画質',
+		ytdl03: '普通の画質',
+		ytdl04: 'オリジナル画質',
+		ytdl05: 'HD',
+		ytdl06: 'フルHD',
 		maxpic01: 'ズーム',
 		update01: 'アップデート',
 		update02: '新しいバージョン：',
@@ -1158,22 +1182,25 @@ var execHash = function(hash){
 
 var ytDL = function(url, ele){
 	var format = {
-		5: {format: 'FLV', desc: '低畫質'},
-		18: {format: 'MP4', desc: '高畫質'},
-		22: {format: 'MP4', desc: 'HD'},
-		34: {format: 'FLV', desc: '低畫質'},
-		35: {format: 'FLV', desc: '標準畫質'},
-		37: {format: 'MP4', desc: 'FULL HD'},
-		38: {format: 'MP4', desc: '原始畫質'},
-		43: {format: 'WebM', desc: '低畫質'},
-		44: {format: 'WebM', desc: '標準畫質'},
-		45: {format: 'WebM', desc: 'HD'}
+		5: {format: 'FLV', res: '240p', desc: lang.ytdl02},
+		18: {format: 'MP4', res: '360p', desc: lang.ytdl02},
+		22: {format: 'MP4', res: '720p', desc: lang.ytdl05},
+		34: {format: 'FLV', res: '360p', desc: lang.ytdl02},
+		35: {format: 'FLV', res: '480p', desc: lang.ytdl03},
+		37: {format: 'MP4', res: '1080p', desc: lang.ytdl06},
+		38: {format: 'MP4', res: '4k', desc: lang.ytdl04},
+		43: {format: 'WebM', res: '360p', desc: lang.ytdl02},
+		44: {format: 'WebM', res: '480p', desc: lang.ytdl03},
+		45: {format: 'WebM', res: '720p', desc: lang.ytdl05}
 		},
-		popInner = '<div class="closeButton" title="'+lang.set10+'"></div><strong>'+lang.piclink01+'</strong><br>';
+		appends = '';
 
 	GM_xmlhttpRequest({
 		method: 'GET',
 		url: url,
+		onerror: function(){
+			ele.append('Error!');
+		},
 		onload: function(data){
 			var hash = $(data.responseText).find('embed').attr('flashvars'),
 				map = unescape(execHash(hash).url_encoded_fmt_stream_map).split(',');
@@ -1181,18 +1208,12 @@ var ytDL = function(url, ele){
 			for (var i=0; i<map.length; i++){
 				var item = execHash(map[i]),
 					url = unescape(item.url),
-					desc = format[item.itag].desc+'<small>'+format[item.itag].format+'</small>';
+					desc = format[item.itag].desc+'<small>'+format[item.itag].format+' / '+format[item.itag].res+'</small>';
 
-				console.log(item);
-				
-				popInner += i == 0 ? '<a class="a-j" href="'+url+'">'+desc+'</a>' : '<br><a class="a-j" href="'+url+'">'+desc+'</a>';
+				appends += i == 0 ? '<a class="a-j" href="'+url+'">'+desc+'</a>' : '<br><a class="a-j" href="'+url+'">'+desc+'</a>';
 			}
 
-			var popup = $('<div>').addClass('clickDetail').html(popInner + '</div>').on('click', '.closeButton', function(){
-				$(this).parent().fadeOut(300);
-			});
-
-			ele.after(popup).next().fadeIn(300).offset({left: ele.offset().left + 10, top: ele.offset().top + 25});
+			ele.append(appends);
 		}
 	});
 }
@@ -1298,7 +1319,17 @@ var timer = new function(){
 			if (!$(this).data('class')){
 				var url = $(this).attr('data-content-url'),
 					button = $('<span>').addClass('a-j tubeStacks').html(lang.fs03).click(function(){
-						ytDL(url, $(this));
+						if (!$(this).next().hasClass('clickDetail')){
+							var popInner = '<div class="closeButton" title="'+lang.set10+'"></div><strong>'+lang.ytdl01+'</strong><br>',
+								popup = $('<div>').addClass('clickDetail').html(popInner + '</div>').on('click', '.closeButton', function(){
+									$(this).parent().fadeOut(300);
+								});
+							
+							$(this).after(popup).next().fadeIn(300).offset({left: $(this).offset().left + 10, top: $(this).offset().top + 25});
+							ytDL(url, $(this).next());
+						} else {
+							$(this).next().is(':hidden') ? $(this).next().fadeIn(300).offset({left: $(this).offset().left + 10, top: $(this).offset().top + 25}) : $(this).next().fadeOut(300);
+						}
 					});
 
 				$(this).data('class', true).parentsUntil('.Ve').find('.dl').append(button);
