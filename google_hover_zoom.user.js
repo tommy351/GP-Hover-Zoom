@@ -960,7 +960,8 @@ var sortPic = function(obj, fragment){
 		}
 	}
 
-	obj.fadeIn(300).children('.main').css({width: wWidth - 200, height: wHeight - 140, marginLeft: -(wWidth / 2) + 100, marginTop: -(wHeight / 2) + 50})
+	obj.fadeIn(300).on('click', '.blue', function(){copyLink(fragment)}).on('click', '.green', function(){newTab(fragment)})
+	.children('.main').css({width: wWidth - 200, height: wHeight - 140, marginLeft: -(wWidth / 2) + 100, marginTop: -(wHeight / 2) + 50})
 	.children('.wrap').css({width: wWidth - 180, height: wHeight - 190}).scrollTop(0).on('scroll', autoLoad)
 	.children('.inner').css('width', wWidth - 200).imagesLoaded(function(){
 		$(this).hasClass('masonry') ? $(this).masonry('reload') : $(this).masonry({isFitWidth: true});
@@ -1083,19 +1084,19 @@ var allPic = function(){
 	count > 1 ? $page.find('small').html('<strong>'+count+'</strong>'+lang.set08) : $page.find('small').html('<strong>'+count+'</strong>'+lang.set07);
 }
 
-var copyLink = function(){
+var copyLink = function(arr){
 	var $page = $('#hz_copyarea'),
 		$textarea = $page.find('textarea');
 
 	if ($textarea.html() === ''){
-		var	item = $(this).parent().parent().children('.wrap').children('.inner').children(),
-			appends = '';
-		
-		item.each(function(){
-			var url = this.href;
+		var	appends = '',
+			length = arr.length;
+
+		for (var i=0; i<length; i++){
+			var url = arr[i].attr('href');
 			if (url.substring(0,2) === '//') url = 'https:' + url;
-			appends += url + '\n'; 
-		});
+			appends += url + '\n';
+		}
 
 		$textarea.html(appends).click(function(){
 			$(this).select();
@@ -1105,12 +1106,11 @@ var copyLink = function(){
 	}
 }
 
-var newTab = function(){
-	var	item = $(this).parent().parent().children('.wrap').children('.inner').children();
-
-	item.each(function(i){
-		window.open(this.href, 'newtab'+i);
-	});
+var newTab = function(arr){
+	var length = arr.length;
+	for (var i=0; i<length; i++){
+		window.open(arr[i].attr('href'), 'newtab'+i);
+	}
 }
 
 var maxYT = function(){
@@ -1483,8 +1483,7 @@ var init = {
 			$page.find('.inner').empty();
 			$page.find('small').html('<strong>0</strong> / '+options.hz_his_max + lang.set07);
 			localStorage['hz_histories'] = '';
-		}).on('click', '.blue', copyLink)
-		.on('click', '.green', newTab);
+		});
 	},
 	album: function(){
 		var $page = $('#hz_album_page');
@@ -1493,8 +1492,7 @@ var init = {
 			$page.fadeOut(300, function(){
 				$(this).find('.inner').empty();
 			});
-		}).on('click', '.blue', copyLink)
-		.on('click', '.green', newTab);
+		});
 	},
 	allPic: function(){
 		var $page = $('#hz_allpic_page');
@@ -1503,8 +1501,7 @@ var init = {
 			$page.fadeOut(300, function(){
 				$(this).find('.inner').empty();
 			});
-		}).on('click', '.blue', copyLink)
-		.on('click', '.green', newTab);
+		});
 	},
 	copyarea: function(){
 		var $page = $('#hz_copyarea');
