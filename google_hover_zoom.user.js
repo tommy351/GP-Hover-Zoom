@@ -1010,7 +1010,7 @@ var albumDL = function(){
 		width = parseInt(($page.width() - 200) / options.hz_his_columns - 10),
 		fragment = [];
 
-	$page.find('small').html(lang.fs04).end()
+	$page.fadeIn(300).find('small').html(lang.fs04).end()
 	.find('.orange').attr('href', 'picasa://downloadfeed/?url=https://picasaweb.google.com/data/feed/back_compat/user/'+userid+'/albumid/'+albumid);
 
 	var meta = function(length, author, album){
@@ -1060,7 +1060,6 @@ var allPic = function(){
 			img = $('<a>');
 		
 		if (tag === 'IMG') {
-			//var img = $('<a>'),
 			var	url = this.src;
 			
 			url = url.match(/\?sz|\/proxy/) ? this.src.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : this.src.replace(picasaRegex,'/s0/$2');
@@ -1069,7 +1068,6 @@ var allPic = function(){
 			img.attr('href', url).html('<img src="'+thumbnail+'" width="'+width+'">');
 			fragment.push(img);
 		} else if (tag === 'A') {
-			//var img = $('<a>'),
 			var	url = $(this).attr('href');
 			
 			if (url.match(picRegex)) {
