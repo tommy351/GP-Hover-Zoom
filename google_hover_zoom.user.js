@@ -1149,10 +1149,28 @@ var execHash = function(hash){
 		query = [];
 	
 	for (var i=0; i<value.length; i++){
-		query.push(value[i].split('='));
+		var tmp = value[i].split('=');
+		query[tmp[0]] = tmp[1];
 	}
 
 	return query;
+}
+
+var ytDL = function(url, ele){
+	GM_xmlhttpRequest({
+		method: 'GET',
+		url: url,
+		onload: function(data){
+			var hash = $(data.responseText).find('embed').attr('flashvars'),
+				map = unescape(execHash(hash).url_encoded_fmt_stream_map).split(',');
+
+			for (var i=0; i<map.length; i++){
+				//console.dir(execHash(map[i]));
+				var item = execHash(map[i]);
+				console.log(item);
+			}
+		}
+	});
 }
 
 var timer = new function(){
@@ -1256,15 +1274,7 @@ var timer = new function(){
 			if (!$(this).data('class')){
 				var url = $(this).attr('data-content-url'),
 					button = $('<span>').addClass('a-j tubeStacks').html(lang.fs03).click(function(){
-
-						GM_xmlhttpRequest({
-							method: 'GET',
-							url: url,
-							onload: function(data){
-								var hash = $(data.responseText).find('embed').attr('flashvars');
-								console.log(execHash(hash));
-							}
-						});
+						ytDL(url, $(this));
 					});
 
 				$(this).data('class', true).parentsUntil('.Ve').find('.dl').append(button);
