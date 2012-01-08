@@ -65,7 +65,8 @@ var	options = {
 	hz_maxyt: localStorage.hz_maxyt || 'false',
 	hz_maxyt_aspect: parseInt(localStorage.hz_maxyt_aspect) || 2,
 	hz_direct_post: localStorage.hz_direct_post || 'false',
-	hz_direct_post_max: parseInt(localStorage.hz_direct_post_max) || 0
+	hz_direct_post_max: parseInt(localStorage.hz_direct_post_max) || 0,
+	hz_ytdl: localStorage.hz_ytdl || 'true'
 };
 
 // Localization
@@ -150,7 +151,8 @@ var locale = {
 		set45: 'Only apply to the first photo in album',
 		set46: 'Not hide photo when hovered',
 		set47: 'Resize videos as width of stream, video aspect:',
-		set48: 'Show photo links in posts directly, max width:'
+		set48: 'Show photo links in posts directly, max width:',
+		set49: 'Enable Youtube Video Download'
 	},
 	'zh-TW': {
 		menu01: '停用',
@@ -232,7 +234,8 @@ var locale = {
 		set45: '僅套用至相簿第一張圖片',
 		set46: '滑鼠移入大圖時不隱藏',
 		set47: '以訊息串寬度顯示影片，影片長寬比例：',
-		set48: '直接顯示文章內的圖片連結，最大寬度：'
+		set48: '直接顯示文章內的圖片連結，最大寬度：',
+		set49: '啟用 Youtube 影片下載'
 	},
 	'zh-CN': {
 		menu01: '停用',
@@ -314,7 +317,8 @@ var locale = {
 		set45: '仅套用至相簿第一张图片',
 		set46: '鼠标移入大图时不隐藏',
 		set47: '以讯息流宽度显示视频，视频长宽比例：',
-		set48: '直接显示文章内的图片链结，最大宽度：'
+		set48: '直接显示文章内的图片链结，最大宽度：',
+		set49: '启用 Youtube 视频下载'
 	},
 	'ja-JP': {
 		menu01: 'オフ',
@@ -396,7 +400,9 @@ var locale = {
 		set45: 'アルバムの一つ目の画像に適用する',
 		set46: '画像にカーソルを重ねた時に画像を隠さない',
 		set47: 'ストリームの幅で動画表示、長さと幅の比：',
-		set48: '画像の直リンクをポストで表示、最大幅：'
+		set48: '画像の直リンクをポストで表示、最大幅：',
+		// Todo: 日文翻譯
+		set49: '啟用 Youtube 影片下載'
 	},
 	'index': ['English', '正體中文', '简体中文', '日本語']
 };
@@ -507,6 +513,7 @@ var $content = $('#content'),
 					'<input id="hz_direct_yt" type="checkbox"><label for="hz_direct_yt">'+lang.set33+'</label><select id="hz_direct_ytaspect"><option value="1">4:3</option><option value="2">16:9</option><option value="3">16:10</option></select><label for="hz_direct_ytaspect">'+lang.set34+'</label><input id="hz_direct_ytmaxwidth" type="text" maxlength="4"><label for="hz_direct_ytmaxwidth">'+lang.set18+'</label><br>'+
 					'<input id="hz_album" type="checkbox"><label for="hz_album">'+lang.set32+'</label><br>'+
 					'<input id="hz_allpics" type="checkbox"><label for="hz_allpics">'+lang.set40+'</label><br>'+
+					'<input id="hz_ytdl" type="checkbox"><label for="hz_ytdl">'+lang.set49+'</label><br>'+
 					'<input id="hz_his" type="checkbox"><label for="hz_his">'+lang.set20+'</label><input id="hz_his_max" type="text" maxlength="4"><label for="hz_his_columns">'+lang.set21+'</label><input id="hz_his_columns" type="text" maxlength="1">'+
 					'</div></div>'+
 					'<div class="functions bottom"><div class="hz_button white">'+lang.set03+'</div><div class="hz_button green">'+lang.set02+'</div></div></div>'
@@ -1423,7 +1430,7 @@ var timer = new function(){
 		comment();
 		if (options.hz_album === 'true') album();
 		if (options.hz_direct_post === 'true') post();
-		tube();
+		if (options.hz_ytdl === 'true') tube();
 		if (options.hz_dl_link === 'true') links();
 		if (options.hz_maxpic === 'true') maxPic();
 		timeout = setTimeout(main, 2500);
