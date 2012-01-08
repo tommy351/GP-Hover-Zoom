@@ -766,10 +766,16 @@ $main: #dd4839;
 	strong{
 		color: #000 !important;
 	}
+	a{
+		&:hover{
+			text-decoration: none;
+			border-bottom: 1px solid #36c;
+		}
+	}
 	small{
-		float: right;
-		margin-right: -16px;
 		color: #999;
+		position: absolute;
+		right: 16px;
 	}
 	&:before{
 		position: absolute;
