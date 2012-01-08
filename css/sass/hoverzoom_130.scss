@@ -777,6 +777,17 @@ $main: #dd4839;
 		position: absolute;
 		right: 16px;
 	}
+	.notify{
+		color: #999;
+		margin-right: -16px;
+		padding: 10px 0 5px;
+		text-align: center;
+	}
+	&.loaded{
+		.notify{
+			display: none;
+		}
+	}
 	&:before{
 		position: absolute;
 		top: -9px;
