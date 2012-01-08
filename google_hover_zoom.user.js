@@ -99,6 +99,8 @@ var locale = {
 		ytdl04: 'Original',
 		ytdl05: 'HD',
 		ytdl06: 'Full HD',
+		ytdl07: 'Connection Failed',
+		ytdl08: 'Incompatible',
 		maxpic01: 'Zoom',
 		update01: 'Update',
 		update02: 'New: ',
@@ -182,6 +184,8 @@ var locale = {
 		ytdl04: '原始畫質',
 		ytdl05: 'HD',
 		ytdl06: 'Full HD',
+		ytdl07: '連接失敗',
+		ytdl08: '不相容',
 		maxpic01: '縮放',
 		update01: '更新',
 		update02: '更新版本：',
@@ -265,6 +269,8 @@ var locale = {
 		ytdl04: '原始',
 		ytdl05: '高清',
 		ytdl06: '全高清',
+		ytdl07: '连接失败',
+		ytdl08: '不相容',
 		maxpic01: '缩放',
 		update01: '更新',
 		update02: '更新版本：',
@@ -348,6 +354,9 @@ var locale = {
 		ytdl04: 'オリジナル画質',
 		ytdl05: 'HD',
 		ytdl06: 'フルHD',
+		// Todo: 日文翻譯
+		ytdl07: 'Connection Failed',
+		ytdl08: 'Incompatible',
 		maxpic01: 'ズーム',
 		update01: 'アップデート',
 		update02: '新しいバージョン：',
@@ -402,7 +411,7 @@ var locale = {
 		set47: 'ストリームの幅で動画表示、長さと幅の比：',
 		set48: '画像の直リンクをポストで表示、最大幅：',
 		// Todo: 日文翻譯
-		set49: '啟用 Youtube 影片下載'
+		set49: 'Enable Youtube Video Download'
 	},
 	'index': ['English', '正體中文', '简体中文', '日本語']
 };
@@ -1187,6 +1196,7 @@ var execHash = function(hash){
 	return query;
 }
 
+// Todo: 留言內也新增Youtube下載連結？
 var ytDL = function(url, ele){
 	var format = {
 		5: {format: 'FLV', res: '240p', desc: lang.ytdl02},
@@ -1195,10 +1205,11 @@ var ytDL = function(url, ele){
 		34: {format: 'FLV', res: '360p', desc: lang.ytdl02},
 		35: {format: 'FLV', res: '480p', desc: lang.ytdl03},
 		37: {format: 'MP4', res: '1080p', desc: lang.ytdl06},
-		38: {format: 'MP4', res: '4k', desc: lang.ytdl04},
+		38: {format: 'MP4', res: '4k', desc: lang.ytdl06},
 		43: {format: 'WebM', res: '360p', desc: lang.ytdl02},
 		44: {format: 'WebM', res: '480p', desc: lang.ytdl03},
-		45: {format: 'WebM', res: '720p', desc: lang.ytdl05}
+		45: {format: 'WebM', res: '720p', desc: lang.ytdl05},
+		46: {format: 'WebM', res: '1080p', desc: lang.ytdl06}
 		},
 		appends = '';
 
@@ -1211,23 +1222,29 @@ var ytDL = function(url, ele){
 		method: 'GET',
 		url: url,
 		onerror: function(){
-			ele.children('.loaded').html('Error!');
+			ele.children('.notify').html(lang.ytdl07);
 		},
 		onload: function(data){
 			var data = $(data.responseText),
-				title = data.find('#eow-title').attr('title'),
-				hash = data.find('embed').attr('flashvars'),
-				map = decodeURIComponent(execHash(hash).url_encoded_fmt_stream_map).split(',');
+				title = encode(data.find('#eow-title').attr('title')),
+				player = data.find('#watch-player');
 
-			for (var i=0; i<map.length; i++){
-				var item = execHash(map[i]),
-					url = decodeURIComponent(item.url)+'&title='+encode(title),
-					desc = format[item.itag].desc+'<small>'+format[item.itag].format+' / '+format[item.itag].res+'</small>';
+			if (player.hasClass('flash-player')){
+				var hash = data.find('#movie_player').attr('flashvars'),
+					map = decodeURIComponent(execHash(hash).url_encoded_fmt_stream_map).split(',');
+				
+				for (var i=0; i<map.length; i++){
+					var item = execHash(map[i]),
+						url = decodeURIComponent(item.url)+'&title='+title,
+						desc = format[item.itag].desc+'<small>'+format[item.itag].format+' / '+format[item.itag].res+'</small>';
+					
+					appends += i == 0 ? '<a class="a-j" href="'+url+'" target="_blank">'+desc+'</a>' : '<br><a class="a-j" href="'+url+'" target="_blank">'+desc+'</a>';
+				}
 
-				appends += i == 0 ? '<a class="a-j" href="'+url+'" target="_blank">'+desc+'</a>' : '<br><a class="a-j" href="'+url+'" target="_blank">'+desc+'</a>';
+				ele.addClass('loaded').append(appends);
+			} else {
+				ele.children('.notify').html(lang.ytdl08);
 			}
-
-			ele.addClass('loaded').append(appends);
 		}
 	});
 }
