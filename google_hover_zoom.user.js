@@ -1346,7 +1346,7 @@ var timer = new function(){
 	}
 
 	var tube = function(){
-		$('div[data-content-url*="youtube"]').each(function(){
+		$('div[data-content-type$="flash"]').each(function(){
 			if (!$(this).data('class')){
 				var url = $(this).attr('data-content-url'),
 					button = $('<span>').addClass('a-j tubeStacks').html(lang.fs03).click(function(){
