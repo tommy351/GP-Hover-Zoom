@@ -554,7 +554,7 @@ var appendElement = {
 		if (typeof obj.html !== 'undefined') element.innerHTML = obj.html;
 		if (typeof obj.css !== 'undefined') {
 			var style = obj.css;
-			for (var i=0; i<style.length; i++) {
+			for (var i=0, len=style.length; i<len; i++) {
 				element.style[style[i][0]] = style[i][1];
 			}
 		}
@@ -741,7 +741,7 @@ var main = function(){
 		var date = month+'/'+day+' '+hour+':'+minute+':'+second,
 			storage = localStorage.hz_histories == null || localStorage.hz_histories == '' ? [] : localStorage.hz_histories.split('|||');
 
-		for (var i=0; i<storage.length; i++){
+		for (var i=0, len=storage.length; i<len; i++){
 			var item = storage[i].split(';');
 			if (item[0] === url){
 				storage.splice(i, 1);
@@ -1022,7 +1022,7 @@ var history = function(){
 		newarr = [];
 
 	if (storage.length > 0){
-		for (var i=max; i<storage.length; i++){
+		for (var i=max, len=storage.length; i<len; i++){
 			if (storage[i] !== '') newarr.push(storage[i]);
 		}
 
@@ -1128,10 +1128,9 @@ var copyLink = function(arr){
 		$textarea = $page.find('textarea');
 
 	if ($textarea.html() === ''){
-		var	appends = '',
-			length = arr.length;
+		var	appends = '';
 
-		for (var i=0; i<length; i++){
+		for (var i=0, len=arr.length; i<len; i++){
 			var url = arr[i].attr('href');
 			if (url.substring(0,2) === '//') url = 'https:' + url;
 			appends += url + '\n';
@@ -1146,8 +1145,7 @@ var copyLink = function(arr){
 }
 
 var newTab = function(arr){
-	var length = arr.length;
-	for (var i=0; i<length; i++){
+	for (var i=0, len=arr.length; i<len; i++){
 		window.open(arr[i].attr('href'), 'newtab'+i);
 	}
 }
@@ -1233,7 +1231,7 @@ var ytDL = function(url, ele){
 				var hash = data.find('#movie_player').attr('flashvars'),
 					map = decodeURIComponent(execHash(hash).url_encoded_fmt_stream_map).split(',');
 				
-				for (var i=0; i<map.length; i++){
+				for (var i=0, len=map.length; i<len; i++){
 					var item = execHash(map[i]),
 						url = decodeURIComponent(item.url)+'&title='+title,
 						desc = format[item.itag].desc+'<small>'+format[item.itag].format+' / '+format[item.itag].res+'</small>';
@@ -1476,7 +1474,7 @@ var update = function(manual){
 			.find('small').html(lang.update02+'<strong>'+news+'</strong> / '+lang.update03+'<strong>'+version+'</strong>');
 		}
 
-		for (var i=0; i<content.length; i++){
+		for (var i=0, len=content.length; i<len; i++){
 			appends += '<li>'+content[i]+'</li>';
 		}
 
