@@ -6,6 +6,7 @@
 // @website        http://userscripts.org/scripts/show/106681
 // @namespace      http://zespia.twbbs.org
 // @version        1.3.3.2
+// @license        MIT License
 // @include        https://plus.google.com/*
 // @exclude        https://plus.google.com/ripples/*
 // ==/UserScript==
