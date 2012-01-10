@@ -932,29 +932,36 @@ var sortPic = function(obj, fragment){
 	var wWidth = obj.width(),
 		wHeight = obj.height(),
 		$inner = obj.find('.inner'),
+		length = fragment.length,
 		counts = 1;
 
-	if (fragment.length > 0){
-		var trigger = false,
-			max = fragment.length >= 50 ? 50 : fragment.length; 
+	if (length > 0){
+		var trigger = true,
+			appends = document.createDocumentFragment(),
+			max = length >= 50 ? 50 : length; 
 		for (var i=0; i<max; i++){
-			$inner.append(fragment[i]);
+			appends.appendChild(fragment[i]);
 		}
+		$inner.append(appends).imagesLoaded(function(){
+			$(this).hasClass('masonry') ? $(this).masonry('reload') : $(this).masonry({isFitWidth: true});
+			trigger = false;
+		});
 	}
 
 	var autoLoad = function(){
 		if ($(this).scrollTop() >= $(this)[0].scrollHeight - $(this).height() - 200 && trigger == false){
 			var start = 50 * counts,
-				end = fragment.length < 50 * (counts + 1) ? fragment.length : 50 * (counts + 1);
+				end = length < 50 * (counts + 1) ? length : 50 * (counts + 1),
+				appends = document.createDocumentFragment();
 			
 			trigger = true;
 			counts++;
 
 			for (var i=start; i<end; i++){
-				$inner.append(fragment[i]);
+				appends.appendChild(fragment[i]);
 			}
 
-			$inner.imagesLoaded(function(){
+			$inner.append(appends).imagesLoaded(function(){
 				$(this).masonry('reload');
 				trigger = false;
 			});
@@ -963,11 +970,8 @@ var sortPic = function(obj, fragment){
 
 	obj.fadeIn(300).on('click', '.blue', function(){copyLink(fragment)}).on('click', '.green', function(){newTab(fragment)})
 	.children('.main').css({width: wWidth - 200, height: wHeight - 140, marginLeft: -(wWidth / 2) + 100, marginTop: -(wHeight / 2) + 50})
-	.children('.wrap').css({width: wWidth - 180, height: wHeight - 190}).scrollTop(0).on('scroll', autoLoad)
-	.children('.inner').css('width', wWidth - 200).imagesLoaded(function(){
-		$(this).hasClass('masonry') ? $(this).masonry('reload') : $(this).masonry({isFitWidth: true});
-		trigger = false;
-	});
+	.children('.wrap').css({width: wWidth - 180, height: wHeight - 190}).scrollTop(0).off('scroll').on('scroll', autoLoad)
+	.children('.inner').css('width', wWidth - 200);
 }
 
 var history = function(){
@@ -991,8 +995,9 @@ var history = function(){
 		for (var a=newarr.length-1; a>=0; a--){
 			var	item = newarr[a].split(';'),
 				thumbnail = item[0].match(/googleusercontent/) && item[0].match(picasaRegex) ? item[0].replace(picasaRegex, '/w'+parseInt(width)+'/$2') : item[0],
-				img = $('<a>').attr({href: item[0], title: item[1]}).html('<img src="'+thumbnail+'" width="'+width+'">');
-			
+				img = document.createElement('a');
+
+			$(img).attr({href: item[0], title: item[1]}).html('<img src="'+thumbnail+'" width="'+width+'">');
 			fragment.push(img);
 		}
 	}
@@ -1040,8 +1045,9 @@ var albumDL = function(){
 					url = a.media$content[0].url,
 					original = url.replace(/(.*)\//, '$1/s0/'),
 					thumbnail = url.replace(/(.*)\//, '$1/w'+width+'/'),
-					item = $('<a>').attr({href: original, title: title}).html('<img src="'+thumbnail+'" width="'+width+'">');
+					item = document.createElement('a');
 				
+				$(item).attr({href: original, title: title}).html('<img src="'+thumbnail+'" width="'+width+'">');
 				fragment.push(item);
 			});
 			meta(entry.length, [feed.author[0].name.$t, feed.author[0].uri.$t], [feed.title.$t, feed.link[3].href]);
@@ -1057,7 +1063,7 @@ var allPic = function(){
 
 	$('div[data-content-type^="image"] img, div[data-content-url*="picasa"] img, .ot-anchor, .Sl img, .ru img').filter(':visible').each(function(){
 		var tag = $(this).prop('tagName'),
-			img = $('<a>');
+			img = document.createElement('a');
 		
 		if (tag === 'IMG') {
 			var	url = this.src;
@@ -1065,13 +1071,13 @@ var allPic = function(){
 			url = url.match(/\?sz|\/proxy/) ? this.src.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : this.src.replace(picasaRegex,'/s0/$2');
 			thumbnail = url.match(/googleusercontent/) && url.match(picasaRegex) ? url.replace(picasaRegex, '/w'+width+'/$2') : url;
 			
-			img.attr('href', url).html('<img src="'+thumbnail+'" width="'+width+'">');
+			$(img).attr('href', url).html('<img src="'+thumbnail+'" width="'+width+'">');
 			fragment.push(img);
 		} else if (tag === 'A') {
 			var	url = $(this).attr('href');
 			
 			if (url.match(picRegex)) {
-				img.attr('href', url).html('<img src="'+thumbnail+'" width="'+width+'">');
+				$(img).attr('href', url).html('<img src="'+url+'" width="'+width+'">');
 				fragment.push(img);
 			}
 		}
@@ -1083,16 +1089,15 @@ var allPic = function(){
 	count > 1 ? $page.find('small').html('<strong>'+count+'</strong>'+lang.set08) : $page.find('small').html('<strong>'+count+'</strong>'+lang.set07);
 }
 
-var copyLink = function(arr){
+var copyLink = function(fragment){
 	var $page = $('#hz_copyarea'),
 		$textarea = $page.find('textarea');
 
 	if ($textarea.html() === ''){
-		var	appends = '',
-			length = arr.length;
+		var	appends = '';
 
-		for (var i=0; i<length; i++){
-			var url = arr[i].attr('href');
+		for (var i=0, len=fragment.length; i<len; i++){
+			var url = fragment[i].href;
 			if (url.substring(0,2) === '//') url = 'https:' + url;
 			appends += url + '\n';
 		}
@@ -1105,10 +1110,9 @@ var copyLink = function(arr){
 	}
 }
 
-var newTab = function(arr){
-	var length = arr.length;
-	for (var i=0; i<length; i++){
-		window.open(arr[i].attr('href'), 'newtab'+i);
+var newTab = function(fragment){
+	for (var i=0, len=fragment.length; i<len; i++){
+		window.open(fragment[i].href, 'newtab'+i);
 	}
 }
 
