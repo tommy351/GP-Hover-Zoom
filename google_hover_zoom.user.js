@@ -348,15 +348,14 @@ var locale = {
 		yt01: '削除',
 		allpic01: 'バッチダウンロード',
 		piclink01: '画像をダウンロード：',
-		ytdl01: 'ビデオをダウンロード：',
+		ytdl01: '動画をダウンロード：',
 		ytdl02: '低画質',
-		ytdl03: '普通の画質',
+		ytdl03: '標準画質',
 		ytdl04: 'オリジナル画質',
-		ytdl05: 'HD',
-		ytdl06: 'フルHD',
-		// Todo: 日文翻譯
-		ytdl07: 'Connection Failed',
-		ytdl08: 'Incompatible',
+		ytdl05: 'HD画質',
+		ytdl06: 'フルHD画質',
+		ytdl07: '接続に失敗しました',
+		ytdl08: '非対応',
 		maxpic01: 'ズーム',
 		update01: 'アップデート',
 		update02: '新しいバージョン：',
@@ -410,8 +409,7 @@ var locale = {
 		set46: '画像にカーソルを重ねた時に画像を隠さない',
 		set47: 'ストリームの幅で動画表示、長さと幅の比：',
 		set48: '画像の直リンクをポストで表示、最大幅：',
-		// Todo: 日文翻譯
-		set49: 'Enable Youtube Video Download'
+		set49: 'YouTube ダウンロード機能を有効にする'
 	},
 	'index': ['English', '正體中文', '简体中文', '日本語']
 };
