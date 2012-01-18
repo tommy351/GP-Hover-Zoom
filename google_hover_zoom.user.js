@@ -983,7 +983,7 @@ var albumDL = function(){
 		fragment = document.createDocumentFragment();
 
 	$page.find('small').html(lang.fs04).end()
-	.find('.orange').attr('href', 'picasa://downloadfeed/?url=https://picasaweb.google.com/data/feed/back_compat/user/'+userid+'/albumid/'+albumid);
+	.find('.orange').attr('href', 'picasa://downloadfeed/?url=https://picasaweb.google.com/data/feed/back_compat/user/'+userid+'/albumid/'+albumid+'?imgdl=1');
 
 	var meta = function(length, author, album){
 		var text;
