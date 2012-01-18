@@ -931,17 +931,22 @@ var disable = function(){
 var sortPic = function(obj, fragment){
 	var wWidth = obj.width(),
 		wHeight = obj.height(),
-		$inner = obj.find('.inner'),
+		$wrap = obj.find('.wrap'),
+		$inner = $wrap.children('.inner'),
 		length = fragment.length,
-		counts = 1;
+		counts = 0,
+		trigger = false;
 
-	if (length > 0){
-		var trigger = true,
-			appends = document.createDocumentFragment(),
-			max = length >= 50 ? 50 : length; 
-		for (var i=0; i<max; i++){
+	var addFragment = function(start, end){
+		var appends = document.createDocumentFragment();
+
+		trigger = true;
+		counts++;
+
+		for (var i=start; i<end; i++){
 			appends.appendChild(fragment[i]);
 		}
+
 		obj.addClass('loading');
 		$inner.append(appends).imagesLoaded(function(){
 			$(this).hasClass('masonry') ? $(this).masonry('reload') : $(this).masonry({isFitWidth: true});
@@ -952,29 +957,28 @@ var sortPic = function(obj, fragment){
 
 	var autoLoad = function(){
 		if ($(this).scrollTop() >= $(this)[0].scrollHeight - $(this).height() - 200 && trigger == false){
-			var start = 50 * counts,
-				end = length < 50 * (counts + 1) ? length : 50 * (counts + 1),
-				appends = document.createDocumentFragment();
-			
-			trigger = true;
-			counts++;
+			var start = 50 * counts;
 
-			for (var i=start; i<end; i++){
-				appends.appendChild(fragment[i]);
+			if (length < 50 * (counts + 1)){
+				end = length;
+				$wrap.off('scroll');
+			} else {
+				end = 50 * (counts + 1);
 			}
-
-			obj.addClass('loading');
-			$inner.append(appends).imagesLoaded(function(){
-				$(this).masonry('reload');
-				obj.removeClass('loading');
-				trigger = false;
-			});
+			
+			addFragment(start, end);
 		}
+	}
+
+	if (length > 0){
+		var max = length >= 50 ? 50 : length;
+		addFragment(0, max);
+		if (length > 50) $wrap.off('scroll').on('scroll', autoLoad);
 	}
 
 	obj.fadeIn(300).on('click', '.blue', function(){copyLink(fragment)}).on('click', '.green', function(){newTab(fragment)})
 	.children('.main').css({width: wWidth - 200, height: wHeight - 140, marginLeft: -(wWidth / 2) + 100, marginTop: -(wHeight / 2) + 50})
-	.children('.wrap').css({width: wWidth - 180, height: wHeight - 190}).scrollTop(0).off('scroll').on('scroll', autoLoad)
+	.children('.wrap').css({width: wWidth - 180, height: wHeight - 190}).scrollTop(0)
 	.children('.inner').css('width', wWidth - 200);
 }
 
