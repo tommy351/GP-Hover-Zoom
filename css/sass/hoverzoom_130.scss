@@ -136,7 +136,7 @@ $main: #dd4839;
 		left: -27px;
 		position: relative;
 		display: inline-block;
-		border-bottom: 1px solid #fff;
+		border-bottom: 1px solid transparent;
 	}
 }
 .in-albumDownload{
@@ -166,7 +166,20 @@ $main: #dd4839;
 		left: -27px;
 		position: relative;
 		display: inline-block;
-		border-bottom: 1px solid #fff;
+		border-bottom: 1px solid transparent;
+	}
+}
+.tubeStacks{
+	background: url(https://s.ytimg.com/yt/favicon-refresh-vfldLzJxy.ico) no-repeat;
+	padding-left: 15px;
+	margin-left: 20px;
+	&:before{
+		content: "-";
+		cursor: default;
+		left: -27px;
+		position: relative;
+		display: inline-block;
+		border-bottom: 1px solid transparent;
 	}
 }
 .hz_button{
@@ -779,6 +792,28 @@ $main: #dd4839;
 	@include border-radius(2px);
 	strong{
 		color: #000 !important;
+	}
+	a{
+		&:hover{
+			text-decoration: none;
+			border-bottom: 1px solid #36c;
+		}
+	}
+	small{
+		color: #999;
+		position: absolute;
+		right: 16px;
+	}
+	.notify{
+		color: #999;
+		margin-right: -16px;
+		padding: 10px 0 5px;
+		text-align: center;
+	}
+	&.loaded{
+		.notify{
+			display: none;
+		}
 	}
 	&:before{
 		position: absolute;
