@@ -1,9 +1,5 @@
 #Google+ Hover Zoom
 
-[My Google+]
-
-[My Google+]: http://gplus.to/SkyArrow
-
 ##Download
 
 <http://userscripts.org/scripts/show/106681>
@@ -19,8 +15,12 @@
 
 ##Contribution
 
-**GitHub**: <https://github.com/tommy351/GP-Hover-Zoom>   
-**Localization**: <http://goo.gl/4IyfO>  
+**GitHub**: <https://github.com/tommy351/GP-Hover-Zoom>  
+**Google+**: <http://gplus.to/SkyArrow>   
+
+**Localization**:  
+**日本語**: [神楽坂雯麗](https://plus.google.com/u/0/104770674104762685579)  
+Help me translate? <http://goo.gl/4IyfO>  
 
 ##Usages
 
