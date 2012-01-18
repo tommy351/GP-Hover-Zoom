@@ -502,6 +502,12 @@ $main: #dd4839;
 	width: 100%;
 	height: 100%;
 	display: none;
+	&.loading{
+		.cycle{
+			opacity: 1 !important;
+			@include animation(loading infinite 0.8s linear);
+		}
+	}
 	.back{
 		position: absolute;
 		top: 0;
@@ -624,6 +630,27 @@ $main: #dd4839;
 			}
 			:last-child{
 				margin-right: 0;
+			}
+			.cycle{
+				float: left;
+				border: 3px solid #ccc;
+				border-radius: 50%;
+				height: 16px;
+				width: 16px;
+				margin-right: 10px;
+				position: relative;
+				top: 4px;
+				opacity: 0;
+				@include transition(opacity 0.3s);
+				&:before{
+					content: "";
+					position: absolute;
+					bottom: -3px;
+					right: -3px;
+					width: 12px;
+					height: 12px;
+					background: #fff;
+				}
 			}
 		}
 	}
