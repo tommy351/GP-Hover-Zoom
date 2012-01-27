@@ -1282,7 +1282,7 @@ var timer = new function(){
 				$(this).addClass('img-in-post').html(item);
 			} else if (url.match(/youtube.com\/watch\?v=/) && !$(this).hasClass('yt-in-post') && options.hz_direct_yt === 'true'){
 				var maxWidth = (options.hz_direct_ytmaxwidth > 0) ? options.hz_direct_ytmaxwidth : $(this).parent().parent().width();
-					url = url.replace(/(http:|https:)(.*)\?v=(.*)/, 'https://www.youtube.com/v/$3?version=3&autohide=1&feature=player_embedded');
+					url = url.replace(/(https?:)(.*)\?v=(.*)/, 'https://www.youtube.com/v/$3?version=3&autohide=1&feature=player_embedded');
 
 				var close = document.createElement('div'),
 					object = document.createElement('object'),
