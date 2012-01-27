@@ -1356,6 +1356,7 @@ var timer = new function(){
 		});
 	}
 
+	/*
 	var tube = function(){
 		$('div[data-content-type$="flash"]').each(function(){
 			if (!$(this).data('class')){
@@ -1378,6 +1379,7 @@ var timer = new function(){
 			}
 		});
 	}
+	*/
 
 	var links = function(){
 		$('.Vl').each(function(){
