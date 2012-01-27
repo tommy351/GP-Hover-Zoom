@@ -1460,7 +1460,6 @@ var timer = new function(){
 		comment();
 		if (options.hz_album === 'true') album();
 		if (options.hz_direct_post === 'true') post();
-		if (options.hz_ytdl === 'true') tube();
 		if (options.hz_dl_link === 'true') links();
 		if (options.hz_maxpic === 'true') maxPic();
 		timeout = setTimeout(main, 2500);
