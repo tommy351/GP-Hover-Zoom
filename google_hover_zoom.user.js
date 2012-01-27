@@ -1109,7 +1109,7 @@ var allPic = function(){
 		width = parseInt(($page.width() - 200) / options.hz_his_columns - 10),
 		fragment = [];
 
-	$('div[data-content-type^="image"] img, div[data-content-url*="picasa"] img, .ot-anchor, .Sl img, .ru img').filter(':visible').each(function(){
+	$('div[data-content-type^="image"] img, div[data-content-url*="picasa"] img, .ot-anchor, .s-W-Oh img').filter(':visible').each(function(){
 		var tag = $(this).prop('tagName'),
 			img = document.createElement('a');
 		
@@ -1179,7 +1179,7 @@ var maxYT = function(){
 			var iframe = $(this),
 				button = $('<span>');
 
-			button.addClass('a-j').attr('title', lang.set10).html(' - '+lang.set10).click(function(){
+			button.addClass('c-C').attr('title', lang.set10).html(' - '+lang.set10).click(function(){
 				iframe.nextAll().show().parent().attr('style', 'height: 226px;').click(function(){
 					$(this).children().hide();
 					$(this).attr('style', 'max-height: none; max-width: none; width: 100%;').prepend(iframe);
@@ -1191,7 +1191,7 @@ var maxYT = function(){
 				$(this).hide();
 			});
 
-			iframe.attr({width: width, height: width * aspect}).parentsUntil('.Ve').find('.dl').append(button);
+			iframe.attr({width: width, height: width * aspect}).parentsUntil('.Ye').find('.vo').append(button);
 		});
 	});
 }
@@ -1249,7 +1249,7 @@ var ytDL = function(url, ele){
 						url = decodeURIComponent(item.url)+'&title='+title,
 						desc = format[item.itag].desc+'<small>'+format[item.itag].format+' / '+format[item.itag].res+'</small>';
 					
-					appends += i == 0 ? '<a class="a-j" href="'+url+'" target="_blank">'+desc+'</a>' : '<br><a class="a-j" href="'+url+'" target="_blank">'+desc+'</a>';
+					appends += i == 0 ? '<a class="c-C" href="'+url+'" target="_blank">'+desc+'</a>' : '<br><a class="c-C" href="'+url+'" target="_blank">'+desc+'</a>';
 				}
 
 				ele.addClass('loaded').append(appends);
@@ -1270,7 +1270,7 @@ var timer = new function(){
 	}
 
 	var comment = function(){
-		$('.zj .ot-anchor').each(function(){
+		$('.kH .ot-anchor').each(function(){
 			var url = this.href;
 			if (options.hz_direct === 'true' && url.match(picRegex) && !$(this).hasClass('img-in-post')){
 				var item = $('<img>').attr('src', url);
@@ -1307,7 +1307,7 @@ var timer = new function(){
 		var page = location.href.replace(/\?(.*)/, '');
 
 		if (page.match(/\/photos\/\w+\/albums\/\w+/)) {
-			var $main = $('.Pk:visible');
+			var $main = $('.aN8flf:visible');
 
 			if (!$main.data('class')){
 				var button = $('<div>').attr('title', lang.al01).data('url', page).addClass('in-albumDownload hz_button blue').html(lang.al01).click(albumDL);
@@ -1316,25 +1316,25 @@ var timer = new function(){
 				$main.data('class', true);
 			}
 		} else {
-			$('.B-u-Y').each(function(){
+			$('.s-r-za').each(function(){
 				var url = $(this).children().attr('href');
 
 				if (url.match(/\/photos\/\w+\/albums\/\w+/) && !$(this).data('class')){
 					var button = $('<span>');
-					button.data('url', url).addClass('a-j albumDownload').html(lang.fs03).attr('title', lang.al01).click(albumDL);
-					$(this).data('class', true).parentsUntil('.Ve').find('.dl').append(button);
+					button.data('url', url).addClass('c-C albumDownload').html(lang.fs03).attr('title', lang.al01).click(albumDL);
+					$(this).data('class', true).parentsUntil('.Ye').find('.vo').append(button);
 				}
 			});
 		}
 	}
 
 	var post = function(){
-		$('.vg .ot-anchor').each(function(){
+		$('.Vl .ot-anchor').each(function(){
 			if (!$(this).data('class')){
 				var url = this.href;
 
 				if (url.match(picRegex)){
-					var auto = $(this).parentsUntil('.Bx').find('div[data-content-type^="image"]');
+					var auto = $(this).parentsUntil('.Ks').find('div[data-content-type^="image"]');
 
 					if (typeof auto[0] != 'undefined'){
 						if (auto.attr('data-content-url').match(picRegex)){
@@ -1360,7 +1360,7 @@ var timer = new function(){
 		$('div[data-content-type$="flash"]').each(function(){
 			if (!$(this).data('class')){
 				var url = $(this).attr('data-content-url'),
-					button = $('<span>').addClass('a-j tubeStacks').html(lang.fs03).click(function(){
+					button = $('<span>').addClass('c-C tubeStacks').html(lang.fs03).click(function(){
 						if (!$(this).next().hasClass('clickDetail')){
 							var popInner = '<div class="closeButton" title="'+lang.set10+'"></div><strong>'+lang.ytdl01+'</strong><br><div class="notify">'+lang.fs04+'</div>',
 								popup = $('<div>').addClass('clickDetail').html(popInner + '</div>').on('click', '.closeButton', function(){
@@ -1374,19 +1374,19 @@ var timer = new function(){
 						}
 					});
 
-				$(this).data('class', true).parentsUntil('.Ve').find('.dl').append(button);
+				$(this).data('class', true).parentsUntil('.Ye').find('.vo').append(button);
 			}
 		});
 	}
 
 	var links = function(){
-		$('.Us').each(function(){
+		$('.Vl').each(function(){
 			if (!$(this).data('class')){
 				var target = $(this).find('div[data-content-type^="image"], div[data-content-url*="picasa"], .img-in-post'),
 					count = target.length;
 				
 				if (count > 1) {
-					var link = $('<span>').addClass('a-j picStacks').html(lang.fs03+' ('+count+')').click(function(){
+					var link = $('<span>').addClass('c-C picStacks').html(lang.fs03+' ('+count+')').click(function(){
 						if (!$(this).next().hasClass('clickDetail')){
 							var popInner = '<div class="closeButton" title="'+lang.set10+'"></div><strong>'+lang.piclink01+'</strong><br>';
 						
@@ -1394,7 +1394,7 @@ var timer = new function(){
 								var url = target[i].childNodes[0].src,
 									number = i + 1;
 								url = url.match(/\?sz|\/proxy/) ? url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : url.replace(picasaRegex,'/s0/$2');
-								popInner += i == 0 ? '<a class="a-j" href="'+url+'">'+number+'</a>' : ' - <a class="a-j" href="'+url+'">'+number+'</a>';
+								popInner += i == 0 ? '<a class="c-C" href="'+url+'">'+number+'</a>' : ' - <a class="c-C" href="'+url+'">'+number+'</a>';
 							}
 
 							var popup = $('<div>').addClass('clickDetail').html(popInner + '</div>').on('click', '.closeButton', function(){
@@ -1409,15 +1409,15 @@ var timer = new function(){
 				} else if (count === 1) {
 					var url = target[0].childNodes[0].src;
 					url = url.match(/\?sz|\/proxy/) ? url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : url.replace(picasaRegex,'/s0/$2');
-					var link = $('<a>').addClass('a-j picStacks').attr('href', url).html(lang.fs03);
+					var link = $('<a>').addClass('c-C picStacks').attr('href', url).html(lang.fs03);
 				}
-				$(this).data('class', true).parentsUntil('.Ve').find('.dl').append(link);
+				$(this).data('class', true).parentsUntil('.Ye').find('.vo').append(link);
 			}
 		});
 	}
 
 	var maxPic = function(){
-		$content.find('.B-u-C:visible').each(function(){
+		$content.find('.s-r-fa:visible').each(function(){
 			if (!$(this).data('class')){
 				var children = $(this).children('div[data-content-type^="image"], div[data-content-url*="picasa"]'),
 					width = $(this).width();
@@ -1434,7 +1434,7 @@ var timer = new function(){
 						img.attr('src', url).css({maxWidth: '100%', height: 'auto'});
 					});
 
-					var zoom = $('<span>').attr({class: 'a-j', title: lang.maxpic01}).html(' - '+lang.maxpic01).click(function(){
+					var zoom = $('<span>').attr({class: 'c-C', title: lang.maxpic01}).html(' - '+lang.maxpic01).click(function(){
 						children.each(function(){
 							var data = $(this).data('original');
 							if (typeof data != 'undefined'){
@@ -1445,7 +1445,7 @@ var timer = new function(){
 						$(this).remove();
 					});
 
-					$(this).parentsUntil('.Ve').find('.dl').append(zoom);
+					$(this).parentsUntil('.Ye').find('.vo').append(zoom);
 				}
 
 				$(this).data('class', true);
