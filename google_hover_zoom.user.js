@@ -1236,19 +1236,20 @@ var ytDL = function(url, ele){
 			ele.children('.notify').html(lang.ytdl07);
 		},
 		onload: function(data){
-			var data = $(data.responseText),
-				title = encode(data.find('#eow-title').attr('title')),
-				player = data.find('#watch-player');
+			var data = data.responseText,
+				title = encode($(data).find('#eow-title').attr('title'));
 
-			if (player.hasClass('flash-player')){
-				var hash = data.find('#movie_player').attr('flashvars'),
-					map = decodeURIComponent(execHash(hash).url_encoded_fmt_stream_map).split(',');
-				
+			var regexp_url = new RegExp('"url_encoded_fmt_stream_map": "([^"]*)"', 'i');
+			data.match(regexp_url);
+			var map = RegExp.$1.split(',');
+
+			if (map.length > 0){
 				for (var i=0, len=map.length; i<len; i++){
 					var item = execHash(map[i]),
-						url = decodeURIComponent(item.url)+'&title='+title,
-						desc = format[item.itag].desc+'<small>'+format[item.itag].format+' / '+format[item.itag].res+'</small>';
-					
+						url = decodeURIComponent(item.url).replace(/\\u0026quality/, '')+'&title='+title,
+						itag = url.replace(/(.*)itag=(\d+)(.*)/, '$2'),
+						desc = format[itag].desc+'<small>'+format[itag].format+' / '+format[itag].res+'</small>';
+
 					appends += i == 0 ? '<a class="c-C" href="'+url+'" target="_blank">'+desc+'</a>' : '<br><a class="c-C" href="'+url+'" target="_blank">'+desc+'</a>';
 				}
 
