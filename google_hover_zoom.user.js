@@ -1191,7 +1191,7 @@ var maxYT = function(){
 				$(this).hide();
 			});
 
-			iframe.attr({width: width, height: width * aspect}).parentsUntil('.Ye').find('.vo').append(button);
+			iframe.attr({width: width, height: width * aspect}).parentsUntil('.Te').find('.vo').append(button);
 		});
 	});
 }
@@ -1323,7 +1323,7 @@ var timer = new function(){
 				if (url.match(/\/photos\/\w+\/albums\/\w+/) && !$(this).data('class')){
 					var button = $('<span>');
 					button.data('url', url).addClass('c-C albumDownload').html(lang.fs03).attr('title', lang.al01).click(albumDL);
-					$(this).data('class', true).parentsUntil('.Ye').find('.vo').append(button);
+					$(this).data('class', true).parentsUntil('.Te').find('.vo').append(button);
 				}
 			});
 		}
@@ -1375,7 +1375,7 @@ var timer = new function(){
 						}
 					});
 
-				$(this).data('class', true).parentsUntil('.Ye').find('.vo').append(button);
+				$(this).data('class', true).parentsUntil('.Te').find('.vo').append(button);
 			}
 		});
 	}
@@ -1412,7 +1412,7 @@ var timer = new function(){
 					url = url.match(/\?sz|\/proxy/) ? url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : url.replace(picasaRegex,'/s0/$2');
 					var link = $('<a>').addClass('c-C picStacks').attr('href', url).html(lang.fs03);
 				}
-				$(this).data('class', true).parentsUntil('.Ye').find('.vo').append(link);
+				$(this).data('class', true).parentsUntil('.Te').find('.vo').append(link);
 			}
 		});
 	}
@@ -1446,7 +1446,7 @@ var timer = new function(){
 						$(this).remove();
 					});
 
-					$(this).parentsUntil('.Ye').find('.vo').append(zoom);
+					$(this).parentsUntil('.Te').find('.vo').append(zoom);
 				}
 
 				$(this).data('class', true);
