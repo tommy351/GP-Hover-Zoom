@@ -948,7 +948,7 @@ var enable = function(){
 	if (options.hz_enable_main === 'true')
 		$content.on('mouseenter', 'div[data-content-type^="image"] img, div[data-content-url*="picasa"] img', main);
 	if (options.hz_enable_icon === 'true')
-		$content.on('mouseenter', '.Nm img', main);
+		$content.on('mouseenter', '.oP img', main);
 	if (options.hz_enable_link === 'true')
 		$content.on('mouseenter', '.ot-anchor', main);
 	
@@ -960,7 +960,7 @@ var disable = function(){
 	if (options.hz_enable_main === 'true')
 		$content.off('mouseenter', 'div[data-content-type^="image"] img, div[data-content-url*="picasa"] img', main);
 	if (options.hz_enable_icon === 'true')
-		$content.off('mouseenter', '.Nm img', main);
+		$content.off('mouseenter', '.oP img', main);
 	if (options.hz_enable_link === 'true')
 		$content.off('mouseenter', '.ot-anchor', main);
 	
