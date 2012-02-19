@@ -102,6 +102,7 @@ var locale = {
 		ytdl06: 'Full HD',
 		ytdl07: 'Connection Failed',
 		ytdl08: 'Incompatible',
+		ytdl09: 'Unknown Format',
 		maxpic01: 'Zoom',
 		update01: 'Update',
 		update02: 'New: ',
@@ -187,6 +188,7 @@ var locale = {
 		ytdl06: 'Full HD',
 		ytdl07: '連接失敗',
 		ytdl08: '不相容',
+		ytdl09: '未知格式',
 		maxpic01: '縮放',
 		update01: '更新',
 		update02: '更新版本：',
@@ -272,6 +274,7 @@ var locale = {
 		ytdl06: '全高清',
 		ytdl07: '连接失败',
 		ytdl08: '不相容',
+		ytdl09: '未知格式',
 		maxpic01: '缩放',
 		update01: '更新',
 		update02: '更新版本：',
@@ -357,6 +360,7 @@ var locale = {
 		ytdl06: 'フル HD 画質',
 		ytdl07: '接続に失敗しました',
 		ytdl08: '非対応',
+		ytdl09: '未知の形式',
 		maxpic01: 'ズーム',
 		update01: 'アップデート',
 		update02: '新しいバージョン：',
@@ -1245,12 +1249,15 @@ var ytDL = function(url, ele){
 
 			if (map.length > 0){
 				for (var i=0, len=map.length; i<len; i++){
-					var item = execHash(map[i]),
-						url = decodeURIComponent(item.url).replace(/\\u0026quality/, '')+'&title='+title,
-						itag = url.replace(/(.*)itag=(\d+)(.*)/, '$2'),
-						desc = format[itag].desc+'<small>'+format[itag].format+' / '+format[itag].res+'</small>';
+					var item = execHash(map[i]);
+					if (typeof item.url != 'undefined'){
+						var url = decodeURIComponent(item.url).replace(/\\u0026quality/, '')+'&title='+title,
+							itag = url.replace(/(.*)itag=(\d+)(.*)/, '$2'),
+							tag = format[itag],
+							desc = typeof tag != 'undefined' ? tag.desc+'<small>'+tag.format+' / '+tag.res+'</small>' : lang.ytdl09+'<small>itag='+itag+'</small>';
 
-					appends += i == 0 ? '<a class="c-C" href="'+url+'" target="_blank">'+desc+'</a>' : '<br><a class="c-C" href="'+url+'" target="_blank">'+desc+'</a>';
+						appends += i == 0 ? '<a class="c-C" href="'+url+'" target="_blank">'+desc+'</a>' : '<br><a class="c-C" href="'+url+'" target="_blank">'+desc+'</a>';
+					}	
 				}
 
 				ele.addClass('loaded').append(appends);
