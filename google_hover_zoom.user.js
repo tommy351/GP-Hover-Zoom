@@ -4,7 +4,7 @@
 // @description    Enlarge thumbnails & profile icons on mouse hover. Display pictures in comments directly. Download albums quickly.
 // @author         SkyArrow
 // @website        http://userscripts.org/scripts/show/106681
-// @namespace      http://zespia.twbbs.org
+// @namespace      http://zespia.tw
 // @version        1.3.4.6
 // @license        MIT License
 // @include        https://plus.google.com/*
