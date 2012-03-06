@@ -1367,7 +1367,7 @@ var timer = new function(){
 	var tube = function(){
 		$('div[data-content-type$="flash"]').each(function(){
 			if (!$(this).data('class')){
-				var url = $(this).attr('data-content-url'),
+				var url = $(this).attr('data-content-url').replace(/http/, 'https'),
 					button = $('<span>').addClass('c-C tubeStacks').html(lang.fs03).click(function(){
 						if (!$(this).next().hasClass('clickDetail')){
 							var popInner = '<div class="closeButton" title="'+lang.set10+'"></div><strong>'+lang.ytdl01+'</strong><br><div class="notify">'+lang.fs04+'</div>',
