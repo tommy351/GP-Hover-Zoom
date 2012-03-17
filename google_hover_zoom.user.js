@@ -30,6 +30,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
 var	version = '1.3.4.6',
 	picRegex = /\.(jpg|jpeg|gif|bmp|png|tiff)/i,
 	picasaRegex = /\/\w\d+(-\w\d*)*\/([^\/]+)$/,
+	gcRegex = /googleusercontent.com/,
 	mouse = [];
 
 // Options
@@ -625,7 +626,7 @@ var main = function(){
 		
 		$('<img>').attr('src', url).load(function(){
 			if (trigger1 == true){
-					var nWidth = this.naturalWidth,
+				var nWidth = this.naturalWidth,
 					nHeight = this.naturalHeight,
 					inner = document.createDocumentFragment();
 				inner.appendChild(this);
@@ -1046,7 +1047,7 @@ var history = function(){
 
 		for (var a=newarr.length-1; a>=0; a--){
 			var	item = newarr[a].split(';'),
-				thumbnail = item[0].match(/googleusercontent/) && item[0].match(picasaRegex) ? item[0].replace(picasaRegex, '/w'+parseInt(width)+'/$2') : item[0],
+				thumbnail = item[0].match(gcRegex) && item[0].match(picasaRegex) ? item[0].replace(picasaRegex, '/w'+parseInt(width)+'/$2') : item[0],
 				img = document.createElement('a');
 
 			$(img).attr({href: item[0], title: item[1]}).html('<img src="'+thumbnail+'" width="'+width+'">');
@@ -1120,8 +1121,7 @@ var allPic = function(){
 		if (tag === 'IMG') {
 			var	url = this.src;
 			
-			url = url.match(/\?sz|\/proxy/) ? this.src.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : this.src.replace(picasaRegex,'/s0/$2');
-			thumbnail = url.match(/googleusercontent/) && url.match(picasaRegex) ? url.replace(picasaRegex, '/w'+width+'/$2') : url;
+			thumbnail = url.match(gcRegex) && url.match(picasaRegex) ? url.replace(picasaRegex, '/w'+width+'/$2') : url;
 			
 			$(img).attr('href', url).html('<img src="'+thumbnail+'" width="'+width+'">');
 			fragment.push(img);
