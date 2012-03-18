@@ -27,7 +27,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
  */
 (function(a,b,c){var d=b.event,e;d.special.smartresize={setup:function(){b(this).bind("resize",d.special.smartresize.handler)},teardown:function(){b(this).unbind("resize",d.special.smartresize.handler)},handler:function(a,b){var c=this,d=arguments;a.type="smartresize",e&&clearTimeout(e),e=setTimeout(function(){jQuery.event.handle.apply(c,d)},b==="execAsap"?0:100)}},b.fn.smartresize=function(a){return a?this.bind("smartresize",a):this.trigger("smartresize",["execAsap"])},b.Mason=function(a,c){this.element=b(c),this._create(a),this._init()};var f=["position","height"];b.Mason.settings={isResizable:!0,isAnimated:!1,animationOptions:{queue:!1,duration:500},gutterWidth:0,isRTL:!1,isFitWidth:!1},b.Mason.prototype={_filterFindBricks:function(a){var b=this.options.itemSelector;return b?a.filter(b).add(a.find(b)):a},_getBricks:function(a){var b=this._filterFindBricks(a).css({position:"absolute"}).addClass("masonry-brick");return b},_create:function(c){this.options=b.extend(!0,{},b.Mason.settings,c),this.styleQueue=[],this.reloadItems();var d=this.element[0].style;this.originalStyle={};for(var e=0,g=f.length;e<g;e++){var h=f[e];this.originalStyle[h]=d[h]||""}this.element.css({position:"relative"}),this.horizontalDirection=this.options.isRTL?"right":"left",this.offset={x:parseInt(this.element.css("padding-"+this.horizontalDirection),10),y:parseInt(this.element.css("padding-top"),10)},this.isFluid=this.options.columnWidth&&typeof this.options.columnWidth=="function";var i=this;setTimeout(function(){i.element.addClass("masonry")},0),this.options.isResizable&&b(a).bind("smartresize.masonry",function(){i.resize()})},_init:function(a){this._getColumns(),this._reLayout(a)},option:function(a,c){b.isPlainObject(a)&&(this.options=b.extend(!0,this.options,a))},layout:function(a,b){for(var c=0,d=a.length;c<d;c++)this._placeBrick(a[c]);var e={};e.height=Math.max.apply(Math,this.colYs);if(this.options.isFitWidth){var f=0,c=this.cols;while(--c){if(this.colYs[c]!==0)break;f++}e.width=(this.cols-f)*this.columnWidth-this.options.gutterWidth}this.styleQueue.push({$el:this.element,style:e});var g=this.isLaidOut?this.options.isAnimated?"animate":"css":"css",h=this.options.animationOptions,i;for(c=0,d=this.styleQueue.length;c<d;c++)i=this.styleQueue[c],i.$el[g](i.style,h);this.styleQueue=[],b&&b.call(a),this.isLaidOut=!0},_getColumns:function(){var a=this.options.isFitWidth?this.element.parent():this.element,b=a.width();this.columnWidth=this.isFluid?this.options.columnWidth(b):this.options.columnWidth||this.$bricks.outerWidth(!0)||b,this.columnWidth+=this.options.gutterWidth,this.cols=Math.floor((b+this.options.gutterWidth)/this.columnWidth),this.cols=Math.max(this.cols,1)},_placeBrick:function(a){var c=b(a),d,e,f,g,h;d=Math.ceil(c.outerWidth(!0)/(this.columnWidth+this.options.gutterWidth)),d=Math.min(d,this.cols);if(d===1)f=this.colYs;else{e=this.cols+1-d,f=[];for(h=0;h<e;h++)g=this.colYs.slice(h,h+d),f[h]=Math.max.apply(Math,g)}var i=Math.min.apply(Math,f),j=0;for(var k=0,l=f.length;k<l;k++)if(f[k]===i){j=k;break}var m={top:i+this.offset.y};m[this.horizontalDirection]=this.columnWidth*j+this.offset.x,this.styleQueue.push({$el:c,style:m});var n=i+c.outerHeight(!0),o=this.cols+1-l;for(k=0;k<o;k++)this.colYs[j+k]=n},resize:function(){var a=this.cols;this._getColumns(),(this.isFluid||this.cols!==a)&&this._reLayout()},_reLayout:function(a){var b=this.cols;this.colYs=[];while(b--)this.colYs.push(0);this.layout(this.$bricks,a)},reloadItems:function(){this.$bricks=this._getBricks(this.element.children())},reload:function(a){this.reloadItems(),this._init(a)},appended:function(a,b,c){if(b){this._filterFindBricks(a).css({top:this.element.height()});var d=this;setTimeout(function(){d._appended(a,c)},1)}else this._appended(a,c)},_appended:function(a,b){var c=this._getBricks(a);this.$bricks=this.$bricks.add(c),this.layout(c,b)},remove:function(a){this.$bricks=this.$bricks.not(a),a.remove()},destroy:function(){this.$bricks.removeClass("masonry-brick").each(function(){this.style.position="",this.style.top="",this.style.left=""});var c=this.element[0].style;for(var d=0,e=f.length;d<e;d++){var g=f[d];c[g]=this.originalStyle[g]}this.element.unbind(".masonry").removeClass("masonry").removeData("masonry"),b(a).unbind(".masonry")}},b.fn.imagesLoaded=function(a){function h(){--e<=0&&this.src!==f&&(setTimeout(g),d.unbind("load error",h))}function g(){a.call(b,d)}var b=this,d=b.find("img").add(b.filter("img")),e=d.length,f="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";e||g(),d.bind("load error",h).each(function(){if(this.complete||this.complete===c){var a=this.src;this.src=f,this.src=a}});return b};var g=function(a){this.console&&console.error(a)};b.fn.masonry=function(a){if(typeof a=="string"){var c=Array.prototype.slice.call(arguments,1);this.each(function(){var d=b.data(this,"masonry");if(!d)g("cannot call methods on masonry prior to initialization; attempted to call method '"+a+"'");else{if(!b.isFunction(d[a])||a.charAt(0)==="_"){g("no such method '"+a+"' for masonry instance");return}d[a].apply(d,c)}})}else this.each(function(){var c=b.data(this,"masonry");c?(c.option(a||{}),c._init()):b.data(this,"masonry",new b.Mason(a,this))});return this}})(window,jQuery);
 ;
-var $content, albumDL, batch, bodyElement, bodyTmp, copyLink, disable, elements, enable, execHash, gcRegex, history, init, lang, locale, main, maxYT, menuElements, menuTmp, mouse, newTab, options, picRegex, picasaRegex, sortPic, timer, update, version, ytDL;
+var $content, albumDL, batch, bodyElement, bodyTmp, disable, elements, enable, execHash, gcRegex, history, hoverzoom, init, lang, locale, maxYT, menuElements, menuTmp, mouse, options, picRegex, picasaRegex, sortPic, timer, update, version, ytDL;
 
 version = '1.4';
 
@@ -572,7 +572,7 @@ document.addEventListener('mousemove', function(e) {
   };
 }, false);
 
-main = function() {
+hoverzoom = function() {
   var $loading, $main, $sc, fullscreen, hide, history, keys, resize, self, shortcut, show, tag, timer1, timer2, timer3, timer4, trigger1, url, wHeight, wWidth;
   tag = $(this).prop('tagName');
   self = this;
@@ -684,7 +684,7 @@ main = function() {
     var date, i, storage, time, _fn, _i, _len;
     time = new Date();
     date = "" + (time.getMonth() + 1) + "/" + (time.getDate()) + " " + (time.getHours()) + ":" + (time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes()) + ":" + (time.getSeconds() < 10 ? '0' + time.getSeconds() : time.getSeconds()) + "}";
-    storage = (localStorage.hz_histories != null) || localStorage.hz_histories === '' ? [] : localStorage.hz_histories.split('|||');
+    storage = typeof localStorage.hz_histories === 'undefined' || localStorage.hz_histories === '' ? [] : localStorage.hz_histories.split('|||');
     _fn = function(i) {
       var item;
       item = i.split(';');
@@ -758,7 +758,7 @@ main = function() {
       if (arr.length > 1) return insert(i + 1, true);
     };
     resize = new function() {
-      var $func, detect, getSize, item, nHeight, nWidth, wHeight, wWidth;
+      var $func, detect, getSize, item, main, nHeight, nWidth, wHeight, wWidth;
       $func = $fs.find('li');
       wWidth = wHeight = nWidth = nHeight = item = '';
       main = function(top, left) {
@@ -881,13 +881,13 @@ main = function() {
 
 enable = function() {
   if (options.hz_enable_main === 'true') {
-    $content.on('mouseenter', 'div[data-content-type^="image"] img, div[data-content-url*="picasa"] img', main);
+    $content.on('mouseenter', 'div[data-content-type^="image"] img, div[data-content-url*="picasa"] img', hoverzoom);
   }
   if (options.hz_enable_icon === 'true') {
-    $content.on('mouseenter', '.oP img', main);
+    $content.on('mouseenter', '.oP img', hoverzoom);
   }
   if (options.hz_enable_link === 'true') {
-    $content.on('mouseenter', '.ot-anchor', main);
+    $content.on('mouseenter', '.ot-anchor', hoverzoom);
   }
   $('#hoverzoom_db').addClass('enable');
   return timer.start();
@@ -895,20 +895,20 @@ enable = function() {
 
 disable = function() {
   if (options.hz_enable_main === 'true') {
-    $content.off('mouseenter', 'div[data-content-type^="image"] img, div[data-content-url*="picasa"] img', main);
+    $content.off('mouseenter', 'div[data-content-type^="image"] img, div[data-content-url*="picasa"] img', hoverzoom);
   }
   if (options.hz_enable_icon === 'true') {
-    $content.off('mouseenter', '.oP img', main);
+    $content.off('mouseenter', '.oP img', hoverzoom);
   }
   if (options.hz_enable_link === 'true') {
-    $content.off('mouseenter', '.ot-anchor', main);
+    $content.off('mouseenter', '.ot-anchor', hoverzoom);
   }
   $('#hoverzoom_db').removeClass('enable');
   return timer.stop();
 };
 
 sortPic = function(obj, fragment) {
-  var $inner, $wrap, addFragment, autoLoad, counts, length, max, trigger, wHeight, wWidth;
+  var $inner, $wrap, addFragment, autoLoad, copyLink, counts, length, max, newTab, trigger, wHeight, wWidth;
   wWidth = obj.width();
   wHeight = obj.height();
   $wrap = obj.find('.wrap');
@@ -924,7 +924,7 @@ sortPic = function(obj, fragment) {
     for (i = start; start <= end ? i <= end : i >= end; start <= end ? i++ : i--) {
       appends.appendChild(fragment[i]);
     }
-    obj.adClass('loading');
+    obj.addClass('loading');
     return $inner.append(appends).imagesLoaded(function() {
       if ($(this).hasClass('masonry')) {
         $(this).masonry('reload');
@@ -950,25 +950,46 @@ sortPic = function(obj, fragment) {
       return addFragment(start, end);
     }
   };
+  copyLink = function() {
+    var $page, $textarea, appends, i, url, _i, _len;
+    $page = $('#hz_copyarea');
+    $textarea = $page.find('textarea');
+    if ($textarea.html() === '') {
+      appends = '';
+      for (_i = 0, _len = fragment.length; _i < _len; _i++) {
+        i = fragment[_i];
+        url = i.href;
+        if (url.substring(0, 2) === '//') url = 'https:' + url;
+        appends += url + '\n';
+      }
+      $textarea.html(appends).click(function() {
+        return $(this).select();
+      });
+      return $page.fadeIn(300);
+    }
+  };
+  newTab = function() {
+    var i, _i, _len, _results;
+    _results = [];
+    for (_i = 0, _len = fragment.length; _i < _len; _i++) {
+      i = fragment[_i];
+      _results.push(window.open(i.href, 'hz_newtab' + i));
+    }
+    return _results;
+  };
   if (length > 0) {
     max = length >= 50 ? 50 : length;
     addFragment(0, max);
     if (length > 50) $wrap.off('scroll').on('scroll', autoLoad);
   }
-  return obj.fadeIn(300).on('click', '.blue', function() {
-    return copyLink(fragment);
-  }).on('click', '.green', function() {
-    return newTab(fragment);
-  }).children('.main').css({
+  return obj.fadeIn(300).on('click', '.blue', copyLink).on('click', '.green', newTab).children('.main').css({
     width: wWidth - 200,
     height: wHeight - 140,
     marginLeft: -(wWidth / 2) + 100,
     marginTop: -(wHeight / 2) + 50
   }).children('.wrap').css({
     width: wWidth - 180,
-    height: wHeight - 140,
-    marginLeft: -(wWidth / 2) + 100,
-    marginTop: -(wHeight / 2) + 50
+    height: wHeight - 190
   }).children('.inner').css({
     width: wWidth - 200
   });
@@ -1071,33 +1092,6 @@ batch = function() {
   sortPic($page, fragment);
   count = $page.find('.inner').children.length;
   return $page.find('small').html("<strong>" + count + "</strong> / " + options.hz_his_max + (count > 1 ? lang.set08 : lang.set07));
-};
-
-copyLink = function(fragment) {
-  var $page, $textarea, appends, i, _i, _len;
-  $page = $('#hz_copyarea');
-  $textarea = $page.find('textarea');
-  if ($textarea.html() === '') {
-    appends = '';
-    for (_i = 0, _len = fragment.length; _i < _len; _i++) {
-      i = fragment[_i];
-      appends += i.href.substring(0, 2) === '//' ? 'https://' + i.href : i.href;
-    }
-    $textarea.html(appends).click(function() {
-      return $(this).select();
-    });
-    return $page.fadeIn(300);
-  }
-};
-
-newTab = function(fragment) {
-  var i, _i, _len, _results;
-  _results = [];
-  for (_i = 0, _len = fragment.length; _i < _len; _i++) {
-    i = fragment[_i];
-    _results.push(window.open(i.href, 'hz_newtab' + i));
-  }
-  return _results;
 };
 
 maxYT = function() {
@@ -1234,7 +1228,7 @@ ytDL = function(url, ele) {
             itag = url.replace(/(.*)itag=(\d+)(.*)/, '$2');
             tag = format[itag];
             desc = tag != null ? "" + tag.desc + "<small>" + tag.format + " / " + tag.res + "</small>" : "" + lang.ytdl09 + "<small>itag=" + itag + "</small>";
-            return appends += i === 0 ? "<a class='c-C' href='" + url + "' target='_blank'>" + desc + "</a>" : "<br><a class='c-C' href='" + url + "' target='_blank'>" + desc + "</a>";
+            return appends += _i === 0 ? "<a class='c-C' href='" + url + "' target='_blank'>" + desc + "</a>" : "<br><a class='c-C' href='" + url + "' target='_blank'>" + desc + "</a>";
           }
         };
         for (_i = 0, _len = map.length; _i < _len; _i++) {
@@ -1250,7 +1244,7 @@ ytDL = function(url, ele) {
 };
 
 timer = new function() {
-  var album, aspect, comment, links, maxPic, post, timeout, tube;
+  var album, aspect, comment, links, main, maxPic, post, timeout, tube;
   switch (options.hz_direct_ytaspect) {
     case 1:
       aspect = 3 / 4;
@@ -1343,9 +1337,120 @@ timer = new function() {
       }
     });
   };
-  tube = function() {};
-  links = function() {};
-  maxPic = function() {};
+  tube = function() {
+    return $('div[data-content-type$="flash"]').each(function() {
+      var button, url;
+      if (!$(this).data('class')) {
+        url = $(this).attr('data-content-url').replace(/^http/, 'https');
+        button = $("<span class='c-C tubeStacks'>" + lang.fs03 + "</span>").click(function() {
+          var popInner, popup;
+          if (!$(this).next().hasClass('clickDetail')) {
+            popInner = "<div class='closeButton' title='" + lang.set10 + "'></div><strong>" + lang.ytdl01 + "</strong><br><div class='notify'>" + lang.fs04 + "</div>";
+            popup = $("<div class='clickDetail'>" + popInner + "</div>").on('click', 'closeButton', function() {
+              return $(this).parent().fadeOut(300);
+            });
+            $(this).after(popup).next().fadeIn(300).offset({
+              left: $(this).offset().left + 10,
+              top: $(this).offset().top + 25
+            });
+            return ytDL(url, $(this).next());
+          }
+        });
+        return $(this).data('class', true).parentsUntil('.Te').find('.vo').append(button);
+      }
+    });
+  };
+  links = function() {
+    return $('.Vl').each(function() {
+      var count, link, target, url;
+      if (!$(this).data('class')) {
+        target = $(this).find('div[data-content-type^="image"], div[data-content-url*="picasa"], .img-in-post');
+        count = target.length;
+        if (count > 1) {
+          link = $("<span class='c-C picStacks'>" + lang.fs03 + " (" + count + ")</span>").click(function() {
+            var i, popInner, popup, _fn, _i, _len;
+            if (!$(this).next().hasClass('clickDetail')) {
+              popInner = "<div class='closeButton' title='" + lang.set10 + "'></div><strong>" + lang.piclink01 + "</strong><br>";
+              _fn = function(i) {
+                var number, url;
+                url = i.childNodes[0].src;
+                number = i + 1;
+                url = url.match(/\?sz|\/proxy/) ? url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : url.replace(picasaRegex, '/s0/$2');
+                return popInner += i === 0 ? "<a class='c-C' href='" + url + "'>" + number + "</a>" : " - <a class='c-C' href='" + url + "'>" + number + "</a>";
+              };
+              for (_i = 0, _len = count.length; _i < _len; _i++) {
+                i = count[_i];
+                _fn(i);
+              }
+              popup = $("<div class='clickDetail'>" + popInner + "</div>").on('click', 'closeButton', function() {
+                return $(this).parent().fadeOut(300);
+              });
+              return $(this).after(popup).next().fadeIn(300).offset({
+                left: $(this).offset().left + 10,
+                top: $(this).offset().top + 25
+              });
+            } else {
+              if ($(this).next().is(':hidden')) {
+                return $(this).next().fadeIn(300).offset({
+                  left: $(this).offset().left + 10,
+                  top: $(this).offset().top + 25
+                });
+              } else {
+                return $(this).next().fadeOut(300);
+              }
+            }
+          });
+        } else if (count === 1) {
+          url = target[0].childNodes[0].src;
+          url = url.match(/\?sz|\/proxy/) ? url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : url.replace(picasaRegex, '/s0/$2');
+          link = "<a class='c-C picStacks' href='" + url + "'>" + lang.fs03 + "</a>";
+        }
+        return $(this).data('class', true).parentsUntil('.Te').find('.vo').append(link);
+      }
+    });
+  };
+  maxPic = function() {
+    return $content.find('.s-r-fa:visible').each(function() {
+      var children, width, zoom;
+      if (!$(this).data('class')) {
+        children = $(this).children('div[data-content-type^="image"], div[data-content-url*="picasa"]');
+        width = $(this).width();
+        if (children.length > 0) {
+          if (options.hz_maxpic_option === '1') children = children.eq(0);
+          children.each(function(i) {
+            var img, src, url;
+            img = $(this).children('img');
+            src = img.attr('src');
+            url = src.match(/\?sz|\/proxy/) ? src.replace(/resize_\D?=\d+/, 'resize_w=' + width) : src.replace(picasaRegex, "/w" + width + "/$2");
+            $(this).data('original', src).css({
+              height: 'auto',
+              width: '100%',
+              maxHeight: 'none',
+              maxWidth: 'none',
+              marginButtom: 5
+            }).next('div').next('div').css('display', 'block');
+            return img.attr('src', url).css({
+              maxWidth: '100%',
+              height: 'auto'
+            });
+          });
+          zoom = $("<span class='c-C' title='" + lang.maxpic01 + "'> - " + lang.maxpic01 + "</span>").click(function() {
+            children.each(function() {
+              var data;
+              data = $(this).data('original');
+              if (data != null) {
+                return $(this).attr('style', '').children('img').attr('src', data);
+              }
+            });
+            $(document).scrollTop($(this).parent().parent().parent().parent().offset().top - 100);
+            return $(this).remove();
+          });
+          $(this).parentsUntil('.Te').find('.vo').append(zoom);
+        }
+        return $(this).data('class', true);
+      }
+    });
+  };
   timeout = '';
   main = function() {
     comment();
@@ -1366,7 +1471,53 @@ timer = new function() {
   };
 };
 
-update = function(manual) {};
+update = function(manual) {
+  var main;
+  main = function(news, content, latest) {
+    var $page, appends, i, _i, _len;
+    $page = $('#hz_update_note');
+    appends = '';
+    if (latest) {
+      $page.find('.green').hide().end().find('small').html("<strong>" + version + "</strong>" + lang.update06);
+    } else {
+      $page.find('.green').show().end().find('small').html("" + lang.update02 + "<strong>" + news + "</strong> / " + lang.update06 + "<strong>" + version + "</strong>");
+    }
+    for (_i = 0, _len = content.length; _i < _len; _i++) {
+      i = content[_i];
+      appends += "<li>" + i + "</li>";
+    }
+    return $page.fadeIn(300).find('p').html("<ul>" + appends + "</ul>");
+  };
+  return GM_xmlhttpRequest({
+    method: 'GET',
+    url: 'https://sites.google.com/site/hoverzoomplus/sources/version.json',
+    onload: function(data) {
+      var content, feed, i, newVer, nowVer, _ref, _ref2, _results;
+      feed = JSON.parse(data.responseText);
+      nowVer = version.split('.');
+      newVer = feed.version.split('.');
+      content = feed.content[options.hz_language] || feed.content['en-US'];
+      if (version === feed.version && manual) {
+        return main(version, content, true);
+      } else {
+        _results = [];
+        for (i = _ref = nowVer.length, _ref2 = newVer.length; _ref <= _ref2 ? i <= _ref2 : i >= _ref2; _ref <= _ref2 ? i++ : i--) {
+          if (nowVer[i] != null) nowVer[i] = 0;
+          if (newVer[i] > nowVer[i]) {
+            main(feed.version, content, false);
+            break;
+          } else if (nowVer[i] > newVer[i]) {
+            if (manual) main(version, content, true);
+            break;
+          } else {
+            _results.push(void 0);
+          }
+        }
+        return _results;
+      }
+    }
+  });
+};
 
 init = {
   normal: function() {

@@ -680,7 +680,7 @@ document.addEventListener 'mousemove', (e) ->
 		y: e.pageY
 , false
 
-main = ->
+hoverzoom = ->
 	tag = $(this).prop('tagName')
 	self = this
 	$main = $('#hoverzoom')
@@ -779,7 +779,7 @@ main = ->
 	history = ->
 		time = new Date()
 		date = "#{time.getMonth()+1}/#{time.getDate()} #{time.getHours()}:#{if time.getMinutes() < 10 then '0' + time.getMinutes() else time.getMinutes()}:#{if time.getSeconds() < 10 then '0' + time.getSeconds() else time.getSeconds()}}"
-		storage = if localStorage.hz_histories? or localStorage.hz_histories is '' then [] else localStorage.hz_histories.split('|||')
+		storage = if typeof localStorage.hz_histories is 'undefined' or localStorage.hz_histories is '' then [] else localStorage.hz_histories.split('|||')
 
 		for i in storage
 			do (i) ->
@@ -967,17 +967,17 @@ main = ->
 	$(document).on('keydown', keys)
 
 enable = ->
-	$content.on 'mouseenter', 'div[data-content-type^="image"] img, div[data-content-url*="picasa"] img', main if options.hz_enable_main is 'true'
-	$content.on 'mouseenter', '.oP img', main if options.hz_enable_icon is 'true'
-	$content.on 'mouseenter', '.ot-anchor', main if options.hz_enable_link is 'true'
+	$content.on 'mouseenter', 'div[data-content-type^="image"] img, div[data-content-url*="picasa"] img', hoverzoom if options.hz_enable_main is 'true'
+	$content.on 'mouseenter', '.oP img', hoverzoom if options.hz_enable_icon is 'true'
+	$content.on 'mouseenter', '.ot-anchor', hoverzoom if options.hz_enable_link is 'true'
 
 	$('#hoverzoom_db').addClass 'enable'
 	timer.start()
 
 disable = ->
-	$content.off 'mouseenter', 'div[data-content-type^="image"] img, div[data-content-url*="picasa"] img', main if options.hz_enable_main is 'true'
-	$content.off 'mouseenter', '.oP img', main if options.hz_enable_icon is 'true'
-	$content.off 'mouseenter', '.ot-anchor', main if options.hz_enable_link is 'true'
+	$content.off 'mouseenter', 'div[data-content-type^="image"] img, div[data-content-url*="picasa"] img', hoverzoom if options.hz_enable_main is 'true'
+	$content.off 'mouseenter', '.oP img', hoverzoom if options.hz_enable_icon is 'true'
+	$content.off 'mouseenter', '.ot-anchor', hoverzoom if options.hz_enable_link is 'true'
 
 	$('#hoverzoom_db').removeClass 'enable'
 	timer.stop()
@@ -997,9 +997,9 @@ sortPic = (obj, fragment) ->
 		counts++
 
 		for i in [start..end]
-			appends.appendChild(fragment[i])
+			appends.appendChild(fragment[i]);
 
-		obj.adClass('loading')
+		obj.addClass('loading')
 		$inner.append(appends).imagesLoaded ->
 			if $(this).hasClass('masonry') then $(this).masonry('reload') else $(this).masonry({isFitWidth: true})
 			obj.removeClass('loading')
@@ -1017,25 +1017,41 @@ sortPic = (obj, fragment) ->
 
 			addFragment(start, end)
 
+	copyLink = ->
+		$page = $('#hz_copyarea')
+		$textarea = $page.find('textarea')
+		if $textarea.html() is ''
+			appends = ''
+
+			for i in fragment
+				url = i.href
+				url = 'https:' + url if url.substring(0, 2) is '//'
+				appends += url + '\n'
+
+			$textarea.html(appends).click ->
+				$(this).select()
+
+			$page.fadeIn(300)
+
+	newTab = ->
+		for i in fragment
+			window.open i.href, 'hz_newtab'+i
+
+
 	if length > 0
 		max = if length >= 50 then 50 else length
 		addFragment(0, max)
 		$wrap.off('scroll').on('scroll', autoLoad) if length > 50
 
-	obj.fadeIn(300).on('click', '.blue', ->
-		copyLink(fragment)
-	).on('click', '.green', ->
-		newTab(fragment)
-	).children('.main').css(
+	obj.fadeIn(300).on('click', '.blue', copyLink).on('click', '.green', newTab)
+	.children('.main').css(
 		width: wWidth - 200
 		height: wHeight - 140
 		marginLeft: -(wWidth / 2) + 100
 		marginTop: -(wHeight / 2) + 50
 	).children('.wrap').css(
 		width: wWidth - 180
-		height: wHeight - 140
-		marginLeft: -(wWidth / 2) + 100
-		marginTop: -(wHeight / 2) + 50
+		height: wHeight - 190
 	).children('.inner').css
 		width: wWidth - 200
 
@@ -1129,25 +1145,6 @@ batch = ->
 	sortPic($page, fragment)
 	count = $page.find('.inner').children.length
 	$page.find('small').html("<strong>#{count}</strong> / #{options.hz_his_max}#{if count > 1 then lang.set08 else lang.set07}")
-
-copyLink = (fragment) ->
-	$page = $('#hz_copyarea')
-	$textarea = $page.find('textarea')
-
-	if $textarea.html() is ''
-		appends = ''
-
-		for i in fragment
-			appends += if i.href.substring(0, 2) is '//' then 'https://' + i.href else i.href
-
-		$textarea.html(appends).click ->
-			$(this).select()
-
-		$page.fadeIn(300)
-
-newTab = (fragment) ->
-	for i in fragment
-		window.open(i.href, 'hz_newtab'+i)
 
 maxYT = ->
 	$content.on 'click', 'div[data-content-type$="flash"]', ->
@@ -1257,7 +1254,7 @@ ytDL = (url, ele) ->
 							tag = format[itag]
 							desc = if tag? then "#{tag.desc}<small>#{tag.format} / #{tag.res}</small>" else "#{lang.ytdl09}<small>itag=#{itag}</small>"
 
-							appends += if i is 0 then "<a class='c-C' href='#{url}' target='_blank'>#{desc}</a>" else "<br><a class='c-C' href='#{url}' target='_blank'>#{desc}</a>"
+							appends += if _i is 0 then "<a class='c-C' href='#{url}' target='_blank'>#{desc}</a>" else "<br><a class='c-C' href='#{url}' target='_blank'>#{desc}</a>"
 
 				ele.addClass('loaded').append(appends)
 			else
@@ -1344,8 +1341,92 @@ timer = new ->
 				$(this).data('class', true)
 
 	tube = ->
+		$('div[data-content-type$="flash"]').each ->
+			if !$(this).data('class')
+				url = $(this).attr('data-content-url').replace(/^http/, 'https')
+				button = $("<span class='c-C tubeStacks'>#{lang.fs03}</span>").click ->
+					if !$(this).next().hasClass('clickDetail')
+						popInner = "<div class='closeButton' title='#{lang.set10}'></div><strong>#{lang.ytdl01}</strong><br><div class='notify'>#{lang.fs04}</div>"
+						popup = $("<div class='clickDetail'>#{popInner}</div>").on 'click', 'closeButton', ->
+							$(this).parent().fadeOut(300)
+
+						$(this).after(popup).next().fadeIn(300).offset
+							left: $(this).offset().left + 10
+							top: $(this).offset().top + 25
+						ytDL(url, $(this).next())
+
+				$(this).data('class', true).parentsUntil('.Te').find('.vo').append(button)
+
 	links = ->
+		$('.Vl').each ->
+			if !$(this).data('class')
+				target = $(this).find('div[data-content-type^="image"], div[data-content-url*="picasa"], .img-in-post')
+				count = target.length
+
+				if count > 1
+					link = $("<span class='c-C picStacks'>#{lang.fs03} (#{count})</span>").click ->
+						if !$(this).next().hasClass('clickDetail')
+							popInner = "<div class='closeButton' title='#{lang.set10}'></div><strong>#{lang.piclink01}</strong><br>"
+
+							for i in count
+								do (i) ->
+									url = i.childNodes[0].src
+									number = i + 1
+									url = if url.match(/\?sz|\/proxy/) then url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') else url.replace(picasaRegex,'/s0/$2')
+									popInner += if i is 0 then "<a class='c-C' href='#{url}'>#{number}</a>" else " - <a class='c-C' href='#{url}'>#{number}</a>"
+
+							popup = $("<div class='clickDetail'>#{popInner}</div>").on 'click', 'closeButton', ->
+								$(this).parent().fadeOut(300)
+
+							$(this).after(popup).next().fadeIn(300).offset
+								left: $(this).offset().left + 10
+								top: $(this).offset().top + 25
+						else
+							if $(this).next().is(':hidden') then $(this).next().fadeIn(300).offset({left: $(this).offset().left + 10, top: $(this).offset().top + 25}) else $(this).next().fadeOut(300)
+				else if count is 1
+					url = target[0].childNodes[0].src
+					url = if url.match(/\?sz|\/proxy/) then url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') else url.replace(picasaRegex,'/s0/$2')
+					link = "<a class='c-C picStacks' href='#{url}'>#{lang.fs03}</a>"
+
+				$(this).data('class', true).parentsUntil('.Te').find('.vo').append(link)
+
 	maxPic = ->
+		$content.find('.s-r-fa:visible').each ->
+			if !$(this).data('class')
+				children = $(this).children('div[data-content-type^="image"], div[data-content-url*="picasa"]')
+				width = $(this).width()
+
+				if children.length > 0
+					children = children.eq(0) if options.hz_maxpic_option is '1'
+
+					children.each (i) ->
+						img = $(this).children('img')
+						src = img.attr('src')
+						url = if src.match(/\?sz|\/proxy/) then src.replace(/resize_\D?=\d+/, 'resize_w='+width) else src.replace(picasaRegex,"/w#{width}/$2")
+
+						$(this).data('original', src).css(
+							height: 'auto'
+							width: '100%'
+							maxHeight: 'none'
+							maxWidth: 'none'
+							marginButtom: 5
+						).next('div').next('div').css('display', 'block')
+						img.attr('src', url).css
+							maxWidth: '100%'
+							height: 'auto'
+
+					zoom = $("<span class='c-C' title='#{lang.maxpic01}'> - #{lang.maxpic01}</span>").click ->
+						children.each ->
+							data = $(this).data('original')
+							if data?
+								$(this).attr('style', '').children('img').attr('src', data)
+						$(document).scrollTop $(this).parent().parent().parent().parent().offset().top - 100
+						$(this).remove()
+
+					$(this).parentsUntil('.Te').find('.vo').append(zoom);
+
+				$(this).data('class', true)
+
 	timeout = ''
 	main = ->
 		comment()
@@ -1363,6 +1444,43 @@ timer = new ->
 	}
 
 update = (manual) ->
+	main = (news, content, latest) ->
+		$page = $('#hz_update_note')
+		appends = ''
+
+		if latest
+			$page.find('.green').hide().end()
+			.find('small').html("<strong>#{version}</strong>#{lang.update06}")
+		else
+			$page.find('.green').show().end()
+			.find('small').html("#{lang.update02}<strong>#{news}</strong> / #{lang.update06}<strong>#{version}</strong>")
+
+		for i in content
+			appends += "<li>#{i}</li>"
+
+		$page.fadeIn(300).find('p').html("<ul>#{appends}</ul>")
+
+	GM_xmlhttpRequest
+		method: 'GET'
+		url: 'https://sites.google.com/site/hoverzoomplus/sources/version.json'
+		onload: (data) ->
+			feed = JSON.parse(data.responseText)
+			nowVer = version.split('.')
+			newVer = feed.version.split('.')
+			content = feed.content[options.hz_language] or feed.content['en-US']
+
+			if version is feed.version and manual
+				main(version, content, true)
+			else
+				for i in [nowVer.length..newVer.length]
+					nowVer[i] = 0 if nowVer[i]?
+
+					if newVer[i] > nowVer[i]
+						main(feed.version, content, false)
+						break;
+					else if nowVer[i] > newVer[i]
+						main(version, content, true) if manual
+						break;
 
 # Initialize
 init =
