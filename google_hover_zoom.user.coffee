@@ -34,6 +34,7 @@ picasaRegex = /\/\w\d+(-\w\d*)*\/([^\/]+)$/
 gcRegex = /googleusercontent.com/
 mouse = []
 
+# Options
 options = 
 	hz_delay: parseInt(localStorage.hz_delay) or 500
 	hz_opacity: parseInt(localStorage.hz_opacity) or 100
@@ -70,6 +71,7 @@ options =
 	hz_direct_post_max: parseInt(localStorage.hz_direct_post_max) or 0
 	hz_ytdl: localStorage.hz_ytdl or 'true'
 
+# l10n
 locale =
 	'en-US':
 		menu01: 'Disable',
@@ -420,6 +422,7 @@ locale =
 
 lang = locale[options.hz_language] or locale['en-US']
 
+# Append elements
 $content = $('#content')
 bodyTmp = ''
 menuTmp = ''
@@ -674,12 +677,14 @@ $('#gbmpdv').append "
 </div>
 "
 
+#Detect cursor position
 document.addEventListener 'mousemove', (e) ->
 	mouse =
 		x: e.pageX
 		y: e.pageY
 , false
 
+# Hover Zoom
 hoverzoom = ->
 	tag = $(this).prop('tagName')
 	self = this
@@ -1270,33 +1275,11 @@ timer = new ->
 		$('.kH .ot-anchor').each ->
 			url = @href
 			if options.hz_direct is 'true' and url.match(picRegex) and !$(this).hasClass('img-in-post')
-				item = $('<img>').attr('src', url)
-
-				if options.hz_direct_max > 0
-					item.css('maxWidth', options.hz_direct_max)
-
-				$(this).addClass('img-in-post').html(item)
-
+				$(this).addClass('img-in-post').html("<img src='url' style='max-width: #{options.hz_direct_max if options.hz_direct_max > 0}'>")
 			else if url.match(/youtube.com\/watch\?v=/) and !$(this).hasClass('yt-in-post') and options.hz_direct_yt is 'true'
 				maxWidth = if options.hz_direct_ytmaxwidth > 0 then options.hz_direct_ytmaxwidth else $(this).parent().parent().width()
 				url = url.replace(/(https?:)(.*)\?v=(.*)/, 'https://www.youtube.com/v/$3?version=3&autohide=1&feature=player_embedded')
-
-				close = document.createElement('div')
-				object = document.createElement('object')
-				fragment = document.createDocumentFragment()
-
-				$(close).addClass('closeYT').attr('title', lang.yt01).html('X').click ->
-					$(this).prev().attr('style', '').end()
-					.next().remove().end()
-					.remove()
-				fragment.appendChild(close)
-
-				$(object).html("<param name='movie' value='#{url}'><param name='allowFullScreen' value='true'><param name='allowScriptAccess' value='always'><embed src='#{url}' type='application/x-shockwave-flash' allowfullscreen='true' allowScriptAccess='always' width='#{maxWidth}' height='#{maxWidth * aspect}'></object>").css
-					width: maxWidth
-					height: maxWidth * aspect
-				fragment.appendChild(object)
-
-				$(this).after(fragment).addClass('yt-in-post').css
+				$(this).after("<div class='closeYT' title='#{lang.ytdl01}'>X</div><object style='width: #{maxWidth}; height: #{maxWidth * aspect}'><param name='movie' value='#{url}'><param name='allowFullScreen' value='true'><param name='allowScriptAccess' value='always'><embed src='#{url}' type='application/x-shockwave-flash' allowfullscreen='true' allowScriptAccess='always' width='#{maxWidth}' height='#{maxWidth * aspect}'></object></object>").addClass('yt-in-post').css
 					display: 'block'
 					fontWeight: 'bold'
 					marginRight: 11
@@ -1428,13 +1411,17 @@ timer = new ->
 				$(this).data('class', true)
 
 	timeout = ''
+
+	chain = [comment]
+	chain.push(album) if options.hz_album is 'true'
+	chain.push(post) if options.hz_direct_post is 'true'
+	chain.push(tube) if options.hz_ytdl is 'true'
+	chain.push(links) if options.hz_dl_link is 'true'
+	chain.push(maxPic) if hz_maxpic.hz_album is 'true'
+	
 	main = ->
-		comment()
-		album() if options.hz_album is 'true'
-		post() if options.hz_direct_post is 'true'
-		tube() if options.hz_ytdl is 'true'
-		links() if options.hz_dl_link is 'true'
-		maxPic() if options.hz_maxpic is 'true'
+		for i in chain
+			i()
 		timeout = setTimeout(main, 2500)
 	return {
 		start: ->
@@ -1483,128 +1470,126 @@ update = (manual) ->
 						break;
 
 # Initialize
-init =
-	normal: ->
-		$set = $('#hz_set_page')
+init = ->
+	$set = $('#hz_set_page')
 
-		# Append options
-		keys = "<option value='0'>#{lang.set24}</option><option value='16'>Shift</option><option value='17'>Ctrl</option>"
-		keys += if navigator.appVersion.indexOf('Macintosh') > -1 then "<option value='18'>Option</option><option value='13'>Return</option>" else "<option value='18'>Alt</option><option value='13'>Enter</option>"
-		for i in [65..91]
-			keys += "<option value='#{i}'>&##{i};</option>"
-		$('#hz_trigger, #hz_fullscreen, #hz_dl_key').append(keys)
+	# Append options
+	keys = "<option value='0'>#{lang.set24}</option><option value='16'>Shift</option><option value='17'>Ctrl</option>"
+	keys += if navigator.appVersion.indexOf('Macintosh') > -1 then "<option value='18'>Option</option><option value='13'>Return</option>" else "<option value='18'>Alt</option><option value='13'>Enter</option>"
+	for i in [65..91]
+		keys += "<option value='#{i}'>&##{i};</option>"
+	$('#hz_trigger, #hz_fullscreen, #hz_dl_key').append(keys)
 
-		langTmp = ''
-		for i in locale.index
-			langTmp += "<option value='#{i[0]}'>#{i[1]}</option>"
-		$('#hz_language').html(langTmp)
+	langTmp = ''
+	for i in locale.index
+		langTmp += "<option value='#{i[0]}'>#{i[1]}</option>"
+	$('#hz_language').html(langTmp)
 
-		# Bind menu events
-		$('#hz_opts').on('click', '#disable_hz', (e) ->
-			if !$(this).hasClass('off')
-				disable()
-				$(this).html(lang.menu01).addClass('off')
-			else
-				enable()
-				$(this).html(lang.menu02).removeClass('off')
-			e.stopPropagation()
-		# Load options
-		).on('click', '#hz_set_open', ->
-			$set.fadeIn(300).find(':text').each(->
-				$(this).val options[$(this).attr('id')]
-			).end()
-			.find('select').each(->
-				$(this).children("option[value='#{options[$(this).attr('id')]}']").prop('selected', true)
-			).end()
-			.find(':checkbox').each(->
-				if options[$(this).attr('id')] is 'true'
-					$(this).prop('checked', true)
-			)
-		).on('click', '#hz_history_open', history).on('click', '#hz_allpic_dl', batch)
+	# Bind menu events
+	$('#hz_opts').on('click', '#disable_hz', (e) ->
+		if !$(this).hasClass('off')
+			disable()
+			$(this).html(lang.menu01).addClass('off')
+		else
+			enable()
+			$(this).html(lang.menu02).removeClass('off')
+		e.stopPropagation()
+	# Load options
+	).on('click', '#hz_set_open', ->
+		$set.fadeIn(300).find(':text').each(->
+			$(this).val options[$(this).attr('id')]
+		).end()
+		.find('select').each(->
+			$(this).children("option[value='#{options[$(this).attr('id')]}']").prop('selected', true)
+		).end()
+		.find(':checkbox').each(->
+			if options[$(this).attr('id')] is 'true'
+				$(this).prop('checked', true)
+		)
+	).on('click', '#hz_history_open', history).on('click', '#hz_allpic_dl', batch)
 
-		# Manually check update
-		$('#hz_checkupdate').click ->
-			update(true)
+	# Manually check update
+	$('#hz_checkupdate').click ->
+		update(true)
 
-		# Close options window
-		$set.on('click', '.close, .back', ->
-			$set.fadeOut(300)
-		# Save options
-		).on('click', '.green', ->
-			$set.find(':text').each(->
-				localStorage[$(this).attr('id')] = $(this).val()
-			).end()
-			.find('select').each(->
-				localStorage[$(this).attr('id')] = $(this).find(':selected').val()
-			).end()
-			.find(':checkbox').each(->
-				localStorage[$(this).attr('id')] = $(this).prop('checked').toString()
-			)
+	# Close options window
+	$set.on('click', '.close, .back', ->
+		$set.fadeOut(300)
+	# Save options
+	).on('click', '.green', ->
+		$set.find(':text').each(->
+			localStorage[$(this).attr('id')] = $(this).val()
+		).end()
+		.find('select').each(->
+			localStorage[$(this).attr('id')] = $(this).find(':selected').val()
+		).end()
+		.find(':checkbox').each(->
+			localStorage[$(this).attr('id')] = $(this).prop('checked').toString()
+		)
+		location.reload()
+	# Reset options
+	).on('click', '.white', ->
+		sure = confirm(lang.set04)
+		if sure
+			localStorage.clear()
 			location.reload()
-		# Reset options
-		).on('click', '.white', ->
-			sure = confirm(lang.set04)
-			if sure
-				localStorage.clear()
-				location.reload()
-			else
-				return false
-		# Tab events
-		).find('.menu li').each (i) ->
-			if i is 0
-				$(this).addClass('current')
+		else
+			return false
+	# Tab events
+	).find('.menu li').each (i) ->
+		if i is 0
+			$(this).addClass('current')
 
-			$(this).attr('tabid', i).click ->
-				$current = $(this).parent().children('.current')
-				gap = 590 * (i - $current.attr('tabid'))
-				height = $(this).parent().children('.tabs').children('div').eq(i).height()
+		$(this).attr('tabid', i).click ->
+			$current = $(this).parent().children('.current')
+			gap = 590 * (i - $current.attr('tabid'))
+			height = $(this).parent().children('.tabs').children('div').eq(i).height()
 
-				$set.children('.main').animate(
-					height: height + 140
-				, 300).find('.tabs').animate(
-					left: '-=' + gap
-				, 300)
-				$current.removeClass('current')
-				$(this).addClass('current')
-	download: ->
-		$('#hoverzoom_db').mouseenter ->
-			$(this).attr 'href', $(this).data('url')
-	history: ->
-		$page = $('#hz_history_page')
-		$page.on('click', '.back, .close', ->
-			$page.fadeOut 300, ->
-				$(this).find('.inner').empty()
-		).on 'click', '.white', ->
-			$page.find('.inner').empty().end()
-			.find('small').html("<strong>0</strong> / #{options.hz_his_max}#{lang.set07}")
-			localStorage.hz_histories = ''
-	album: ->
-		$page = $('#hz_album_page')
-		$page.on 'click', '.back, .close', ->
-			$page.fadeOut 300, ->
-				$(this).find('.inner').empty()
-	batch: ->
-		$page = $('#hz_allpic_page')
-		$page.on 'click', '.back, .close', ->
-			$page.fadeOut 300, ->
-				$(this).find('.inner').empty()
-	copyarea: ->
-		$page = $('#hz_copyarea')
-		$page.on 'click', '.back, .close', ->
-			$page.fadeOut 300, ->
-				$(this).find('textarea').empty()
-	update: ->
-		$page = $('#hz_update_note')
-		$page.on 'click', '.back, .close, .white', ->
-			$page.fadeOut(300)
+			$set.children('.main').animate(
+				height: height + 140
+			, 300).find('.tabs').animate(
+				left: '-=' + gap
+			, 300)
+			$current.removeClass('current')
+			$(this).addClass('current')
 
-init.normal()
-init.download() if options.hz_download is 'true'
-init.history() if options.hz_his is 'true'
-init.album() if options.hz_album is 'true'
-init.batch() if options.hz_allpics is 'true'
-init.copyarea()
-init.update()
+	# Download button
+	$('#hoverzoom_db').mouseenter ->
+		$(this).attr 'href', $(this).data('url')
+
+	# History page
+	$('#hz_history_page').on('click', '.back, .close', ->
+		$('#hz_history_page').fadeOut 300, ->
+			$(this).find('.inner').empty()
+	).on 'click', '.white', ->
+		$('#hz_history_page').find('.inner').empty().end()
+		.find('small').html("<strong>0</strong> / #{options.hz_his_max}#{lang.set07}")
+		localStorage.hz_histories = ''
+
+	# Album page
+	$('#hz_album_page').on 'click', '.back, .close', ->
+		$('#hz_album_page').fadeOut 300, ->
+			$(this).find('.inner').empty()
+
+	# Batch download page
+	$('#hz_allpic_page').on 'click', '.back, .close', ->
+		$('#hz_allpic_page').fadeOut 300, ->
+			$(this).find('.inner').empty()
+
+	# Copy area
+	$('#hz_copyarea').on 'click', '.back, .close', ->
+		$('#hz_copyarea').fadeOut 300, ->
+			$(this).find('textarea').empty()
+
+	# Update window
+	$('#hz_update_note').on 'click', '.back, .close, .white', ->
+		$('#hz_update_note').fadeOut(300)
+
+	# Show Youtube links in comments directly
+	$content.on 'click', '.closeYT', ->
+		$(this).prev().attr('style', '').end().next().remove().end().remove()
+
+init()
 
 # After page loaded completely
 $(document).ready ->

@@ -1244,7 +1244,7 @@ ytDL = function(url, ele) {
 };
 
 timer = new function() {
-  var album, aspect, comment, links, main, maxPic, post, timeout, tube;
+  var album, aspect, chain, comment, links, main, maxPic, post, timeout, tube;
   switch (options.hz_direct_ytaspect) {
     case 1:
       aspect = 3 / 4;
@@ -1257,28 +1257,14 @@ timer = new function() {
   }
   comment = function() {
     return $('.kH .ot-anchor').each(function() {
-      var close, fragment, item, maxWidth, object, url;
+      var maxWidth, url;
       url = this.href;
       if (options.hz_direct === 'true' && url.match(picRegex) && !$(this).hasClass('img-in-post')) {
-        item = $('<img>').attr('src', url);
-        if (options.hz_direct_max > 0) item.css('maxWidth', options.hz_direct_max);
-        return $(this).addClass('img-in-post').html(item);
+        return $(this).addClass('img-in-post').html("<img src='url' style='max-width: " + (options.hz_direct_max > 0 ? options.hz_direct_max : void 0) + "'>");
       } else if (url.match(/youtube.com\/watch\?v=/) && !$(this).hasClass('yt-in-post') && options.hz_direct_yt === 'true') {
         maxWidth = options.hz_direct_ytmaxwidth > 0 ? options.hz_direct_ytmaxwidth : $(this).parent().parent().width();
         url = url.replace(/(https?:)(.*)\?v=(.*)/, 'https://www.youtube.com/v/$3?version=3&autohide=1&feature=player_embedded');
-        close = document.createElement('div');
-        object = document.createElement('object');
-        fragment = document.createDocumentFragment();
-        $(close).addClass('closeYT').attr('title', lang.yt01).html('X').click(function() {
-          return $(this).prev().attr('style', '').end().next().remove().end().remove();
-        });
-        fragment.appendChild(close);
-        $(object).html("<param name='movie' value='" + url + "'><param name='allowFullScreen' value='true'><param name='allowScriptAccess' value='always'><embed src='" + url + "' type='application/x-shockwave-flash' allowfullscreen='true' allowScriptAccess='always' width='" + maxWidth + "' height='" + (maxWidth * aspect) + "'></object>").css({
-          width: maxWidth,
-          height: maxWidth * aspect
-        });
-        fragment.appendChild(object);
-        return $(this).after(fragment).addClass('yt-in-post').css({
+        return $(this).after("<div class='closeYT' title='" + lang.ytdl01 + "'>X</div><object style='width: " + maxWidth + "; height: " + (maxWidth * aspect) + "'><param name='movie' value='" + url + "'><param name='allowFullScreen' value='true'><param name='allowScriptAccess' value='always'><embed src='" + url + "' type='application/x-shockwave-flash' allowfullscreen='true' allowScriptAccess='always' width='" + maxWidth + "' height='" + (maxWidth * aspect) + "'></object></object>").addClass('yt-in-post').css({
           display: 'block',
           fontWeight: 'bold',
           marginRight: 11
@@ -1452,13 +1438,18 @@ timer = new function() {
     });
   };
   timeout = '';
+  chain = [comment];
+  if (options.hz_album === 'true') chain.push(album);
+  if (options.hz_direct_post === 'true') chain.push(post);
+  if (options.hz_ytdl === 'true') chain.push(tube);
+  if (options.hz_dl_link === 'true') chain.push(links);
+  if (hz_maxpic.hz_album === 'true') chain.push(maxPic);
   main = function() {
-    comment();
-    if (options.hz_album === 'true') album();
-    if (options.hz_direct_post === 'true') post();
-    if (options.hz_ytdl === 'true') tube();
-    if (options.hz_dl_link === 'true') links();
-    if (options.hz_maxpic === 'true') maxPic();
+    var i, _i, _len;
+    for (_i = 0, _len = chain.length; _i < _len; _i++) {
+      i = chain[_i];
+      i();
+    }
     return timeout = setTimeout(main, 2500);
   };
   return {
@@ -1519,149 +1510,116 @@ update = function(manual) {
   });
 };
 
-init = {
-  normal: function() {
-    var $set, i, keys, langTmp, _i, _len, _ref;
-    $set = $('#hz_set_page');
-    keys = "<option value='0'>" + lang.set24 + "</option><option value='16'>Shift</option><option value='17'>Ctrl</option>";
-    keys += navigator.appVersion.indexOf('Macintosh') > -1 ? "<option value='18'>Option</option><option value='13'>Return</option>" : "<option value='18'>Alt</option><option value='13'>Enter</option>";
-    for (i = 65; i <= 91; i++) {
-      keys += "<option value='" + i + "'>&#" + i + ";</option>";
-    }
-    $('#hz_trigger, #hz_fullscreen, #hz_dl_key').append(keys);
-    langTmp = '';
-    _ref = locale.index;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      i = _ref[_i];
-      langTmp += "<option value='" + i[0] + "'>" + i[1] + "</option>";
-    }
-    $('#hz_language').html(langTmp);
-    $('#hz_opts').on('click', '#disable_hz', function(e) {
-      if (!$(this).hasClass('off')) {
-        disable();
-        $(this).html(lang.menu01).addClass('off');
-      } else {
-        enable();
-        $(this).html(lang.menu02).removeClass('off');
-      }
-      return e.stopPropagation();
-    }).on('click', '#hz_set_open', function() {
-      return $set.fadeIn(300).find(':text').each(function() {
-        return $(this).val(options[$(this).attr('id')]);
-      }).end().find('select').each(function() {
-        return $(this).children("option[value='" + options[$(this).attr('id')] + "']").prop('selected', true);
-      }).end().find(':checkbox').each(function() {
-        if (options[$(this).attr('id')] === 'true') {
-          return $(this).prop('checked', true);
-        }
-      });
-    }).on('click', '#hz_history_open', history).on('click', '#hz_allpic_dl', batch);
-    $('#hz_checkupdate').click(function() {
-      return update(true);
-    });
-    return $set.on('click', '.close, .back', function() {
-      return $set.fadeOut(300);
-    }).on('click', '.green', function() {
-      $set.find(':text').each(function() {
-        return localStorage[$(this).attr('id')] = $(this).val();
-      }).end().find('select').each(function() {
-        return localStorage[$(this).attr('id')] = $(this).find(':selected').val();
-      }).end().find(':checkbox').each(function() {
-        return localStorage[$(this).attr('id')] = $(this).prop('checked').toString();
-      });
-      return location.reload();
-    }).on('click', '.white', function() {
-      var sure;
-      sure = confirm(lang.set04);
-      if (sure) {
-        localStorage.clear();
-        return location.reload();
-      } else {
-        return false;
-      }
-    }).find('.menu li').each(function(i) {
-      if (i === 0) $(this).addClass('current');
-      return $(this).attr('tabid', i).click(function() {
-        var $current, gap, height;
-        $current = $(this).parent().children('.current');
-        gap = 590 * (i - $current.attr('tabid'));
-        height = $(this).parent().children('.tabs').children('div').eq(i).height();
-        $set.children('.main').animate({
-          height: height + 140
-        }, 300).find('.tabs').animate({
-          left: '-=' + gap
-        }, 300);
-        $current.removeClass('current');
-        return $(this).addClass('current');
-      });
-    });
-  },
-  download: function() {
-    return $('#hoverzoom_db').mouseenter(function() {
-      return $(this).attr('href', $(this).data('url'));
-    });
-  },
-  history: function() {
-    var $page;
-    $page = $('#hz_history_page');
-    return $page.on('click', '.back, .close', function() {
-      return $page.fadeOut(300, function() {
-        return $(this).find('.inner').empty();
-      });
-    }).on('click', '.white', function() {
-      $page.find('.inner').empty().end().find('small').html("<strong>0</strong> / " + options.hz_his_max + lang.set07);
-      return localStorage.hz_histories = '';
-    });
-  },
-  album: function() {
-    var $page;
-    $page = $('#hz_album_page');
-    return $page.on('click', '.back, .close', function() {
-      return $page.fadeOut(300, function() {
-        return $(this).find('.inner').empty();
-      });
-    });
-  },
-  batch: function() {
-    var $page;
-    $page = $('#hz_allpic_page');
-    return $page.on('click', '.back, .close', function() {
-      return $page.fadeOut(300, function() {
-        return $(this).find('.inner').empty();
-      });
-    });
-  },
-  copyarea: function() {
-    var $page;
-    $page = $('#hz_copyarea');
-    return $page.on('click', '.back, .close', function() {
-      return $page.fadeOut(300, function() {
-        return $(this).find('textarea').empty();
-      });
-    });
-  },
-  update: function() {
-    var $page;
-    $page = $('#hz_update_note');
-    return $page.on('click', '.back, .close, .white', function() {
-      return $page.fadeOut(300);
-    });
+init = function() {
+  var $set, i, keys, langTmp, _i, _len, _ref;
+  $set = $('#hz_set_page');
+  keys = "<option value='0'>" + lang.set24 + "</option><option value='16'>Shift</option><option value='17'>Ctrl</option>";
+  keys += navigator.appVersion.indexOf('Macintosh') > -1 ? "<option value='18'>Option</option><option value='13'>Return</option>" : "<option value='18'>Alt</option><option value='13'>Enter</option>";
+  for (i = 65; i <= 91; i++) {
+    keys += "<option value='" + i + "'>&#" + i + ";</option>";
   }
+  $('#hz_trigger, #hz_fullscreen, #hz_dl_key').append(keys);
+  langTmp = '';
+  _ref = locale.index;
+  for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+    i = _ref[_i];
+    langTmp += "<option value='" + i[0] + "'>" + i[1] + "</option>";
+  }
+  $('#hz_language').html(langTmp);
+  $('#hz_opts').on('click', '#disable_hz', function(e) {
+    if (!$(this).hasClass('off')) {
+      disable();
+      $(this).html(lang.menu01).addClass('off');
+    } else {
+      enable();
+      $(this).html(lang.menu02).removeClass('off');
+    }
+    return e.stopPropagation();
+  }).on('click', '#hz_set_open', function() {
+    return $set.fadeIn(300).find(':text').each(function() {
+      return $(this).val(options[$(this).attr('id')]);
+    }).end().find('select').each(function() {
+      return $(this).children("option[value='" + options[$(this).attr('id')] + "']").prop('selected', true);
+    }).end().find(':checkbox').each(function() {
+      if (options[$(this).attr('id')] === 'true') {
+        return $(this).prop('checked', true);
+      }
+    });
+  }).on('click', '#hz_history_open', history).on('click', '#hz_allpic_dl', batch);
+  $('#hz_checkupdate').click(function() {
+    return update(true);
+  });
+  $set.on('click', '.close, .back', function() {
+    return $set.fadeOut(300);
+  }).on('click', '.green', function() {
+    $set.find(':text').each(function() {
+      return localStorage[$(this).attr('id')] = $(this).val();
+    }).end().find('select').each(function() {
+      return localStorage[$(this).attr('id')] = $(this).find(':selected').val();
+    }).end().find(':checkbox').each(function() {
+      return localStorage[$(this).attr('id')] = $(this).prop('checked').toString();
+    });
+    return location.reload();
+  }).on('click', '.white', function() {
+    var sure;
+    sure = confirm(lang.set04);
+    if (sure) {
+      localStorage.clear();
+      return location.reload();
+    } else {
+      return false;
+    }
+  }).find('.menu li').each(function(i) {
+    if (i === 0) $(this).addClass('current');
+    return $(this).attr('tabid', i).click(function() {
+      var $current, gap, height;
+      $current = $(this).parent().children('.current');
+      gap = 590 * (i - $current.attr('tabid'));
+      height = $(this).parent().children('.tabs').children('div').eq(i).height();
+      $set.children('.main').animate({
+        height: height + 140
+      }, 300).find('.tabs').animate({
+        left: '-=' + gap
+      }, 300);
+      $current.removeClass('current');
+      return $(this).addClass('current');
+    });
+  });
+  $('#hoverzoom_db').mouseenter(function() {
+    return $(this).attr('href', $(this).data('url'));
+  });
+  $('#hz_history_page').on('click', '.back, .close', function() {
+    return $('#hz_history_page').fadeOut(300, function() {
+      return $(this).find('.inner').empty();
+    });
+  }).on('click', '.white', function() {
+    $('#hz_history_page').find('.inner').empty().end().find('small').html("<strong>0</strong> / " + options.hz_his_max + lang.set07);
+    return localStorage.hz_histories = '';
+  });
+  $('#hz_album_page').on('click', '.back, .close', function() {
+    return $('#hz_album_page').fadeOut(300, function() {
+      return $(this).find('.inner').empty();
+    });
+  });
+  $('#hz_allpic_page').on('click', '.back, .close', function() {
+    return $('#hz_allpic_page').fadeOut(300, function() {
+      return $(this).find('.inner').empty();
+    });
+  });
+  $('#hz_copyarea').on('click', '.back, .close', function() {
+    return $('#hz_copyarea').fadeOut(300, function() {
+      return $(this).find('textarea').empty();
+    });
+  });
+  $('#hz_update_note').on('click', '.back, .close, .white', function() {
+    return $('#hz_update_note').fadeOut(300);
+  });
+  return $content.on('click', '.closeYT', function() {
+    return $(this).prev().attr('style', '').end().next().remove().end().remove();
+  });
 };
 
-init.normal();
-
-if (options.hz_download === 'true') init.download();
-
-if (options.hz_his === 'true') init.history();
-
-if (options.hz_album === 'true') init.album();
-
-if (options.hz_allpics === 'true') init.batch();
-
-init.copyarea();
-
-init.update();
+init();
 
 $(document).ready(function() {
   enable();
