@@ -52,7 +52,6 @@ options = {
   hz_resolution: localStorage.hz_resolution || 'false',
   hz_fullscreen: parseInt(localStorage.hz_fullscreen) || 0,
   hz_dl_key: parseInt(localStorage.hz_dl_key) || 0,
-  hz_drift: localStorage.hz_drift || 'true',
   hz_shortcut: localStorage.hz_shortcut || 'false',
   hz_album: localStorage.hz_album || 'true',
   hz_direct_yt: localStorage.hz_direct_yt || 'false',
@@ -142,7 +141,6 @@ locale = {
     set26: 'Show Resolution',
     set27: 'Full Screen Mode:',
     set28: 'Download Shortcut:',
-    set30: 'Not to move pictures with cursor',
     set31: 'Show Shortcuts',
     set32: 'Enable Album Download',
     set33: 'Show Youtube links in comments directly, video aspect:',
@@ -228,7 +226,6 @@ locale = {
     set26: '顯示圖片解析度',
     set27: '全螢幕模式：',
     set28: '下載快捷鍵：',
-    set30: '圖片不隨滑鼠飄移',
     set31: '顯示快捷鍵',
     set32: '啟用相簿下載',
     set33: '直接顯示留言內的 Youtube 連結，影片長寬比例：',
@@ -314,7 +311,6 @@ locale = {
     set26: '显示图片分辨率',
     set27: '全屏模式：',
     set28: '下载热键：',
-    set30: '图片不随鼠标飘移',
     set31: '显示热键',
     set32: '启用相簿下载',
     set33: '直接显示留言内的 Youtube 连结，视频长宽比例：',
@@ -400,7 +396,6 @@ locale = {
     set26: '画像解像度を表示',
     set27: 'フルスクリーンモード：',
     set28: 'ダウンロードショートカット：',
-    set30: '画像とカーソルを連動しない',
     set31: 'ショートカットを表示',
     set32: 'アルバムダウンロードを有効にする',
     set33: 'コメント欄内の Youtube リンクを表示、長さと幅の比：',
@@ -521,7 +516,7 @@ elements = {
     set: new bodyElement({
       id: 'hz_set_page',
       className: 'hz_settings',
-      html: "<div class='back'></div><div class='main'>	<h3>" + lang.set01 + "</h3>	<small>Ver. " + version + " by <a href='https://plus.google.com/105931860008509594725' target='_blank'>SkyArrow</a></small>	<div class='close' title='" + lang.set10 + "'></div>	<ul class='menu'>		<li>" + lang.set11 + "</li>		<li>" + lang.set12 + "</li>		<li>" + lang.set13 + "</li>		<div class='tabs'>			<div>				<label>" + lang.set36 + "</label>				<input id='hz_enable_main' type='checkbox'><label for='hz_enable_main'>" + lang.set37 + "</label>				<input id='hz_enable_icon' type='checkbox'><label for='hz_enable_icon'>" + lang.set38 + "</label>				<input id='hz_enable_link' type='checkbox'><label for='hz_enable_link'>" + lang.set39 + "</label><br>				<label for='hz_delay'>" + lang.set14 + "</label><input id='hz_delay' type='text' maxlength='4'><label for='hz_delay'>" + lang.set15 + "</label><br>				<label for='hz_opacity'>" + lang.set16 + "</label><input id='hz_opacity' type='text' maxlength='3'><label for='hz_opacity'>%</label><br>				<label for='hz_maxwidth'>" + lang.set17 + "</label><input id='hz_maxwidth' type='text' maxlength='4'><label for='hz_maxwidth'>" + lang.set18 + "</label><br>				<input id='hz_drift' type='checkbox'><label for='hz_drift'>" + lang.set30 + "</label><br>				<input id='hz_resolution' type='checkbox'><label for='hz_resolution'>" + lang.set26 + "</label><br>				<input id='hz_hovering' type='checkbox'><label for='hz_hovering'>" + lang.set46 + "</label><br>			</div>			<div>				<label for='hz_trigger'>" + lang.set23 + "</label><select id='hz_trigger'></select><br>				<label for='hz_dl_key'>" + lang.set28 + "</label><select id='hz_dl_key'></select><br>				<label for='hz_fullscreen'>" + lang.set27 + "</label><select id='hz_fullscreen'></select><br>				<input id='hz_download' type='checkbox'><label for='hz_download'>" + lang.set19 + "</label><br>				<input id='hz_shortcut' type='checkbox'><label for='hz_shortcut'>" + lang.set31 + "</label><br>				<input id='hz_dl_link' type='checkbox'><label for='hz_dl_link'>" + lang.set42 + "</label><br>			</div>			<div>				<label for='hz_language'>" + lang.set35 + "</label><select id='hz_language'></select><br>				<input id='hz_update' type='checkbox'><label for='hz_update'>" + lang.set41 + "</label>&nbsp;				<a id='hz_checkupdate' href='javascript:void(0)'>(" + lang.update05 + ")</a><br>				<input id='hz_maxpic' type='checkbox'><label for='hz_maxpic'>" + lang.set43 + "</label>				<select id='hz_maxpic_option'>					<option value='0'>" + lang.set44 + "</option>					<option value='1'>" + lang.set45 + "</option>				</select><br>				<input id='hz_maxyt' type='checkbox'><label for='hz_maxyt'>" + lang.set47 + "</label>				<select id='hz_maxyt_aspect'>					<option value='1'>4:3</option>					<option value='2'>16:9</option>					<option value='3'>16:10</option>				</select><br>				<input id='hz_direct_post' type='checkbox'><label for='hz_direct_post'>" + lang.set48 + "</label>				<input id='hz_direct_post_max' type='text' maxlength='4'><label for='hz_direct_post_max'>" + lang.set18 + "</label><br>				<input id='hz_direct' type='checkbox'><label for='hz_direct'>" + lang.set25 + "</label>				<input id='hz_direct_max' type='text' maxlength='4'><label for='hz_direct_max'>" + lang.set18 + "</label><br>				<input id='hz_direct_yt' type='checkbox'><label for='hz_direct_yt'>" + lang.set33 + "</label>				<select id='hz_direct_ytaspect'>					<option value='1'>4:3</option>					<option value='2'>16:9</option>					<option value='3'>16:10</option>				</select>				<label for='hz_direct_ytaspect'>" + lang.set34 + "</label>				<input id='hz_direct_ytmaxwidth' type='text' maxlength='4'><label for='hz_direct_ytmaxwidth'>" + lang.set18 + "</label><br>				<input id='hz_album' type='checkbox'><label for='hz_album'>" + lang.set32 + "</label><br>				<input id='hz_allpics' type='checkbox'><label for='hz_allpics'>" + lang.set40 + "</label><br>				<input id='hz_ytdl' type='checkbox'><label for='hz_ytdl'>" + lang.set49 + "</label><br>				<input id='hz_his' type='checkbox'><label for='hz_his'>" + lang.set20 + "</label>				<input id='hz_his_max' type='text' maxlength='4'>				<label for='hz_his_columns'>" + lang.set21 + "</label><input id='hz_his_columns' type='text' maxlength='1'>				<br>			</div>		</div>		<div class='functions bottom'>			<div class='hz_button white' title='" + lang.set03 + "'>" + lang.set03 + "</div>			<div class='hz_button green' title='" + lang.set02 + "'>" + lang.set02 + "</div>		</div>	</ul></div>"
+      html: "<div class='back'></div><div class='main'>	<h3>" + lang.set01 + "</h3>	<small>Ver. " + version + " by <a href='https://plus.google.com/105931860008509594725' target='_blank'>SkyArrow</a></small>	<div class='close' title='" + lang.set10 + "'></div>	<ul class='menu'>		<li>" + lang.set11 + "</li>		<li>" + lang.set12 + "</li>		<li>" + lang.set13 + "</li>		<div class='tabs'>			<div>				<label>" + lang.set36 + "</label>				<input id='hz_enable_main' type='checkbox'><label for='hz_enable_main'>" + lang.set37 + "</label>				<input id='hz_enable_icon' type='checkbox'><label for='hz_enable_icon'>" + lang.set38 + "</label>				<input id='hz_enable_link' type='checkbox'><label for='hz_enable_link'>" + lang.set39 + "</label><br>				<label for='hz_delay'>" + lang.set14 + "</label><input id='hz_delay' type='text' maxlength='4'><label for='hz_delay'>" + lang.set15 + "</label><br>				<label for='hz_opacity'>" + lang.set16 + "</label><input id='hz_opacity' type='text' maxlength='3'><label for='hz_opacity'>%</label><br>				<label for='hz_maxwidth'>" + lang.set17 + "</label><input id='hz_maxwidth' type='text' maxlength='4'><label for='hz_maxwidth'>" + lang.set18 + "</label><br>				<input id='hz_resolution' type='checkbox'><label for='hz_resolution'>" + lang.set26 + "</label><br>				<input id='hz_hovering' type='checkbox'><label for='hz_hovering'>" + lang.set46 + "</label><br>			</div>			<div>				<label for='hz_trigger'>" + lang.set23 + "</label><select id='hz_trigger'></select><br>				<label for='hz_dl_key'>" + lang.set28 + "</label><select id='hz_dl_key'></select><br>				<label for='hz_fullscreen'>" + lang.set27 + "</label><select id='hz_fullscreen'></select><br>				<input id='hz_download' type='checkbox'><label for='hz_download'>" + lang.set19 + "</label><br>				<input id='hz_shortcut' type='checkbox'><label for='hz_shortcut'>" + lang.set31 + "</label><br>				<input id='hz_dl_link' type='checkbox'><label for='hz_dl_link'>" + lang.set42 + "</label><br>			</div>			<div>				<label for='hz_language'>" + lang.set35 + "</label><select id='hz_language'></select><br>				<input id='hz_update' type='checkbox'><label for='hz_update'>" + lang.set41 + "</label>&nbsp;				<a id='hz_checkupdate' href='javascript:void(0)'>(" + lang.update05 + ")</a><br>				<input id='hz_maxpic' type='checkbox'><label for='hz_maxpic'>" + lang.set43 + "</label>				<select id='hz_maxpic_option'>					<option value='0'>" + lang.set44 + "</option>					<option value='1'>" + lang.set45 + "</option>				</select><br>				<input id='hz_maxyt' type='checkbox'><label for='hz_maxyt'>" + lang.set47 + "</label>				<select id='hz_maxyt_aspect'>					<option value='1'>4:3</option>					<option value='2'>16:9</option>					<option value='3'>16:10</option>				</select><br>				<input id='hz_direct_post' type='checkbox'><label for='hz_direct_post'>" + lang.set48 + "</label>				<input id='hz_direct_post_max' type='text' maxlength='4'><label for='hz_direct_post_max'>" + lang.set18 + "</label><br>				<input id='hz_direct' type='checkbox'><label for='hz_direct'>" + lang.set25 + "</label>				<input id='hz_direct_max' type='text' maxlength='4'><label for='hz_direct_max'>" + lang.set18 + "</label><br>				<input id='hz_direct_yt' type='checkbox'><label for='hz_direct_yt'>" + lang.set33 + "</label>				<select id='hz_direct_ytaspect'>					<option value='1'>4:3</option>					<option value='2'>16:9</option>					<option value='3'>16:10</option>				</select>				<label for='hz_direct_ytaspect'>" + lang.set34 + "</label>				<input id='hz_direct_ytmaxwidth' type='text' maxlength='4'><label for='hz_direct_ytmaxwidth'>" + lang.set18 + "</label><br>				<input id='hz_album' type='checkbox'><label for='hz_album'>" + lang.set32 + "</label><br>				<input id='hz_allpics' type='checkbox'><label for='hz_allpics'>" + lang.set40 + "</label><br>				<input id='hz_ytdl' type='checkbox'><label for='hz_ytdl'>" + lang.set49 + "</label><br>				<input id='hz_his' type='checkbox'><label for='hz_his'>" + lang.set20 + "</label>				<input id='hz_his_max' type='text' maxlength='4'>				<label for='hz_his_columns'>" + lang.set21 + "</label><input id='hz_his_columns' type='text' maxlength='1'>				<br>			</div>		</div>		<div class='functions bottom'>			<div class='hz_button white' title='" + lang.set03 + "'>" + lang.set03 + "</div>			<div class='hz_button green' title='" + lang.set02 + "'>" + lang.set02 + "</div>		</div>	</ul></div>"
     })
   },
   menu: {
@@ -573,310 +568,81 @@ document.addEventListener('mousemove', function(e) {
 }, false);
 
 hoverzoom = function() {
-  var $loading, $main, $sc, fullscreen, hide, history, keys, resize, self, shortcut, show, tag, timer1, timer2, timer3, timer4, trigger1, url, wHeight, wWidth;
-  tag = $(this).prop('tagName');
-  self = this;
-  $main = $('#hoverzoom');
-  $sc = $('#hoverzoom_sc');
-  $loading = $('#hz_loading');
-  if (tag === 'IMG') {
-    url = $(this).attr('src');
-    url = url.match(/\?sz|\/proxy/) ? url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : url.replace(picasaRegex, '/s0/$2');
-  } else if (tag === 'A') {
-    url = $(this).attr('href');
-    if (url.match(picRegex) === null) return false;
-  }
-  show = function() {
-    $loading.show().offset({
-      top: mouse.y - 10,
-      left: mouse.x - 10
-    });
-    if (options.hz_download === 'true') $('#hoverzoom_db').data('url', url);
-    history();
-    return $('<img>').attr('src', url).load(function() {
-      var inner, meta, nHeight, nWidth;
-      if (trigger1) {
-        nWidth = this.naturalWidth;
-        nHeight = this.naturalHeight;
-        inner = document.createDocumentFragment();
-        inner.appendChild(this);
-        if (options.hz_resolution === 'true') {
-          meta = document.createElement('small');
-          meta.innerHTML = nWidth + ' x ' + nHeight;
-          inner.appendChild(meta);
-        }
+  var main, timer1, _this;
+  _this = this;
+  main = function() {
+    var $loading, $main, $sc, hide, show, tag, url;
+    tag = _this.tagName.toUpperCase();
+    if (tag === 'IMG') {
+      url = _this.src;
+      url = url.match(/\?sz|\/proxy/) ? url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : url.replace(picasaRegex, '/s0/$2');
+    } else if (tag === 'A') {
+      url = _this.href;
+      if (!url.match(picRegex)) return false;
+    }
+    $main = $('#hoverzoom');
+    $sc = $('#hoverzoom_sc');
+    $loading = $('#hz_loading');
+    show = function() {
+      var resize;
+      $loading.show().offset({
+        top: mouse.y - 10,
+        left: mouse.x - 10
+      });
+      if (options.hz_download === 'true') $('#hoverzoom_db').data('url', url);
+      $("<img src='" + url + "'>").load(function() {
         $loading.hide();
-        $main.empty().append(inner).fadeIn(300);
-        resize($(this));
-        if (options.hz_hovering === 'true') {
-          return $main.on({
-            mouseenter: function() {
-              return clearTimeout(timer2);
-            },
-            mouseleave: hide
-          });
+        $main.append(this).fadeIn(300);
+        if (options.hz_resolution === 'true') {
+          $main.append("<small>" + this.naturalWidth + " x " + this.naturalHeight + "</small>");
         }
-      }
-    });
-  };
-  hide = function() {
-    var timer2, timer4;
-    clearTimeout(timer2);
-    timer2 = setTimeout(function() {
-      var trigger1;
-      trigger1 = false;
-      $main.hide().empty().off();
-      $loading.hide();
-      $(self).off('mouseleave', hide);
-      $(document).off('keydown', keys);
-      return clearTimeout(timer1);
-    }, 100);
-    if (options.hz_shortcut === 'true') {
-      clearTimeout(timer4);
-      return timer4 = setTimeout(function() {
-        $sc.hide().off();
-        $(self).off('mouseleave', hide);
-        return clearTimeout(timer3);
-      }, 500);
-    }
-  };
-  resize = function(img) {
-    var x, y;
-    x = mouse.x;
-    y = mouse.y;
-    if (mouse.x > wWidth / 2) {
-      img.css({
-        maxWidth: options.hz_maxwidth > 0 ? options.hz_maxwidth : x - 30,
-        maxHeight: options.resolution === 'true' ? wHeight - 45 : wHeight - 35
+        return resize(this);
       });
-      $main.offset({
-        top: y + 20,
-        left: x - $main.width() - 20
-      });
-    } else {
-      img.css({
-        maxWidth: options.hz_maxwidth > 0 ? options.hz_maxwidth : wWidth - x - 40,
-        maxHeight: options.resolution === 'true' ? wHeight - 45 : wHeight - 35
-      });
-      $main.offset({
-        top: y + 20,
-        left: x + 20
-      });
-    }
-    if (y + $main.height() + 20 > $(document).scrollTop() + wHeight - 20) {
-      return $main.offset({
-        top: $main.offset().top - $main.height() < $(document).scrollTop() + 20 ? $(document).scrollTop() + 10 : y - $main.height() - 20
-      });
-    }
-  };
-  shortcut = function() {
-    return $sc.fadeIn(300).offset({
-      top: mouse.y + 10,
-      left: mouse.x + 10
-    }).on({
-      mouseenter: function() {
-        return clearTimeout(timer4);
-      },
-      mouseleave: hide
-    }).on('click', 'span', fullscreen).children().eq(0).attr('href', url);
-  };
-  history = function() {
-    var date, i, storage, time, _fn, _i, _len;
-    time = new Date();
-    date = "" + (time.getMonth() + 1) + "/" + (time.getDate()) + " " + (time.getHours()) + ":" + (time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes()) + ":" + (time.getSeconds() < 10 ? '0' + time.getSeconds() : time.getSeconds()) + "}";
-    storage = typeof localStorage.hz_histories === 'undefined' || localStorage.hz_histories === '' ? [] : localStorage.hz_histories.split('|||');
-    _fn = function(i) {
-      var item;
-      item = i.split(';');
-      if (item[0] === url) return storage.splice(i, 1);
-    };
-    for (_i = 0, _len = storage.length; _i < _len; _i++) {
-      i = storage[_i];
-      _fn(i);
-    }
-    storage.push(url + ';' + date);
-    return localStorage.hz_histories = storage.join('|||');
-  };
-  keys = function(e) {
-    var code;
-    code = e.keyCode || e.which;
-    if (code === options.hz_trigger) {
-      return show();
-    } else if (code === options.hz_fullscreen) {
-      fullscreen();
-      return history();
-    } else if (code === options.hz_dl_key) {
-      window.open(url, 'hz_dlwindow');
-      return history();
-    }
-  };
-  fullscreen = function() {
-    var $fs, $fsmain, arr, close, i, insert, next, prev, scroll, trigger;
-    $fs = $('#hoverzoom_fs');
-    $fsmain = $fs.children('.main');
-    scroll = $(document).scrollTop();
-    trigger = true;
-    arr = $(self).parent().parent().find('div[data-content-type^="image"] img, div[data-content-url*="picasa"] img');
-    i = $.inArray(self, arr);
-    url = '';
-    insert = function(num, repeat) {
-      if (trigger) {
-        if (num < 0) {
-          num = arr.length - 1;
-        } else if (num === arr.length) {
-          num = 0;
-        }
-      }
-      i = num;
-      trigger = false;
-      if (arr[i] != null) {
-        url = arr[i].src.match(/\?sz|\/proxy/) ? arr[i].src.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : arr[i].src.replace(picasaRegex, '/s0/$2');
-      } else {
-        url = self.href || self.src;
-      }
-      $fs.addClass('load').find('a').attr('href', url);
-      return $('<img>').attr('src', url).appendTo($fsmain).load(function() {
-        var img;
-        img = this;
-        if (repeat) {
-          $fsmain.children('img').eq(0).fadeOut(300, function() {
-            $(this).remove();
-            resize.start(img);
-            return trigger = true;
+      return resize = function(img) {
+        var wHeight, wWidth, x, y;
+        x = mouse.x;
+        y = mouse.y;
+        wWidth = $(window).width();
+        wHeight = $(window).height();
+        if (mouse.x > wWidth / 2) {
+          img.style.maxWidth = options.hz_maxwidth > 0 ? options.hz_maxwidth + 'px' : x - 30 + 'px';
+          img.style.maxHeight = options.resolution === 'true' ? wHeight - 45 + 'px' : wHeight - 35 + 'px';
+          $main.offset({
+            top: y + 20,
+            left: x - $main.width() - 20
           });
         } else {
-          resize.start(img);
-          trigger = true;
-        }
-        return $fs.removeClass('load');
-      });
-    };
-    prev = function() {
-      if (arr.length > 1) return insert(i - 1, true);
-    };
-    next = function() {
-      if (arr.length > 1) return insert(i + 1, true);
-    };
-    resize = new function() {
-      var $func, detect, getSize, item, main, nHeight, nWidth, wHeight, wWidth;
-      $func = $fs.find('li');
-      wWidth = wHeight = nWidth = nHeight = item = '';
-      main = function(top, left) {
-        var percent;
-        percent = parseInt(item.width() / nWidth * 100);
-        $fsmain.css({
-          top: top,
-          left: left
-        });
-        return $fs.find('small').html("" + nWidth + " x " + nHeight + " (" + percent + "%)").end().find('span').html("" + (parseInt(i + 1)) + " / " + arr.length);
-      };
-      resize = [
-        function() {
-          item.css({
-            maxWidth: wWidth - 50,
-            maxHeight: wHeight - 50
+          img.style.maxWidth = options.hz_maxwidth > 0 ? options.hz_maxwidth + 'px' : wWidth - x - 40 + 'px';
+          img.style.maxHeight = options.resolution === 'true' ? wHeight - 45 + 'px' : wHeight - 35 + 'px';
+          $main.offset({
+            top: y + 20,
+            left: x + 20
           });
-          $func.css('fontWeight', 'normal').eq(0).css('fontWeight', 'bold');
-          return main(wHeight - item.height() / 2, wWidth - item.width());
-        }, function() {
-          item.css('maxHeight', 'none');
-          getSize();
-          item.css('maxWidth', wWidth);
-          $func.css('fontWeight', 'normal').eq(1).css('fontWeight', 'bold');
-          if (item.height() > wHeight) {
-            return main(0, (wWidth - item.width()) / 2);
-          } else {
-            return main(wHeight - item.height() / 2, (wWidth - item.width()) / 2);
-          }
-        }, function() {
-          return item.css({
-            maxWidth: 'none',
-            maxHeight: 'none'
-          }, $func.css('fontWeight', 'normal').eq(2).css('fontWeight', 'bold'), item.height() > wHeight ? main(0, 0) : main((wHeight - item.height()) / 2, 0));
         }
-      ];
-      detect = function() {
-        var html;
-        if (wWidth > nWidth && wHeight > nHeight) {
-          return $fs.removeClass('zoom');
-        } else {
-          if (nWidth > wWidth) {
-            html = "" + lang.fs06 + " (" + (parseInt(wWidth / nWidth * 100)) + "%)";
-            $fs.addClass('actual');
-          } else {
-            html = "" + lang.fs06 + " (100%)";
-            $fs.removeClass('actual');
-          }
-          return $fs.addClass('zoom').find('li').each(function(i) {
-            return $(this).off('click').on('click', resize[i]);
-          }).eq(0).html("" + lang.fs09 + " (" + (parseInt(item.width() / nWidth * 100)) + "%)").end().eq(1).html(html);
-        }
-      };
-      getSize = function() {
-        wWidth = $fs.width();
-        return wHeight = $fs.height();
-      };
-      return {
-        start: function(obj) {
-          nWidth = obj.naturalWidth;
-          nHeight = obj.naturalHeight;
-          item = $(obj);
-          $(obj).css({
-            maxWidth: wWidth - 50,
-            maxHeight: wHeight - 50
-          }).animate({
-            opacity: 1
-          }, 300);
-          $func.css('fontWeight', 'normal').eq(0).css('fontWeight', 'bold');
-          main(wHeight - $(obj).height() / 2, wWidth - $(obj).width() / 2);
-          return detect();
+        if (y + $main.height() + 20 > $(document).scrollTop() + wHeight - 20) {
+          return $main.offset({
+            top: $main.offset().top - $main.height() < $(document).scrollTop() + 20 ? $(document).scrollTop() + 10 : y - $main.height() - 20
+          });
         }
       };
     };
-    close = function() {
-      $fs.hide().off().attr('class', '').children('.main').empty().end().children('.ctrl').attr('style', '');
-      $('html').css('overflowY', 'auto');
-      return $(document).scrollTop(scroll).off('keyup').off('keydown');
+    hide = function() {
+      var timer2;
+      return timer2 = setTimeout(function() {
+        $main.hide().empty().off();
+        $loading.hide();
+        $(_this).off('mouseleave');
+        return clearTimeout(timer1);
+      }, 100);
     };
-    $fs.show().on('click', '.back, .close', close).on('click', '.prev', prev).on('click', '.next', next).on('contextmenu', 'img', prev).on('scroll', function() {
-      return $ctrl.css({
-        top: this.scrollTop,
-        left: this.scrollLeft
-      });
-    });
-    hide();
-    $('html', 'body').css('overflowY', 'hidden');
-    insert(i, false);
-    if (arr.length > 1) $fs.addClass('multi');
-    return $(document).on({
-      keyup: function(e) {
-        var code;
-        code = e.keyCode || e.which;
-        if (code === 39) {
-          return next();
-        } else if (code === 37) {
-          return prev();
-        }
-      },
-      keydown: function(e) {
-        var code;
-        code = e.keyCode || e.which;
-        if (code === options.hz_fullscreen || code === 27) {
-          return close();
-        } else if (code === options.hz_dl_key) {
-          return window.open(url, 'hz_dlwindow');
-        }
-      }
-    });
+    if (options.hz_trigger === 0) show();
+    history.create(url);
+    return $(_this).on('mouseleave', hide);
   };
-  timer1 = timer2 = timer3 = timer4 = '';
-  trigger1 = true;
-  wWidth = $(window).width();
-  wHeight = $(window).height();
-  $(self).on('mouseleave', hide);
-  if (options.hz_trigger === 0) timer1 = setTimeout(show, options.hz_delay);
-  if (options.hz_shortcut === 'true') timer3 = setTimeout(shortcut, 500);
-  return $(document).on('keydown', keys);
+  timer1 = setTimeout(main, options.hz_delay);
+  return $(_this).on('mouseleave', function() {
+    return clearTimeout(timer1);
+  });
 };
 
 enable = function() {
@@ -995,37 +761,80 @@ sortPic = function(obj, fragment) {
   });
 };
 
-history = function() {
-  var $page, a, count, fragment, i, length, max, newarr, storage, width, _fn, _ref, _ref2;
-  $page = $('#hz_history_page');
-  width = parseInt(($page.width() - 200) / options.hz_his_columns - 10);
-  storage = (localStorage.hz_histories != null) || localStorage.hz_histories === '' ? [] : localStorage.hz_histories.split('|||');
-  length = storage.length;
-  max = length >= options.hz_his_max ? length - options.hz_his_max : 0;
-  count = length > options.hz_his_max ? options.hz_his_max : length;
-  fragment = newarr = [];
-  if (storage.length > 0) {
-    for (i = max, _ref = storage.length; max <= _ref ? i <= _ref : i >= _ref; max <= _ref ? i++ : i--) {
-      if (storage[i] !== '') newarrr.push(storage[i]);
+/*
+history = ->
+	$page = $('#hz_history_page')
+	width = parseInt ($page.width() - 200) / options.hz_his_columns - 10
+	storage = if localStorage.hz_histories? or localStorage.hz_histories is '' then [] else localStorage.hz_histories.split('|||')
+	length = storage.length
+	max = if length >= options.hz_his_max then length - options.hz_his_max else 0
+	count = if length > options.hz_his_max then options.hz_his_max else length
+	fragment = newarr = []
+
+	if storage.length > 0
+		for i in [max..storage.length]
+			newarrr.push(storage[i]) if storage[i] isnt ''
+
+		localStorage.hz_histories = newarr.join('|||')
+
+		for a in [newarr.length-1..0]
+			do (a) ->
+				item = newarr[a].split(';')
+				thumbnail = if item[0].match(gcRegex) and item[0].match(picasaRegex) then item[0].replace(picasaRegex, "/w#{width}/$2") else item[0]
+				img = document.createElement('a')
+
+				$(img).html("<img src='#{thumbnail}' width='#{width}'>").attr
+					href: item[0]
+					title: item[1]
+				fragment.push(img)
+
+	$page.find('small').html("<strong>#{count}</strong> / #{options.hz_his_max}#{if count > 1 then lang.set08 else lang.set07}")
+	sortPic($page, fragment)
+*/
+
+history = new function() {
+  var read, save;
+  read = function() {
+    var arr, i, length, max, storage, _i, _len;
+    storage = localStorage.hz_histories;
+    if (typeof storage === 'undefined' || storage === '') {
+      return [];
+    } else {
+      arr = storage.split('|||');
+      length = arr.length;
+      max = options.hz_his_max;
+      if (length > max) arr.splice(max, length - max);
+      for (_i = 0, _len = arr.length; _i < _len; _i++) {
+        i = arr[_i];
+        if (typeof i === 'undefined') arr.splice(i, 1);
+      }
+      console.log(arr);
+      return arr;
     }
-    localStorage.hz_histories = newarr.join('|||');
-    _fn = function(a) {
-      var img, item, thumbnail;
-      item = newarr[a].split(';');
-      thumbnail = item[0].match(gcRegex) && item[0].match(picasaRegex) ? item[0].replace(picasaRegex, "/w" + width + "/$2") : item[0];
-      img = document.createElement('a');
-      $(img).html("<img src='" + thumbnail + "' width='" + width + "'>").attr({
-        href: item[0],
-        title: item[1]
-      });
-      return fragment.push(img);
-    };
-    for (a = _ref2 = newarr.length - 1; _ref2 <= 0 ? a <= 0 : a >= 0; _ref2 <= 0 ? a++ : a--) {
-      _fn(a);
+  };
+  save = function(url, date) {
+    var i, item, storage, _i, _len;
+    storage = read();
+    if (storage.length > 0) {
+      for (_i = 0, _len = storage.length; _i < _len; _i++) {
+        i = storage[_i];
+        item = i.split(';');
+        if (item[0] === url) storage.splice(i, 1);
+      }
+      storage.push(url + ';' + date);
+      return localStorage.hz_histories = storage.join('|||');
+    } else {
+      return localStorage.hz_histories = url + ';' + date;
     }
-  }
-  $page.find('small').html("<strong>" + count + "</strong> / " + options.hz_his_max + (count > 1 ? lang.set08 : lang.set07));
-  return sortPic($page, fragment);
+  };
+  return {
+    create: function(url) {
+      var date, time;
+      time = new Date();
+      date = "" + (time.getMonth() + 1) + "/" + (time.getDate()) + " " + (time.getHours()) + ":" + (time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes()) + ":" + (time.getSeconds() < 10 ? '0' + time.getSeconds() : time.getSeconds());
+      return save(url, date);
+    }
+  };
 };
 
 albumDL = function() {
@@ -1443,7 +1252,7 @@ timer = new function() {
   if (options.hz_direct_post === 'true') chain.push(post);
   if (options.hz_ytdl === 'true') chain.push(tube);
   if (options.hz_dl_link === 'true') chain.push(links);
-  if (hz_maxpic.hz_album === 'true') chain.push(maxPic);
+  if (options.hz_maxpic === 'true') chain.push(maxPic);
   main = function() {
     var i, _i, _len;
     for (_i = 0, _len = chain.length; _i < _len; _i++) {

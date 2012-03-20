@@ -48,7 +48,6 @@ options =
 	hz_resolution: localStorage.hz_resolution or 'false'
 	hz_fullscreen: parseInt(localStorage.hz_fullscreen) or 0
 	hz_dl_key: parseInt(localStorage.hz_dl_key) or 0
-	hz_drift: localStorage.hz_drift or 'true'
 	hz_shortcut: localStorage.hz_shortcut or 'false'
 	hz_album: localStorage.hz_album or 'true'
 	hz_direct_yt: localStorage.hz_direct_yt or 'false'
@@ -138,7 +137,6 @@ locale =
 		set26: 'Show Resolution',
 		set27: 'Full Screen Mode:',
 		set28: 'Download Shortcut:',
-		set30: 'Not to move pictures with cursor',
 		set31: 'Show Shortcuts',
 		set32: 'Enable Album Download',
 		set33: 'Show Youtube links in comments directly, video aspect:',
@@ -223,7 +221,6 @@ locale =
 		set26: '顯示圖片解析度',
 		set27: '全螢幕模式：',
 		set28: '下載快捷鍵：',
-		set30: '圖片不隨滑鼠飄移',
 		set31: '顯示快捷鍵',
 		set32: '啟用相簿下載',
 		set33: '直接顯示留言內的 Youtube 連結，影片長寬比例：',
@@ -308,7 +305,6 @@ locale =
 		set26: '显示图片分辨率',
 		set27: '全屏模式：',
 		set28: '下载热键：',
-		set30: '图片不随鼠标飘移',
 		set31: '显示热键',
 		set32: '启用相簿下载',
 		set33: '直接显示留言内的 Youtube 连结，视频长宽比例：',
@@ -393,7 +389,6 @@ locale =
 		set26: '画像解像度を表示',
 		set27: 'フルスクリーンモード：',
 		set28: 'ダウンロードショートカット：',
-		set30: '画像とカーソルを連動しない',
 		set31: 'ショートカットを表示',
 		set32: 'アルバムダウンロードを有効にする',
 		set33: 'コメント欄内の Youtube リンクを表示、長さと幅の比：',
@@ -594,7 +589,6 @@ elements =
 				<label for='hz_delay'>#{lang.set14}</label><input id='hz_delay' type='text' maxlength='4'><label for='hz_delay'>#{lang.set15}</label><br>
 				<label for='hz_opacity'>#{lang.set16}</label><input id='hz_opacity' type='text' maxlength='3'><label for='hz_opacity'>%</label><br>
 				<label for='hz_maxwidth'>#{lang.set17}</label><input id='hz_maxwidth' type='text' maxlength='4'><label for='hz_maxwidth'>#{lang.set18}</label><br>
-				<input id='hz_drift' type='checkbox'><label for='hz_drift'>#{lang.set30}</label><br>
 				<input id='hz_resolution' type='checkbox'><label for='hz_resolution'>#{lang.set26}</label><br>
 				<input id='hz_hovering' type='checkbox'><label for='hz_hovering'>#{lang.set46}</label><br>
 			</div>
@@ -686,291 +680,72 @@ document.addEventListener 'mousemove', (e) ->
 
 # Hover Zoom
 hoverzoom = ->
-	tag = $(this).prop('tagName')
-	self = this
-	$main = $('#hoverzoom')
-	$sc = $('#hoverzoom_sc')
-	$loading = $('#hz_loading')
+	_this = this
 
-	# Detect tag of element
-	if tag is 'IMG'
-		url = $(this).attr('src')
-		url = if url.match(/\?sz|\/proxy/) then url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') else url.replace(picasaRegex, '/s0/$2');
-	else if tag is 'A'
-		url = $(this).attr('href')
-		return false if url.match(picRegex) is null
+	main = ->
+		tag = _this.tagName.toUpperCase()
+		if tag is 'IMG'
+			url = _this.src
+			url = if url.match(/\?sz|\/proxy/) then url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') else url.replace(picasaRegex,'/s0/$2')
+		else if tag is 'A'
+			url = _this.href
+			return false if !url.match(picRegex)
 
-	show = ->
-		$loading.show().offset
-			top: mouse.y - 10
-			left: mouse.x - 10
-		$('#hoverzoom_db').data('url', url) if options.hz_download is 'true'
-		history()
+		$main = $('#hoverzoom')
+		$sc = $('#hoverzoom_sc')
+		$loading = $('#hz_loading')
 
-		$('<img>').attr('src', url).load ->
-			if trigger1
-				nWidth = @naturalWidth
-				nHeight = @naturalHeight
-				inner = document.createDocumentFragment()
-				inner.appendChild(this)
-				
-				if options.hz_resolution is 'true'
-					meta = document.createElement('small')
-					meta.innerHTML = nWidth+' x '+nHeight
-					inner.appendChild meta
-
+		show = ->
+			$loading.show().offset
+				top: mouse.y - 10
+				left: mouse.x - 10
+			$('#hoverzoom_db').data('url', url) if options.hz_download is 'true'
+			$("<img src='#{url}'>").load ->
 				$loading.hide()
-				$main.empty().append(inner).fadeIn(300)
-				resize($(this))
-
-				if options.hz_hovering is 'true'
-					$main.on
-						mouseenter: ->
-							clearTimeout(timer2)
-						mouseleave: hide
-
-	hide = ->
-		clearTimeout(timer2)
-		timer2 = setTimeout ->
-			trigger1 = false
-			$main.hide().empty().off()
-			$loading.hide()
-			$(self).off('mouseleave', hide)
-			$(document).off('keydown', keys)
-			clearTimeout(timer1)
-		, 100
-
-		if options.hz_shortcut is 'true'
-			clearTimeout(timer4)
-			timer4 = setTimeout ->
-				$sc.hide().off()
-				$(self).off('mouseleave', hide)
-				clearTimeout(timer3)
-			, 500
-
-	resize = (img) ->
-		x = mouse.x
-		y = mouse.y
-
-		if mouse.x > wWidth / 2
-			img.css
-				maxWidth: if options.hz_maxwidth > 0 then options.hz_maxwidth else x - 30
-				maxHeight: if options.resolution is 'true' then wHeight - 45 else wHeight - 35
-			$main.offset
-				top: y + 20
-				left: x - $main.width() - 20
-		else
-			img.css
-				maxWidth: if options.hz_maxwidth > 0 then options.hz_maxwidth else wWidth - x - 40
-				maxHeight: if options.resolution is 'true' then wHeight - 45 else wHeight - 35
-			$main.offset
-				top: y + 20
-				left: x + 20
-
-		if y + $main.height() + 20 > $(document).scrollTop() + wHeight - 20
-			$main.offset
-				top: if $main.offset().top - $main.height() < $(document).scrollTop() + 20 then $(document).scrollTop() + 10 else y - $main.height() - 20
-
-	shortcut = ->
-		$sc.fadeIn(300).offset(
-			top: mouse.y + 10
-			left: mouse.x + 10
-		).on(
-			mouseenter: ->
-				clearTimeout(timer4)
-			mouseleave: hide
-		).on('click', 'span', fullscreen).children().eq(0).attr('href', url)
-
-	history = ->
-		time = new Date()
-		date = "#{time.getMonth()+1}/#{time.getDate()} #{time.getHours()}:#{if time.getMinutes() < 10 then '0' + time.getMinutes() else time.getMinutes()}:#{if time.getSeconds() < 10 then '0' + time.getSeconds() else time.getSeconds()}}"
-		storage = if typeof localStorage.hz_histories is 'undefined' or localStorage.hz_histories is '' then [] else localStorage.hz_histories.split('|||')
-
-		for i in storage
-			do (i) ->
-				item = i.split(';')
-				storage.splice(i, 1) if item[0] is url
-
-		storage.push url+';'+date
-		localStorage.hz_histories = storage.join('|||')
-
-	keys = (e) ->
-		code = e.keyCode or e.which
-		if code is options.hz_trigger
-			show()
-		else if code is options.hz_fullscreen
-			fullscreen()
-			history()
-		else if code is options.hz_dl_key
-			window.open(url, 'hz_dlwindow')
-			history()
-
-	fullscreen = ->
-		$fs = $('#hoverzoom_fs')
-		$fsmain = $fs.children('.main')
-		scroll = $(document).scrollTop()
-		trigger = true
-		arr = $(self).parent().parent().find('div[data-content-type^="image"] img, div[data-content-url*="picasa"] img')
-		i = $.inArray(self, arr)
-		url = ''
-
-		insert = (num, repeat) ->
-			if trigger
-				if num < 0
-					num = arr.length - 1
-				else if num is arr.length
-					num = 0
-
-			i = num
-			trigger = false
-			if arr[i]?
-				url = if arr[i].src.match(/\?sz|\/proxy/) then arr[i].src.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') else arr[i].src.replace(picasaRegex,'/s0/$2')
-			else
-				url = self.href or self.src
-
-			$fs.addClass('load').find('a').attr('href', url)
-			$('<img>').attr('src', url).appendTo($fsmain).load ->
-				img = this
-
-				if repeat
-					$fsmain.children('img').eq(0).fadeOut 300, ->
-						$(this).remove()
-						resize.start(img)
-						trigger = true
-				else
-					resize.start(img)
-					trigger = true
-
-				$fs.removeClass('load')
-		
-		prev = ->
-			if arr.length > 1
-				insert(i-1, true)
-
-		next = ->
-			if arr.length > 1
-				insert(i+1, true)
-
-		resize = new ->
-			$func = $fs.find('li')
-			wWidth = wHeight = nWidth = nHeight = item = ''
-
-			main = (top, left) ->
-				percent = parseInt item.width() / nWidth * 100
-
-				$fsmain.css
-					top: top
-					left: left
-				$fs.find('small').html("#{nWidth} x #{nHeight} (#{percent}%)").end()
-				.find('span').html "#{parseInt(i+1)} / #{arr.length}"
-
+				$main.append(this).fadeIn(300)
+				$main.append("<small>#{@naturalWidth} x #{@naturalHeight}</small>") if options.hz_resolution is 'true'
+				resize(this)
 			
-			resize = [
-				->
-					item.css
-						maxWidth: wWidth - 50
-						maxHeight: wHeight - 50
-					$func.css('fontWeight', 'normal').eq(0).css('fontWeight', 'bold')
-					main wHeight - item.height() / 2, wWidth - item.width()
-				->
-					item.css 'maxHeight', 'none'
-					getSize()
-					item.css 'maxWidth', wWidth
-					$func.css('fontWeight', 'normal').eq(1).css('fontWeight', 'bold')
-					if item.height() > wHeight
-						main 0, (wWidth - item.width()) / 2
-					else
-						main wHeight - item.height() / 2, (wWidth - item.width()) / 2
-				->
-					item.css
-						maxWidth: 'none'
-						maxHeight: 'none'
-						$func.css('fontWeight', 'normal').eq(2).css('fontWeight', 'bold')
-						if item.height() > wHeight
-							main 0, 0
-						else
-							main (wHeight - item.height()) / 2, 0
-			]
+			resize = (img) ->
+				x = mouse.x
+				y = mouse.y
+				wWidth = $(window).width()
+				wHeight = $(window).height()
 
-			detect = ->
-				if wWidth > nWidth and wHeight > nHeight
-					$fs.removeClass('zoom')
+				if mouse.x > wWidth / 2
+					img.style.maxWidth = if options.hz_maxwidth > 0 then options.hz_maxwidth + 'px' else x - 30 + 'px'
+					img.style.maxHeight = if options.resolution is 'true' then wHeight - 45 + 'px' else wHeight - 35 + 'px'
+					$main.offset
+						top: y + 20
+						left: x - $main.width() - 20
 				else
-					if nWidth > wWidth
-						html = "#{lang.fs06} (#{parseInt(wWidth/nWidth*100)}%)"
-						$fs.addClass('actual')
-					else
-						html = "#{lang.fs06} (100%)"
-						$fs.removeClass('actual')
+					img.style.maxWidth = if options.hz_maxwidth > 0 then options.hz_maxwidth + 'px' else wWidth - x - 40 + 'px'
+					img.style.maxHeight = if options.resolution is 'true' then wHeight - 45 + 'px' else wHeight - 35 + 'px'
+					$main.offset
+						top: y + 20
+						left: x + 20
 
-					$fs.addClass('zoom').find('li').each((i) ->
-						$(this).off('click').on('click', resize[i])
-					).eq(0).html("#{lang.fs09} (#{parseInt(item.width() / nWidth * 100)}%)").end()
-					.eq(1).html(html)
+				if y + $main.height() + 20 > $(document).scrollTop() + wHeight - 20
+					$main.offset
+						top: if $main.offset().top - $main.height() < $(document).scrollTop() + 20 then $(document).scrollTop() + 10 else y - $main.height() - 20
 
-			getSize = ->
-				wWidth = $fs.width()
-				wHeight = $fs.height()
+		hide = ->
+			timer2 = setTimeout ->
+				$main.hide().empty().off()
+				$loading.hide()
+				$(_this).off('mouseleave')
+				clearTimeout(timer1)
+			, 100
 
-			return {
-				start: (obj) ->
-					nWidth = obj.naturalWidth
-					nHeight = obj.naturalHeight
-					item = $(obj)
-					$(obj).css(
-						maxWidth: wWidth - 50
-						maxHeight: wHeight - 50
-					).animate
-						opacity: 1
-					, 300
-					$func.css('fontWeight', 'normal').eq(0).css('fontWeight', 'bold')
-					main wHeight - $(obj).height() / 2, (wWidth - $(obj).width() / 2)
-					detect()
-			}
+		show() if options.hz_trigger is 0
+		history.create(url)
+		$(_this).on('mouseleave', hide)
 
-		close = ->
-			$fs.hide().off().attr('class', '').children('.main').empty().end().children('.ctrl').attr('style', '')
-			$('html').css('overflowY', 'auto')
-			$(document).scrollTop(scroll).off('keyup').off('keydown')
+	timer1 = setTimeout(main, options.hz_delay)
+	$(_this).on 'mouseleave', ->
+		clearTimeout(timer1)
 
-		$fs.show().on('click', '.back, .close', close)
-		.on('click', '.prev', prev)
-		.on('click', '.next', next)
-		.on('contextmenu', 'img', prev)
-		.on 'scroll', ->
-			$ctrl.css
-				top: @scrollTop
-				left: @scrollLeft
-
-		hide()
-		$('html', 'body').css('overflowY', 'hidden')
-		insert(i, false)
-		$fs.addClass('multi') if arr.length > 1
-
-		$(document).on
-			keyup: (e) ->
-				code = e.keyCode or e.which
-				if code is 39
-					next()
-				else if code is 37
-					prev()
-			keydown: (e) ->
-				code = e.keyCode or e.which
-				if code is options.hz_fullscreen or code is 27
-					close()
-				else if code is options.hz_dl_key
-					window.open(url, 'hz_dlwindow')
-
-	timer1 = timer2 = timer3 = timer4 = ''
-	trigger1 = true
-	wWidth = $(window).width()
-	wHeight = $(window).height()
-
-	$(self).on('mouseleave', hide)
-	timer1 = setTimeout(show, options.hz_delay) if options.hz_trigger is 0
-	timer3 = setTimeout(shortcut, 500) if options.hz_shortcut is 'true'
-	$(document).on('keydown', keys)
-
+# Enable functions
 enable = ->
 	$content.on 'mouseenter', 'div[data-content-type^="image"] img, div[data-content-url*="picasa"] img', hoverzoom if options.hz_enable_main is 'true'
 	$content.on 'mouseenter', '.oP img', hoverzoom if options.hz_enable_icon is 'true'
@@ -979,6 +754,7 @@ enable = ->
 	$('#hoverzoom_db').addClass 'enable'
 	timer.start()
 
+# Disable functions
 disable = ->
 	$content.off 'mouseenter', 'div[data-content-type^="image"] img, div[data-content-url*="picasa"] img', hoverzoom if options.hz_enable_main is 'true'
 	$content.off 'mouseenter', '.oP img', hoverzoom if options.hz_enable_icon is 'true'
@@ -1060,6 +836,7 @@ sortPic = (obj, fragment) ->
 	).children('.inner').css
 		width: wWidth - 200
 
+###
 history = ->
 	$page = $('#hz_history_page')
 	width = parseInt ($page.width() - 200) / options.hz_his_columns - 10
@@ -1088,6 +865,45 @@ history = ->
 
 	$page.find('small').html("<strong>#{count}</strong> / #{options.hz_his_max}#{if count > 1 then lang.set08 else lang.set07}")
 	sortPic($page, fragment)
+###
+history = new ->
+	read = ->
+		storage = localStorage.hz_histories
+		if typeof storage is 'undefined' or storage is ''
+			return []
+		else
+			arr = storage.split('|||')
+			length = arr.length
+			max = options.hz_his_max
+			if length > max
+				arr.splice(max, length-max)
+
+			for i in arr
+				if typeof i is 'undefined'
+					arr.splice(i, 1)
+
+			console.log arr
+			return arr
+
+	save = (url, date) ->
+		storage = read()
+		if storage.length > 0
+			for i in storage
+				item = i.split(';')
+				if item[0] is url
+					storage.splice(i, 1)
+
+			storage.push(url+';'+date)
+			localStorage.hz_histories = storage.join('|||')
+		else
+			localStorage.hz_histories = url+';'+date
+
+	return {
+		create: (url) ->
+			time = new Date()
+			date = "#{time.getMonth()+1}/#{time.getDate()} #{time.getHours()}:#{if time.getMinutes() < 10 then '0' + time.getMinutes() else time.getMinutes()}:#{if time.getSeconds() < 10 then '0' + time.getSeconds() else time.getSeconds()}"
+			save(url, date)
+	}
 
 albumDL = ->
 	$page = $('#hz_album_page')
@@ -1188,50 +1004,17 @@ execHash = (hash) ->
 ytDL = (url, ele) ->
 	appends = ''
 	format = 
-		5:
-			format: 'FLV'
-			res: '240p'
-			desc: lang.ytdl02
-		18:
-			format: 'MP4'
-			res: '360p'
-			desc: lang.ytdl02
-		22:
-			format: 'MP4'
-			res: '720p'
-			desc: lang.ytdl05
-		34:
-			format: 'FLV'
-			res: '360p'
-			desc: lang.ytdl02
-		35:
-			format: 'FLV'
-			res: '480p'
-			desc: lang.ytdl03
-		37:
-			format: 'MP4'
-			res: '1080p'
-			desc: lang.ytdl06
-		38:
-			format: 'MP4'
-			res: '4k'
-			desc: lang.ytdl06
-		43:
-			format: 'WebM'
-			res: '360p'
-			desc: lang.ytdl02
-		44:
-			format: 'WebM'
-			res: '480p'
-			desc: lang.ytdl03
-		45:
-			format: 'WebM'
-			res: '720p'
-			desc: lang.ytdl05
-		46:
-			format: 'WebM'
-			res: '1080p'
-			desc: lang.ytdl06
+		5: format: 'FLV', res: '240p', desc: lang.ytdl02
+		18: format: 'MP4', res: '360p', desc: lang.ytdl02
+		22: format: 'MP4', res: '720p', desc: lang.ytdl05
+		34: format: 'FLV', res: '360p', desc: lang.ytdl02
+		35: format: 'FLV', res: '480p', desc: lang.ytdl03
+		37: format: 'MP4', res: '1080p', desc: lang.ytdl06
+		38: format: 'MP4', res: '4k', desc: lang.ytdl06
+		43: format: 'WebM', res: '360p', desc: lang.ytdl02
+		44: format: 'WebM', res: '480p', desc: lang.ytdl03
+		45: format: 'WebM', res: '720p', desc: lang.ytdl05
+		46: format: 'WebM', res: '1080p', desc: lang.ytdl06
 
 	encode = (text) ->
 		return `text.replace(/"/g, "-").replace(/%/g, "%25").replace(/=/g, "%3D").replace(/,/g, "%2C").replace(/&/g, "%26").replace(/#/g, "%23").replace(/\?/g, "%3F").replace(/\//g, "_").replace(/\\/g, "_").replace(/ /g, "+")`
@@ -1417,7 +1200,7 @@ timer = new ->
 	chain.push(post) if options.hz_direct_post is 'true'
 	chain.push(tube) if options.hz_ytdl is 'true'
 	chain.push(links) if options.hz_dl_link is 'true'
-	chain.push(maxPic) if hz_maxpic.hz_album is 'true'
+	chain.push(maxPic) if options.hz_maxpic is 'true'
 	
 	main = ->
 		for i in chain
