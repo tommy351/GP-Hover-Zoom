@@ -77,7 +77,7 @@ $main: #dd4839;
 		@include transition(0.3s);
 		&:before, &:after{
 			position: absolute;
-			content: "";
+			content: '';
 		}
 		&:before{
 			width: 6px;
@@ -122,7 +122,7 @@ $main: #dd4839;
 	padding-left: 15px;
 	margin-left: 20px;
 	&:before{
-		content: "-";
+		content: '-';
 		cursor: default;
 		left: -27px;
 		position: relative;
@@ -152,7 +152,7 @@ $main: #dd4839;
 	padding-left: 15px;
 	margin-left: 20px;
 	&:before{
-		content: "-";
+		content: '-';
 		cursor: default;
 		left: -27px;
 		position: relative;
@@ -165,7 +165,7 @@ $main: #dd4839;
 	padding-left: 15px;
 	margin-left: 20px;
 	&:before{
-		content: "-";
+		content: '-';
 		cursor: default;
 		left: -27px;
 		position: relative;
@@ -332,7 +332,7 @@ $main: #dd4839;
 		div{
 			@include transition(0.3s);
 			&:before, &:after{
-				content: "";
+				content: '';
 				position: absolute;
 			}
 		}
@@ -479,7 +479,7 @@ $main: #dd4839;
 		@include animation(loading 2s infinite linear);
 		&:before, &:after{
 			position: absolute;
-			content: "";
+			content: '';
 		}
 		&:before{
 			border: 5px solid #fff;
@@ -491,7 +491,7 @@ $main: #dd4839;
 		}
 		&:after{
 			background: #000;
-			content: "";
+			content: '';
 			height: 12px;
 			width: 36px;
 			top: 30px;
@@ -506,6 +506,7 @@ $main: #dd4839;
 	width: 100%;
 	height: 100%;
 	display: none;
+	z-index: 10000;
 	&.loading{
 		.cycle{
 			opacity: 1 !important;
@@ -600,13 +601,13 @@ $main: #dd4839;
 				padding: 15px 20px 0;
 			}
 		}
-		input[type="text"]{
+		input[type='text']{
 			border: 1px solid #d9d9d9;
 			padding: 2px 5px;
 			margin-right: 5px;
 			width: 50px;
 		}
-		input[type="checkbox"]{
+		input[type='checkbox']{
 			margin: 0 5px 0 0;
 		}
 		label{
@@ -620,7 +621,7 @@ $main: #dd4839;
 		}
 		textarea{
 			border: 1px solid #ccc;
-			font: 12px "Consolas", Monaco, Courier New, Courier, monospace !important;
+			font: 'Consolas', Monaco, Courier New, Courier, monospace !important;
 			height: 265px;
 			width: 540px;
 			padding: 10px 0 0 10px;
@@ -652,7 +653,7 @@ $main: #dd4839;
 				opacity: 0;
 				@include transition(opacity 0.3s);
 				&:before{
-					content: "";
+					content: '';
 					position: absolute;
 					bottom: -3px;
 					right: -3px;
@@ -704,7 +705,7 @@ $main: #dd4839;
 		float: right;
 		position: relative;
 		&:before{
-			content: "";
+			content: '';
 			position: absolute;
 			top: 10px;
 			left: -5px;
@@ -818,7 +819,7 @@ $main: #dd4839;
 		border-left: 9px solid transparent;
 		border-right: 9px solid transparent;
 		border-bottom: 9px dashed #ccc;
-		content: "";
+		content: '';
 	}
 	&:after{
 		position: absolute;
@@ -827,7 +828,7 @@ $main: #dd4839;
 		border-left: 9px solid transparent;
 		border-right: 9px solid transparent;
 		border-bottom: 9px dashed #fff;
-		content: ""; 
+		content: ''; 
 	}
 }
 @keyframes loading{
