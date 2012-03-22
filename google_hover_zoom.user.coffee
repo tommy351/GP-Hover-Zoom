@@ -761,6 +761,7 @@ hoverzoom = ->
 
 		hide = ->
 			timer2 = setTimeout ->
+				delete url
 				$main.hide().empty().off()
 				$loading.hide()
 				$(_this).off('mouseleave')
@@ -803,8 +804,9 @@ disable = ->
 lightbox = (url, arr) ->
 
 # Open in new window
-openWindow = (url, number) ->
-		window.open(url, "hz_newtab#{number if number}")
+openWindow = (url) ->
+		time = new Date()
+		window.open(url, "hz_newtab#{time.getTime()}")
 
 sortPic = (ele, arr, message) ->
 	wWidth = ele.width()
@@ -850,7 +852,13 @@ sortPic = (ele, arr, message) ->
 
 	newTab = ->
 		for i in arr
-			openWindow $(i).attr('href'), _i
+			openWindow $(i).attr('href')
+
+	close = ->
+		delete arr
+		ele.off('click').fadeOut 300, ->
+			$inner.empty()
+			ele.find('small').html('')
 
 	if length > 0
 		max = if length >= 50 then 50 else length
@@ -859,11 +867,12 @@ sortPic = (ele, arr, message) ->
 
 	ele.fadeIn(300).on('click', '.blue', copyLink)
 	.on('click', '.green', newTab)
+	.on('click', '.back, .close', close)
 	.find('small').html(message).end()
 	.children('.main').css(
 		width: wWidth - 200
 		height: wHeight - 140
-		marginLeft: -(wWidth / 2) + 100
+		marginLeft: -(wWidth / 2) + 80
 		marginTop: -(wHeight / 2) + 50
 	).children('.wrap').scrollTop(0).css(
 		width: wWidth - 180
@@ -1352,23 +1361,10 @@ init = ->
 		$(this).attr 'href', $(this).data('url')
 
 	# History page
-	$('#hz_history_page').on('click', '.back, .close', ->
-		$('#hz_history_page').fadeOut 300, ->
-			$(this).find('.inner').empty()
-	).on 'click', '.white', ->
+	$('#hz_history_page').on 'click', '.white', ->
 		$('#hz_history_page').find('.inner').empty().end()
 		.find('small').html("<strong>0</strong> / #{options.hz_his_max}#{lang.set07}")
 		history.clear()
-
-	# Album page
-	$('#hz_album_page').on 'click', '.back, .close', ->
-		$('#hz_album_page').fadeOut 300, ->
-			$(this).find('.inner').empty()
-
-	# Batch download page
-	$('#hz_batch_page').on 'click', '.back, .close', ->
-		$('#hz_batch_page').fadeOut 300, ->
-			$(this).find('.inner').empty()
 
 	# Copy area
 	$('#hz_copyarea').on 'click', '.back, .close', ->

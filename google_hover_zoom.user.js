@@ -666,6 +666,7 @@ hoverzoom = function() {
     hide = function() {
       var timer2;
       timer2 = setTimeout(function() {
+        delete url;
         $main.hide().empty().off();
         $loading.hide();
         $(_this).off('mouseleave');
@@ -716,12 +717,14 @@ disable = function() {
 
 lightbox = function(url, arr) {};
 
-openWindow = function(url, number) {
-  return window.open(url, "hz_newtab" + (number ? number : void 0));
+openWindow = function(url) {
+  var time;
+  time = new Date();
+  return window.open(url, "hz_newtab" + (time.getTime()));
 };
 
 sortPic = function(ele, arr, message) {
-  var $inner, $wrap, append, copyLink, counts, length, load, max, newTab, trigger, wHeight, wWidth;
+  var $inner, $wrap, append, close, copyLink, counts, length, load, max, newTab, trigger, wHeight, wWidth;
   wWidth = ele.width();
   wHeight = ele.height();
   $wrap = ele.find('.wrap');
@@ -778,19 +781,26 @@ sortPic = function(ele, arr, message) {
     _results = [];
     for (_i = 0, _len = arr.length; _i < _len; _i++) {
       i = arr[_i];
-      _results.push(openWindow($(i).attr('href'), _i));
+      _results.push(openWindow($(i).attr('href')));
     }
     return _results;
+  };
+  close = function() {
+    delete arr;
+    return ele.off('click').fadeOut(300, function() {
+      $inner.empty();
+      return ele.find('small').html('');
+    });
   };
   if (length > 0) {
     max = length >= 50 ? 50 : length;
     append(0, max - 1);
     if (length > 50) $wrap.off('scroll').on('scroll', load);
   }
-  return ele.fadeIn(300).on('click', '.blue', copyLink).on('click', '.green', newTab).find('small').html(message).end().children('.main').css({
+  return ele.fadeIn(300).on('click', '.blue', copyLink).on('click', '.green', newTab).on('click', '.back, .close', close).find('small').html(message).end().children('.main').css({
     width: wWidth - 200,
     height: wHeight - 140,
-    marginLeft: -(wWidth / 2) + 100,
+    marginLeft: -(wWidth / 2) + 80,
     marginTop: -(wHeight / 2) + 50
   }).children('.wrap').scrollTop(0).css({
     width: wWidth - 180,
@@ -1408,23 +1418,9 @@ init = function() {
   $('#hoverzoom_db').mouseenter(function() {
     return $(this).attr('href', $(this).data('url'));
   });
-  $('#hz_history_page').on('click', '.back, .close', function() {
-    return $('#hz_history_page').fadeOut(300, function() {
-      return $(this).find('.inner').empty();
-    });
-  }).on('click', '.white', function() {
+  $('#hz_history_page').on('click', '.white', function() {
     $('#hz_history_page').find('.inner').empty().end().find('small').html("<strong>0</strong> / " + options.hz_his_max + lang.set07);
     return history.clear();
-  });
-  $('#hz_album_page').on('click', '.back, .close', function() {
-    return $('#hz_album_page').fadeOut(300, function() {
-      return $(this).find('.inner').empty();
-    });
-  });
-  $('#hz_batch_page').on('click', '.back, .close', function() {
-    return $('#hz_batch_page').fadeOut(300, function() {
-      return $(this).find('.inner').empty();
-    });
   });
   $('#hz_copyarea').on('click', '.back, .close', function() {
     return $('#hz_copyarea').fadeOut(300, function() {
