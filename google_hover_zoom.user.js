@@ -1303,24 +1303,16 @@ timer = new function() {
   };
   post = function() {
     return $('.Vl .ot-anchor').each(function() {
-      var auto, img, url;
+      var auto, url;
       if (!$(this).data('class')) {
         url = this.href;
         if (url.match(picRegex)) {
           auto = $(this).parentsUntil('.Ks').find('div[data-content-type^="image"]');
           if (auto[0] != null) {
-            if (auto.attr('data-content-url').match(picRegex)) {
-              auto = auto.attr('data-content-url');
-            } else {
-              auto = auto.children('img').attr('src').replace(/(http:|https:)?(.*)/, 'https:$2').replace(picasaRegex, '/s0/$2');
-            }
+            auto = auto.attr('data-content-url').match(picRegex) ? auto.attr('data-content-url') : auto.children('img').attr('src').replace(/(https?:)?(.*)/, 'https:$2').replace(picasaRegex, '/s0/$2');
           }
           if (url !== auto) {
-            img = $("<img src='" + url + "'>");
-            if (options.hz_direct_post_max > 0) {
-              img.css('maxWidth', options.hz_direct_post_max);
-            }
-            $(this).html(img).addClass('img-in-post');
+            $(this).html("<img src='" + url + "' style='max-width:" + (options.hz_direct_post_max > 0 ? options.hz_direct_post_max : void 0) + "'>").addClass('img-in-post');
           }
         }
         return $(this).data('class', true);

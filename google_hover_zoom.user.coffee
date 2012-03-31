@@ -1267,17 +1267,12 @@ timer = new ->
 
 				if url.match(picRegex)
 					auto = $(this).parentsUntil('.Ks').find('div[data-content-type^="image"]')
-
+					
 					if auto[0]?
-						if auto.attr('data-content-url').match(picRegex)
-							auto = auto.attr('data-content-url')
-						else
-							auto = auto.children('img').attr('src').replace(/(http:|https:)?(.*)/, 'https:$2').replace(picasaRegex, '/s0/$2')
-
+						auto = if auto.attr('data-content-url').match(picRegex) then auto.attr('data-content-url') else auto.children('img').attr('src').replace(/(https?:)?(.*)/, 'https:$2').replace(picasaRegex, '/s0/$2')
+					
 					if url isnt auto
-						img = $("<img src='#{url}'>")
-						img.css('maxWidth', options.hz_direct_post_max) if (options.hz_direct_post_max > 0)
-						$(this).html(img).addClass('img-in-post')
+						$(this).html("<img src='#{url}' style='max-width:#{options.hz_direct_post_max if options.hz_direct_post_max > 0}'>").addClass('img-in-post')
 
 				$(this).data('class', true)
 
