@@ -1264,7 +1264,7 @@ timer = new function() {
       var maxWidth, url;
       url = this.href;
       if (options.hz_direct === 'true' && url.match(picRegex) && !$(this).hasClass('img-in-post')) {
-        return $(this).addClass('img-in-post').html("<img src='url' style='max-width: " + (options.hz_direct_max > 0 ? options.hz_direct_max : void 0) + "'>");
+        return $(this).addClass('img-in-post').html("<img src='" + url + "' style='max-width: " + (options.hz_direct_max > 0 ? options.hz_direct_max : void 0) + "'>");
       } else if (url.match(/youtube.com\/watch\?v=/) && !$(this).hasClass('yt-in-post') && options.hz_direct_yt === 'true') {
         maxWidth = options.hz_direct_ytmaxwidth > 0 ? options.hz_direct_ytmaxwidth : $(this).parent().parent().width();
         url = url.replace(/(https?:)(.*)\?v=(.*)/, 'https://www.youtube.com/v/$3?version=3&autohide=1&feature=player_embedded');

@@ -1226,11 +1226,14 @@ timer = new ->
 		when 3 then aspect = 10/16
 		else aspect = 9/16
 
+	# Process links in comments
 	comment = ->
 		$('.kH .ot-anchor').each ->
 			url = @href
+			# Show photo links in comments directly
 			if options.hz_direct is 'true' and url.match(picRegex) and !$(this).hasClass('img-in-post')
-				$(this).addClass('img-in-post').html("<img src='url' style='max-width: #{options.hz_direct_max if options.hz_direct_max > 0}'>")
+				$(this).addClass('img-in-post').html("<img src='#{url}' style='max-width: #{options.hz_direct_max if options.hz_direct_max > 0}'>")
+			# Show Youtube links in comments directly
 			else if url.match(/youtube.com\/watch\?v=/) and !$(this).hasClass('yt-in-post') and options.hz_direct_yt is 'true'
 				maxWidth = if options.hz_direct_ytmaxwidth > 0 then options.hz_direct_ytmaxwidth else $(this).parent().parent().width()
 				url = url.replace(/(https?:)(.*)\?v=(.*)/, 'https://www.youtube.com/v/$3?version=3&autohide=1&feature=player_embedded')
