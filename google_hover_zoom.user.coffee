@@ -741,7 +741,7 @@ hoverzoom = ->
 				links.push _this.href or _this.src
 
 			hide()
-			lightbox links, num
+			lightbox.start links, num
 
 		keys = (e) ->
 			code = e.keyCode or e.which
@@ -817,29 +817,23 @@ disable = ->
 	timer.stop()
 
 # Lightbox
-lightbox = (arr, i) ->
+lightbox = new ->
+	`var scroll, links, i, url, length`
 	$fs = $('#hoverzoom_fs')
 	$main = $fs.children('.main')
-	$ctrl = $fs.children('.ctrl')
-	$func = $fs.find('li')
-	$meta = $fs.find('small')
-	$navi = $fs.find('span')
-	scroll = $(document).scrollTop()
-	length = arr.length
 	trigger = false
-	url = ''
-
+	
 	insert = (num) ->
 		if !trigger
 			if num < 0
-				num = arr.length - 1
+				num = length - 1
 			else if num is length
 				num = 0
 
-			i = num
+			`i = num`
+			`url = links[i]`
 			trigger = true
-			url = arr[i]
-			$fs.addClass('load').find('a').attr('href', url)
+			$fs.addClass('load')
 			$("<img src='#{url}'>").load ->
 				img = this
 				others = $main.find('img')
@@ -847,63 +841,27 @@ lightbox = (arr, i) ->
 				if others.length > 0
 					others.fadeOut 300, ->
 						$(this).remove()
-						$main.append(img)
-						resize(img)
-						trigger = false
+						resize.start(img)
 				else
-					$main.append(img)
-					resize(img)
-					trigger = false
+					resize.start(img)
 
-				$fs.removeClass('load')
+	resize = new ->
+		`var img, nWidth, nHeight, wWidth, wHeight`
 
-	resize = (obj) ->
-		wWidth = $fs.width()
-		wHeight = $fs.height()
-		nWidth = obj.naturalWidth
-		nHeight = obj.naturalHeight
+		$ctrl = $fs.children('.ctrl')
+		$meta = $ctrl.find('small')
+		$navi = $ctrl.find('span')
 
 		main = (top, left) ->
 			$main.css
 				top: top
 				left: left
-			$meta.html "#{nWidth} x #{nHeight} (#{parseInt $(obj).width() / nWidth * 100}%)"
+			$meta.html "#{nWidth} x #{nHeight} (#{parseInt $(img).width() / nWidth * 100}%)"
 			$navi.html "#{parseInt(i + 1)} / #{length}" if length > 1
 
-		switchFunc = (i) ->
-			$func.css('fontWeight', 'normal').eq(i).css('fontWeight', 'bold')
-
 		getSize = ->
-			wWidth = $fs.width()
-			wHeight = $fs.height()
-
-		$(obj).css(
-			maxWidth: wWidth - 50
-			maxHeight: wHeight - 50
-		).animate
-			opacity: 1
-		, 300
-
-		main (wHeight - $(obj).height()) / 2, (wWidth - $(obj).width()) / 2
-
-		###
-		resize = [
-			->
-				$(item).css
-					maxWidth: wWidth - 50
-					maxHeight: wHeight - 50
-				main wHeight - item.offsetHeight / 2, wWidth - item.offsetWidth / 2
-			->
-				$(item).css 'maxHeight', 'none'
-				getSize()
-				$(item).css 'maxWidth', 'none'
-				main (if item.offsetHeight > wHeight then 0 else (wHeight - item.offsetHeight) / 2), (wWidth - item.offsetWidth) / 2
-			->
-				$(item).css
-					maxWidth: 'none'
-					maxHeight: 'none'
-				main (if item.offsetHeight > wHeight then 0 else wHeight - item.offsetHeight / 2), 0
-		]
+			`wWidth = $fs[0].clientWidth`
+			`wHeight = $fs[0].clientHeight`
 
 		detect = ->
 			if wWidth > nWidth and wHeight > nHeight
@@ -916,59 +874,87 @@ lightbox = (arr, i) ->
 					html = "#{lang.fs06} (100%)"
 					$fs.removeClass 'actual'
 
-				$fs.addClass('zoom').find('li').each((i) ->
-					_i = i
-					$(this).off('click').on 'click', ->
-						resize[_i]()
-						switchFunc(_i)
-				).eq(0).html("#{lang.fs09} (#{parseInt item.offsetWidth / nWidth * 100}%)").end().eq(1).html(html)
+				$fs.addClass('zoom').find('li').eq(0).html("#{lang.fs09} (#{parseInt $(img).width() / nWidth * 100}%)").end().eq(1).html(html)
 
+		type = (i) ->
+			switch i
+				when 0
+					$(img).css
+						maxWidth: wWidth - 50
+						maxHeight: wHeight - 50
+					main (wHeight - $(img).height()) / 2, (wWidth - $(img).width()) / 2
+				when 1
+					$(img).css 'maxHeight', 'none'
+					getSize()
+					$(img).css 'maxWidth', wWidth
+					main (if $(img).height() > wHeight then 0 else (wHeight - $(img).height()) / 2), (wWidth - $(img).width()) / 2
+				when 2
+					$(img).css
+						maxWidth: 'none'
+						maxHeight: 'none'
+					main (if $(img).height() > wHeight then 0 else (wHeight - $(img).height()) / 2), 0
 
-		$(obj).css(
-			maxWidth: wWidth - 50
-			maxHeight: wHeight - 50
-		).animate
-			opacity: 1
-		, 300
-		###
+			$ctrl.find('li').css('fontWeight', 'normal').eq(i).css('fontWeight', 'bold')
+		
+		return {
+			start: (obj) ->
+				$main.append(obj)
+				$fs.removeClass('load')
+				
+				`trigger = false`
+				`img = obj`
+				`nWidth = obj.naturalWidth`
+				`nHeight = obj.naturalHeight`
 
-		#switchFunc(0)
-		#main (wHeight - item.offsetHeight) / 2, (wWidth - item.offsetWidth) / 2
-		#detect()
+				getSize()
+				type(0)
+				detect()
+
+				$(obj).animate
+					opacity: 1
+				, 300
+			type: type
+		}
 
 	prev = ->
-		if length > 1
-			insert(i - 1)
+		insert(i - 1) if length > 1
 
 	next = ->
-		if length > 1
-			insert(i + 1)
+		insert(i + 1) if length > 1
 
 	close = ->
-		$fs.hide().off().attr('class', '').children('.main').empty()
+		$fs.hide().attr('class', '').children('.main').empty().end().children('.ctrl').attr('style', '')
 		$('html').css('overflowY', 'auto')
 		$(document).scrollTop(scroll).off('keyup').off('keydown')
 
-	$fs.show().on('click', '.back, .close', close).on('click', '.prev', prev).on('click', '.next, img', next).on('contextmenu', 'img', prev).on 'scroll', ->
-		$ctrl.css
-			top: @scrollTop
-			left: @scrollLeft
+	return {
+		start: (arr, i) ->
+			`scroll = $(document).scrollTop()`
+			`links = arr`
+			`length = arr.length`
+			
+			$('html, body').css('overflowY', 'hidden')
+			insert(i)
+			$fs.show()
+			$fs.addClass('multi') if length > 1
 
-	$('html, body').css('overflowY', 'hidden')
-	insert(i)
-	$fs.addClass('multi') if length > 1
-
-	$(document).on('keyup', (e) ->
-		code = e.keyCode or e.which
-		switch code
-			when 39 then next()
-			when 37 then prev()
-	).on 'keydown', (e) ->
-		code = e.keyCode or e.which
-		switch code
-			when options.hz_fullscreen then close()
-			when 27 then close()
-			when options.hz_dl_key then openWindow url
+			$(document).on
+				keyup: (e) ->
+					code = e.keyCode or e.which
+					switch code
+						when 39 then next()
+						when 37 then prev()
+				keydown: (e) ->
+					code = e.keyCode or e.which
+					switch code
+						when 27 then close()
+						when options.hz_fullscreen then close()
+						when options.hz_dl_key then openWindow url
+		prev: prev
+		next: next
+		close: close
+		resize: resize
+	}
 
 # Open in new window
 openWindow = (url) ->
@@ -1547,6 +1533,19 @@ init = ->
 		$(this).prev().attr('style', '').end().next().remove().end().remove()
 
 	# Lightbox
+	$('#hoverzoom_fs').on('click', '.back, .close', lightbox.close)
+	.on('click', '.prev', lightbox.prev)
+	.on('click', '.next, img', lightbox.next)
+	.on('contextmenu', 'img', lightbox.prev)
+	.on('mouseenter', 'a', ->
+		@href = $('#hoverzoom_fs').find('img').attr('src')
+	).on('scroll', ->
+		$(this).children('.ctrl').css
+			top: @scrollTop
+			left: @scrollLeft
+	).find('li').each (i) ->
+		$(this).on 'click', ->
+			lightbox.resize.type i
 
 init()
 

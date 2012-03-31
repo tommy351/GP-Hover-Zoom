@@ -642,7 +642,7 @@ hoverzoom = function() {
         links.push(_this.href || _this.src);
       }
       hide();
-      return lightbox(links, num);
+      return lightbox.start(links, num);
     };
     keys = function(e) {
       var code;
@@ -734,122 +734,111 @@ disable = function() {
   return timer.stop();
 };
 
-lightbox = function(arr, i) {
-  var $ctrl, $fs, $func, $main, $meta, $navi, close, insert, length, next, prev, resize, scroll, trigger, url;
+lightbox = new function() {
+  var scroll, links, i, url, length;
+  var $fs, $main, close, insert, next, prev, resize, trigger;
   $fs = $('#hoverzoom_fs');
   $main = $fs.children('.main');
-  $ctrl = $fs.children('.ctrl');
-  $func = $fs.find('li');
-  $meta = $fs.find('small');
-  $navi = $fs.find('span');
-  scroll = $(document).scrollTop();
-  length = arr.length;
   trigger = false;
-  url = '';
   insert = function(num) {
     if (!trigger) {
       if (num < 0) {
-        num = arr.length - 1;
+        num = length - 1;
       } else if (num === length) {
         num = 0;
       }
       i = num;
+      url = links[i];
       trigger = true;
-      url = arr[i];
-      $fs.addClass('load').find('a').attr('href', url);
+      $fs.addClass('load');
       return $("<img src='" + url + "'>").load(function() {
         var img, others;
         img = this;
         others = $main.find('img');
         if (others.length > 0) {
-          others.fadeOut(300, function() {
+          return others.fadeOut(300, function() {
             $(this).remove();
-            $main.append(img);
-            resize(img);
-            return trigger = false;
+            return resize.start(img);
           });
         } else {
-          $main.append(img);
-          resize(img);
-          trigger = false;
+          return resize.start(img);
         }
-        return $fs.removeClass('load');
       });
     }
   };
-  resize = function(obj) {
-    var getSize, main, nHeight, nWidth, switchFunc, wHeight, wWidth;
-    wWidth = $fs.width();
-    wHeight = $fs.height();
-    nWidth = obj.naturalWidth;
-    nHeight = obj.naturalHeight;
+  resize = new function() {
+    var img, nWidth, nHeight, wWidth, wHeight;
+    var $ctrl, $meta, $navi, detect, getSize, main, type;
+    $ctrl = $fs.children('.ctrl');
+    $meta = $ctrl.find('small');
+    $navi = $ctrl.find('span');
     main = function(top, left) {
       $main.css({
         top: top,
         left: left
       });
-      $meta.html("" + nWidth + " x " + nHeight + " (" + (parseInt($(obj).width() / nWidth * 100)) + "%)");
+      $meta.html("" + nWidth + " x " + nHeight + " (" + (parseInt($(img).width() / nWidth * 100)) + "%)");
       if (length > 1) return $navi.html("" + (parseInt(i + 1)) + " / " + length);
     };
-    switchFunc = function(i) {
-      return $func.css('fontWeight', 'normal').eq(i).css('fontWeight', 'bold');
-    };
     getSize = function() {
-      wWidth = $fs.width();
-      return wHeight = $fs.height();
+      wWidth = $fs[0].clientWidth;      return wHeight = $fs[0].clientHeight;
     };
-    $(obj).css({
-      maxWidth: wWidth - 50,
-      maxHeight: wHeight - 50
-    }).animate({
-      opacity: 1
-    }, 300);
-    return main((wHeight - $(obj).height()) / 2, (wWidth - $(obj).width()) / 2);
-    /*
-    		resize = [
-    			->
-    				$(item).css
-    					maxWidth: wWidth - 50
-    					maxHeight: wHeight - 50
-    				main wHeight - item.offsetHeight / 2, wWidth - item.offsetWidth / 2
-    			->
-    				$(item).css 'maxHeight', 'none'
-    				getSize()
-    				$(item).css 'maxWidth', 'none'
-    				main (if item.offsetHeight > wHeight then 0 else (wHeight - item.offsetHeight) / 2), (wWidth - item.offsetWidth) / 2
-    			->
-    				$(item).css
-    					maxWidth: 'none'
-    					maxHeight: 'none'
-    				main (if item.offsetHeight > wHeight then 0 else wHeight - item.offsetHeight / 2), 0
-    		]
-    
-    		detect = ->
-    			if wWidth > nWidth and wHeight > nHeight
-    				$fs.removeClass 'zoom'
-    			else
-    				if nWidth > wWidth
-    					html = "#{lang.fs06} (#{parseInt wWidth / nWidth * 100}%)"
-    					$fs.addClass 'actual'
-    				else
-    					html = "#{lang.fs06} (100%)"
-    					$fs.removeClass 'actual'
-    
-    				$fs.addClass('zoom').find('li').each((i) ->
-    					_i = i
-    					$(this).off('click').on 'click', ->
-    						resize[_i]()
-    						switchFunc(_i)
-    				).eq(0).html("#{lang.fs09} (#{parseInt item.offsetWidth / nWidth * 100}%)").end().eq(1).html(html)
-    
-    
-    		$(obj).css(
-    			maxWidth: wWidth - 50
-    			maxHeight: wHeight - 50
-    		).animate
-    			opacity: 1
-    		, 300
-    */
+    detect = function() {
+      var html;
+      if (wWidth > nWidth && wHeight > nHeight) {
+        return $fs.removeClass('zoom');
+      } else {
+        if (nWidth > wWidth) {
+          html = "" + lang.fs06 + " (" + (parseInt(wWidth / nWidth * 100)) + "%)";
+          $fs.addClass('actual');
+        } else {
+          html = "" + lang.fs06 + " (100%)";
+          $fs.removeClass('actual');
+        }
+        return $fs.addClass('zoom').find('li').eq(0).html("" + lang.fs09 + " (" + (parseInt($(img).width() / nWidth * 100)) + "%)").end().eq(1).html(html);
+      }
+    };
+    type = function(i) {
+      switch (i) {
+        case 0:
+          $(img).css({
+            maxWidth: wWidth - 50,
+            maxHeight: wHeight - 50
+          });
+          main((wHeight - $(img).height()) / 2, (wWidth - $(img).width()) / 2);
+          break;
+        case 1:
+          $(img).css('maxHeight', 'none');
+          getSize();
+          $(img).css('maxWidth', wWidth);
+          main(($(img).height() > wHeight ? 0 : (wHeight - $(img).height()) / 2), (wWidth - $(img).width()) / 2);
+          break;
+        case 2:
+          $(img).css({
+            maxWidth: 'none',
+            maxHeight: 'none'
+          });
+          main(($(img).height() > wHeight ? 0 : (wHeight - $(img).height()) / 2), 0);
+      }
+      return $ctrl.find('li').css('fontWeight', 'normal').eq(i).css('fontWeight', 'bold');
+    };
+    return {
+      start: function(obj) {
+        $main.append(obj);
+        $fs.removeClass('load');
+        trigger = false;
+        img = obj;
+        nWidth = obj.naturalWidth;
+        nHeight = obj.naturalHeight;
+        getSize();
+        type(0);
+        detect();
+        return $(obj).animate({
+          opacity: 1
+        }, 300);
+      },
+      type: type
+    };
   };
   prev = function() {
     if (length > 1) return insert(i - 1);
@@ -858,40 +847,48 @@ lightbox = function(arr, i) {
     if (length > 1) return insert(i + 1);
   };
   close = function() {
-    $fs.hide().off().attr('class', '').children('.main').empty();
+    $fs.hide().attr('class', '').children('.main').empty().end().children('.ctrl').attr('style', '');
     $('html').css('overflowY', 'auto');
     return $(document).scrollTop(scroll).off('keyup').off('keydown');
   };
-  $fs.show().on('click', '.back, .close', close).on('click', '.prev', prev).on('click', '.next, img', next).on('contextmenu', 'img', prev).on('scroll', function() {
-    return $ctrl.css({
-      top: this.scrollTop,
-      left: this.scrollLeft
-    });
-  });
-  $('html, body').css('overflowY', 'hidden');
-  insert(i);
-  if (length > 1) $fs.addClass('multi');
-  return $(document).on('keyup', function(e) {
-    var code;
-    code = e.keyCode || e.which;
-    switch (code) {
-      case 39:
-        return next();
-      case 37:
-        return prev();
-    }
-  }).on('keydown', function(e) {
-    var code;
-    code = e.keyCode || e.which;
-    switch (code) {
-      case options.hz_fullscreen:
-        return close();
-      case 27:
-        return close();
-      case options.hz_dl_key:
-        return openWindow(url);
-    }
-  });
+  return {
+    start: function(arr, i) {
+      scroll = $(document).scrollTop();
+      links = arr;
+      length = arr.length;      $('html, body').css('overflowY', 'hidden');
+      insert(i);
+      $fs.show();
+      if (length > 1) $fs.addClass('multi');
+      return $(document).on({
+        keyup: function(e) {
+          var code;
+          code = e.keyCode || e.which;
+          switch (code) {
+            case 39:
+              return next();
+            case 37:
+              return prev();
+          }
+        },
+        keydown: function(e) {
+          var code;
+          code = e.keyCode || e.which;
+          switch (code) {
+            case 27:
+              return close();
+            case options.hz_fullscreen:
+              return close();
+            case options.hz_dl_key:
+              return openWindow(url);
+          }
+        }
+      });
+    },
+    prev: prev,
+    next: next,
+    close: close,
+    resize: resize
+  };
 };
 
 openWindow = function(url) {
@@ -1607,8 +1604,20 @@ init = function() {
   $('#hz_update_note').on('click', '.back, .close, .white', function() {
     return $('#hz_update_note').fadeOut(300);
   });
-  return $content.on('click', '.closeYT', function() {
+  $content.on('click', '.closeYT', function() {
     return $(this).prev().attr('style', '').end().next().remove().end().remove();
+  });
+  return $('#hoverzoom_fs').on('click', '.back, .close', lightbox.close).on('click', '.prev', lightbox.prev).on('click', '.next, img', lightbox.next).on('contextmenu', 'img', lightbox.prev).on('mouseenter', 'a', function() {
+    return this.href = $('#hoverzoom_fs').find('img').attr('src');
+  }).on('scroll', function() {
+    return $(this).children('.ctrl').css({
+      top: this.scrollTop,
+      left: this.scrollLeft
+    });
+  }).find('li').each(function(i) {
+    return $(this).on('click', function() {
+      return lightbox.resize.type(i);
+    });
   });
 };
 
