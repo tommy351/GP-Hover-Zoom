@@ -324,7 +324,7 @@ $main: #dd4839;
 		margin-top: -50px;
 		opacity: 0;
 		@include transition(opacity 0.5s, margin 0.5s);
-		@include background(linear-gradient(left top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 50%));
+		@include background(linear-gradient(top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 50%));
 		&:hover{
 			margin-top: 0;
 			opacity: 1;
