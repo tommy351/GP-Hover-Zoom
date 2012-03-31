@@ -1282,7 +1282,7 @@ timer = new function() {
     if (page.match(/\/photos\/\w+\/albums\/\w+/)) {
       $main = $('.aN8flf:visible');
       if (!$main.data('class')) {
-        button = $("<div class='in-albumDownload hz_button blue' title='" + lang.al01 + "'>" + lang.al01 + "</div>").data('url', page).click(albumDL);
+        button = $("<div class='in-albumDownload hz_button blue' title='" + lang.al01 + "'>" + lang.al01 + "</div>").data('url', page);
         if ($main.children().length > 2) {
           $main.children().eq(1).after(button);
         } else {
@@ -1295,7 +1295,7 @@ timer = new function() {
         var url;
         url = $(this).children().attr('href');
         if (url.match(/\/photos\/\w+\/albums\/\w+/) && !$(this).data('class')) {
-          button = $("<span class='c-C albumDownload' title='" + lang.al01 + "'>" + lang.fs03 + "</span>").data('url', url).click(albumDL);
+          button = $("<span class='c-C albumDownload' title='" + lang.al01 + "'>" + lang.fs03 + "</span>").data('url', url);
           return $(this).data('class', true).parentsUntil('.Te').find('.vo').append(button);
         }
       });
@@ -1606,7 +1606,7 @@ init = function() {
   });
   $content.on('click', '.closeYT', function() {
     return $(this).prev().attr('style', '').end().next().remove().end().remove();
-  });
+  }).on('click', '.albumDownload, .in-albumDownload', albumDL);
   return $('#hoverzoom_fs').on('click', '.back, .close', lightbox.close).on('click', '.prev', lightbox.prev).on('click', '.next, img', lightbox.next).on('contextmenu', 'img', lightbox.prev).on('mouseenter', 'a', function() {
     return this.href = $('#hoverzoom_fs').find('img').attr('src');
   }).on('scroll', function() {

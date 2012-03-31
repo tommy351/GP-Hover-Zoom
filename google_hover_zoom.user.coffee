@@ -1246,7 +1246,7 @@ timer = new ->
 			$main = $('.aN8flf:visible')
 
 			if !$main.data('class')
-				button = $("<div class='in-albumDownload hz_button blue' title='#{lang.al01}'>#{lang.al01}</div>").data('url', page).click(albumDL)
+				button = $("<div class='in-albumDownload hz_button blue' title='#{lang.al01}'>#{lang.al01}</div>").data('url', page)
 				if $main.children().length > 2 then $main.children().eq(1).after(button) else $main.children().eq(0).after(button)
 				$main.data('class', true)
 		else
@@ -1254,7 +1254,7 @@ timer = new ->
 				url = $(this).children().attr('href')
 
 				if url.match(/\/photos\/\w+\/albums\/\w+/) and !$(this).data('class')
-					button = $("<span class='c-C albumDownload' title='#{lang.al01}'>#{lang.fs03}</span>").data('url', url).click(albumDL)
+					button = $("<span class='c-C albumDownload' title='#{lang.al01}'>#{lang.fs03}</span>").data('url', url)
 					$(this).data('class', true).parentsUntil('.Te').find('.vo').append(button)
 	
 	post = ->
@@ -1529,8 +1529,10 @@ init = ->
 		$('#hz_update_note').fadeOut(300)
 
 	# Show Youtube links in comments directly
-	$content.on 'click', '.closeYT', ->
+	$content.on('click', '.closeYT', ->
 		$(this).prev().attr('style', '').end().next().remove().end().remove()
+	# Album Download button
+	).on('click', '.albumDownload, .in-albumDownload', albumDL)
 
 	# Lightbox
 	$('#hoverzoom_fs').on('click', '.back, .close', lightbox.close)
