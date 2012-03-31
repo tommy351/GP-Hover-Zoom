@@ -1162,63 +1162,79 @@ maxYT = ->
 				height: width * aspect
 			).parentsUntil('.Te').find('.vo').append(button)
 
-execHash = (hash) ->
-	value = hash.split('&')
-	query = []
+# Youtube download
+ytDL = (url, ele) ->
+	$notify = ele.children('.notify')
+	format =
+		# FLV
+    5: format: 'FLV', res: '224p', desc: lang.ytdl02
+    6: format: 'FLV', res: '270p', desc: lang.ytdl02
+    34: format: 'FLV', res: '360p', desc: lang.ytdl02
+    35: format: 'FLV', res: '480p', desc: lang.ytdl03
+    # MP4
+    18: format: 'MP4', res: '360p', desc: lang.ytdl02
+    22: format: 'MP4', res: '720p', desc: lang.ytdl05
+    37: format: 'MP4', res: '1080p', desc: lang.ytdl06
+    38: format: 'MP4', res: '2304p', desc: lang.ytdl06
+    # MP4.3D
+    83: format: 'MP4', res: '240p', desc: lang.ytdl02
+    82: format: 'MP4', res: '360p', desc: lang.ytdl02
+    85: format: 'MP4', res: '520p', desc: lang.ytdl03
+    84: format: 'MP4', res: '720p', desc: lang.ytdl05
+    # WebM
+    43: format: 'WebM', res: '360p', desc: lang.ytdl02
+    44: format: 'WebM', res: '480p', desc: lang.ytdl03
+    45: format: 'WebM', res: '720p', desc: lang.ytdl05
+    46: format: 'WebM', res: '1080p', desc: lang.ytdl06
+    # WebM.3D
+    100: format: 'WebM', res: '360p', desc: lang.ytdl02
+    101: format: 'WebM', res: '480p', desc: lang.ytdl03
+    102: format: 'WebM', res: '720p', desc: lang.ytdl05
+    # 3GP
+    13: format: '3GP', res: '176x144', desc: lang.ytdl02
+    17: format: '3GP', res: '176x144', desc: lang.ytdl0
 
-	for i in value
-		do (i) ->
+	execHash = (hash) ->
+		query = []
+
+		for i in hash.split('&')
 			tmp = i.split('=')
 			query[tmp[0]] = tmp[1]
 
-	return query
-
-ytDL = (url, ele) ->
-	appends = ''
-	format = 
-		5: format: 'FLV', res: '240p', desc: lang.ytdl02
-		18: format: 'MP4', res: '360p', desc: lang.ytdl02
-		22: format: 'MP4', res: '720p', desc: lang.ytdl05
-		34: format: 'FLV', res: '360p', desc: lang.ytdl02
-		35: format: 'FLV', res: '480p', desc: lang.ytdl03
-		37: format: 'MP4', res: '1080p', desc: lang.ytdl06
-		38: format: 'MP4', res: '4k', desc: lang.ytdl06
-		43: format: 'WebM', res: '360p', desc: lang.ytdl02
-		44: format: 'WebM', res: '480p', desc: lang.ytdl03
-		45: format: 'WebM', res: '720p', desc: lang.ytdl05
-		46: format: 'WebM', res: '1080p', desc: lang.ytdl06
+		return query
 
 	encode = (text) ->
-		return `text.replace(/"/g, "-").replace(/%/g, "%25").replace(/=/g, "%3D").replace(/,/g, "%2C").replace(/&/g, "%26").replace(/#/g, "%23").replace(/\?/g, "%3F").replace(/\//g, "_").replace(/\\/g, "_").replace(/ /g, "+")`
+		`text.replace(/"/g, "-").replace(/%/g, "%25").replace(/=/g, "%3D").replace(/,/g, "%2C").replace(/&/g, "%26").replace(/#/g, "%23").replace(/\?/g, "%3F").replace(/\//g, "_").replace(/\\/g, "_").replace(/ /g, "+")`
 
 	GM_xmlhttpRequest
 		method: 'GET'
 		url: url
 		onerror: ->
-			ele.children('.notify').html(lang.ytdl07)
+			$notify.html(lang.ytdl07)
 		onload: (data) ->
 			data = data.responseText
 			title = encode $(data).find('#eow-title').attr('title')
-			
+
 			regexp_url = new RegExp('"url_encoded_fmt_stream_map": "([^"]*)"', 'i')
 			data.match(regexp_url)
 			map = RegExp.$1.split(',')
 
-			if map.length > 0
+			if (map.length > 0)
+				appends = ''
+				
 				for i in map
-					do (i) ->
-						item = execHash(i)
-						if item.url?
-							url = decodeURIComponent(item.url).replace(/\\u0026quality/, '')+'&title='+title
-							itag = url.replace(/(.*)itag=(\d+)(.*)/, '$2')
-							tag = format[itag]
-							desc = if tag? then "#{tag.desc}<small>#{tag.format} / #{tag.res}</small>" else "#{lang.ytdl09}<small>itag=#{itag}</small>"
+					item = execHash(i)
+					if item.url?
+						url = decodeURIComponent(item.url).replace(/\\u0026quality/, '')+'&title='+title
+						itag = url.replace(/(.*)itag=(\d+)(.*)/, '$2')
+						tag = format[itag]
+						desc = if tag? then "#{tag.desc}<small>#{tag.format} / #{tag.res}</small>" else "#{lang.ytdl09}<small>itag=#{itag}</small>"
 
-							appends += if _i is 0 then "<a class='c-C' href='#{url}' target='_blank'>#{desc}</a>" else "<br><a class='c-C' href='#{url}' target='_blank'>#{desc}</a>"
+						appends += "<br><a class='c-C' href='#{url}' target='_blank'>#{desc}</a>"
 
 				ele.addClass('loaded').append(appends)
 			else
-				ele.children('.notify').html(lang.ytdl08)
+				$notify.html(lang.ytdl08)
 
 timer = new ->
 	switch options.hz_direct_ytaspect
@@ -1242,6 +1258,7 @@ timer = new ->
 					fontWeight: 'bold'
 					marginRight: 11
 					
+	# Append album download button
 	album = ->
 		page = location.href.replace(/\?(.*)/, '')
 
@@ -1260,6 +1277,7 @@ timer = new ->
 					button = $("<span class='c-C albumDownload' title='#{lang.al01}'>#{lang.fs03}</span>").data('url', url)
 					$(this).data('class', true).parentsUntil('.Te').find('.vo').append(button)
 	
+	# Process links in posts
 	post = ->
 		$('.Vl .ot-anchor').each ->
 			if !$(this).data('class')
@@ -1276,21 +1294,11 @@ timer = new ->
 
 				$(this).data('class', true)
 
+	# Process Youtube video in posts
 	tube = ->
 		$('div[data-content-type$="flash"]').each ->
 			if !$(this).data('class')
-				url = $(this).attr('data-content-url').replace(/^http/, 'https')
-				button = $("<span class='c-C tubeStacks'>#{lang.fs03}</span>").click ->
-					if !$(this).next().hasClass('clickDetail')
-						popInner = "<div class='closeButton' title='#{lang.set10}'></div><strong>#{lang.ytdl01}</strong><br><div class='notify'>#{lang.fs04}</div>"
-						popup = $("<div class='clickDetail'>#{popInner}</div>").on 'click', 'closeButton', ->
-							$(this).parent().fadeOut(300)
-
-						$(this).after(popup).next().fadeIn(300).offset
-							left: $(this).offset().left + 10
-							top: $(this).offset().top + 25
-						ytDL(url, $(this).next())
-
+				button = $("<span class='c-C tubeStacks'>#{lang.fs03}</span>").data('url', $(this).attr('data-content-url').replace(/^http/, 'https'))
 				$(this).data('class', true).parentsUntil('.Te').find('.vo').append(button)
 
 	links = ->
@@ -1531,6 +1539,25 @@ init = ->
 		$(this).prev().attr('style', '').end().next().remove().end().remove()
 	# Album Download button
 	).on('click', '.albumDownload, .in-albumDownload', albumDL)
+	# Youtube download button
+	.on('click', '.tubeStacks', ->
+		if !$(this).next().hasClass('clickDetail')
+			html = "<div class='closeButton' title='#{lang.set10}'></div><strong>#{lang.ytdl01}</strong><div class='notify'>#{lang.fs04}</div>"
+			popup = $("<div class='clickDetail'>#{html}</div>").on 'click', '.closeButton', ->
+				$(this).parent().fadeOut(300)
+
+			$(this).after(popup).next().fadeIn(300).offset
+				left: $(this).offset().left + 10
+				top: $(this).offset().top + 25
+			ytDL($(this).data('url'), popup)
+		else
+			if $(this).next().is(':hidden')
+				$(this).next().fadeIn(300).offset
+					left: $(this).offset().left + 10
+					top: $(this).offset().top + 25
+			else
+				$(this).next().fadeOut(300)
+	)
 
 	# Lightbox
 	$('#hoverzoom_fs').on('click', '.back, .close', lightbox.close)

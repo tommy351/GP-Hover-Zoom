@@ -27,7 +27,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
  */
 (function(a,b,c){var d=b.event,e;d.special.smartresize={setup:function(){b(this).bind("resize",d.special.smartresize.handler)},teardown:function(){b(this).unbind("resize",d.special.smartresize.handler)},handler:function(a,b){var c=this,d=arguments;a.type="smartresize",e&&clearTimeout(e),e=setTimeout(function(){jQuery.event.handle.apply(c,d)},b==="execAsap"?0:100)}},b.fn.smartresize=function(a){return a?this.bind("smartresize",a):this.trigger("smartresize",["execAsap"])},b.Mason=function(a,c){this.element=b(c),this._create(a),this._init()};var f=["position","height"];b.Mason.settings={isResizable:!0,isAnimated:!1,animationOptions:{queue:!1,duration:500},gutterWidth:0,isRTL:!1,isFitWidth:!1},b.Mason.prototype={_filterFindBricks:function(a){var b=this.options.itemSelector;return b?a.filter(b).add(a.find(b)):a},_getBricks:function(a){var b=this._filterFindBricks(a).css({position:"absolute"}).addClass("masonry-brick");return b},_create:function(c){this.options=b.extend(!0,{},b.Mason.settings,c),this.styleQueue=[],this.reloadItems();var d=this.element[0].style;this.originalStyle={};for(var e=0,g=f.length;e<g;e++){var h=f[e];this.originalStyle[h]=d[h]||""}this.element.css({position:"relative"}),this.horizontalDirection=this.options.isRTL?"right":"left",this.offset={x:parseInt(this.element.css("padding-"+this.horizontalDirection),10),y:parseInt(this.element.css("padding-top"),10)},this.isFluid=this.options.columnWidth&&typeof this.options.columnWidth=="function";var i=this;setTimeout(function(){i.element.addClass("masonry")},0),this.options.isResizable&&b(a).bind("smartresize.masonry",function(){i.resize()})},_init:function(a){this._getColumns(),this._reLayout(a)},option:function(a,c){b.isPlainObject(a)&&(this.options=b.extend(!0,this.options,a))},layout:function(a,b){for(var c=0,d=a.length;c<d;c++)this._placeBrick(a[c]);var e={};e.height=Math.max.apply(Math,this.colYs);if(this.options.isFitWidth){var f=0,c=this.cols;while(--c){if(this.colYs[c]!==0)break;f++}e.width=(this.cols-f)*this.columnWidth-this.options.gutterWidth}this.styleQueue.push({$el:this.element,style:e});var g=this.isLaidOut?this.options.isAnimated?"animate":"css":"css",h=this.options.animationOptions,i;for(c=0,d=this.styleQueue.length;c<d;c++)i=this.styleQueue[c],i.$el[g](i.style,h);this.styleQueue=[],b&&b.call(a),this.isLaidOut=!0},_getColumns:function(){var a=this.options.isFitWidth?this.element.parent():this.element,b=a.width();this.columnWidth=this.isFluid?this.options.columnWidth(b):this.options.columnWidth||this.$bricks.outerWidth(!0)||b,this.columnWidth+=this.options.gutterWidth,this.cols=Math.floor((b+this.options.gutterWidth)/this.columnWidth),this.cols=Math.max(this.cols,1)},_placeBrick:function(a){var c=b(a),d,e,f,g,h;d=Math.ceil(c.outerWidth(!0)/(this.columnWidth+this.options.gutterWidth)),d=Math.min(d,this.cols);if(d===1)f=this.colYs;else{e=this.cols+1-d,f=[];for(h=0;h<e;h++)g=this.colYs.slice(h,h+d),f[h]=Math.max.apply(Math,g)}var i=Math.min.apply(Math,f),j=0;for(var k=0,l=f.length;k<l;k++)if(f[k]===i){j=k;break}var m={top:i+this.offset.y};m[this.horizontalDirection]=this.columnWidth*j+this.offset.x,this.styleQueue.push({$el:c,style:m});var n=i+c.outerHeight(!0),o=this.cols+1-l;for(k=0;k<o;k++)this.colYs[j+k]=n},resize:function(){var a=this.cols;this._getColumns(),(this.isFluid||this.cols!==a)&&this._reLayout()},_reLayout:function(a){var b=this.cols;this.colYs=[];while(b--)this.colYs.push(0);this.layout(this.$bricks,a)},reloadItems:function(){this.$bricks=this._getBricks(this.element.children())},reload:function(a){this.reloadItems(),this._init(a)},appended:function(a,b,c){if(b){this._filterFindBricks(a).css({top:this.element.height()});var d=this;setTimeout(function(){d._appended(a,c)},1)}else this._appended(a,c)},_appended:function(a,b){var c=this._getBricks(a);this.$bricks=this.$bricks.add(c),this.layout(c,b)},remove:function(a){this.$bricks=this.$bricks.not(a),a.remove()},destroy:function(){this.$bricks.removeClass("masonry-brick").each(function(){this.style.position="",this.style.top="",this.style.left=""});var c=this.element[0].style;for(var d=0,e=f.length;d<e;d++){var g=f[d];c[g]=this.originalStyle[g]}this.element.unbind(".masonry").removeClass("masonry").removeData("masonry"),b(a).unbind(".masonry")}},b.fn.imagesLoaded=function(a){function h(){--e<=0&&this.src!==f&&(setTimeout(g),d.unbind("load error",h))}function g(){a.call(b,d)}var b=this,d=b.find("img").add(b.filter("img")),e=d.length,f="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";e||g(),d.bind("load error",h).each(function(){if(this.complete||this.complete===c){var a=this.src;this.src=f,this.src=a}});return b};var g=function(a){this.console&&console.error(a)};b.fn.masonry=function(a){if(typeof a=="string"){var c=Array.prototype.slice.call(arguments,1);this.each(function(){var d=b.data(this,"masonry");if(!d)g("cannot call methods on masonry prior to initialization; attempted to call method '"+a+"'");else{if(!b.isFunction(d[a])||a.charAt(0)==="_"){g("no such method '"+a+"' for masonry instance");return}d[a].apply(d,c)}})}else this.each(function(){var c=b.data(this,"masonry");c?(c.option(a||{}),c._init()):b.data(this,"masonry",new b.Mason(a,this))});return this}})(window,jQuery);
 ;
-var $content, albumDL, batch, bodyElement, bodyTmp, disable, elements, enable, execHash, gcRegex, history, hoverzoom, init, lang, lightbox, locale, maxYT, menuElements, menuTmp, mouse, openWindow, options, picRegex, picasaRegex, sortPic, timer, update, version, ytDL;
+var $content, albumDL, batch, bodyElement, bodyTmp, disable, elements, enable, gcRegex, history, hoverzoom, init, lang, lightbox, locale, maxYT, menuElements, menuTmp, mouse, openWindow, options, picRegex, picasaRegex, sortPic, timer, update, version, ytDL;
 
 version = '1.4';
 
@@ -1131,40 +1131,19 @@ maxYT = function() {
   });
 };
 
-execHash = function(hash) {
-  var i, query, value, _fn, _i, _len;
-  value = hash.split('&');
-  query = [];
-  _fn = function(i) {
-    var tmp;
-    tmp = i.split('=');
-    return query[tmp[0]] = tmp[1];
-  };
-  for (_i = 0, _len = value.length; _i < _len; _i++) {
-    i = value[_i];
-    _fn(i);
-  }
-  return query;
-};
-
 ytDL = function(url, ele) {
-  var appends, encode, format;
-  appends = '';
+  var $notify, encode, execHash, format;
+  $notify = ele.children('.notify');
   format = {
     5: {
       format: 'FLV',
-      res: '240p',
+      res: '224p',
       desc: lang.ytdl02
     },
-    18: {
-      format: 'MP4',
-      res: '360p',
+    6: {
+      format: 'FLV',
+      res: '270p',
       desc: lang.ytdl02
-    },
-    22: {
-      format: 'MP4',
-      res: '720p',
-      desc: lang.ytdl05
     },
     34: {
       format: 'FLV',
@@ -1176,6 +1155,16 @@ ytDL = function(url, ele) {
       res: '480p',
       desc: lang.ytdl03
     },
+    18: {
+      format: 'MP4',
+      res: '360p',
+      desc: lang.ytdl02
+    },
+    22: {
+      format: 'MP4',
+      res: '720p',
+      desc: lang.ytdl05
+    },
     37: {
       format: 'MP4',
       res: '1080p',
@@ -1183,8 +1172,28 @@ ytDL = function(url, ele) {
     },
     38: {
       format: 'MP4',
-      res: '4k',
+      res: '2304p',
       desc: lang.ytdl06
+    },
+    83: {
+      format: 'MP4',
+      res: '240p',
+      desc: lang.ytdl02
+    },
+    82: {
+      format: 'MP4',
+      res: '360p',
+      desc: lang.ytdl02
+    },
+    85: {
+      format: 'MP4',
+      res: '520p',
+      desc: lang.ytdl03
+    },
+    84: {
+      format: 'MP4',
+      res: '720p',
+      desc: lang.ytdl05
     },
     43: {
       format: 'WebM',
@@ -1205,7 +1214,43 @@ ytDL = function(url, ele) {
       format: 'WebM',
       res: '1080p',
       desc: lang.ytdl06
+    },
+    100: {
+      format: 'WebM',
+      res: '360p',
+      desc: lang.ytdl02
+    },
+    101: {
+      format: 'WebM',
+      res: '480p',
+      desc: lang.ytdl03
+    },
+    102: {
+      format: 'WebM',
+      res: '720p',
+      desc: lang.ytdl05
+    },
+    13: {
+      format: '3GP',
+      res: '176x144',
+      desc: lang.ytdl02
+    },
+    17: {
+      format: '3GP',
+      res: '176x144',
+      desc: lang.ytdl0
     }
+  };
+  execHash = function(hash) {
+    var i, query, tmp, _i, _len, _ref;
+    query = [];
+    _ref = hash.split('&');
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      i = _ref[_i];
+      tmp = i.split('=');
+      query[tmp[0]] = tmp[1];
+    }
+    return query;
   };
   encode = function(text) {
     return text.replace(/"/g, "-").replace(/%/g, "%25").replace(/=/g, "%3D").replace(/,/g, "%2C").replace(/&/g, "%26").replace(/#/g, "%23").replace(/\?/g, "%3F").replace(/\//g, "_").replace(/\\/g, "_").replace(/ /g, "+");
@@ -1214,34 +1259,31 @@ ytDL = function(url, ele) {
     method: 'GET',
     url: url,
     onerror: function() {
-      return ele.children('.notify').html(lang.ytdl07);
+      return $notify.html(lang.ytdl07);
     },
     onload: function(data) {
-      var i, map, regexp_url, title, _fn, _i, _len;
+      var appends, desc, i, itag, item, map, regexp_url, tag, title, _i, _len;
       data = data.responseText;
       title = encode($(data).find('#eow-title').attr('title'));
       regexp_url = new RegExp('"url_encoded_fmt_stream_map": "([^"]*)"', 'i');
       data.match(regexp_url);
       map = RegExp.$1.split(',');
       if (map.length > 0) {
-        _fn = function(i) {
-          var desc, itag, item, tag;
+        appends = '';
+        for (_i = 0, _len = map.length; _i < _len; _i++) {
+          i = map[_i];
           item = execHash(i);
           if (item.url != null) {
             url = decodeURIComponent(item.url).replace(/\\u0026quality/, '') + '&title=' + title;
             itag = url.replace(/(.*)itag=(\d+)(.*)/, '$2');
             tag = format[itag];
             desc = tag != null ? "" + tag.desc + "<small>" + tag.format + " / " + tag.res + "</small>" : "" + lang.ytdl09 + "<small>itag=" + itag + "</small>";
-            return appends += _i === 0 ? "<a class='c-C' href='" + url + "' target='_blank'>" + desc + "</a>" : "<br><a class='c-C' href='" + url + "' target='_blank'>" + desc + "</a>";
+            appends += "<br><a class='c-C' href='" + url + "' target='_blank'>" + desc + "</a>";
           }
-        };
-        for (_i = 0, _len = map.length; _i < _len; _i++) {
-          i = map[_i];
-          _fn(i);
         }
         return ele.addClass('loaded').append(appends);
       } else {
-        return ele.children('.notify').html(lang.ytdl08);
+        return $notify.html(lang.ytdl08);
       }
     }
   });
@@ -1321,23 +1363,9 @@ timer = new function() {
   };
   tube = function() {
     return $('div[data-content-type$="flash"]').each(function() {
-      var button, url;
+      var button;
       if (!$(this).data('class')) {
-        url = $(this).attr('data-content-url').replace(/^http/, 'https');
-        button = $("<span class='c-C tubeStacks'>" + lang.fs03 + "</span>").click(function() {
-          var popInner, popup;
-          if (!$(this).next().hasClass('clickDetail')) {
-            popInner = "<div class='closeButton' title='" + lang.set10 + "'></div><strong>" + lang.ytdl01 + "</strong><br><div class='notify'>" + lang.fs04 + "</div>";
-            popup = $("<div class='clickDetail'>" + popInner + "</div>").on('click', 'closeButton', function() {
-              return $(this).parent().fadeOut(300);
-            });
-            $(this).after(popup).next().fadeIn(300).offset({
-              left: $(this).offset().left + 10,
-              top: $(this).offset().top + 25
-            });
-            return ytDL(url, $(this).next());
-          }
-        });
+        button = $("<span class='c-C tubeStacks'>" + lang.fs03 + "</span>").data('url', $(this).attr('data-content-url').replace(/^http/, 'https'));
         return $(this).data('class', true).parentsUntil('.Te').find('.vo').append(button);
       }
     });
@@ -1598,7 +1626,29 @@ init = function() {
   });
   $content.on('click', '.closeYT', function() {
     return $(this).prev().attr('style', '').end().next().remove().end().remove();
-  }).on('click', '.albumDownload, .in-albumDownload', albumDL);
+  }).on('click', '.albumDownload, .in-albumDownload', albumDL).on('click', '.tubeStacks', function() {
+    var html, popup;
+    if (!$(this).next().hasClass('clickDetail')) {
+      html = "<div class='closeButton' title='" + lang.set10 + "'></div><strong>" + lang.ytdl01 + "</strong><div class='notify'>" + lang.fs04 + "</div>";
+      popup = $("<div class='clickDetail'>" + html + "</div>").on('click', '.closeButton', function() {
+        return $(this).parent().fadeOut(300);
+      });
+      $(this).after(popup).next().fadeIn(300).offset({
+        left: $(this).offset().left + 10,
+        top: $(this).offset().top + 25
+      });
+      return ytDL($(this).data('url'), popup);
+    } else {
+      if ($(this).next().is(':hidden')) {
+        return $(this).next().fadeIn(300).offset({
+          left: $(this).offset().left + 10,
+          top: $(this).offset().top + 25
+        });
+      } else {
+        return $(this).next().fadeOut(300);
+      }
+    }
+  });
   return $('#hoverzoom_fs').on('click', '.back, .close', lightbox.close).on('click', '.prev', lightbox.prev).on('click', '.next, img', lightbox.next).on('contextmenu', 'img', lightbox.prev).on('mouseenter', 'a', function() {
     return this.href = $('#hoverzoom_fs').find('img').attr('src');
   }).on('scroll', function() {
