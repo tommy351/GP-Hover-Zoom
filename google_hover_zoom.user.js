@@ -27,7 +27,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
  */
 (function(a,b,c){var d=b.event,e;d.special.smartresize={setup:function(){b(this).bind("resize",d.special.smartresize.handler)},teardown:function(){b(this).unbind("resize",d.special.smartresize.handler)},handler:function(a,b){var c=this,d=arguments;a.type="smartresize",e&&clearTimeout(e),e=setTimeout(function(){jQuery.event.handle.apply(c,d)},b==="execAsap"?0:100)}},b.fn.smartresize=function(a){return a?this.bind("smartresize",a):this.trigger("smartresize",["execAsap"])},b.Mason=function(a,c){this.element=b(c),this._create(a),this._init()};var f=["position","height"];b.Mason.settings={isResizable:!0,isAnimated:!1,animationOptions:{queue:!1,duration:500},gutterWidth:0,isRTL:!1,isFitWidth:!1},b.Mason.prototype={_filterFindBricks:function(a){var b=this.options.itemSelector;return b?a.filter(b).add(a.find(b)):a},_getBricks:function(a){var b=this._filterFindBricks(a).css({position:"absolute"}).addClass("masonry-brick");return b},_create:function(c){this.options=b.extend(!0,{},b.Mason.settings,c),this.styleQueue=[],this.reloadItems();var d=this.element[0].style;this.originalStyle={};for(var e=0,g=f.length;e<g;e++){var h=f[e];this.originalStyle[h]=d[h]||""}this.element.css({position:"relative"}),this.horizontalDirection=this.options.isRTL?"right":"left",this.offset={x:parseInt(this.element.css("padding-"+this.horizontalDirection),10),y:parseInt(this.element.css("padding-top"),10)},this.isFluid=this.options.columnWidth&&typeof this.options.columnWidth=="function";var i=this;setTimeout(function(){i.element.addClass("masonry")},0),this.options.isResizable&&b(a).bind("smartresize.masonry",function(){i.resize()})},_init:function(a){this._getColumns(),this._reLayout(a)},option:function(a,c){b.isPlainObject(a)&&(this.options=b.extend(!0,this.options,a))},layout:function(a,b){for(var c=0,d=a.length;c<d;c++)this._placeBrick(a[c]);var e={};e.height=Math.max.apply(Math,this.colYs);if(this.options.isFitWidth){var f=0,c=this.cols;while(--c){if(this.colYs[c]!==0)break;f++}e.width=(this.cols-f)*this.columnWidth-this.options.gutterWidth}this.styleQueue.push({$el:this.element,style:e});var g=this.isLaidOut?this.options.isAnimated?"animate":"css":"css",h=this.options.animationOptions,i;for(c=0,d=this.styleQueue.length;c<d;c++)i=this.styleQueue[c],i.$el[g](i.style,h);this.styleQueue=[],b&&b.call(a),this.isLaidOut=!0},_getColumns:function(){var a=this.options.isFitWidth?this.element.parent():this.element,b=a.width();this.columnWidth=this.isFluid?this.options.columnWidth(b):this.options.columnWidth||this.$bricks.outerWidth(!0)||b,this.columnWidth+=this.options.gutterWidth,this.cols=Math.floor((b+this.options.gutterWidth)/this.columnWidth),this.cols=Math.max(this.cols,1)},_placeBrick:function(a){var c=b(a),d,e,f,g,h;d=Math.ceil(c.outerWidth(!0)/(this.columnWidth+this.options.gutterWidth)),d=Math.min(d,this.cols);if(d===1)f=this.colYs;else{e=this.cols+1-d,f=[];for(h=0;h<e;h++)g=this.colYs.slice(h,h+d),f[h]=Math.max.apply(Math,g)}var i=Math.min.apply(Math,f),j=0;for(var k=0,l=f.length;k<l;k++)if(f[k]===i){j=k;break}var m={top:i+this.offset.y};m[this.horizontalDirection]=this.columnWidth*j+this.offset.x,this.styleQueue.push({$el:c,style:m});var n=i+c.outerHeight(!0),o=this.cols+1-l;for(k=0;k<o;k++)this.colYs[j+k]=n},resize:function(){var a=this.cols;this._getColumns(),(this.isFluid||this.cols!==a)&&this._reLayout()},_reLayout:function(a){var b=this.cols;this.colYs=[];while(b--)this.colYs.push(0);this.layout(this.$bricks,a)},reloadItems:function(){this.$bricks=this._getBricks(this.element.children())},reload:function(a){this.reloadItems(),this._init(a)},appended:function(a,b,c){if(b){this._filterFindBricks(a).css({top:this.element.height()});var d=this;setTimeout(function(){d._appended(a,c)},1)}else this._appended(a,c)},_appended:function(a,b){var c=this._getBricks(a);this.$bricks=this.$bricks.add(c),this.layout(c,b)},remove:function(a){this.$bricks=this.$bricks.not(a),a.remove()},destroy:function(){this.$bricks.removeClass("masonry-brick").each(function(){this.style.position="",this.style.top="",this.style.left=""});var c=this.element[0].style;for(var d=0,e=f.length;d<e;d++){var g=f[d];c[g]=this.originalStyle[g]}this.element.unbind(".masonry").removeClass("masonry").removeData("masonry"),b(a).unbind(".masonry")}},b.fn.imagesLoaded=function(a){function h(){--e<=0&&this.src!==f&&(setTimeout(g),d.unbind("load error",h))}function g(){a.call(b,d)}var b=this,d=b.find("img").add(b.filter("img")),e=d.length,f="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";e||g(),d.bind("load error",h).each(function(){if(this.complete||this.complete===c){var a=this.src;this.src=f,this.src=a}});return b};var g=function(a){this.console&&console.error(a)};b.fn.masonry=function(a){if(typeof a=="string"){var c=Array.prototype.slice.call(arguments,1);this.each(function(){var d=b.data(this,"masonry");if(!d)g("cannot call methods on masonry prior to initialization; attempted to call method '"+a+"'");else{if(!b.isFunction(d[a])||a.charAt(0)==="_"){g("no such method '"+a+"' for masonry instance");return}d[a].apply(d,c)}})}else this.each(function(){var c=b.data(this,"masonry");c?(c.option(a||{}),c._init()):b.data(this,"masonry",new b.Mason(a,this))});return this}})(window,jQuery);
 ;
-var $content, albumDL, batch, bodyElement, bodyTmp, disable, elements, enable, gcRegex, history, hoverzoom, init, lang, lightbox, locale, maxYT, menuElements, menuTmp, mouse, openWindow, options, picRegex, picasaRegex, sortPic, timer, update, version, ytDL;
+var $content, albumDL, batch, disable, enable, gcRegex, history, hoverzoom, init, lang, lightbox, locale, maxYT, mouse, openWindow, options, picRegex, picasaRegex, sortPic, timer, update, version, ytDL;
 
 version = '1.4';
 
@@ -38,6 +38,8 @@ picasaRegex = /\/\w\d+(-\w\d*)*\/([^\/]+)$/;
 gcRegex = /googleusercontent.com/;
 
 mouse = [];
+
+$content = $('#content');
 
 options = {
   hz_delay: parseInt(localStorage.hz_delay) || 500,
@@ -420,145 +422,6 @@ locale = {
 };
 
 lang = locale[options.hz_language] || locale['en-US'];
-
-$content = $('#content');
-
-bodyTmp = '';
-
-menuTmp = '';
-
-bodyElement = (function() {
-
-  function bodyElement(array) {
-    this.array = array;
-  }
-
-  bodyElement.prototype.create = function() {
-    var arr, _defaults;
-    _defaults = {
-      id: '',
-      type: 'div',
-      className: '',
-      html: '',
-      css: ''
-    };
-    arr = $.extend(_defaults, this.array);
-    return bodyTmp += "<" + arr.type + " id='" + arr.id + "' class='" + arr.className + "' style='" + arr.css + "'>" + arr.html + "</" + arr.type + ">";
-  };
-
-  return bodyElement;
-
-})();
-
-menuElements = (function() {
-
-  function menuElements(id, html) {
-    this.id = id;
-    this.html = html;
-  }
-
-  menuElements.prototype.create = function() {
-    return menuTmp += "<li><a id='" + this.id + "' class='gbmt'>" + this.html + "</a></li>";
-  };
-
-  return menuElements;
-
-})();
-
-elements = {
-  body: {
-    main: new bodyElement({
-      id: 'hoverzoom',
-      css: "opacity:" + (options.hz_opacity / 100)
-    }),
-    loading: new bodyElement({
-      id: 'hz_loading'
-    }),
-    downloadButton: new bodyElement({
-      id: 'hoverzoom_db',
-      type: 'a',
-      html: '<div></div>'
-    }),
-    shortcuts: new bodyElement({
-      id: 'hoverzoom_sc',
-      className: 'hz_button white',
-      html: "<a>" + lang.fs03 + "</a><span>" + lang.fs08 + "</span>"
-    }),
-    lightbox: new bodyElement({
-      id: 'hoverzoom_fs',
-      html: "<div class='back'></div><div class='main'></div><div class='ctrl'>	<div class='close' title=" + lang.fs01 + "></div>	<div class='center'>		<div class='prev' title='" + lang.fs10 + "'></div>		<span></span>		<div class='next' title='" + lang.fs11 + "'></div>	</div>	<div class='right'>		<small></small>		<a>" + lang.fs03 + "</a>		<div class='zoom'>			" + lang.maxpic01 + "			<ul>				<li>" + lang.fs09 + "</li>				<li>" + lang.fs06 + "</li>				<li>" + lang.fs07 + "</li>			</ul>		</div>	</div></div><div class='loading'></div>"
-    }),
-    history: new bodyElement({
-      id: 'hz_history_page',
-      className: 'hz_settings',
-      html: "<div class='back'></div><div class='main'>	<h3>" + lang.set06 + "</h3>	<small></small>	<div class='close' title='" + lang.set10 + "'></div>	<div class='wrap'>		<div class='inner'></div>	</div>	<div class='functions top'>		<div class='cycle'></div>		<div class='hz_button white' title='" + lang.set09 + "'>" + lang.set09 + "</div>		<div class='hz_button blue' title='" + lang.al05 + "'>" + lang.al05 + "</div>		<div class='hz_button green' title='" + lang.al06 + "'>" + lang.al06 + "</div>	</div></div>"
-    }),
-    album: new bodyElement({
-      id: 'hz_album_page',
-      className: 'hz_settings',
-      html: "<div class='back'></div><div class='main'>	<h3>" + lang.al01 + "</h3>	<small></small>	<div class='close' title='" + lang.set10 + "'></div>	<div class='wrap'>		<div class='inner'></div>	</div>	<div class='functions top'>		<div class='cycle'></div>		<div class='hz_button blue' title='" + lang.al05 + "'>" + lang.al05 + "</div>		<div class='hz_button green' title='" + lang.al06 + "'>" + lang.al06 + "</div>		<a class='hz_button orange' title='" + lang.al04 + "'>" + lang.al03 + "</a>	</div></div>"
-    }),
-    batch: new bodyElement({
-      id: 'hz_batch_page',
-      className: 'hz_settings',
-      html: "<div class='back'></div><div class='main'>	<h3>" + lang.allpic01 + "</h3>	<small></small>	<div class='close' title='" + lang.set10 + "'></div>	<div class='wrap'>		<div class='inner'></div>	</div>	<div class='functions top'>		<div class='cycle'></div>		<div class='hz_button blue' title='" + lang.al05 + "'>" + lang.al05 + "</div>		<div class='hz_button green' title='" + lang.al06 + "'>" + lang.al06 + "</div>	</div></div>"
-    }),
-    copyarea: new bodyElement({
-      id: 'hz_copyarea',
-      className: 'hz_settings',
-      html: "<div class='back'></div><div class='main'>	<h3>" + lang.al05 + "</h3>	<small></small>	<div class='close' title='" + lang.set10 + "'></div>	<textarea readonly wrap='off'></textarea></div>"
-    }),
-    update: new bodyElement({
-      id: 'hz_update_note',
-      className: 'hz_settings',
-      html: "<div class='back'></div><div class='main'>	<h3>" + lang.update01 + "</h3>	<small></small>	<div class='close' title='" + lang.set10 + "'></div>	<p></p>	<div>		<a class='meta' href='http://userscripts.org/scripts/show/106681'>Google+ Hover Zoom</a>		<a class='hz_button green' title='" + lang.update01 + "'>" + lang.update01 + "</a>		<div class='hz_button white' title='" + lang.update04 + "'>" + lang.update04 + "</div>	</div></div>"
-    }),
-    set: new bodyElement({
-      id: 'hz_set_page',
-      className: 'hz_settings',
-      html: "<div class='back'></div><div class='main'>	<h3>" + lang.set01 + "</h3>	<small>Ver. " + version + " by <a href='https://plus.google.com/105931860008509594725' target='_blank'>SkyArrow</a></small>	<div class='close' title='" + lang.set10 + "'></div>	<ul class='menu'>		<li>" + lang.set11 + "</li>		<li>" + lang.set12 + "</li>		<li>" + lang.set13 + "</li>		<div class='tabs'>			<div>				<label>" + lang.set36 + "</label>				<input id='hz_enable_main' type='checkbox'><label for='hz_enable_main'>" + lang.set37 + "</label>				<input id='hz_enable_icon' type='checkbox'><label for='hz_enable_icon'>" + lang.set38 + "</label>				<input id='hz_enable_link' type='checkbox'><label for='hz_enable_link'>" + lang.set39 + "</label><br>				<label for='hz_delay'>" + lang.set14 + "</label><input id='hz_delay' type='text' maxlength='4'><label for='hz_delay'>" + lang.set15 + "</label><br>				<label for='hz_opacity'>" + lang.set16 + "</label><input id='hz_opacity' type='text' maxlength='3'><label for='hz_opacity'>%</label><br>				<label for='hz_maxwidth'>" + lang.set17 + "</label><input id='hz_maxwidth' type='text' maxlength='4'><label for='hz_maxwidth'>" + lang.set18 + "</label><br>				<input id='hz_resolution' type='checkbox'><label for='hz_resolution'>" + lang.set26 + "</label><br>				<input id='hz_hovering' type='checkbox'><label for='hz_hovering'>" + lang.set46 + "</label><br>			</div>			<div>				<label for='hz_trigger'>" + lang.set23 + "</label><select id='hz_trigger'></select><br>				<label for='hz_dl_key'>" + lang.set28 + "</label><select id='hz_dl_key'></select><br>				<label for='hz_fullscreen'>" + lang.set27 + "</label><select id='hz_fullscreen'></select><br>				<input id='hz_download' type='checkbox'><label for='hz_download'>" + lang.set19 + "</label><br>				<input id='hz_shortcut' type='checkbox'><label for='hz_shortcut'>" + lang.set31 + "</label><br>				<input id='hz_dl_link' type='checkbox'><label for='hz_dl_link'>" + lang.set42 + "</label><br>			</div>			<div>				<label for='hz_language'>" + lang.set35 + "</label><select id='hz_language'></select><br>				<input id='hz_update' type='checkbox'><label for='hz_update'>" + lang.set41 + "</label>&nbsp;				<a id='hz_checkupdate' href='javascript:void(0)'>(" + lang.update05 + ")</a><br>				<input id='hz_maxpic' type='checkbox'><label for='hz_maxpic'>" + lang.set43 + "</label>				<select id='hz_maxpic_option'>					<option value='0'>" + lang.set44 + "</option>					<option value='1'>" + lang.set45 + "</option>				</select><br>				<input id='hz_maxyt' type='checkbox'><label for='hz_maxyt'>" + lang.set47 + "</label>				<select id='hz_maxyt_aspect'>					<option value='1'>4:3</option>					<option value='2'>16:9</option>					<option value='3'>16:10</option>				</select><br>				<input id='hz_direct_post' type='checkbox'><label for='hz_direct_post'>" + lang.set48 + "</label>				<input id='hz_direct_post_max' type='text' maxlength='4'><label for='hz_direct_post_max'>" + lang.set18 + "</label><br>				<input id='hz_direct' type='checkbox'><label for='hz_direct'>" + lang.set25 + "</label>				<input id='hz_direct_max' type='text' maxlength='4'><label for='hz_direct_max'>" + lang.set18 + "</label><br>				<input id='hz_direct_yt' type='checkbox'><label for='hz_direct_yt'>" + lang.set33 + "</label>				<select id='hz_direct_ytaspect'>					<option value='1'>4:3</option>					<option value='2'>16:9</option>					<option value='3'>16:10</option>				</select>				<label for='hz_direct_ytaspect'>" + lang.set34 + "</label>				<input id='hz_direct_ytmaxwidth' type='text' maxlength='4'><label for='hz_direct_ytmaxwidth'>" + lang.set18 + "</label><br>				<input id='hz_album' type='checkbox'><label for='hz_album'>" + lang.set32 + "</label><br>				<input id='hz_allpics' type='checkbox'><label for='hz_allpics'>" + lang.set40 + "</label><br>				<input id='hz_ytdl' type='checkbox'><label for='hz_ytdl'>" + lang.set49 + "</label><br>				<input id='hz_his' type='checkbox'><label for='hz_his'>" + lang.set20 + "</label>				<input id='hz_his_max' type='text' maxlength='4'>				<label for='hz_his_columns'>" + lang.set21 + "</label><input id='hz_his_columns' type='text' maxlength='1'>				<br>			</div>		</div>		<div class='functions bottom'>			<div class='hz_button white' title='" + lang.set03 + "'>" + lang.set03 + "</div>			<div class='hz_button green' title='" + lang.set02 + "'>" + lang.set02 + "</div>		</div>	</ul></div>"
-    })
-  },
-  menu: {
-    setting: new menuElements('hz_set_open', lang.set01),
-    history: new menuElements('hz_history_open', lang.set06),
-    allPic: new menuElements('hz_allpic_dl', lang.allpic01)
-  }
-};
-
-elements.body.main.create();
-
-elements.body.loading.create();
-
-if (options.hz_download === 'true') elements.body.downloadButton.create();
-
-if (options.hz_shortcut === 'true') elements.body.shortcuts.create();
-
-if (options.hz_fullscreen > 0 || options.hz_shortcut === 'true') {
-  elements.body.lightbox.create();
-}
-
-if (options.hz_his === 'true') elements.body.history.create();
-
-if (options.hz_album === 'true') elements.body.album.create();
-
-if (options.hz_allpics === 'true') elements.body.batch.create();
-
-elements.body.copyarea.create();
-
-elements.body.set.create();
-
-elements.body.update.create();
-
-$content.parent().append(bodyTmp);
-
-elements.menu.setting.create();
-
-if (options.hz_his === 'true') elements.menu.history.create();
-
-if (options.hz_allpics === 'true') elements.menu.allPic.create();
-
-$('#gbmpdv').append("<div id='hz_opts'>	<strong>Google+ Hover Zoom</strong>	<a id='disable_hz'>" + lang.menu02 + "</a>	<ul>" + menuTmp + "</ul></div>");
 
 document.addEventListener('mousemove', function(e) {
   return mouse = {
@@ -1534,133 +1397,262 @@ update = function(manual) {
   });
 };
 
-init = function() {
-  var $set, i, keys, langTmp, _i, _len, _ref;
-  $set = $('#hz_set_page');
-  keys = "<option value='0'>" + lang.set24 + "</option><option value='16'>Shift</option><option value='17'>Ctrl</option>";
-  keys += navigator.appVersion.indexOf('Macintosh') > -1 ? "<option value='18'>Option</option><option value='13'>Return</option>" : "<option value='18'>Alt</option><option value='13'>Enter</option>";
-  for (i = 65; i <= 90; i++) {
-    keys += "<option value='" + i + "'>&#" + i + ";</option>";
-  }
-  $('#hz_trigger, #hz_fullscreen, #hz_dl_key').append(keys);
-  langTmp = '';
-  _ref = locale.index;
-  for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-    i = _ref[_i];
-    langTmp += "<option value='" + i[0] + "'>" + i[1] + "</option>";
-  }
-  $('#hz_language').html(langTmp);
-  $('#hz_opts').on('click', '#disable_hz', function(e) {
-    if (!$(this).hasClass('off')) {
-      disable();
-      $(this).html(lang.menu01).addClass('off');
-    } else {
-      enable();
-      $(this).html(lang.menu02).removeClass('off');
+init = {
+  basic: function() {
+    var $set, i, keys, langTmp, _i, _len, _ref;
+    $set = $('#hz_set_page');
+    keys = "<option value='0'>" + lang.set24 + "</option><option value='16'>Shift</option><option value='17'>Ctrl</option>";
+    keys += navigator.appVersion.indexOf('Macintosh') > -1 ? "<option value='18'>Option</option><option value='13'>Return</option>" : "<option value='18'>Alt</option><option value='13'>Enter</option>";
+    for (i = 65; i <= 90; i++) {
+      keys += "<option value='" + i + "'>&#" + i + ";</option>";
     }
-    return e.stopPropagation();
-  }).on('click', '#hz_set_open', function() {
-    return $set.fadeIn(300).find(':text').each(function() {
-      return $(this).val(options[$(this).attr('id')]);
-    }).end().find('select').each(function() {
-      return $(this).children("option[value='" + options[$(this).attr('id')] + "']").prop('selected', true);
-    }).end().find(':checkbox').each(function() {
-      if (options[$(this).attr('id')] === 'true') {
-        return $(this).prop('checked', true);
+    $('#hz_trigger, #hz_fullscreen, #hz_dl_key').append(keys);
+    langTmp = '';
+    _ref = locale.index;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      i = _ref[_i];
+      langTmp += "<option value='" + i[0] + "'>" + i[1] + "</option>";
+    }
+    $('#hz_language').html(langTmp);
+    $('#hz_opts').on('click', '#disable_hz', function(e) {
+      if (!$(this).hasClass('off')) {
+        disable();
+        $(this).html(lang.menu01).addClass('off');
+      } else {
+        enable();
+        $(this).html(lang.menu02).removeClass('off');
       }
+      return e.stopPropagation();
+    }).on('click', '#hz_set_open', function() {
+      return $set.fadeIn(300).find(':text').each(function() {
+        return $(this).val(options[$(this).attr('id')]);
+      }).end().find('select').each(function() {
+        return $(this).children("option[value='" + options[$(this).attr('id')] + "']").prop('selected', true);
+      }).end().find(':checkbox').each(function() {
+        if (options[$(this).attr('id')] === 'true') {
+          return $(this).prop('checked', true);
+        }
+      });
+    }).on('click', '#hz_history_open', history.display).on('click', '#hz_allpic_dl', batch);
+    $('#hz_checkupdate').click(function() {
+      return update(true);
     });
-  }).on('click', '#hz_history_open', history.display).on('click', '#hz_allpic_dl', batch);
-  $('#hz_checkupdate').click(function() {
-    return update(true);
-  });
-  $set.on('click', '.close, .back', function() {
-    return $set.fadeOut(300);
-  }).on('click', '.green', function() {
-    $set.find(':text').each(function() {
-      return localStorage[$(this).attr('id')] = $(this).val();
-    }).end().find('select').each(function() {
-      return localStorage[$(this).attr('id')] = $(this).find(':selected').val();
-    }).end().find(':checkbox').each(function() {
-      return localStorage[$(this).attr('id')] = $(this).prop('checked').toString();
-    });
-    return location.reload();
-  }).on('click', '.white', function() {
-    var sure;
-    sure = confirm(lang.set04);
-    if (sure) {
-      localStorage.clear();
+    return $set.on('click', '.close, .back', function() {
+      return $set.fadeOut(300);
+    }).on('click', '.green', function() {
+      $set.find(':text').each(function() {
+        return localStorage[$(this).attr('id')] = $(this).val();
+      }).end().find('select').each(function() {
+        return localStorage[$(this).attr('id')] = $(this).find(':selected').val();
+      }).end().find(':checkbox').each(function() {
+        return localStorage[$(this).attr('id')] = $(this).prop('checked').toString();
+      });
       return location.reload();
-    } else {
-      return false;
-    }
-  }).find('.menu li').each(function(i) {
-    if (i === 0) $(this).addClass('current');
-    return $(this).attr('tabid', i).click(function() {
-      var $current, gap, height;
-      $current = $(this).parent().children('.current');
-      gap = 590 * (i - $current.attr('tabid'));
-      height = $(this).parent().children('.tabs').children('div').eq(i).height();
-      $set.children('.main').animate({
-        height: height + 140
-      }, 300).find('.tabs').animate({
-        left: '-=' + gap
-      }, 300);
-      $current.removeClass('current');
-      return $(this).addClass('current');
-    });
-  });
-  $('#hz_history_page').on('click', '.white', function() {
-    $('#hz_history_page').find('.inner').empty().end().find('small').html("<strong>0</strong> / " + options.hz_his_max + lang.set07);
-    return history.clear();
-  });
-  $('#hz_copyarea').on('click', '.back, .close', function() {
-    return $('#hz_copyarea').fadeOut(300, function() {
-      return $(this).find('textarea').empty();
-    });
-  });
-  $('#hz_update_note').on('click', '.back, .close, .white', function() {
-    return $('#hz_update_note').fadeOut(300);
-  });
-  $content.on('click', '.closeYT', function() {
-    return $(this).prev().attr('style', '').end().next().remove().end().remove();
-  }).on('click', '.albumDownload, .in-albumDownload', albumDL).on('click', '.tubeStacks', function() {
-    var html, popup;
-    if (!$(this).next().hasClass('clickDetail')) {
-      html = "<div class='closeButton' title='" + lang.set10 + "'></div><strong>" + lang.ytdl01 + "</strong><div class='notify'>" + lang.fs04 + "</div>";
-      popup = $("<div class='clickDetail'>" + html + "</div>").on('click', '.closeButton', function() {
-        return $(this).parent().fadeOut(300);
+    }).on('click', '.white', function() {
+      var sure;
+      sure = confirm(lang.set04);
+      if (sure) {
+        localStorage.clear();
+        return location.reload();
+      } else {
+        return false;
+      }
+    }).find('.menu li').each(function(i) {
+      if (i === 0) $(this).addClass('current');
+      return $(this).attr('tabid', i).click(function() {
+        var $current, gap, height;
+        $current = $(this).parent().children('.current');
+        gap = 590 * (i - $current.attr('tabid'));
+        height = $(this).parent().children('.tabs').children('div').eq(i).height();
+        $set.children('.main').animate({
+          height: height + 140
+        }, 300).find('.tabs').animate({
+          left: '-=' + gap
+        }, 300);
+        $current.removeClass('current');
+        return $(this).addClass('current');
       });
-      $(this).after(popup).next().fadeIn(300).offset({
-        left: $(this).offset().left + 10,
-        top: $(this).offset().top + 25
+    });
+  },
+  history: function() {
+    var $page;
+    $page = $('#hz_history_page');
+    return $page.on('click', '.white', function() {
+      $page.find('.inner').empty().end().find('small').html("<strong>0</strong> / " + options.hz_his_max + lang.set07);
+      return history.clear();
+    });
+  },
+  copyarea: function() {
+    var $page;
+    $page = $('#hz_copyarea');
+    return $page.on('click', '.back, .close', function() {
+      return $page.fadeOut(300, function() {
+        return $(this).find('textarea').empty();
       });
-      return ytDL($(this).data('url'), popup);
-    } else {
-      if ($(this).next().is(':hidden')) {
-        return $(this).next().fadeIn(300).offset({
+    });
+  },
+  lightbox: function() {
+    return $('#hoverzoom_fs').on('click', '.back, .close', lightbox.close).on('click', '.prev', lightbox.prev).on('click', '.next, img', lightbox.next).on('contextmenu', 'img', lightbox.prev).on('scroll', function() {
+      return $(this).children('.ctrl').css({
+        top: this.scrollTop,
+        left: this.scrollLeft
+      });
+    }).find('li').each(function(i) {
+      return $(this).on('click', function() {
+        return lightbox.resize.type(i);
+      });
+    });
+  },
+  update: function() {
+    var $page;
+    $page = $('#hz_update_note');
+    return $page.on('click', '.back, .close, .white', function() {
+      return $page.fadeOut(300);
+    });
+  },
+  timer: function() {
+    return $content.on('click', '.closeYT', function() {
+      return $(this).prev().attr('style', '').end().next().remove().end().remove();
+    }).on('click', '.albumDownload, .in-albumDownload', albumDL).on('click', '.tubeStacks', function() {
+      var html, popup;
+      if (!$(this).next().hasClass('clickDetail')) {
+        html = "<div class='closeButton' title='" + lang.set10 + "'></div><strong>" + lang.ytdl01 + "</strong><div class='notify'>" + lang.fs04 + "</div>";
+        popup = $("<div class='clickDetail'>" + html + "</div>").on('click', '.closeButton', function() {
+          return $(this).parent().fadeOut(300);
+        });
+        $(this).after(popup).next().fadeIn(300).offset({
           left: $(this).offset().left + 10,
           top: $(this).offset().top + 25
         });
+        return ytDL($(this).data('url'), popup);
       } else {
-        return $(this).next().fadeOut(300);
+        if ($(this).next().is(':hidden')) {
+          return $(this).next().fadeIn(300).offset({
+            left: $(this).offset().left + 10,
+            top: $(this).offset().top + 25
+          });
+        } else {
+          return $(this).next().fadeOut(300);
+        }
       }
+    });
+  },
+  append: function() {
+    var body, bodyTmp, elements, menu, menuTmp;
+    elements = {
+      body: {
+        main: {
+          id: 'hoverzoom',
+          css: "opacity:" + (options.hz_opacity / 100)
+        },
+        loading: {
+          id: 'hz_loading'
+        },
+        downloadButton: {
+          id: 'hoverzoom_db',
+          type: 'a',
+          html: '<div></div>'
+        },
+        shortcuts: {
+          id: 'hoverzoom_sc',
+          className: 'hz_button white',
+          html: "<a>" + lang.fs03 + "</a><span>" + lang.fs08 + "</span>"
+        },
+        lightbox: {
+          id: 'hoverzoom_fs',
+          html: "<div class='back'></div><div class='main'></div><div class='ctrl'><div class='close' title=" + lang.fs01 + "></div><div class='center'><div class='prev' title='" + lang.fs10 + "'></div><span></span><div class='next' title='" + lang.fs11 + "'></div></div><div class='right'><small></small><a>" + lang.fs03 + "</a><div class='zoom'>" + lang.maxpic01 + "<ul><li>" + lang.fs09 + "</li><li>" + lang.fs06 + "</li><li>" + lang.fs07 + "</li></ul></div></div></div><div class='loading'></div>"
+        },
+        history: {
+          id: 'hz_history_page',
+          className: 'hz_settings',
+          html: "<div class='back'></div><div class='main'><h3>" + lang.set06 + "</h3><small></small><div class='close' title='" + lang.set10 + "'></div><div class='wrap'><div class='inner'></div></div><div class='functions top'><div class='cycle'></div><div class='hz_button white' title='" + lang.set09 + "'>" + lang.set09 + "</div><div class='hz_button blue' title='" + lang.al05 + "'>" + lang.al05 + "</div><div class='hz_button green' title='" + lang.al06 + "'>" + lang.al06 + "</div></div></div>"
+        },
+        album: {
+          id: 'hz_album_page',
+          className: 'hz_settings',
+          html: "<div class='back'></div><div class='main'><h3>" + lang.al01 + "</h3><small></small><div class='close' title='" + lang.set10 + "'></div><div class='wrap'><div class='inner'></div></div><div class='functions top'><div class='cycle'></div><div class='hz_button blue' title='" + lang.al05 + "'>" + lang.al05 + "</div><div class='hz_button green' title='" + lang.al06 + "'>" + lang.al06 + "</div><a class='hz_button orange' title='" + lang.al04 + "'>" + lang.al03 + "</a></div></div>"
+        },
+        batch: {
+          id: 'hz_batch_page',
+          className: 'hz_settings',
+          html: "<div class='back'></div><div class='main'><h3>" + lang.allpic01 + "</h3><small></small><div class='close' title='" + lang.set10 + "'></div><div class='wrap'><div class='inner'></div></div><div class='functions top'><div class='cycle'></div><div class='hz_button blue' title='" + lang.al05 + "'>" + lang.al05 + "</div><div class='hz_button green' title='" + lang.al06 + "'>" + lang.al06 + "</div></div></div>"
+        },
+        copyarea: {
+          id: 'hz_copyarea',
+          className: 'hz_settings',
+          html: "<div class='back'></div><div class='main'><h3>" + lang.al05 + "</h3><small></small><div class='close' title='" + lang.set10 + "'></div><textarea readonly wrap='off'></textarea></div>"
+        },
+        update: {
+          id: 'hz_update_note',
+          className: 'hz_settings',
+          html: "<div class='back'></div><div class='main'><h3>" + lang.update01 + "</h3><small></small><div class='close' title='" + lang.set10 + "'></div><p></p><div><a class='meta' href='http://userscripts.org/scripts/show/106681'>Google+ Hover Zoom</a><a class='hz_button green' title='" + lang.update01 + "'>" + lang.update01 + "</a><div class='hz_button white' title='" + lang.update04 + "'>" + lang.update04 + "</div></div></div>"
+        },
+        set: {
+          id: 'hz_set_page',
+          className: 'hz_settings',
+          html: "<div class='back'></div><div class='main'><h3>" + lang.set01 + "</h3><small>Ver. " + version + " by <a href='https://plus.google.com/105931860008509594725' target='_blank'>SkyArrow</a></small><div class='close' title='" + lang.set10 + "'></div><ul class='menu'><li>" + lang.set11 + "</li><li>" + lang.set12 + "</li><li>" + lang.set13 + "</li><div class='tabs'><div><label>" + lang.set36 + "</label><input id='hz_enable_main' type='checkbox'><label for='hz_enable_main'>" + lang.set37 + "</label><input id='hz_enable_icon' type='checkbox'><label for='hz_enable_icon'>" + lang.set38 + "</label><input id='hz_enable_link' type='checkbox'><label for='hz_enable_link'>" + lang.set39 + "</label><br><label for='hz_delay'>" + lang.set14 + "</label><input id='hz_delay' type='text' maxlength='4'><label for='hz_delay'>" + lang.set15 + "</label><br><label for='hz_opacity'>" + lang.set16 + "</label><input id='hz_opacity' type='text' maxlength='3'><label for='hz_opacity'>%</label><br><label for='hz_maxwidth'>" + lang.set17 + "</label><input id='hz_maxwidth' type='text' maxlength='4'><label for='hz_maxwidth'>" + lang.set18 + "</label><br><input id='hz_resolution' type='checkbox'><label for='hz_resolution'>" + lang.set26 + "</label><br><input id='hz_hovering' type='checkbox'><label for='hz_hovering'>" + lang.set46 + "</label><br></div><div><label for='hz_trigger'>" + lang.set23 + "</label><select id='hz_trigger'></select><br><label for='hz_dl_key'>" + lang.set28 + "</label><select id='hz_dl_key'></select><br><label for='hz_fullscreen'>" + lang.set27 + "</label><select id='hz_fullscreen'></select><br><input id='hz_download' type='checkbox'><label for='hz_download'>" + lang.set19 + "</label><br><input id='hz_shortcut' type='checkbox'><label for='hz_shortcut'>" + lang.set31 + "</label><br><input id='hz_dl_link' type='checkbox'><label for='hz_dl_link'>" + lang.set42 + "</label><br></div><div><label for='hz_language'>" + lang.set35 + "</label><select id='hz_language'></select><br><input id='hz_update' type='checkbox'><label for='hz_update'>" + lang.set41 + "</label>&nbsp;<a id='hz_checkupdate' href='javascript:void(0)'>(" + lang.update05 + ")</a><br><input id='hz_maxpic' type='checkbox'><label for='hz_maxpic'>" + lang.set43 + "</label><select id='hz_maxpic_option'><option value='0'>" + lang.set44 + "</option><option value='1'>" + lang.set45 + "</option></select><br><input id='hz_maxyt' type='checkbox'><label for='hz_maxyt'>" + lang.set47 + "</label><select id='hz_maxyt_aspect'><option value='1'>4:3</option><option value='2'>16:9</option><option value='3'>16:10</option></select><br><input id='hz_direct_post' type='checkbox'><label for='hz_direct_post'>" + lang.set48 + "</label><input id='hz_direct_post_max' type='text' maxlength='4'><label for='hz_direct_post_max'>" + lang.set18 + "</label><br><input id='hz_direct' type='checkbox'><label for='hz_direct'>" + lang.set25 + "</label><input id='hz_direct_max' type='text' maxlength='4'><label for='hz_direct_max'>" + lang.set18 + "</label><br><input id='hz_direct_yt' type='checkbox'><label for='hz_direct_yt'>" + lang.set33 + "</label><select id='hz_direct_ytaspect'><option value='1'>4:3</option><option value='2'>16:9</option><option value='3'>16:10</option></select><label for='hz_direct_ytaspect'>" + lang.set34 + "</label><input id='hz_direct_ytmaxwidth' type='text' maxlength='4'><label for='hz_direct_ytmaxwidth'>" + lang.set18 + "</label><br><input id='hz_album' type='checkbox'><label for='hz_album'>" + lang.set32 + "</label><br><input id='hz_allpics' type='checkbox'><label for='hz_allpics'>" + lang.set40 + "</label><br><input id='hz_ytdl' type='checkbox'><label for='hz_ytdl'>" + lang.set49 + "</label><br><input id='hz_his' type='checkbox'><label for='hz_his'>" + lang.set20 + "</label><input id='hz_his_max' type='text' maxlength='4'><label for='hz_his_columns'>" + lang.set21 + "</label><input id='hz_his_columns' type='text' maxlength='1'><br></div></div><div class='functions bottom'><div class='hz_button white' title='" + lang.set03 + "'>" + lang.set03 + "</div><div class='hz_button green' title='" + lang.set02 + "'>" + lang.set02 + "</div></div></ul></div>"
+        }
+      },
+      menu: {
+        setting: {
+          id: 'hz_set_open',
+          html: lang.set01
+        },
+        history: {
+          id: 'hz_history_open',
+          html: lang.set06
+        },
+        allPic: {
+          id: 'hz_allpic_dl',
+          html: lang.allpic01
+        }
+      }
+    };
+    bodyTmp = menuTmp = '';
+    body = function(arr) {
+      var _defaults;
+      _defaults = {
+        id: '',
+        type: 'div',
+        className: '',
+        html: '',
+        css: ''
+      };
+      arr = $.extend(_defaults, arr);
+      return bodyTmp += "<" + arr.type + " id='" + arr.id + "' class='" + arr.className + "' style='" + arr.css + "'>" + arr.html + "</" + arr.type + ">";
+    };
+    menu = function(arr) {
+      return menuTmp += "<li><a id='" + arr.id + "' class='gbmt'>" + arr.html + "</a></li>";
+    };
+    body(elements.body.main);
+    body(elements.body.loading);
+    if (options.hz_download === 'true') body(elements.body.downloadButton);
+    if (options.hz_shortcut === 'true') body(elements.body.shortcuts);
+    if (options.hz_fullscreen > 0 || options.hz_shortcut === 'true') {
+      body(elements.body.lightbox);
     }
-  });
-  return $('#hoverzoom_fs').on('click', '.back, .close', lightbox.close).on('click', '.prev', lightbox.prev).on('click', '.next, img', lightbox.next).on('contextmenu', 'img', lightbox.prev).on('scroll', function() {
-    return $(this).children('.ctrl').css({
-      top: this.scrollTop,
-      left: this.scrollLeft
-    });
-  }).find('li').each(function(i) {
-    return $(this).on('click', function() {
-      return lightbox.resize.type(i);
-    });
-  });
+    if (options.hz_his === 'true') body(elements.body.history);
+    if (options.hz_album === 'true') body(elements.body.album);
+    if (options.hz_allpics === 'true') body(elements.body.batch);
+    body(elements.body.copyarea);
+    body(elements.body.set);
+    body(elements.body.update);
+    $content.parent().append(bodyTmp);
+    menu(elements.menu.setting);
+    if (options.hz_his === 'true') menu(elements.menu.history);
+    if (options.hz_allpics === 'true') menu(elements.menu.allPic);
+    return $('#gbmpdv').append("<div id='hz_opts'><strong>Google+ Hover Zoom</strong><a id='disable_hz'>" + lang.menu02 + "</a><ul>" + menuTmp + "</ul></div>");
+  }
 };
 
-init();
-
 $(document).ready(function() {
+  init.append();
+  init.basic();
+  if (options.hz_his === 'true') init.history();
+  init.copyarea();
+  if (options.hz_fullscreen > 0 || options.hz_shortcut === 'true') init.lightbox();
+  init.update();
+  init.timer();
   enable();
   if (options.hz_update === 'true') update();
   if (options.maxyt === 'true') return maxYT();

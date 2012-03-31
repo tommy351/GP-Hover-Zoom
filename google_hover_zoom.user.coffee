@@ -33,6 +33,7 @@ picRegex = /.(jpg|jpeg|gif|bmp|png|tiff)/i
 picasaRegex = /\/\w\d+(-\w\d*)*\/([^\/]+)$/
 gcRegex = /googleusercontent.com/
 mouse = []
+$content = $('#content')
 
 # Options
 options = 
@@ -416,260 +417,6 @@ locale =
 	]
 
 lang = locale[options.hz_language] or locale['en-US']
-
-# Append elements
-$content = $('#content')
-bodyTmp = ''
-menuTmp = ''
-
-class bodyElement
-	constructor: (@array) ->
-
-	create: ->
-		_defaults =
-			id: ''
-			type: 'div'
-			className: ''
-			html: ''
-			css: ''
-
-		arr = $.extend _defaults, @array
-		bodyTmp += "<#{arr.type} id='#{arr.id}' class='#{arr.className}' style='#{arr.css}'>#{arr.html}</#{arr.type}>"
-
-class menuElements
-	constructor: (@id, @html) ->
-
-	create: ->
-		menuTmp += "<li><a id='#{@id}' class='gbmt'>#{@html}</a></li>"
-
-
-elements =
-	body:
-		main: new bodyElement
-			id: 'hoverzoom'
-			css: "opacity:#{options.hz_opacity / 100}"
-		loading: new bodyElement
-			id: 'hz_loading'
-		downloadButton: new bodyElement
-			id: 'hoverzoom_db'
-			type: 'a'
-			html: '<div></div>'
-		shortcuts: new bodyElement
-			id: 'hoverzoom_sc'
-			className: 'hz_button white'
-			html: "<a>#{lang.fs03}</a><span>#{lang.fs08}</span>"
-		lightbox: new bodyElement
-			id: 'hoverzoom_fs'
-			html: "
-<div class='back'></div>
-<div class='main'></div>
-<div class='ctrl'>
-	<div class='close' title=#{lang.fs01}></div>
-	<div class='center'>
-		<div class='prev' title='#{lang.fs10}'></div>
-		<span></span>
-		<div class='next' title='#{lang.fs11}'></div>
-	</div>
-	<div class='right'>
-		<small></small>
-		<a>#{lang.fs03}</a>
-		<div class='zoom'>
-			#{lang.maxpic01}
-			<ul>
-				<li>#{lang.fs09}</li>
-				<li>#{lang.fs06}</li>
-				<li>#{lang.fs07}</li>
-			</ul>
-		</div>
-	</div>
-</div>
-<div class='loading'></div>"
-		history: new bodyElement
-			id: 'hz_history_page'
-			className: 'hz_settings'
-			html: "
-<div class='back'></div>
-<div class='main'>
-	<h3>#{lang.set06}</h3>
-	<small></small>
-	<div class='close' title='#{lang.set10}'></div>
-	<div class='wrap'>
-		<div class='inner'></div>
-	</div>
-	<div class='functions top'>
-		<div class='cycle'></div>
-		<div class='hz_button white' title='#{lang.set09}'>#{lang.set09}</div>
-		<div class='hz_button blue' title='#{lang.al05}'>#{lang.al05}</div>
-		<div class='hz_button green' title='#{lang.al06}'>#{lang.al06}</div>
-	</div>
-</div>"
-		album: new bodyElement
-			id: 'hz_album_page'
-			className: 'hz_settings'
-			html: "
-<div class='back'></div>
-<div class='main'>
-	<h3>#{lang.al01}</h3>
-	<small></small>
-	<div class='close' title='#{lang.set10}'></div>
-	<div class='wrap'>
-		<div class='inner'></div>
-	</div>
-	<div class='functions top'>
-		<div class='cycle'></div>
-		<div class='hz_button blue' title='#{lang.al05}'>#{lang.al05}</div>
-		<div class='hz_button green' title='#{lang.al06}'>#{lang.al06}</div>
-		<a class='hz_button orange' title='#{lang.al04}'>#{lang.al03}</a>
-	</div>
-</div>"
-		batch: new bodyElement
-			id: 'hz_batch_page'
-			className: 'hz_settings'
-			html: "
-<div class='back'></div>
-<div class='main'>
-	<h3>#{lang.allpic01}</h3>
-	<small></small>
-	<div class='close' title='#{lang.set10}'></div>
-	<div class='wrap'>
-		<div class='inner'></div>
-	</div>
-	<div class='functions top'>
-		<div class='cycle'></div>
-		<div class='hz_button blue' title='#{lang.al05}'>#{lang.al05}</div>
-		<div class='hz_button green' title='#{lang.al06}'>#{lang.al06}</div>
-	</div>
-</div>"
-		copyarea: new bodyElement
-			id: 'hz_copyarea'
-			className: 'hz_settings'
-			html: "
-<div class='back'></div>
-<div class='main'>
-	<h3>#{lang.al05}</h3>
-	<small></small>
-	<div class='close' title='#{lang.set10}'></div>
-	<textarea readonly wrap='off'></textarea>
-</div>"
-		update: new bodyElement
-			id: 'hz_update_note'
-			className: 'hz_settings'
-			html: "
-<div class='back'></div>
-<div class='main'>
-	<h3>#{lang.update01}</h3>
-	<small></small>
-	<div class='close' title='#{lang.set10}'></div>
-	<p></p>
-	<div>
-		<a class='meta' href='http://userscripts.org/scripts/show/106681'>Google+ Hover Zoom</a>
-		<a class='hz_button green' title='#{lang.update01}'>#{lang.update01}</a>
-		<div class='hz_button white' title='#{lang.update04}'>#{lang.update04}</div>
-	</div>
-</div>"
-		set: new bodyElement
-			id: 'hz_set_page'
-			className: 'hz_settings'
-			html: "
-<div class='back'></div>
-<div class='main'>
-	<h3>#{lang.set01}</h3>
-	<small>Ver. #{version} by <a href='https://plus.google.com/105931860008509594725' target='_blank'>SkyArrow</a></small>
-	<div class='close' title='#{lang.set10}'></div>
-	<ul class='menu'>
-		<li>#{lang.set11}</li>
-		<li>#{lang.set12}</li>
-		<li>#{lang.set13}</li>
-		<div class='tabs'>
-			<div>
-				<label>#{lang.set36}</label>
-				<input id='hz_enable_main' type='checkbox'><label for='hz_enable_main'>#{lang.set37}</label>
-				<input id='hz_enable_icon' type='checkbox'><label for='hz_enable_icon'>#{lang.set38}</label>
-				<input id='hz_enable_link' type='checkbox'><label for='hz_enable_link'>#{lang.set39}</label><br>
-				<label for='hz_delay'>#{lang.set14}</label><input id='hz_delay' type='text' maxlength='4'><label for='hz_delay'>#{lang.set15}</label><br>
-				<label for='hz_opacity'>#{lang.set16}</label><input id='hz_opacity' type='text' maxlength='3'><label for='hz_opacity'>%</label><br>
-				<label for='hz_maxwidth'>#{lang.set17}</label><input id='hz_maxwidth' type='text' maxlength='4'><label for='hz_maxwidth'>#{lang.set18}</label><br>
-				<input id='hz_resolution' type='checkbox'><label for='hz_resolution'>#{lang.set26}</label><br>
-				<input id='hz_hovering' type='checkbox'><label for='hz_hovering'>#{lang.set46}</label><br>
-			</div>
-			<div>
-				<label for='hz_trigger'>#{lang.set23}</label><select id='hz_trigger'></select><br>
-				<label for='hz_dl_key'>#{lang.set28}</label><select id='hz_dl_key'></select><br>
-				<label for='hz_fullscreen'>#{lang.set27}</label><select id='hz_fullscreen'></select><br>
-				<input id='hz_download' type='checkbox'><label for='hz_download'>#{lang.set19}</label><br>
-				<input id='hz_shortcut' type='checkbox'><label for='hz_shortcut'>#{lang.set31}</label><br>
-				<input id='hz_dl_link' type='checkbox'><label for='hz_dl_link'>#{lang.set42}</label><br>
-			</div>
-			<div>
-				<label for='hz_language'>#{lang.set35}</label><select id='hz_language'></select><br>
-				<input id='hz_update' type='checkbox'><label for='hz_update'>#{lang.set41}</label>&nbsp;
-				<a id='hz_checkupdate' href='javascript:void(0)'>(#{lang.update05})</a><br>
-				<input id='hz_maxpic' type='checkbox'><label for='hz_maxpic'>#{lang.set43}</label>
-				<select id='hz_maxpic_option'>
-					<option value='0'>#{lang.set44}</option>
-					<option value='1'>#{lang.set45}</option>
-				</select><br>
-				<input id='hz_maxyt' type='checkbox'><label for='hz_maxyt'>#{lang.set47}</label>
-				<select id='hz_maxyt_aspect'>
-					<option value='1'>4:3</option>
-					<option value='2'>16:9</option>
-					<option value='3'>16:10</option>
-				</select><br>
-				<input id='hz_direct_post' type='checkbox'><label for='hz_direct_post'>#{lang.set48}</label>
-				<input id='hz_direct_post_max' type='text' maxlength='4'><label for='hz_direct_post_max'>#{lang.set18}</label><br>
-				<input id='hz_direct' type='checkbox'><label for='hz_direct'>#{lang.set25}</label>
-				<input id='hz_direct_max' type='text' maxlength='4'><label for='hz_direct_max'>#{lang.set18}</label><br>
-				<input id='hz_direct_yt' type='checkbox'><label for='hz_direct_yt'>#{lang.set33}</label>
-				<select id='hz_direct_ytaspect'>
-					<option value='1'>4:3</option>
-					<option value='2'>16:9</option>
-					<option value='3'>16:10</option>
-				</select>
-				<label for='hz_direct_ytaspect'>#{lang.set34}</label>
-				<input id='hz_direct_ytmaxwidth' type='text' maxlength='4'><label for='hz_direct_ytmaxwidth'>#{lang.set18}</label><br>
-				<input id='hz_album' type='checkbox'><label for='hz_album'>#{lang.set32}</label><br>
-				<input id='hz_allpics' type='checkbox'><label for='hz_allpics'>#{lang.set40}</label><br>
-				<input id='hz_ytdl' type='checkbox'><label for='hz_ytdl'>#{lang.set49}</label><br>
-				<input id='hz_his' type='checkbox'><label for='hz_his'>#{lang.set20}</label>
-				<input id='hz_his_max' type='text' maxlength='4'>
-				<label for='hz_his_columns'>#{lang.set21}</label><input id='hz_his_columns' type='text' maxlength='1'>
-				<br>
-			</div>
-		</div>
-		<div class='functions bottom'>
-			<div class='hz_button white' title='#{lang.set03}'>#{lang.set03}</div>
-			<div class='hz_button green' title='#{lang.set02}'>#{lang.set02}</div>
-		</div>
-	</ul>
-</div>"
-	menu:
-		setting: new menuElements('hz_set_open', lang.set01)
-		history: new menuElements('hz_history_open', lang.set06)
-		allPic: new menuElements('hz_allpic_dl', lang.allpic01)
-
-elements.body.main.create()
-elements.body.loading.create()
-elements.body.downloadButton.create() if options.hz_download is 'true'
-elements.body.shortcuts.create() if options.hz_shortcut is 'true'
-elements.body.lightbox.create() if options.hz_fullscreen > 0 or options.hz_shortcut is 'true'
-elements.body.history.create() if options.hz_his is 'true'
-elements.body.album.create() if options.hz_album is 'true'
-elements.body.batch.create() if options.hz_allpics is 'true'
-elements.body.copyarea.create()
-elements.body.set.create()
-elements.body.update.create()
-$content.parent().append bodyTmp
-
-elements.menu.setting.create()
-elements.menu.history.create() if options.hz_his is 'true'
-elements.menu.allPic.create() if options.hz_allpics is 'true'
-$('#gbmpdv').append "
-<div id='hz_opts'>
-	<strong>Google+ Hover Zoom</strong>
-	<a id='disable_hz'>#{lang.menu02}</a>
-	<ul>#{menuTmp}</ul>
-</div>
-"
 
 #Detect cursor position
 document.addEventListener 'mousemove', (e) ->
@@ -1432,146 +1179,394 @@ update = (manual) ->
 						break;
 
 # Initialize
-init = ->
-	$set = $('#hz_set_page')
+init =
+	basic: ->
+		$set = $('#hz_set_page')
 
-	# Append options
-	keys = "<option value='0'>#{lang.set24}</option><option value='16'>Shift</option><option value='17'>Ctrl</option>"
-	keys += if navigator.appVersion.indexOf('Macintosh') > -1 then "<option value='18'>Option</option><option value='13'>Return</option>" else "<option value='18'>Alt</option><option value='13'>Enter</option>"
-	for i in [65..90]
-		keys += "<option value='#{i}'>&##{i};</option>"
-	$('#hz_trigger, #hz_fullscreen, #hz_dl_key').append(keys)
+		# Append options
+		keys = "<option value='0'>#{lang.set24}</option><option value='16'>Shift</option><option value='17'>Ctrl</option>"
+		keys += if navigator.appVersion.indexOf('Macintosh') > -1 then "<option value='18'>Option</option><option value='13'>Return</option>" else "<option value='18'>Alt</option><option value='13'>Enter</option>"
+		for i in [65..90]
+			keys += "<option value='#{i}'>&##{i};</option>"
+		$('#hz_trigger, #hz_fullscreen, #hz_dl_key').append(keys)
 
-	langTmp = ''
-	for i in locale.index
-		langTmp += "<option value='#{i[0]}'>#{i[1]}</option>"
-	$('#hz_language').html(langTmp)
+		langTmp = ''
+		for i in locale.index
+			langTmp += "<option value='#{i[0]}'>#{i[1]}</option>"
+		$('#hz_language').html(langTmp)
 
-	# Bind menu events
-	$('#hz_opts').on('click', '#disable_hz', (e) ->
-		if !$(this).hasClass('off')
-			disable()
-			$(this).html(lang.menu01).addClass('off')
-		else
-			enable()
-			$(this).html(lang.menu02).removeClass('off')
-		e.stopPropagation()
-	# Load options
-	).on('click', '#hz_set_open', ->
-		$set.fadeIn(300).find(':text').each(->
-			$(this).val options[$(this).attr('id')]
-		).end()
-		.find('select').each(->
-			$(this).children("option[value='#{options[$(this).attr('id')]}']").prop('selected', true)
-		).end()
-		.find(':checkbox').each(->
-			if options[$(this).attr('id')] is 'true'
-				$(this).prop('checked', true)
-		)
-	).on('click', '#hz_history_open', history.display).on('click', '#hz_allpic_dl', batch)
+		# Bind menu events
+		$('#hz_opts').on('click', '#disable_hz', (e) ->
+			if !$(this).hasClass('off')
+				disable()
+				$(this).html(lang.menu01).addClass('off')
+			else
+				enable()
+				$(this).html(lang.menu02).removeClass('off')
+			e.stopPropagation()
+		# Load options
+		).on('click', '#hz_set_open', ->
+			$set.fadeIn(300).find(':text').each(->
+				$(this).val options[$(this).attr('id')]
+			).end()
+			.find('select').each(->
+				$(this).children("option[value='#{options[$(this).attr('id')]}']").prop('selected', true)
+			).end()
+			.find(':checkbox').each(->
+				if options[$(this).attr('id')] is 'true'
+					$(this).prop('checked', true)
+			)
+		).on('click', '#hz_history_open', history.display).on('click', '#hz_allpic_dl', batch)
 
-	# Manually check update
-	$('#hz_checkupdate').click ->
-		update(true)
+		# Manually check update
+		$('#hz_checkupdate').click ->
+			update(true)
 
-	# Close options window
-	$set.on('click', '.close, .back', ->
-		$set.fadeOut(300)
-	# Save options
-	).on('click', '.green', ->
-		$set.find(':text').each(->
-			localStorage[$(this).attr('id')] = $(this).val()
-		).end()
-		.find('select').each(->
-			localStorage[$(this).attr('id')] = $(this).find(':selected').val()
-		).end()
-		.find(':checkbox').each(->
-			localStorage[$(this).attr('id')] = $(this).prop('checked').toString()
-		)
-		location.reload()
-	# Reset options
-	).on('click', '.white', ->
-		sure = confirm(lang.set04)
-		if sure
-			localStorage.clear()
+		# Close options window
+		$set.on('click', '.close, .back', ->
+			$set.fadeOut(300)
+		# Save options
+		).on('click', '.green', ->
+			$set.find(':text').each(->
+				localStorage[$(this).attr('id')] = $(this).val()
+			).end()
+			.find('select').each(->
+				localStorage[$(this).attr('id')] = $(this).find(':selected').val()
+			).end()
+			.find(':checkbox').each(->
+				localStorage[$(this).attr('id')] = $(this).prop('checked').toString()
+			)
 			location.reload()
-		else
-			return false
-	# Tab events
-	).find('.menu li').each (i) ->
-		if i is 0
-			$(this).addClass('current')
+		# Reset options
+		).on('click', '.white', ->
+			sure = confirm(lang.set04)
+			if sure
+				localStorage.clear()
+				location.reload()
+			else
+				return false
+		# Tab events
+		).find('.menu li').each (i) ->
+			if i is 0
+				$(this).addClass('current')
 
-		$(this).attr('tabid', i).click ->
-			$current = $(this).parent().children('.current')
-			gap = 590 * (i - $current.attr('tabid'))
-			height = $(this).parent().children('.tabs').children('div').eq(i).height()
+			$(this).attr('tabid', i).click ->
+				$current = $(this).parent().children('.current')
+				gap = 590 * (i - $current.attr('tabid'))
+				height = $(this).parent().children('.tabs').children('div').eq(i).height()
 
-			$set.children('.main').animate(
-				height: height + 140
-			, 300).find('.tabs').animate(
-				left: '-=' + gap
-			, 300)
-			$current.removeClass('current')
-			$(this).addClass('current')
+				$set.children('.main').animate(
+					height: height + 140
+				, 300).find('.tabs').animate(
+					left: '-=' + gap
+				, 300)
+				$current.removeClass('current')
+				$(this).addClass('current')
+	history: ->
+		$page = $('#hz_history_page')
+		$page.on 'click', '.white', ->
+			$page.find('.inner').empty().end()
+			.find('small').html("<strong>0</strong> / #{options.hz_his_max}#{lang.set07}")
+			history.clear()
+	copyarea: ->
+		$page = $('#hz_copyarea')
+		$page.on 'click', '.back, .close', ->
+			$page.fadeOut 300, ->
+				$(this).find('textarea').empty()
+	lightbox: ->
+		$('#hoverzoom_fs').on('click', '.back, .close', lightbox.close)
+		.on('click', '.prev', lightbox.prev)
+		.on('click', '.next, img', lightbox.next)
+		.on('contextmenu', 'img', lightbox.prev)
+		.on('scroll', ->
+			$(this).children('.ctrl').css
+				top: @scrollTop
+				left: @scrollLeft
+		).find('li').each (i) ->
+			$(this).on 'click', ->
+				lightbox.resize.type i
+	update: ->
+		$page = $('#hz_update_note')
+		$page.on 'click', '.back, .close, .white', ->
+			$page.fadeOut(300)
+	timer: ->
+		# Show Youtube links in comments directly
+		$content.on('click', '.closeYT', ->
+			$(this).prev().attr('style', '').end().next().remove().end().remove()
+		# Album Download button
+		).on('click', '.albumDownload, .in-albumDownload', albumDL)
+		# Youtube download button
+		.on('click', '.tubeStacks', ->
+			if !$(this).next().hasClass('clickDetail')
+				html = "<div class='closeButton' title='#{lang.set10}'></div><strong>#{lang.ytdl01}</strong><div class='notify'>#{lang.fs04}</div>"
+				popup = $("<div class='clickDetail'>#{html}</div>").on 'click', '.closeButton', ->
+					$(this).parent().fadeOut(300)
 
-	# History page
-	$('#hz_history_page').on 'click', '.white', ->
-		$('#hz_history_page').find('.inner').empty().end()
-		.find('small').html("<strong>0</strong> / #{options.hz_his_max}#{lang.set07}")
-		history.clear()
-
-	# Copy area
-	$('#hz_copyarea').on 'click', '.back, .close', ->
-		$('#hz_copyarea').fadeOut 300, ->
-			$(this).find('textarea').empty()
-
-	# Update window
-	$('#hz_update_note').on 'click', '.back, .close, .white', ->
-		$('#hz_update_note').fadeOut(300)
-
-	# Show Youtube links in comments directly
-	$content.on('click', '.closeYT', ->
-		$(this).prev().attr('style', '').end().next().remove().end().remove()
-	# Album Download button
-	).on('click', '.albumDownload, .in-albumDownload', albumDL)
-	# Youtube download button
-	.on('click', '.tubeStacks', ->
-		if !$(this).next().hasClass('clickDetail')
-			html = "<div class='closeButton' title='#{lang.set10}'></div><strong>#{lang.ytdl01}</strong><div class='notify'>#{lang.fs04}</div>"
-			popup = $("<div class='clickDetail'>#{html}</div>").on 'click', '.closeButton', ->
-				$(this).parent().fadeOut(300)
-
-			$(this).after(popup).next().fadeIn(300).offset
-				left: $(this).offset().left + 10
-				top: $(this).offset().top + 25
-			ytDL($(this).data('url'), popup)
-		else
-			if $(this).next().is(':hidden')
-				$(this).next().fadeIn(300).offset
+				$(this).after(popup).next().fadeIn(300).offset
 					left: $(this).offset().left + 10
 					top: $(this).offset().top + 25
+				ytDL($(this).data('url'), popup)
 			else
-				$(this).next().fadeOut(300)
-	)
+				if $(this).next().is(':hidden')
+					$(this).next().fadeIn(300).offset
+						left: $(this).offset().left + 10
+						top: $(this).offset().top + 25
+				else
+					$(this).next().fadeOut(300)
+		)
+	append: ->
+		elements =
+			body:
+				main:
+					id: 'hoverzoom'
+					css: "opacity:#{options.hz_opacity / 100}"
+				loading:
+					id: 'hz_loading'
+				downloadButton:
+					id: 'hoverzoom_db'
+					type: 'a'
+					html: '<div></div>'
+				shortcuts:
+					id: 'hoverzoom_sc'
+					className: 'hz_button white'
+					html: "<a>#{lang.fs03}</a><span>#{lang.fs08}</span>"
+				lightbox:
+					id: 'hoverzoom_fs'
+					html: "
+<div class='back'></div>
+<div class='main'></div>
+<div class='ctrl'>
+<div class='close' title=#{lang.fs01}></div>
+<div class='center'>
+<div class='prev' title='#{lang.fs10}'></div>
+<span></span>
+<div class='next' title='#{lang.fs11}'></div>
+</div>
+<div class='right'>
+<small></small>
+<a>#{lang.fs03}</a>
+<div class='zoom'>
+#{lang.maxpic01}
+<ul>
+<li>#{lang.fs09}</li>
+<li>#{lang.fs06}</li>
+<li>#{lang.fs07}</li>
+</ul>
+</div>
+</div>
+</div>
+<div class='loading'></div>"
+				history:
+					id: 'hz_history_page'
+					className: 'hz_settings'
+					html: "
+<div class='back'></div>
+<div class='main'>
+<h3>#{lang.set06}</h3>
+<small></small>
+<div class='close' title='#{lang.set10}'></div>
+<div class='wrap'>
+<div class='inner'></div>
+</div>
+<div class='functions top'>
+<div class='cycle'></div>
+<div class='hz_button white' title='#{lang.set09}'>#{lang.set09}</div>
+<div class='hz_button blue' title='#{lang.al05}'>#{lang.al05}</div>
+<div class='hz_button green' title='#{lang.al06}'>#{lang.al06}</div>
+</div>
+</div>"
+				album:
+					id: 'hz_album_page'
+					className: 'hz_settings'
+					html: "
+<div class='back'></div>
+<div class='main'>
+<h3>#{lang.al01}</h3>
+<small></small>
+<div class='close' title='#{lang.set10}'></div>
+<div class='wrap'>
+<div class='inner'></div>
+</div>
+<div class='functions top'>
+<div class='cycle'></div>
+<div class='hz_button blue' title='#{lang.al05}'>#{lang.al05}</div>
+<div class='hz_button green' title='#{lang.al06}'>#{lang.al06}</div>
+<a class='hz_button orange' title='#{lang.al04}'>#{lang.al03}</a>
+</div>
+</div>"
+				batch:
+					id: 'hz_batch_page'
+					className: 'hz_settings'
+					html: "
+<div class='back'></div>
+<div class='main'>
+<h3>#{lang.allpic01}</h3>
+<small></small>
+<div class='close' title='#{lang.set10}'></div>
+<div class='wrap'>
+<div class='inner'></div>
+</div>
+<div class='functions top'>
+<div class='cycle'></div>
+<div class='hz_button blue' title='#{lang.al05}'>#{lang.al05}</div>
+<div class='hz_button green' title='#{lang.al06}'>#{lang.al06}</div>
+</div>
+</div>"
+				copyarea:
+					id: 'hz_copyarea'
+					className: 'hz_settings'
+					html: "
+<div class='back'></div>
+<div class='main'>
+<h3>#{lang.al05}</h3>
+<small></small>
+<div class='close' title='#{lang.set10}'></div>
+<textarea readonly wrap='off'></textarea>
+</div>"
+				update:
+					id: 'hz_update_note'
+					className: 'hz_settings'
+					html: "
+<div class='back'></div>
+<div class='main'>
+<h3>#{lang.update01}</h3>
+<small></small>
+<div class='close' title='#{lang.set10}'></div>
+<p></p>
+<div>
+<a class='meta' href='http://userscripts.org/scripts/show/106681'>Google+ Hover Zoom</a>
+<a class='hz_button green' title='#{lang.update01}'>#{lang.update01}</a>
+<div class='hz_button white' title='#{lang.update04}'>#{lang.update04}</div>
+</div>
+</div>"
+				set:
+					id: 'hz_set_page'
+					className: 'hz_settings'
+					html: "
+<div class='back'></div>
+<div class='main'>
+<h3>#{lang.set01}</h3>
+<small>Ver. #{version} by <a href='https://plus.google.com/105931860008509594725' target='_blank'>SkyArrow</a></small>
+<div class='close' title='#{lang.set10}'></div>
+<ul class='menu'>
+<li>#{lang.set11}</li>
+<li>#{lang.set12}</li>
+<li>#{lang.set13}</li>
+<div class='tabs'>
+<div>
+<label>#{lang.set36}</label>
+<input id='hz_enable_main' type='checkbox'><label for='hz_enable_main'>#{lang.set37}</label>
+<input id='hz_enable_icon' type='checkbox'><label for='hz_enable_icon'>#{lang.set38}</label>
+<input id='hz_enable_link' type='checkbox'><label for='hz_enable_link'>#{lang.set39}</label><br>
+<label for='hz_delay'>#{lang.set14}</label><input id='hz_delay' type='text' maxlength='4'><label for='hz_delay'>#{lang.set15}</label><br>
+<label for='hz_opacity'>#{lang.set16}</label><input id='hz_opacity' type='text' maxlength='3'><label for='hz_opacity'>%</label><br>
+<label for='hz_maxwidth'>#{lang.set17}</label><input id='hz_maxwidth' type='text' maxlength='4'><label for='hz_maxwidth'>#{lang.set18}</label><br>
+<input id='hz_resolution' type='checkbox'><label for='hz_resolution'>#{lang.set26}</label><br>
+<input id='hz_hovering' type='checkbox'><label for='hz_hovering'>#{lang.set46}</label><br>
+</div>
+<div>
+<label for='hz_trigger'>#{lang.set23}</label><select id='hz_trigger'></select><br>
+<label for='hz_dl_key'>#{lang.set28}</label><select id='hz_dl_key'></select><br>
+<label for='hz_fullscreen'>#{lang.set27}</label><select id='hz_fullscreen'></select><br>
+<input id='hz_download' type='checkbox'><label for='hz_download'>#{lang.set19}</label><br>
+<input id='hz_shortcut' type='checkbox'><label for='hz_shortcut'>#{lang.set31}</label><br>
+<input id='hz_dl_link' type='checkbox'><label for='hz_dl_link'>#{lang.set42}</label><br>
+</div>
+<div>
+<label for='hz_language'>#{lang.set35}</label><select id='hz_language'></select><br>
+<input id='hz_update' type='checkbox'><label for='hz_update'>#{lang.set41}</label>&nbsp;
+<a id='hz_checkupdate' href='javascript:void(0)'>(#{lang.update05})</a><br>
+<input id='hz_maxpic' type='checkbox'><label for='hz_maxpic'>#{lang.set43}</label>
+<select id='hz_maxpic_option'>
+<option value='0'>#{lang.set44}</option>
+<option value='1'>#{lang.set45}</option>
+</select><br>
+<input id='hz_maxyt' type='checkbox'><label for='hz_maxyt'>#{lang.set47}</label>
+<select id='hz_maxyt_aspect'>
+<option value='1'>4:3</option>
+<option value='2'>16:9</option>
+<option value='3'>16:10</option>
+</select><br>
+<input id='hz_direct_post' type='checkbox'><label for='hz_direct_post'>#{lang.set48}</label>
+<input id='hz_direct_post_max' type='text' maxlength='4'><label for='hz_direct_post_max'>#{lang.set18}</label><br>
+<input id='hz_direct' type='checkbox'><label for='hz_direct'>#{lang.set25}</label>
+<input id='hz_direct_max' type='text' maxlength='4'><label for='hz_direct_max'>#{lang.set18}</label><br>
+<input id='hz_direct_yt' type='checkbox'><label for='hz_direct_yt'>#{lang.set33}</label>
+<select id='hz_direct_ytaspect'>
+<option value='1'>4:3</option>
+<option value='2'>16:9</option>
+<option value='3'>16:10</option>
+</select>
+<label for='hz_direct_ytaspect'>#{lang.set34}</label>
+<input id='hz_direct_ytmaxwidth' type='text' maxlength='4'><label for='hz_direct_ytmaxwidth'>#{lang.set18}</label><br>
+<input id='hz_album' type='checkbox'><label for='hz_album'>#{lang.set32}</label><br>
+<input id='hz_allpics' type='checkbox'><label for='hz_allpics'>#{lang.set40}</label><br>
+<input id='hz_ytdl' type='checkbox'><label for='hz_ytdl'>#{lang.set49}</label><br>
+<input id='hz_his' type='checkbox'><label for='hz_his'>#{lang.set20}</label>
+<input id='hz_his_max' type='text' maxlength='4'>
+<label for='hz_his_columns'>#{lang.set21}</label><input id='hz_his_columns' type='text' maxlength='1'><br>
+</div>
+</div>
+<div class='functions bottom'>
+<div class='hz_button white' title='#{lang.set03}'>#{lang.set03}</div>
+<div class='hz_button green' title='#{lang.set02}'>#{lang.set02}</div>
+</div>
+</ul>
+</div>"
+			menu:
+				setting:
+					id: 'hz_set_open'
+					html: lang.set01
+				history:
+					id: 'hz_history_open'
+					html: lang.set06
+				allPic: 
+					id: 'hz_allpic_dl'
+					html: lang.allpic01
 
-	# Lightbox
-	$('#hoverzoom_fs').on('click', '.back, .close', lightbox.close)
-	.on('click', '.prev', lightbox.prev)
-	.on('click', '.next, img', lightbox.next)
-	.on('contextmenu', 'img', lightbox.prev)
-	.on('scroll', ->
-		$(this).children('.ctrl').css
-			top: @scrollTop
-			left: @scrollLeft
-	).find('li').each (i) ->
-		$(this).on 'click', ->
-			lightbox.resize.type i
+		bodyTmp = menuTmp = ''
+		body = (arr) ->
+			_defaults =
+				id: ''
+				type: 'div'
+				className: ''
+				html: ''
+				css: ''
 
-init()
+			arr = $.extend _defaults, arr
+			bodyTmp += "<#{arr.type} id='#{arr.id}' class='#{arr.className}' style='#{arr.css}'>#{arr.html}</#{arr.type}>"
+
+		menu = (arr) ->
+			menuTmp += "<li><a id='#{arr.id}' class='gbmt'>#{arr.html}</a></li>"
+
+		body(elements.body.main)
+		body(elements.body.loading)
+		body(elements.body.downloadButton) if options.hz_download is 'true'
+		body(elements.body.shortcuts) if options.hz_shortcut is 'true'
+		body(elements.body.lightbox) if options.hz_fullscreen > 0 or options.hz_shortcut is 'true'
+		body(elements.body.history) if options.hz_his is 'true'
+		body(elements.body.album) if options.hz_album is 'true'
+		body(elements.body.batch) if options.hz_allpics is 'true'
+		body(elements.body.copyarea)
+		body(elements.body.set)
+		body(elements.body.update)
+		$content.parent().append(bodyTmp)
+
+		menu(elements.menu.setting)
+		menu(elements.menu.history) if options.hz_his is 'true'
+		menu(elements.menu.allPic) if options.hz_allpics is 'true'
+		$('#gbmpdv').append "<div id='hz_opts'><strong>Google+ Hover Zoom</strong><a id='disable_hz'>#{lang.menu02}</a><ul>#{menuTmp}</ul></div>"
 
 # After page loaded completely
 $(document).ready ->
+	# Initialize
+	init.append()
+	init.basic()
+	init.history() if options.hz_his is 'true'
+	init.copyarea()
+	init.lightbox() if options.hz_fullscreen > 0 or options.hz_shortcut is 'true'
+	init.update()
+	init.timer()
 	# Enable functions
 	enable()
 	# Auto update
