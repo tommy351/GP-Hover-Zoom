@@ -699,7 +699,6 @@ hoverzoom = ->
 				$loading.show().offset
 					top: mouse.y - 10
 					left: mouse.x - 10
-				$('#hoverzoom_db').data('url', url) if options.hz_download is 'true'
 				$("<img src='#{url}'>").load ->
 					$loading.hide()
 					$main.append(this).fadeIn(300)
@@ -790,6 +789,7 @@ hoverzoom = ->
 
 		show() if options.hz_trigger is 0
 		shortcut.show() if options.hz_shortcut is 'true'
+		$('#hoverzoom_db').attr('href', url) if options.hz_download is 'true'
 		history.create(url)
 		$(_this).on('mouseleave', hide)
 		$(document).on('keydown', keys)
@@ -833,7 +833,7 @@ lightbox = new ->
 			`i = num`
 			`url = links[i]`
 			trigger = true
-			$fs.addClass('load')
+			$fs.addClass('load').find('a').attr('href', url)
 			$("<img src='#{url}'>").load ->
 				img = this
 				others = $main.find('img')
@@ -1515,10 +1515,6 @@ init = ->
 			$current.removeClass('current')
 			$(this).addClass('current')
 
-	# Download button
-	$('#hoverzoom_db').mouseenter ->
-		$(this).attr 'href', $(this).data('url')
-
 	# History page
 	$('#hz_history_page').on 'click', '.white', ->
 		$('#hz_history_page').find('.inner').empty().end()
@@ -1564,9 +1560,7 @@ init = ->
 	.on('click', '.prev', lightbox.prev)
 	.on('click', '.next, img', lightbox.next)
 	.on('contextmenu', 'img', lightbox.prev)
-	.on('mouseenter', 'a', ->
-		@href = $('#hoverzoom_fs').find('img').attr('src')
-	).on('scroll', ->
+	.on('scroll', ->
 		$(this).children('.ctrl').css
 			top: @scrollTop
 			left: @scrollLeft

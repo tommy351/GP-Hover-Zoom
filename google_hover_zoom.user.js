@@ -589,7 +589,6 @@ hoverzoom = function() {
           top: mouse.y - 10,
           left: mouse.x - 10
         });
-        if (options.hz_download === 'true') $('#hoverzoom_db').data('url', url);
         $("<img src='" + url + "'>").load(function() {
           $loading.hide();
           $main.append(this).fadeIn(300);
@@ -696,6 +695,7 @@ hoverzoom = function() {
     };
     if (options.hz_trigger === 0) show();
     if (options.hz_shortcut === 'true') shortcut.show();
+    if (options.hz_download === 'true') $('#hoverzoom_db').attr('href', url);
     history.create(url);
     $(_this).on('mouseleave', hide);
     return $(document).on('keydown', keys);
@@ -750,7 +750,7 @@ lightbox = new function() {
       i = num;
       url = links[i];
       trigger = true;
-      $fs.addClass('load');
+      $fs.addClass('load').find('a').attr('href', url);
       return $("<img src='" + url + "'>").load(function() {
         var img, others;
         img = this;
@@ -1609,9 +1609,6 @@ init = function() {
       return $(this).addClass('current');
     });
   });
-  $('#hoverzoom_db').mouseenter(function() {
-    return $(this).attr('href', $(this).data('url'));
-  });
   $('#hz_history_page').on('click', '.white', function() {
     $('#hz_history_page').find('.inner').empty().end().find('small').html("<strong>0</strong> / " + options.hz_his_max + lang.set07);
     return history.clear();
@@ -1649,9 +1646,7 @@ init = function() {
       }
     }
   });
-  return $('#hoverzoom_fs').on('click', '.back, .close', lightbox.close).on('click', '.prev', lightbox.prev).on('click', '.next, img', lightbox.next).on('contextmenu', 'img', lightbox.prev).on('mouseenter', 'a', function() {
-    return this.href = $('#hoverzoom_fs').find('img').attr('src');
-  }).on('scroll', function() {
+  return $('#hoverzoom_fs').on('click', '.back, .close', lightbox.close).on('click', '.prev', lightbox.prev).on('click', '.next, img', lightbox.next).on('contextmenu', 'img', lightbox.prev).on('scroll', function() {
     return $(this).children('.ctrl').css({
       top: this.scrollTop,
       left: this.scrollLeft
