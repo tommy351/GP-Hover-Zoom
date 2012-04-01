@@ -831,6 +831,16 @@ $main: #dd4839;
 		content: ''; 
 	}
 }
+.maxpic_container{
+	height: auto !important;
+	max-width: none !important;
+	max-height: none !important;
+	margin-bottom: 5px !important;
+	img{
+		max-width: 100% !important;
+		height: auto !important;
+	}
+}
 @keyframes loading{
 	0% {transform: rotate(0deg)}
 	100% {transform: rotate(360deg)}
