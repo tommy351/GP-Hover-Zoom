@@ -539,8 +539,11 @@ init =
 		.on('click', '.tubeStacks', ->
 			if !$(this).next().hasClass('clickDetail')
 				html = "<div class='closeButton' title='#{lang.set10}'></div><strong>#{lang.ytdl01}</strong><div class='notify'>#{lang.fs04}</div>"
-				popup = $("<div class='clickDetail'>#{html}</div>").on 'click', '.closeButton', ->
+				popup = $("<div class='clickDetail'>#{html}</div>").on('click', '.closeButton', ->
 					$(this).parent().fadeOut(300)
+				).on 'click', 'a', ->
+					openWindow @href, true
+					return false
 
 				$(this).after(popup).next().fadeIn(300).offset
 					left: $(this).offset().left + 10
@@ -554,6 +557,19 @@ init =
 				else
 					$(this).next().fadeOut(300)
 		)
+	directDL: ->
+		$('#hoverzoom_db').on 'click', ->
+			if @href?
+				openWindow @href
+			return false
+
+		$('#hoverzoom_fs a').on 'click', ->
+			openWindow @href
+			return false
+
+		$('#hoverzoom_sc a').on 'click', ->
+			openWindow @href
+			return false
 	append: ->
 		elements =
 			body:
@@ -808,6 +824,7 @@ $(document).ready ->
 	init.lightbox() if options.hz_fullscreen > 0 or options.hz_shortcut is 'true'
 	init.update()
 	init.timer()
+	init.directDL()
 	# Enable functions
 	enable()
 	# Auto update
@@ -911,9 +928,7 @@ hoverzoom = ->
 						mouseenter: ->
 							clearTimeout(timer3)
 						mouseleave: close
-					).on('click', 'span', ->
-						lightbox _this, $(_this).parent().parent().find('div[data-content-type^="image"] img, div[data-content-url*="picasa"] img')
-					)
+					).on('click', 'span', fullscreen)
 					.children().eq(0).attr('href', url)
 				hide: close
 			}
@@ -1101,9 +1116,12 @@ lightbox = new ->
 	}
 
 # Open in new window
-openWindow = (url) ->
+openWindow = (url, force) ->
 		time = new Date()
-		window.open(url, "hz_newtab#{time.getTime()}")
+		if url.match(gcRegex) or force
+			$content.append("<iframe src='#{url.replace(/\/s0\//, '/s0-d/')}' id='hz_newtab#{time.getTime()}' style='display:none'></iframe>")
+		else
+			window.open(url, "hz_newtab#{time.getTime()}")
 
 sortPic = (ele, arr, message) ->
 	wWidth = ele.width()
@@ -1464,8 +1482,11 @@ timer = new ->
 								url = if url.match(/\?sz|\/proxy/) then url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') else url.replace(picasaRegex,'/s0/$2')
 								html += if _i is 0 then "<a class='c-C' href='#{url}'>#{_i+1}</a>" else " - <a class='c-C' href='#{url}'>#{_i+1}</a>"
 
-							popup = $("<div class='clickDetail'>#{html}</div>").on 'click', '.closeButton', ->
+							popup = $("<div class='clickDetail'>#{html}</div>").on('click', '.closeButton', ->
 								$(this).parent().fadeOut(300)
+							).on 'click', 'a', ->
+								openWindow @href
+								return false
 
 							$(this).after(popup).next().fadeIn(300).offset
 								left: $(this).offset().left + 10

@@ -545,6 +545,9 @@ init = {
         html = "<div class='closeButton' title='" + lang.set10 + "'></div><strong>" + lang.ytdl01 + "</strong><div class='notify'>" + lang.fs04 + "</div>";
         popup = $("<div class='clickDetail'>" + html + "</div>").on('click', '.closeButton', function() {
           return $(this).parent().fadeOut(300);
+        }).on('click', 'a', function() {
+          openWindow(this.href, true);
+          return false;
         });
         $(this).after(popup).next().fadeIn(300).offset({
           left: $(this).offset().left + 10,
@@ -561,6 +564,20 @@ init = {
           return $(this).next().fadeOut(300);
         }
       }
+    });
+  },
+  directDL: function() {
+    $('#hoverzoom_db').on('click', function() {
+      if (this.href != null) openWindow(this.href);
+      return false;
+    });
+    $('#hoverzoom_fs a').on('click', function() {
+      openWindow(this.href);
+      return false;
+    });
+    return $('#hoverzoom_sc a').on('click', function() {
+      openWindow(this.href);
+      return false;
     });
   },
   append: function() {
@@ -680,6 +697,7 @@ $(document).ready(function() {
   if (options.hz_fullscreen > 0 || options.hz_shortcut === 'true') init.lightbox();
   init.update();
   init.timer();
+  init.directDL();
   enable();
   if (options.hz_update === 'true') update();
   if (options.hz_maxyt === 'true') return maxYT();
@@ -799,9 +817,7 @@ hoverzoom = function() {
               return clearTimeout(timer3);
             },
             mouseleave: close
-          }).on('click', 'span', function() {
-            return lightbox(_this, $(_this).parent().parent().find('div[data-content-type^="image"] img, div[data-content-url*="picasa"] img'));
-          }).children().eq(0).attr('href', url);
+          }).on('click', 'span', fullscreen).children().eq(0).attr('href', url);
         },
         hide: close
       };
@@ -1016,10 +1032,14 @@ lightbox = new function() {
   };
 };
 
-openWindow = function(url) {
+openWindow = function(url, force) {
   var time;
   time = new Date();
-  return window.open(url, "hz_newtab" + (time.getTime()));
+  if (url.match(gcRegex) || force) {
+    return $content.append("<iframe src='" + (url.replace(/\/s0\//, '/s0-d/')) + "' id='hz_newtab" + (time.getTime()) + "' style='display:none'></iframe>");
+  } else {
+    return window.open(url, "hz_newtab" + (time.getTime()));
+  }
 };
 
 sortPic = function(ele, arr, message) {
@@ -1517,6 +1537,9 @@ timer = new function() {
               }
               popup = $("<div class='clickDetail'>" + html + "</div>").on('click', '.closeButton', function() {
                 return $(this).parent().fadeOut(300);
+              }).on('click', 'a', function() {
+                openWindow(this.href);
+                return false;
               });
               return $(this).after(popup).next().fadeIn(300).offset({
                 left: $(this).offset().left + 10,
