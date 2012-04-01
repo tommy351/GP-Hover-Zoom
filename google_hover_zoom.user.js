@@ -1235,27 +1235,22 @@ timer = new function() {
   };
   links = function() {
     return $('.Vl').each(function() {
-      var count, link, target, url;
+      var length, link, target, url;
       if (!$(this).data('class')) {
         target = $(this).find('div[data-content-type^="image"], div[data-content-url*="picasa"], .img-in-post');
-        count = target.length;
-        if (count > 1) {
-          link = $("<span class='c-C picStacks'>" + lang.fs03 + " (" + count + ")</span>").click(function() {
-            var i, popInner, popup, _fn, _i, _len;
+        length = target.length;
+        if (length > 1) {
+          link = $("<span class='c-C picStacks'>" + lang.fs03 + " (" + length + ")</span>").click(function() {
+            var html, i, popup, url, _i, _len;
             if (!$(this).next().hasClass('clickDetail')) {
-              popInner = "<div class='closeButton' title='" + lang.set10 + "'></div><strong>" + lang.piclink01 + "</strong><br>";
-              _fn = function(i) {
-                var number, url;
+              html = "<div class='closeButton' title='" + lang.set10 + "'></div><strong>" + lang.piclink01 + "</strong><br>";
+              for (_i = 0, _len = target.length; _i < _len; _i++) {
+                i = target[_i];
                 url = i.childNodes[0].src;
-                number = i + 1;
                 url = url.match(/\?sz|\/proxy/) ? url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : url.replace(picasaRegex, '/s0/$2');
-                return popInner += i === 0 ? "<a class='c-C' href='" + url + "'>" + number + "</a>" : " - <a class='c-C' href='" + url + "'>" + number + "</a>";
-              };
-              for (_i = 0, _len = count.length; _i < _len; _i++) {
-                i = count[_i];
-                _fn(i);
+                html += _i === 0 ? "<a class='c-C' href='" + url + "'>" + (_i + 1) + "</a>" : " - <a class='c-C' href='" + url + "'>" + (_i + 1) + "</a>";
               }
-              popup = $("<div class='clickDetail'>" + popInner + "</div>").on('click', 'closeButton', function() {
+              popup = $("<div class='clickDetail'>" + html + "</div>").on('click', '.closeButton', function() {
                 return $(this).parent().fadeOut(300);
               });
               return $(this).after(popup).next().fadeIn(300).offset({
@@ -1273,7 +1268,7 @@ timer = new function() {
               }
             }
           });
-        } else if (count === 1) {
+        } else if (length === 1) {
           url = target[0].childNodes[0].src;
           url = url.match(/\?sz|\/proxy/) ? url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : url.replace(picasaRegex, '/s0/$2');
           link = "<a class='c-C picStacks' href='" + url + "'>" + lang.fs03 + "</a>";

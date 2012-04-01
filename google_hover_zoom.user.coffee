@@ -1048,33 +1048,36 @@ timer = new ->
 				button = $("<span class='c-C tubeStacks'>#{lang.fs03}</span>").data('url', $(this).attr('data-content-url').replace(/^http/, 'https'))
 				$(this).data('class', true).parentsUntil('.Te').find('.vo').append(button)
 
+	# Display download links below pictures
 	links = ->
 		$('.Vl').each ->
 			if !$(this).data('class')
 				target = $(this).find('div[data-content-type^="image"], div[data-content-url*="picasa"], .img-in-post')
-				count = target.length
+				length = target.length
 
-				if count > 1
-					link = $("<span class='c-C picStacks'>#{lang.fs03} (#{count})</span>").click ->
+				if length > 1
+					link = $("<span class='c-C picStacks'>#{lang.fs03} (#{length})</span>").click ->
 						if !$(this).next().hasClass('clickDetail')
-							popInner = "<div class='closeButton' title='#{lang.set10}'></div><strong>#{lang.piclink01}</strong><br>"
+							html = "<div class='closeButton' title='#{lang.set10}'></div><strong>#{lang.piclink01}</strong><br>"
+							for i in target
+								url = i.childNodes[0].src
+								url = if url.match(/\?sz|\/proxy/) then url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') else url.replace(picasaRegex,'/s0/$2')
+								html += if _i is 0 then "<a class='c-C' href='#{url}'>#{_i+1}</a>" else " - <a class='c-C' href='#{url}'>#{_i+1}</a>"
 
-							for i in count
-								do (i) ->
-									url = i.childNodes[0].src
-									number = i + 1
-									url = if url.match(/\?sz|\/proxy/) then url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') else url.replace(picasaRegex,'/s0/$2')
-									popInner += if i is 0 then "<a class='c-C' href='#{url}'>#{number}</a>" else " - <a class='c-C' href='#{url}'>#{number}</a>"
-
-							popup = $("<div class='clickDetail'>#{popInner}</div>").on 'click', 'closeButton', ->
+							popup = $("<div class='clickDetail'>#{html}</div>").on 'click', '.closeButton', ->
 								$(this).parent().fadeOut(300)
 
 							$(this).after(popup).next().fadeIn(300).offset
 								left: $(this).offset().left + 10
 								top: $(this).offset().top + 25
 						else
-							if $(this).next().is(':hidden') then $(this).next().fadeIn(300).offset({left: $(this).offset().left + 10, top: $(this).offset().top + 25}) else $(this).next().fadeOut(300)
-				else if count is 1
+							if $(this).next().is(':hidden')
+								$(this).next().fadeIn(300).offset
+									left: $(this).offset().left + 10
+									top: $(this).offset().top + 25
+							else
+								$(this).next().fadeOut(300)
+				else if length is 1
 					url = target[0].childNodes[0].src
 					url = if url.match(/\?sz|\/proxy/) then url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') else url.replace(picasaRegex,'/s0/$2')
 					link = "<a class='c-C picStacks' href='#{url}'>#{lang.fs03}</a>"
