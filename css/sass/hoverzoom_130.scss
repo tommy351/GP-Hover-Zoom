@@ -841,6 +841,11 @@ $main: #dd4839;
 		height: auto !important;
 	}
 }
+.maxyt_container{
+	max-width: none !important;
+	width: 100% !important;
+	height: auto !important;
+}
 @keyframes loading{
 	0% {transform: rotate(0deg)}
 	100% {transform: rotate(360deg)}
