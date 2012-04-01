@@ -81,7 +81,7 @@ locale = {
   'en-US': {
     menu01: 'Disable',
     menu02: 'Enable',
-    fs01: 'Press full screen mode trigger or click here to exit fullscreen mode.',
+    fs01: 'Press fullscreen mode trigger or click here to exit fullscreen mode.',
     fs03: 'Download',
     fs04: 'Loading…',
     fs06: 'Page Width',
@@ -603,7 +603,7 @@ init = {
         },
         lightbox: {
           id: 'hoverzoom_fs',
-          html: "<div class='back'></div><div class='main'></div><div class='ctrl'><div class='close' title=" + lang.fs01 + "></div><div class='center'><div class='prev' title='" + lang.fs10 + "'></div><span></span><div class='next' title='" + lang.fs11 + "'></div></div><div class='right'><small></small><a>" + lang.fs03 + "</a><div class='zoom'>" + lang.maxpic01 + "<ul><li>" + lang.fs09 + "</li><li>" + lang.fs06 + "</li><li>" + lang.fs07 + "</li></ul></div></div></div><div class='loading'></div>"
+          html: "<div class='back'></div><div class='main'></div><div class='ctrl'><div class='close' title='" + lang.fs01 + "'></div><div class='center'><div class='prev' title='" + lang.fs10 + "'></div><span></span><div class='next' title='" + lang.fs11 + "'></div></div><div class='right'><small></small><a>" + lang.fs03 + "</a><div class='zoom'>" + lang.maxpic01 + "<ul><li>" + lang.fs09 + "</li><li>" + lang.fs06 + "</li><li>" + lang.fs07 + "</li></ul></div></div></div><div class='loading'></div>"
         },
         history: {
           id: 'hz_history_page',

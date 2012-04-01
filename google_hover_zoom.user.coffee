@@ -76,7 +76,7 @@ locale =
 	'en-US':
 		menu01: 'Disable',
 		menu02: 'Enable',
-		fs01: 'Press full screen mode trigger or click here to exit fullscreen mode.',
+		fs01: 'Press fullscreen mode trigger or click here to exit fullscreen mode.',
 		fs03: 'Download',
 		fs04: 'Loading…',
 		fs06: 'Page Width',
@@ -592,7 +592,7 @@ init =
 <div class='back'></div>
 <div class='main'></div>
 <div class='ctrl'>
-<div class='close' title=#{lang.fs01}></div>
+<div class='close' title='#{lang.fs01}'></div>
 <div class='center'>
 <div class='prev' title='#{lang.fs10}'></div>
 <span></span>
