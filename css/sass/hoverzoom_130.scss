@@ -532,11 +532,6 @@ $main: #dd4839;
 			margin-top: 5px;
 		}
 	}
-	.meta{
-		position: absolute;
-		bottom: 20px;
-		color: #666;
-	}
 	.main{
 		position: absolute;
 		top: 50%;
@@ -588,6 +583,9 @@ $main: #dd4839;
 				&:hover{
 					color: $main;
 				}
+				&:last-of-type{
+					display: none;
+				}
 			}
 		}
 		.tabs{
@@ -595,10 +593,15 @@ $main: #dd4839;
 			position: absolute;
 			left: 0;
 			width: 590 * 5px;
+			line-height: 2;
 			div{
 				float: left;
 				width: 550px;
 				padding: 15px 20px 0;
+			}
+			ul{
+				padding-left: 15px;
+				margin: 0;
 			}
 		}
 		input[type='text']{
@@ -611,7 +614,6 @@ $main: #dd4839;
 			margin: 0 5px 0 0;
 		}
 		label{
-			line-height: 2;
 			margin-right: 5px;
 			display: inline-block;
 			min-width: 120px;
@@ -636,7 +638,48 @@ $main: #dd4839;
 			}
 			&.bottom{
 				bottom: 20px;
-				right: 20px;
+				left: 20px;
+				width: 550px;
+				.hz_button{
+					float: right;
+					margin-right: 0;
+					margin-left: 16px;
+					&.update{
+						display: none;
+					}
+				}
+				.meta{
+					position: absolute;
+					bottom: 5px;
+					padding-left: 15px;
+					color: #666;
+					&:empty{
+						display: none;
+					}
+					&:before{
+						content: '';
+						background: #666;
+						width: 5px;
+						height: 5px;
+						position: absolute;
+						top: 5px;
+						left: 0;
+						@include border-radius(50%);
+						@include box-shadow(0 0 3px #666);
+					}
+					&.green:before{
+						background: #3D9400;
+						@include box-shadow(0 0 3px #3D9400);
+					}
+					&.red:before{
+						background: red;
+						@include box-shadow(0 0 3px red);
+					}
+					&.orange:before{
+						background: orange;
+						@include box-shadow(0 0 3px orange);
+					}
+				}
 			}
 			:last-child{
 				margin-right: 0;
@@ -668,21 +711,6 @@ $main: #dd4839;
 #hz_copyarea{
 	.back{
 		z-index: 10001;
-	}
-}
-#hz_update_note{
-	z-index: 10001;
-	.main{
-		height: auto;
-	}
-	.hz_button{
-		float: right;
-		margin-left: 16px;
-		margin-right: 0;
-	}
-	ul{
-		padding-left: 15px;
-		line-height: 2;
 	}
 }
 #hz_opts{
