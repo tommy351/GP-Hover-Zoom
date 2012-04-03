@@ -24,8 +24,6 @@ $main: #dd4839;
 	z-index: 10002;
 	display: none;
 	background: rgba(255,255,255,0.5);
-	width: auto;
-	height: auto;
 	img{
 		display: block;
 		margin: 5px;
@@ -41,7 +39,7 @@ $main: #dd4839;
 	width: 20px;
 	height: 20px;
 	box-shadow: 0 -2px 1px 1px $main;
-	position: absolute;
+	position: fixed;
 	pointer-events: none;
 	z-index: 10000;
 	display: none;
@@ -117,8 +115,7 @@ $main: #dd4839;
 		}
 	}
 }
-.albumDownload{
-	background: inline-image("picasa.png") no-repeat;
+.albumDownload, .picStacks, .tubeStacks{
 	padding-left: 15px;
 	margin-left: 20px;
 	&:before{
@@ -129,6 +126,9 @@ $main: #dd4839;
 		display: inline-block;
 		border-bottom: 1px solid transparent;
 	}
+}
+.albumDownload{
+	background: inline-image("picasa.png") no-repeat;
 }
 .in-albumDownload{
 	margin: 25px 18px 25px 0;
@@ -149,29 +149,9 @@ $main: #dd4839;
 }
 .picStacks{
 	background: inline-image("stacks.png") no-repeat;
-	padding-left: 15px;
-	margin-left: 20px;
-	&:before{
-		content: '-';
-		cursor: default;
-		left: -27px;
-		position: relative;
-		display: inline-block;
-		border-bottom: 1px solid transparent;
-	}
 }
 .tubeStacks{
 	background: url(https://s.ytimg.com/yt/favicon-refresh-vfldLzJxy.ico) no-repeat;
-	padding-left: 15px;
-	margin-left: 20px;
-	&:before{
-		content: '-';
-		cursor: default;
-		left: -27px;
-		position: relative;
-		display: inline-block;
-		border-bottom: 1px solid transparent;
-	}
 }
 .hz_button{
 	position: relative;
@@ -532,17 +512,12 @@ $main: #dd4839;
 			margin-top: 5px;
 		}
 	}
-	.meta{
-		position: absolute;
-		bottom: 20px;
-		color: #666;
-	}
 	.main{
 		position: absolute;
 		top: 50%;
 		left: 50%;
 		width: 550px;
-		height: 315px;
+		height: 296px;
 		margin-top: -250px;
 		margin-left: -285px;
 		background: #fff;
@@ -588,17 +563,25 @@ $main: #dd4839;
 				&:hover{
 					color: $main;
 				}
+				&:last-of-type{
+					display: none;
+				}
 			}
 		}
 		.tabs{
 			border-top: 1px solid #ddd;
 			position: absolute;
 			left: 0;
-			width: 590 * 3px;
+			width: 590 * 5px;
+			line-height: 2;
 			div{
 				float: left;
 				width: 550px;
 				padding: 15px 20px 0;
+			}
+			ul{
+				padding-left: 15px;
+				margin: 0;
 			}
 		}
 		input[type='text']{
@@ -611,7 +594,6 @@ $main: #dd4839;
 			margin: 0 5px 0 0;
 		}
 		label{
-			line-height: 2;
 			margin-right: 5px;
 			display: inline-block;
 			min-width: 120px;
@@ -636,7 +618,48 @@ $main: #dd4839;
 			}
 			&.bottom{
 				bottom: 20px;
-				right: 20px;
+				left: 20px;
+				width: 550px;
+				.hz_button{
+					float: right;
+					margin-right: 0;
+					margin-left: 16px;
+					&.update{
+						display: none;
+					}
+				}
+				.meta{
+					position: absolute;
+					bottom: 5px;
+					padding-left: 15px;
+					color: #666;
+					&:empty{
+						display: none;
+					}
+					&:before{
+						content: '';
+						background: #666;
+						width: 5px;
+						height: 5px;
+						position: absolute;
+						top: 5px;
+						left: 0;
+						@include border-radius(50%);
+						@include box-shadow(0 0 3px #666);
+					}
+					&.green:before{
+						background: #3D9400;
+						@include box-shadow(0 0 3px #3D9400);
+					}
+					&.red:before{
+						background: red;
+						@include box-shadow(0 0 3px red);
+					}
+					&.orange:before{
+						background: orange;
+						@include box-shadow(0 0 3px orange);
+					}
+				}
 			}
 			:last-child{
 				margin-right: 0;
@@ -668,21 +691,6 @@ $main: #dd4839;
 #hz_copyarea{
 	.back{
 		z-index: 10001;
-	}
-}
-#hz_update_note{
-	z-index: 10001;
-	.main{
-		height: auto;
-	}
-	.hz_button{
-		float: right;
-		margin-left: 16px;
-		margin-right: 0;
-	}
-	ul{
-		padding-left: 15px;
-		line-height: 2;
 	}
 }
 #hz_opts{
