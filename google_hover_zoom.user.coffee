@@ -71,6 +71,7 @@ options =
 	hz_direct_post: localStorage.hz_direct_post or 'false'
 	hz_direct_post_max: parseInt(localStorage.hz_direct_post_max) or 0
 	hz_ytdl: localStorage.hz_ytdl or 'true'
+	hz_iframedl: localStorage.hz_iframedl or 'false'
 
 # l10n
 locale =
@@ -161,6 +162,7 @@ locale =
 		set47: 'Resize videos as width of stream, video aspect:',
 		set48: 'Show photo links in posts directly, max width:',
 		set49: 'Enable Youtube video download'
+		set50: 'Download directly without opening in new tab'
 	'zh-TW':
 		menu01: '關閉',
 		menu02: '開啟',
@@ -248,6 +250,7 @@ locale =
 		set47: '以訊息串寬度顯示影片，影片長寬比例：',
 		set48: '直接顯示文章內的圖片連結，最大寬度：',
 		set49: '啟用 Youtube 影片下載'
+		set50: '直接下載無須開啟新分頁'
 	'zh-CN':
 		menu01: '关闭',
 		menu02: '开启',
@@ -335,6 +338,7 @@ locale =
 		set47: '以讯息流宽度显示视频，视频长宽比例：',
 		set48: '直接显示文章内的图片链结，最大宽度：',
 		set49: '启用 Youtube 视频下载'
+		set50: '直接下载无须开启新页签'
 	'ja-JP':
 		menu01: 'オフ',
 		menu02: 'オン',
@@ -423,6 +427,8 @@ locale =
 		set47: 'ストリームの幅で動画表示、長さと幅の比：',
 		set48: '画像の直リンクをポストで表示、最大幅：',
 		set49: 'YouTube ダウンロード機能を有効にする'
+		# 日文翻譯
+		set50: 'Download directly without opening in new tab'
 	'index': [
 		['en-US', 'English']
 		['zh-TW', '繁體中文']
@@ -685,6 +691,7 @@ init =
 <input id='hz_album' type='checkbox'><label for='hz_album'>#{lang.set32}</label><br>
 <input id='hz_allpics' type='checkbox'><label for='hz_allpics'>#{lang.set40}</label><br>
 <input id='hz_ytdl' type='checkbox'><label for='hz_ytdl'>#{lang.set49}</label><br>
+<input id='hz_iframedl' type='checkbox'><label for='hz_iframedl'>#{lang.set50}</label><br>
 </div>
 <div>
 <label for='hz_language'>#{lang.set35}</label><select id='hz_language'></select><br>
@@ -780,7 +787,7 @@ $(document).ready ->
 	init.copyarea()
 	init.lightbox() if options.hz_fullscreen > 0 or options.hz_shortcut is 'true'
 	init.timer()
-	init.directDL()
+	init.directDL() if options.hz_iframedl is 'true'
 	# Enable functions
 	enable()
 	# Resize Youtube videos to stream size
@@ -1073,10 +1080,14 @@ lightbox = new ->
 # Open in new window
 openWindow = (url, force) ->
 		time = new Date()
-		if url.match(gcRegex) or force
+		if force
 			$content.append("<iframe src='#{url.replace(/\/s0\//, '/s0-d/')}' id='hz_newtab#{time.getTime()}' style='display:none'></iframe>")
 		else
-			window.open(url, "hz_newtab#{time.getTime()}")
+			if options.hz_iframedl is 'true' and url.match(gcRegex)
+				$content.append("<iframe src='#{url.replace(/\/s0\//, '/s0-d/')}' id='hz_newtab#{time.getTime()}' style='display:none'></iframe>")
+			else
+				window.open(url, "hz_newtab#{time.getTime()}")
+
 
 sortPic = (ele, arr, message) ->
 	wWidth = ele.width()

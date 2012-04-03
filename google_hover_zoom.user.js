@@ -76,7 +76,8 @@ options = {
   hz_maxyt_aspect: parseInt(localStorage.hz_maxyt_aspect) || 2,
   hz_direct_post: localStorage.hz_direct_post || 'false',
   hz_direct_post_max: parseInt(localStorage.hz_direct_post_max) || 0,
-  hz_ytdl: localStorage.hz_ytdl || 'true'
+  hz_ytdl: localStorage.hz_ytdl || 'true',
+  hz_iframedl: localStorage.hz_iframedl || 'false'
 };
 
 locale = {
@@ -166,7 +167,8 @@ locale = {
     set46: 'Not hide photo when hovered',
     set47: 'Resize videos as width of stream, video aspect:',
     set48: 'Show photo links in posts directly, max width:',
-    set49: 'Enable Youtube video download'
+    set49: 'Enable Youtube video download',
+    set50: 'Download directly without opening in new tab'
   },
   'zh-TW': {
     menu01: '關閉',
@@ -254,7 +256,8 @@ locale = {
     set46: '滑鼠移入大圖時不隱藏',
     set47: '以訊息串寬度顯示影片，影片長寬比例：',
     set48: '直接顯示文章內的圖片連結，最大寬度：',
-    set49: '啟用 Youtube 影片下載'
+    set49: '啟用 Youtube 影片下載',
+    set50: '直接下載無須開啟新分頁'
   },
   'zh-CN': {
     menu01: '关闭',
@@ -342,7 +345,8 @@ locale = {
     set46: '鼠标移入大图时不隐藏',
     set47: '以讯息流宽度显示视频，视频长宽比例：',
     set48: '直接显示文章内的图片链结，最大宽度：',
-    set49: '启用 Youtube 视频下载'
+    set49: '启用 Youtube 视频下载',
+    set50: '直接下载无须开启新页签'
   },
   'ja-JP': {
     menu01: 'オフ',
@@ -430,7 +434,8 @@ locale = {
     set46: '画像にカーソルを重ねた時に画像を隠さない',
     set47: 'ストリームの幅で動画表示、長さと幅の比：',
     set48: '画像の直リンクをポストで表示、最大幅：',
-    set49: 'YouTube ダウンロード機能を有効にする'
+    set49: 'YouTube ダウンロード機能を有効にする',
+    set50: 'Download directly without opening in new tab'
   },
   'index': [['en-US', 'English'], ['zh-TW', '繁體中文'], ['zh-CN', '简体中文'], ['ja-JP', '日本語']]
 };
@@ -592,7 +597,7 @@ init = {
         set: {
           id: 'hz_set_page',
           className: 'hz_settings',
-          html: "<div class='back'></div><div class='main'><h3>" + lang.set01 + "</h3><small>Ver. " + version + " by <a href='https://plus.google.com/105931860008509594725' target='_blank'>SkyArrow</a></small><div class='close' title='" + lang.set10 + "'></div><ul class='menu'><li>" + lang.set11 + "</li><li>" + lang.set12 + "</li><li>" + lang.fs03 + "</li><li>" + lang.set13 + "</li><li>" + lang.update01 + "</li></ul><div class='tabs'><div><label>" + lang.set36 + "</label><input id='hz_enable_main' type='checkbox'><label for='hz_enable_main'>" + lang.set37 + "</label><input id='hz_enable_icon' type='checkbox'><label for='hz_enable_icon'>" + lang.set38 + "</label><input id='hz_enable_link' type='checkbox'><label for='hz_enable_link'>" + lang.set39 + "</label><br><label for='hz_delay'>" + lang.set14 + "</label><input id='hz_delay' type='text' maxlength='4'><label for='hz_delay'>" + lang.set15 + "</label><br><label for='hz_opacity'>" + lang.set16 + "</label><input id='hz_opacity' type='text' maxlength='3'><label for='hz_opacity'>%</label><br><label for='hz_maxwidth'>" + lang.set17 + "</label><input id='hz_maxwidth' type='text' maxlength='4'><label for='hz_maxwidth'>" + lang.set18 + "</label><br><input id='hz_resolution' type='checkbox'><label for='hz_resolution'>" + lang.set26 + "</label><br><input id='hz_hovering' type='checkbox'><label for='hz_hovering'>" + lang.set46 + "</label><br></div><div><label for='hz_trigger'>" + lang.set23 + "</label><select id='hz_trigger'></select><br><label for='hz_dl_key'>" + lang.set28 + "</label><select id='hz_dl_key'></select><br><label for='hz_fullscreen'>" + lang.set27 + "</label><select id='hz_fullscreen'></select><br><input id='hz_download' type='checkbox'><label for='hz_download'>" + lang.set19 + "</label><br><input id='hz_shortcut' type='checkbox'><label for='hz_shortcut'>" + lang.set31 + "</label><br></div><div><input id='hz_dl_link' type='checkbox'><label for='hz_dl_link'>" + lang.set42 + "</label><br><input id='hz_album' type='checkbox'><label for='hz_album'>" + lang.set32 + "</label><br><input id='hz_allpics' type='checkbox'><label for='hz_allpics'>" + lang.set40 + "</label><br><input id='hz_ytdl' type='checkbox'><label for='hz_ytdl'>" + lang.set49 + "</label><br></div><div><label for='hz_language'>" + lang.set35 + "</label><select id='hz_language'></select><br><input id='hz_update' type='checkbox'><label for='hz_update'>" + lang.set41 + "</label><br><input id='hz_maxpic' type='checkbox'><label for='hz_maxpic'>" + lang.set43 + "</label><select id='hz_maxpic_option'><option value='0'>" + lang.set44 + "</option><option value='1'>" + lang.set45 + "</option></select><br><input id='hz_maxyt' type='checkbox'><label for='hz_maxyt'>" + lang.set47 + "</label><select id='hz_maxyt_aspect'><option value='1'>4:3</option><option value='2'>16:9</option><option value='3'>16:10</option></select><br><input id='hz_direct_post' type='checkbox'><label for='hz_direct_post'>" + lang.set48 + "</label><input id='hz_direct_post_max' type='text' maxlength='4'><label for='hz_direct_post_max'>" + lang.set18 + "</label><br><input id='hz_direct' type='checkbox'><label for='hz_direct'>" + lang.set25 + "</label><input id='hz_direct_max' type='text' maxlength='4'><label for='hz_direct_max'>" + lang.set18 + "</label><br><input id='hz_direct_yt' type='checkbox'><label for='hz_direct_yt'>" + lang.set33 + "</label><select id='hz_direct_ytaspect'><option value='1'>4:3</option><option value='2'>16:9</option><option value='3'>16:10</option></select><label for='hz_direct_ytaspect'>" + lang.set34 + "</label><input id='hz_direct_ytmaxwidth' type='text' maxlength='4'><label for='hz_direct_ytmaxwidth'>" + lang.set18 + "</label><br><input id='hz_his' type='checkbox'><label for='hz_his'>" + lang.set20 + "</label><input id='hz_his_max' type='text' maxlength='4'><label for='hz_his_columns'>" + lang.set21 + "</label><input id='hz_his_columns' type='text' maxlength='1'><br></div><div></div></div><div class='functions bottom'><div class='meta'><a id='hz_checkupdate' href='javascript:void(0)'>" + lang.update05 + "</a></div><div class='hz_button green save' title='" + lang.set02 + "'>" + lang.set02 + "</div><div class='hz_button white reset' title='" + lang.set03 + "'>" + lang.set03 + "</div><a class='hz_button blue update' href='http://userscripts.org/scripts/source/106681.user.js' title='" + lang.update01 + "'>" + lang.update01 + "</a></div></div>"
+          html: "<div class='back'></div><div class='main'><h3>" + lang.set01 + "</h3><small>Ver. " + version + " by <a href='https://plus.google.com/105931860008509594725' target='_blank'>SkyArrow</a></small><div class='close' title='" + lang.set10 + "'></div><ul class='menu'><li>" + lang.set11 + "</li><li>" + lang.set12 + "</li><li>" + lang.fs03 + "</li><li>" + lang.set13 + "</li><li>" + lang.update01 + "</li></ul><div class='tabs'><div><label>" + lang.set36 + "</label><input id='hz_enable_main' type='checkbox'><label for='hz_enable_main'>" + lang.set37 + "</label><input id='hz_enable_icon' type='checkbox'><label for='hz_enable_icon'>" + lang.set38 + "</label><input id='hz_enable_link' type='checkbox'><label for='hz_enable_link'>" + lang.set39 + "</label><br><label for='hz_delay'>" + lang.set14 + "</label><input id='hz_delay' type='text' maxlength='4'><label for='hz_delay'>" + lang.set15 + "</label><br><label for='hz_opacity'>" + lang.set16 + "</label><input id='hz_opacity' type='text' maxlength='3'><label for='hz_opacity'>%</label><br><label for='hz_maxwidth'>" + lang.set17 + "</label><input id='hz_maxwidth' type='text' maxlength='4'><label for='hz_maxwidth'>" + lang.set18 + "</label><br><input id='hz_resolution' type='checkbox'><label for='hz_resolution'>" + lang.set26 + "</label><br><input id='hz_hovering' type='checkbox'><label for='hz_hovering'>" + lang.set46 + "</label><br></div><div><label for='hz_trigger'>" + lang.set23 + "</label><select id='hz_trigger'></select><br><label for='hz_dl_key'>" + lang.set28 + "</label><select id='hz_dl_key'></select><br><label for='hz_fullscreen'>" + lang.set27 + "</label><select id='hz_fullscreen'></select><br><input id='hz_download' type='checkbox'><label for='hz_download'>" + lang.set19 + "</label><br><input id='hz_shortcut' type='checkbox'><label for='hz_shortcut'>" + lang.set31 + "</label><br></div><div><input id='hz_dl_link' type='checkbox'><label for='hz_dl_link'>" + lang.set42 + "</label><br><input id='hz_album' type='checkbox'><label for='hz_album'>" + lang.set32 + "</label><br><input id='hz_allpics' type='checkbox'><label for='hz_allpics'>" + lang.set40 + "</label><br><input id='hz_ytdl' type='checkbox'><label for='hz_ytdl'>" + lang.set49 + "</label><br><input id='hz_iframedl' type='checkbox'><label for='hz_iframedl'>" + lang.set50 + "</label><br></div><div><label for='hz_language'>" + lang.set35 + "</label><select id='hz_language'></select><br><input id='hz_update' type='checkbox'><label for='hz_update'>" + lang.set41 + "</label><br><input id='hz_maxpic' type='checkbox'><label for='hz_maxpic'>" + lang.set43 + "</label><select id='hz_maxpic_option'><option value='0'>" + lang.set44 + "</option><option value='1'>" + lang.set45 + "</option></select><br><input id='hz_maxyt' type='checkbox'><label for='hz_maxyt'>" + lang.set47 + "</label><select id='hz_maxyt_aspect'><option value='1'>4:3</option><option value='2'>16:9</option><option value='3'>16:10</option></select><br><input id='hz_direct_post' type='checkbox'><label for='hz_direct_post'>" + lang.set48 + "</label><input id='hz_direct_post_max' type='text' maxlength='4'><label for='hz_direct_post_max'>" + lang.set18 + "</label><br><input id='hz_direct' type='checkbox'><label for='hz_direct'>" + lang.set25 + "</label><input id='hz_direct_max' type='text' maxlength='4'><label for='hz_direct_max'>" + lang.set18 + "</label><br><input id='hz_direct_yt' type='checkbox'><label for='hz_direct_yt'>" + lang.set33 + "</label><select id='hz_direct_ytaspect'><option value='1'>4:3</option><option value='2'>16:9</option><option value='3'>16:10</option></select><label for='hz_direct_ytaspect'>" + lang.set34 + "</label><input id='hz_direct_ytmaxwidth' type='text' maxlength='4'><label for='hz_direct_ytmaxwidth'>" + lang.set18 + "</label><br><input id='hz_his' type='checkbox'><label for='hz_his'>" + lang.set20 + "</label><input id='hz_his_max' type='text' maxlength='4'><label for='hz_his_columns'>" + lang.set21 + "</label><input id='hz_his_columns' type='text' maxlength='1'><br></div><div></div></div><div class='functions bottom'><div class='meta'><a id='hz_checkupdate' href='javascript:void(0)'>" + lang.update05 + "</a></div><div class='hz_button green save' title='" + lang.set02 + "'>" + lang.set02 + "</div><div class='hz_button white reset' title='" + lang.set03 + "'>" + lang.set03 + "</div><a class='hz_button blue update' href='http://userscripts.org/scripts/source/106681.user.js' title='" + lang.update01 + "'>" + lang.update01 + "</a></div></div>"
         }
       },
       menu: {
@@ -655,7 +660,7 @@ $(document).ready(function() {
   init.copyarea();
   if (options.hz_fullscreen > 0 || options.hz_shortcut === 'true') init.lightbox();
   init.timer();
-  init.directDL();
+  if (options.hz_iframedl === 'true') init.directDL();
   enable();
   if (options.hz_maxyt === 'true') maxYT();
   if (options.hz_update === 'true' && !developer) return update.auto();
@@ -993,10 +998,14 @@ lightbox = new function() {
 openWindow = function(url, force) {
   var time;
   time = new Date();
-  if (url.match(gcRegex) || force) {
+  if (force) {
     return $content.append("<iframe src='" + (url.replace(/\/s0\//, '/s0-d/')) + "' id='hz_newtab" + (time.getTime()) + "' style='display:none'></iframe>");
   } else {
-    return window.open(url, "hz_newtab" + (time.getTime()));
+    if (options.hz_iframedl === 'true' && url.match(gcRegex)) {
+      return $content.append("<iframe src='" + (url.replace(/\/s0\//, '/s0-d/')) + "' id='hz_newtab" + (time.getTime()) + "' style='display:none'></iframe>");
+    } else {
+      return window.open(url, "hz_newtab" + (time.getTime()));
+    }
   }
 };
 
