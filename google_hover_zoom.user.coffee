@@ -115,6 +115,7 @@ locale =
 		update12: 'is available!'
 		update13: 'Checking for update...'
 		update14: 'Retry'
+		update15: 'Please refresh the page manually after update is complete.'
 		set01: 'Settings',
 		set02: 'Save',
 		set03: 'Reset',
@@ -202,6 +203,7 @@ locale =
 		update12: '已發布！'
 		update13: '正在檢查更新...'
 		update14: '重試'
+		update15: '請在更新完成後手動重新整理頁面。'
 		set01: '設定',
 		set02: '儲存',
 		set03: '重設',
@@ -289,6 +291,7 @@ locale =
 		update12: '已发布！'
 		update13: '正在检查更新...'
 		update14: '重试'
+		update15: '请在更新完成后手动刷新页面。'
 		set01: '设置',
 		set02: '保存',
 		set03: '重设',
@@ -377,6 +380,7 @@ locale =
 		update12: 'is available!'
 		update13: 'Checking for update...'
 		update14: 'Retry'
+		update15: 'Please refresh the page manually after update is complete.'
 		set01: '設定',
 		set02: '設定保存',
 		set03: 'リセット',
@@ -1580,6 +1584,7 @@ update = new ->
 
 	$set.find('.update').on 'click', ->
 		openWindow @href, true
+		$meta.html(lang.update15).attr('class', 'meta red')
 		return false
 
 	fetch = ->
