@@ -681,7 +681,7 @@ hoverzoom = function() {
   var main, timer1, _this;
   _this = this;
   main = function() {
-    var $loading, $main, fullscreen, hide, keys, shortcut, show, tag, url;
+    var $loading, $main, fullscreen, hide, keys, shortcut, show, tag, trigger, url;
     tag = _this.tagName.toUpperCase();
     if (tag === 'IMG') {
       url = _this.src;
@@ -692,22 +692,32 @@ hoverzoom = function() {
     }
     $main = $('#hoverzoom');
     $loading = $('#hz_loading');
+    trigger = true;
+    var timer2;
     show = function() {
       var resize;
-      if ($main.is(':hidden')) {
-        $loading.show().offset({
-          top: mouse.y - 10,
-          left: mouse.x - 10
-        });
-        $("<img src='" + url + "'>").load(function() {
-          $loading.hide();
+      $loading.show().offset({
+        top: mouse.y - 10,
+        left: mouse.x - 10
+      });
+      $("<img src='" + url + "'>").load(function() {
+        $loading.hide();
+        if (trigger) {
           $main.append(this).fadeIn(300);
           if (options.hz_resolution === 'true') {
             $main.append("<small>" + this.naturalWidth + " x " + this.naturalHeight + "</small>");
           }
-          return resize(this);
-        });
-      }
+          resize(this);
+          if (options.hz_hovering === 'true') {
+            return $main.on({
+              mouseenter: function() {
+                return clearTimeout(timer2);
+              },
+              mouseleave: hide
+            });
+          }
+        }
+      });
       return resize = function(img) {
         var wHeight, wWidth, x, y;
         x = mouse.x;
@@ -790,16 +800,14 @@ hoverzoom = function() {
       };
     };
     hide = function() {
-      var timer2;
-      timer2 = setTimeout(function() {
-        delete url;
-        $main.hide().empty().off();
-        $loading.hide();
-        $(_this).off('mouseleave');
-        $(document).off('keydown', keys);
-        return clearTimeout(timer1);
-      }, 100);
-      if (options.hz_shortcut === 'true') return shortcut.hide();
+      timer2 = setTimeout(function(){
+				trigger = false;
+				$main.hide().empty().off();
+				$loading.hide();
+				$(_this).off('mouseleave');
+				$(document).off('keydown', keys);
+				clearTimeout(timer1);
+			}, 100);      if (options.hz_shortcut === 'true') return shortcut.hide();
     };
     if (options.hz_trigger === 0) show();
     if (options.hz_shortcut === 'true') shortcut.show();
