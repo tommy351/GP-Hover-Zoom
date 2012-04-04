@@ -816,14 +816,15 @@ hoverzoom = ->
 
 		$main = $('#hoverzoom')
 		$loading = $('#hz_loading')
+		trigger = true
 
 		show = ->
-			if $main.is(':hidden')
-				$loading.show().offset
-					top: mouse.y - 10
-					left: mouse.x - 10
-				$("<img src='#{url}'>").load ->
-					$loading.hide()
+			$loading.show().offset
+				top: mouse.y - 10
+				left: mouse.x - 10
+			$("<img src='#{url}'>").load ->
+				$loading.hide()
+				if trigger
 					$main.append(this).fadeIn(300)
 					$main.append("<small>#{@naturalWidth} x #{@naturalHeight}</small>") if options.hz_resolution is 'true'
 					resize(this)
@@ -898,6 +899,7 @@ hoverzoom = ->
 		hide = ->
 			timer2 = setTimeout ->
 				delete url
+				trigger = false
 				$main.hide().empty().off()
 				$loading.hide()
 				$(_this).off('mouseleave')
