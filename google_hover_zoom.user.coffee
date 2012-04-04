@@ -542,6 +542,10 @@ init =
 		$('#hoverzoom_sc a').on 'click', ->
 			openWindow @href
 			return false
+
+		$('.hz_settings').on 'click', '.masonry-brick', ->
+			openWindow @href
+			return false
 	append: ->
 		elements =
 			body:
