@@ -548,7 +548,11 @@ init = {
       openWindow(this.href);
       return false;
     });
-    return $('#hoverzoom_sc a').on('click', function() {
+    $('#hoverzoom_sc a').on('click', function() {
+      openWindow(this.href);
+      return false;
+    });
+    return $('.hz_settings').on('click', '.masonry-brick', function() {
       openWindow(this.href);
       return false;
     });
