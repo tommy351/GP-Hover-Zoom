@@ -817,6 +817,7 @@ hoverzoom = ->
 		$main = $('#hoverzoom')
 		$loading = $('#hz_loading')
 		trigger = true
+		`var timer2`
 
 		show = ->
 			$loading.show().offset
@@ -828,6 +829,14 @@ hoverzoom = ->
 					$main.append(this).fadeIn(300)
 					$main.append("<small>#{@naturalWidth} x #{@naturalHeight}</small>") if options.hz_resolution is 'true'
 					resize(this)
+
+					if options.hz_hovering is 'true'
+						$main.on
+							mouseenter: ->
+								#console.log 'mouseenter'
+								#console.log timer2
+								clearTimeout(timer2)
+							mouseleave: hide
 			
 			resize = (img) ->
 				x = mouse.x
@@ -897,15 +906,14 @@ hoverzoom = ->
 			}
 
 		hide = ->
-			timer2 = setTimeout ->
-				delete url
-				trigger = false
-				$main.hide().empty().off()
-				$loading.hide()
-				$(_this).off('mouseleave')
-				$(document).off('keydown', keys)
-				clearTimeout(timer1)
-			, 100
+			`timer2 = setTimeout(function(){
+				trigger = false;
+				$main.hide().empty().off();
+				$loading.hide();
+				$(_this).off('mouseleave');
+				$(document).off('keydown', keys);
+				clearTimeout(timer1);
+			}, 100)`
 
 			if options.hz_shortcut is 'true'
 				shortcut.hide()

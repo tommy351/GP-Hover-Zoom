@@ -689,6 +689,7 @@ hoverzoom = function() {
     $main = $('#hoverzoom');
     $loading = $('#hz_loading');
     trigger = true;
+    var timer2;
     show = function() {
       var resize;
       $loading.show().offset({
@@ -702,7 +703,15 @@ hoverzoom = function() {
           if (options.hz_resolution === 'true') {
             $main.append("<small>" + this.naturalWidth + " x " + this.naturalHeight + "</small>");
           }
-          return resize(this);
+          resize(this);
+          if (options.hz_hovering === 'true') {
+            return $main.on({
+              mouseenter: function() {
+                return clearTimeout(timer2);
+              },
+              mouseleave: hide
+            });
+          }
         }
       });
       return resize = function(img) {
@@ -787,17 +796,14 @@ hoverzoom = function() {
       };
     };
     hide = function() {
-      var timer2;
-      timer2 = setTimeout(function() {
-        delete url;
-        trigger = false;
-        $main.hide().empty().off();
-        $loading.hide();
-        $(_this).off('mouseleave');
-        $(document).off('keydown', keys);
-        return clearTimeout(timer1);
-      }, 100);
-      if (options.hz_shortcut === 'true') return shortcut.hide();
+      timer2 = setTimeout(function(){
+				trigger = false;
+				$main.hide().empty().off();
+				$loading.hide();
+				$(_this).off('mouseleave');
+				$(document).off('keydown', keys);
+				clearTimeout(timer1);
+			}, 100);      if (options.hz_shortcut === 'true') return shortcut.hide();
     };
     if (options.hz_trigger === 0) show();
     if (options.hz_shortcut === 'true') shortcut.show();
