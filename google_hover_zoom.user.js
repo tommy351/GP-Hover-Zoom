@@ -671,7 +671,6 @@ var init = {
 					html: '<div class="back"></div>'
 					+'<div class="main">'
 						+'<h3>'+lang.al05+'</h3>'
-						+'<small></small>'
 						+'<div class="close" title='+lang.set10+'></div>'
 						+'<textarea readonly wrap="off"></textarea>'
 					+'</div>'
