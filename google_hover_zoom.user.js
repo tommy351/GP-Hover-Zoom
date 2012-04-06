@@ -26,1717 +26,1811 @@ a){var b=F.exec(a);b&&(b[1]=(b[1]||"").toLowerCase(),b[3]=b[3]&&new RegExp("(?:^
  * Copyright 2011 David DeSandro
  */
 (function(a,b,c){var d=b.event,e;d.special.smartresize={setup:function(){b(this).bind("resize",d.special.smartresize.handler)},teardown:function(){b(this).unbind("resize",d.special.smartresize.handler)},handler:function(a,b){var c=this,d=arguments;a.type="smartresize",e&&clearTimeout(e),e=setTimeout(function(){jQuery.event.handle.apply(c,d)},b==="execAsap"?0:100)}},b.fn.smartresize=function(a){return a?this.bind("smartresize",a):this.trigger("smartresize",["execAsap"])},b.Mason=function(a,c){this.element=b(c),this._create(a),this._init()};var f=["position","height"];b.Mason.settings={isResizable:!0,isAnimated:!1,animationOptions:{queue:!1,duration:500},gutterWidth:0,isRTL:!1,isFitWidth:!1},b.Mason.prototype={_filterFindBricks:function(a){var b=this.options.itemSelector;return b?a.filter(b).add(a.find(b)):a},_getBricks:function(a){var b=this._filterFindBricks(a).css({position:"absolute"}).addClass("masonry-brick");return b},_create:function(c){this.options=b.extend(!0,{},b.Mason.settings,c),this.styleQueue=[],this.reloadItems();var d=this.element[0].style;this.originalStyle={};for(var e=0,g=f.length;e<g;e++){var h=f[e];this.originalStyle[h]=d[h]||""}this.element.css({position:"relative"}),this.horizontalDirection=this.options.isRTL?"right":"left",this.offset={x:parseInt(this.element.css("padding-"+this.horizontalDirection),10),y:parseInt(this.element.css("padding-top"),10)},this.isFluid=this.options.columnWidth&&typeof this.options.columnWidth=="function";var i=this;setTimeout(function(){i.element.addClass("masonry")},0),this.options.isResizable&&b(a).bind("smartresize.masonry",function(){i.resize()})},_init:function(a){this._getColumns(),this._reLayout(a)},option:function(a,c){b.isPlainObject(a)&&(this.options=b.extend(!0,this.options,a))},layout:function(a,b){for(var c=0,d=a.length;c<d;c++)this._placeBrick(a[c]);var e={};e.height=Math.max.apply(Math,this.colYs);if(this.options.isFitWidth){var f=0,c=this.cols;while(--c){if(this.colYs[c]!==0)break;f++}e.width=(this.cols-f)*this.columnWidth-this.options.gutterWidth}this.styleQueue.push({$el:this.element,style:e});var g=this.isLaidOut?this.options.isAnimated?"animate":"css":"css",h=this.options.animationOptions,i;for(c=0,d=this.styleQueue.length;c<d;c++)i=this.styleQueue[c],i.$el[g](i.style,h);this.styleQueue=[],b&&b.call(a),this.isLaidOut=!0},_getColumns:function(){var a=this.options.isFitWidth?this.element.parent():this.element,b=a.width();this.columnWidth=this.isFluid?this.options.columnWidth(b):this.options.columnWidth||this.$bricks.outerWidth(!0)||b,this.columnWidth+=this.options.gutterWidth,this.cols=Math.floor((b+this.options.gutterWidth)/this.columnWidth),this.cols=Math.max(this.cols,1)},_placeBrick:function(a){var c=b(a),d,e,f,g,h;d=Math.ceil(c.outerWidth(!0)/(this.columnWidth+this.options.gutterWidth)),d=Math.min(d,this.cols);if(d===1)f=this.colYs;else{e=this.cols+1-d,f=[];for(h=0;h<e;h++)g=this.colYs.slice(h,h+d),f[h]=Math.max.apply(Math,g)}var i=Math.min.apply(Math,f),j=0;for(var k=0,l=f.length;k<l;k++)if(f[k]===i){j=k;break}var m={top:i+this.offset.y};m[this.horizontalDirection]=this.columnWidth*j+this.offset.x,this.styleQueue.push({$el:c,style:m});var n=i+c.outerHeight(!0),o=this.cols+1-l;for(k=0;k<o;k++)this.colYs[j+k]=n},resize:function(){var a=this.cols;this._getColumns(),(this.isFluid||this.cols!==a)&&this._reLayout()},_reLayout:function(a){var b=this.cols;this.colYs=[];while(b--)this.colYs.push(0);this.layout(this.$bricks,a)},reloadItems:function(){this.$bricks=this._getBricks(this.element.children())},reload:function(a){this.reloadItems(),this._init(a)},appended:function(a,b,c){if(b){this._filterFindBricks(a).css({top:this.element.height()});var d=this;setTimeout(function(){d._appended(a,c)},1)}else this._appended(a,c)},_appended:function(a,b){var c=this._getBricks(a);this.$bricks=this.$bricks.add(c),this.layout(c,b)},remove:function(a){this.$bricks=this.$bricks.not(a),a.remove()},destroy:function(){this.$bricks.removeClass("masonry-brick").each(function(){this.style.position="",this.style.top="",this.style.left=""});var c=this.element[0].style;for(var d=0,e=f.length;d<e;d++){var g=f[d];c[g]=this.originalStyle[g]}this.element.unbind(".masonry").removeClass("masonry").removeData("masonry"),b(a).unbind(".masonry")}},b.fn.imagesLoaded=function(a){function h(){--e<=0&&this.src!==f&&(setTimeout(g),d.unbind("load error",h))}function g(){a.call(b,d)}var b=this,d=b.find("img").add(b.filter("img")),e=d.length,f="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";e||g(),d.bind("load error",h).each(function(){if(this.complete||this.complete===c){var a=this.src;this.src=f,this.src=a}});return b};var g=function(a){this.console&&console.error(a)};b.fn.masonry=function(a){if(typeof a=="string"){var c=Array.prototype.slice.call(arguments,1);this.each(function(){var d=b.data(this,"masonry");if(!d)g("cannot call methods on masonry prior to initialization; attempted to call method '"+a+"'");else{if(!b.isFunction(d[a])||a.charAt(0)==="_"){g("no such method '"+a+"' for masonry instance");return}d[a].apply(d,c)}})}else this.each(function(){var c=b.data(this,"masonry");c?(c.option(a||{}),c._init()):b.data(this,"masonry",new b.Mason(a,this))});return this}})(window,jQuery);
-;
-var $content, albumDL, batch, developer, disable, enable, gcRegex, history, hoverzoom, init, lang, lightbox, locale, maxYT, mouse, openWindow, options, picRegex, picasaRegex, setPage, sortPic, timer, update, version, ytDL;
 
-version = '1.4';
+var version = '1.4',
+	developer = true,
+	picRegex = /.(jpg|jpeg|gif|bmp|png|tiff)/i,
+	picasaRegex = /\/\w\d+(-\w\d*)*\/([^\/]+)$/,
+	gcRegex = /googleusercontent.com/,
+	mouse = [],
+	$content = $('#content');
 
-developer = true;
-
-picRegex = /.(jpg|jpeg|gif|bmp|png|tiff)/i;
-
-picasaRegex = /\/\w\d+(-\w\d*)*\/([^\/]+)$/;
-
-gcRegex = /googleusercontent.com/;
-
-mouse = [];
-
-$content = $('#content');
-
-options = {
-  hz_delay: parseInt(localStorage.hz_delay) || 500,
-  hz_opacity: parseInt(localStorage.hz_opacity) || 100,
-  hz_maxwidth: parseInt(localStorage.hz_maxwidth) || 0,
-  hz_download: localStorage.hz_download || 'false',
-  hz_his: localStorage.hz_his || 'false',
-  hz_his_max: parseInt(localStorage.hz_his_max) || 100,
-  hz_trigger: parseInt(localStorage.hz_trigger) || 0,
-  hz_direct: localStorage.hz_direct || 'true',
-  hz_direct_max: parseInt(localStorage.hz_direct_max) || 0,
-  hz_resolution: localStorage.hz_resolution || 'false',
-  hz_fullscreen: parseInt(localStorage.hz_fullscreen) || 0,
-  hz_dl_key: parseInt(localStorage.hz_dl_key) || 0,
-  hz_shortcut: localStorage.hz_shortcut || 'false',
-  hz_album: localStorage.hz_album || 'true',
-  hz_direct_yt: localStorage.hz_direct_yt || 'false',
-  hz_direct_ytaspect: parseInt(localStorage.hz_direct_ytaspect) || 2,
-  hz_direct_ytmaxwidth: parseInt(localStorage.hz_direct_ytmaxwidth) || 0,
-  hz_language: localStorage.hz_language || navigator.language,
-  hz_his_columns: parseInt(localStorage.hz_his_columns) || 5,
-  hz_enable_main: localStorage.hz_enable_main || 'true',
-  hz_enable_icon: localStorage.hz_enable_icon || 'true',
-  hz_enable_link: localStorage.hz_enable_link || 'true',
-  hz_allpics: localStorage.hz_allpics || 'false',
-  hz_update: localStorage.hz_update || 'true',
-  hz_dl_link: localStorage.hz_dl_link || 'true',
-  hz_maxpic: localStorage.hz_maxpic || 'false',
-  hz_maxpic_option: localStorage.hz_maxpic_option || '0',
-  hz_hovering: localStorage.hz_hovering || 'false',
-  hz_maxyt: localStorage.hz_maxyt || 'false',
-  hz_maxyt_aspect: parseInt(localStorage.hz_maxyt_aspect) || 2,
-  hz_direct_post: localStorage.hz_direct_post || 'false',
-  hz_direct_post_max: parseInt(localStorage.hz_direct_post_max) || 0,
-  hz_ytdl: localStorage.hz_ytdl || 'true',
-  hz_iframedl: localStorage.hz_iframedl || 'false'
+// Options
+var options = {
+	hz_delay: parseInt(localStorage.hz_delay) || 500,
+	hz_opacity: parseInt(localStorage.hz_opacity) || 100,
+	hz_maxwidth: parseInt(localStorage.hz_maxwidth) || 0,
+	hz_download: localStorage.hz_download || 'false',
+	hz_his: localStorage.hz_his || 'false',
+	hz_his_max: parseInt(localStorage.hz_his_max) || 100,
+	hz_trigger: parseInt(localStorage.hz_trigger) || 0,
+	hz_direct: localStorage.hz_direct || 'true',
+	hz_direct_max: parseInt(localStorage.hz_direct_max) || 0,
+	hz_resolution: localStorage.hz_resolution || 'false',
+	hz_fullscreen: parseInt(localStorage.hz_fullscreen) || 0,
+	hz_dl_key: parseInt(localStorage.hz_dl_key) || 0,
+	hz_shortcut: localStorage.hz_shortcut || 'false',
+	hz_album: localStorage.hz_album || 'true',
+	hz_direct_yt: localStorage.hz_direct_yt || 'false',
+	hz_direct_ytaspect: parseInt(localStorage.hz_direct_ytaspect) || 2,
+	hz_direct_ytmaxwidth: parseInt(localStorage.hz_direct_ytmaxwidth) || 0,
+	hz_language: localStorage.hz_language || navigator.language,
+	hz_his_columns: parseInt(localStorage.hz_his_columns) || 5,
+	hz_enable_main: localStorage.hz_enable_main || 'true',
+	hz_enable_icon: localStorage.hz_enable_icon || 'true',
+	hz_enable_link: localStorage.hz_enable_link || 'true',
+	hz_allpics: localStorage.hz_allpics || 'false',
+	hz_update: localStorage.hz_update || 'true',
+	hz_dl_link: localStorage.hz_dl_link || 'true',
+	hz_maxpic: localStorage.hz_maxpic || 'false',
+	hz_maxpic_option: localStorage.hz_maxpic_option || '0',
+	hz_hovering: localStorage.hz_hovering || 'false',
+	hz_maxyt: localStorage.hz_maxyt || 'false',
+	hz_maxyt_aspect: parseInt(localStorage.hz_maxyt_aspect) || 2,
+	hz_direct_post: localStorage.hz_direct_post || 'false',
+	hz_direct_post_max: parseInt(localStorage.hz_direct_post_max) || 0,
+	hz_ytdl: localStorage.hz_ytdl || 'true',
+	hz_iframedl: localStorage.hz_iframedl || 'false'
 };
 
-locale = {
-  'en-US': {
-    menu01: 'Off',
-    menu02: 'On',
-    fs01: 'Press fullscreen mode trigger or click here to exit fullscreen mode.',
-    fs03: 'Download',
-    fs04: 'Loading…',
-    fs06: 'Page Width',
-    fs07: 'Actual Size (100%)',
-    fs08: 'Fullscreen',
-    fs09: 'Window Size',
-    fs10: 'Prev (&larr; / Right-click)',
-    fs11: 'Next (&rarr; / Left-click)',
-    al01: 'Download Album',
-    al02: 'Browse',
-    al03: 'Open with Picasa',
-    al04: 'Open with Picasa (Require Picasa)',
-    al05: 'Copy Links',
-    al06: 'Open in New Tab',
-    al07: 'This album is private and can\'t be fetched. Please click "Open with Picasa" button to download this album.',
-    yt01: 'Remove',
-    allpic01: 'Batch Download',
-    piclink01: 'Download Photos:',
-    ytdl01: 'Download Video:',
-    ytdl02: 'Low',
-    ytdl03: 'Standard',
-    ytdl04: 'Original',
-    ytdl05: 'HD',
-    ytdl06: 'Full HD',
-    ytdl07: 'Connection Failed',
-    ytdl08: 'Incompatible',
-    ytdl09: 'Unknown Format',
-    maxpic01: 'Zoom',
-    update01: 'Update',
-    update05: 'Check for update',
-    update07: "You're up to date!",
-    update08: 'Error!',
-    update09: 'Update check is not available in development version.',
-    update11: 'New version',
-    update12: 'is available!',
-    update13: 'Checking for update...',
-    update14: 'Retry',
-    update15: 'Please refresh the page manually after update is complete.',
-    set01: 'Settings',
-    set02: 'Save',
-    set03: 'Reset',
-    set04: 'Are you sure to reset all options?',
-    set06: 'History',
-    set07: ' photo',
-    set08: ' photos',
-    set09: 'Clear',
-    set10: 'Close',
-    set11: 'General',
-    set12: 'Shortcuts',
-    set13: 'Other',
-    set14: 'Delay:',
-    set15: 'ms',
-    set16: 'Opacity:',
-    set17: 'Max width:',
-    set18: 'px (0: Unlimited)',
-    set19: 'Enable download button',
-    set20: 'Enable history, max records:',
-    set21: ', columns:',
-    set22: '(0: Unlimited)',
-    set23: 'Trigger:',
-    set24: 'None',
-    set25: 'Show photo links in comments directly, max width:',
-    set26: 'Show Resolution',
-    set27: 'Fullscreen:',
-    set28: 'Download:',
-    set31: 'Show shortcuts when hovered',
-    set32: 'Enable album download',
-    set33: 'Show Youtube links in comments directly, video aspect:',
-    set34: ', max width:',
-    set35: 'Language:',
-    set36: 'Enable:',
-    set37: 'Contents',
-    set38: 'Profile Icon',
-    set39: 'Links',
-    set40: 'Enable batch download',
-    set41: 'Enable auto update',
-    set42: 'Display download links below pictures',
-    set43: 'Resize photos to width of stream',
-    set44: 'Apply to all photos',
-    set45: 'Only apply to the first photo in album',
-    set46: 'Not hide photo when hovered',
-    set47: 'Resize videos as width of stream, video aspect:',
-    set48: 'Show photo links in posts directly, max width:',
-    set49: 'Enable Youtube video download',
-    set50: 'Download directly without opening in new tab'
-  },
-  'zh-TW': {
-    menu01: '關閉',
-    menu02: '開啟',
-    fs01: '輕按全螢幕觸發鍵，或點擊此處離開全螢幕模式。',
-    fs03: '下載',
-    fs04: '載入中…',
-    fs06: '頁面寬度',
-    fs07: '實際大小 (100%)',
-    fs08: '全螢幕',
-    fs09: '視窗大小',
-    fs10: '上一張 (&larr; / 右鍵)',
-    fs11: '下一張 (&rarr; / 左鍵)',
-    al01: '下載相簿',
-    al02: '瀏覽',
-    al03: '以 Picasa 開啟',
-    al04: '以 Picasa 開啟 (需安裝 Picasa)',
-    al05: '複製網址',
-    al06: '開啟於新分頁',
-    al07: '此相簿為私密相簿，無法取得相簿內容，請點擊右上角的「以 Picasa 開啟」按鈕下載此相簿。',
-    yt01: '移除',
-    allpic01: '批次下載',
-    piclink01: '圖片下載：',
-    ytdl01: '影片下載：',
-    ytdl02: '低畫質',
-    ytdl03: '標準畫質',
-    ytdl04: '原始畫質',
-    ytdl05: 'HD',
-    ytdl06: 'Full HD',
-    ytdl07: '連接失敗',
-    ytdl08: '不相容',
-    ytdl09: '未知格式',
-    maxpic01: '縮放',
-    update01: '更新',
-    update05: '檢查更新',
-    update07: "您已更新至最新版本！",
-    update08: '錯誤！',
-    update09: '開發版本無法使用更新檢查功能。',
-    update11: '更新版本',
-    update12: '已發布！',
-    update13: '正在檢查更新...',
-    update14: '重試',
-    update15: '請在更新完成後手動重新整理頁面。',
-    set01: '設定',
-    set02: '儲存',
-    set03: '重設',
-    set04: '您確定要重設所有設定值嗎？',
-    set06: '記錄',
-    set07: ' 張相片',
-    set08: ' 張相片',
-    set09: '清除',
-    set10: '關閉',
-    set11: '一般',
-    set12: '快捷鍵',
-    set13: '其它',
-    set14: '延遲：',
-    set15: '毫秒 (ms)',
-    set16: '透明度：',
-    set17: '最大寬度：',
-    set18: 'px (0: 無限制)',
-    set19: '啟用下載按鈕',
-    set20: '啟用記錄，最大記錄數：',
-    set21: '，直欄數：',
-    set22: '(0: 無限制)',
-    set23: '觸發鍵：',
-    set24: '無',
-    set25: '直接顯示留言內的圖片連結，最大寬度：',
-    set26: '顯示圖片解析度',
-    set27: '全螢幕模式：',
-    set28: '下載快捷鍵：',
-    set31: '顯示快捷鍵',
-    set32: '啟用相簿下載',
-    set33: '直接顯示留言內的 Youtube 連結，影片長寬比例：',
-    set34: '，最大寬度：',
-    set35: '語言：',
-    set36: '啟用：',
-    set37: '內文',
-    set38: '個人資料相片',
-    set39: '連結',
-    set40: '啟用批次下載',
-    set41: '啟用自動更新',
-    set42: '在圖片下方顯示下載連結',
-    set43: '以訊息串寬度顯示圖片',
-    set44: '套用至所有圖片',
-    set45: '僅套用至相簿第一張圖片',
-    set46: '滑鼠移入大圖時不隱藏',
-    set47: '以訊息串寬度顯示影片，影片長寬比例：',
-    set48: '直接顯示文章內的圖片連結，最大寬度：',
-    set49: '啟用 Youtube 影片下載',
-    set50: '直接下載無須開啟新分頁'
-  },
-  'zh-CN': {
-    menu01: '关闭',
-    menu02: '开启',
-    fs01: '轻按全屏触发键，或点击此处离开全屏模式。',
-    fs03: '下载',
-    fs04: '加载中…',
-    fs06: '页面宽度',
-    fs07: '实际大小 (100%)',
-    fs08: '全屏',
-    fs09: '窗口大小',
-    fs10: '上一张 (&larr; / 右键)',
-    fs11: '下一张 (&rarr; / 左键)',
-    al01: '下载相簿',
-    al02: '浏览',
-    al03: '以 Picasa 开启',
-    al04: '以 Picasa 开启 (需安装 Picasa)',
-    al05: '复制网址',
-    al06: '开启于新分页',
-    al07: '此相簿为私密相簿，无法取得相簿内容，请点击右上角的「以 Picasa 开启」按钮下载此相簿。',
-    yt01: '移除',
-    allpic01: '批量下载',
-    piclink01: '图片下载：',
-    ytdl01: '视频下载：',
-    ytdl02: '低品质',
-    ytdl03: '标清',
-    ytdl04: '原始',
-    ytdl05: '高清',
-    ytdl06: '全高清',
-    ytdl07: '连接失败',
-    ytdl08: '不相容',
-    ytdl09: '未知格式',
-    maxpic01: '缩放',
-    update01: '更新',
-    update05: '检查更新',
-    update07: "您已更新至最新版本！",
-    update08: '错误！',
-    update09: '开发版本无法使用更新检查功能。',
-    update11: '更新版本',
-    update12: '已发布！',
-    update13: '正在检查更新...',
-    update14: '重试',
-    update15: '请在更新完成后手动刷新页面。',
-    set01: '设置',
-    set02: '保存',
-    set03: '重设',
-    set04: '您确定要重设所有设定值吗？',
-    set06: '记录',
-    set07: ' 张相片',
-    set08: ' 张相片',
-    set09: '清除',
-    set10: '关闭',
-    set11: '通用',
-    set12: '热键',
-    set13: '其它',
-    set14: '延迟：',
-    set15: '毫秒 (ms)',
-    set16: '透明度：',
-    set17: '最大宽度：',
-    set18: 'px (0: 无限制)',
-    set19: '启用下载按钮',
-    set20: '启用记录，最大记录数：',
-    set21: '，直栏数：',
-    set22: '(0: 无限制)',
-    set23: '触发键：',
-    set24: '无',
-    set25: '直接显示评论内的图片连结，最大宽度：',
-    set26: '显示图片分辨率',
-    set27: '全屏模式：',
-    set28: '下载热键：',
-    set31: '显示热键',
-    set32: '启用相簿下载',
-    set33: '直接显示留言内的 Youtube 连结，视频长宽比例：',
-    set34: '，最大宽度：',
-    set35: '语言：',
-    set36: '启用：',
-    set37: '內文',
-    set38: '个人资料相片',
-    set39: '链结',
-    set40: '启用批量下载',
-    set41: '启用自动更新',
-    set42: '在图片下方显示下载链结',
-    set43: '以讯息流宽度显示图片',
-    set44: '套用至所有图片',
-    set45: '仅套用至相簿第一张图片',
-    set46: '鼠标移入大图时不隐藏',
-    set47: '以讯息流宽度显示视频，视频长宽比例：',
-    set48: '直接显示文章内的图片链结，最大宽度：',
-    set49: '启用 Youtube 视频下载',
-    set50: '直接下载无须开启新页签'
-  },
-  'ja-JP': {
-    menu01: 'オフ',
-    menu02: 'オン',
-    fs01: 'フルスクリーントリガーを押してください、まだはこちらをクリックしてフルスクリーンモードを終了します。',
-    fs03: 'ダウンロード',
-    fs04: '読み込み中…',
-    fs06: 'ページ幅',
-    fs07: 'オリジナルサイズ (100%)',
-    fs08: 'フルスクリーン',
-    fs09: 'ウィンドウサイズ',
-    fs10: '前の画像 (&larr; / 右クリック)',
-    fs11: '次の画像 (&rarr; / 左クリック)',
-    al01: 'アルバムダウンロード',
-    al02: '閲覧する',
-    al03: 'Picasa で閲覧',
-    al04: 'Picasa で閲覧 (Picasa インストール必要)',
-    al05: 'リンクをコビー',
-    al06: '新しいタブで開け',
-    al07: 'プライベートアルバムの為、アルバムをアクセスできない。右上辺りの「Picasa で閲覧」ボタンを押して、アルバムをダウンロードして下さい。',
-    yt01: '削除',
-    allpic01: 'バッチダウンロード',
-    piclink01: '画像をダウンロード：',
-    ytdl01: '動画をダウンロード：',
-    ytdl02: '低画質',
-    ytdl03: '標準画質',
-    ytdl04: 'オリジナル画質',
-    ytdl05: 'HD 画質',
-    ytdl06: 'フル HD 画質',
-    ytdl07: '接続に失敗しました',
-    ytdl08: '非対応',
-    ytdl09: '未知の形式',
-    maxpic01: 'ズーム',
-    update01: 'アップデート',
-    update05: 'アップデートチェック',
-    update07: "You're up to date!",
-    update08: 'Error!',
-    update09: 'Update check is not available in developer version.',
-    update11: 'New version',
-    update12: 'is available!',
-    update13: 'Checking for update...',
-    update14: 'Retry',
-    update15: 'Please refresh the page manually after update is complete.',
-    set01: '設定',
-    set02: '設定保存',
-    set03: 'リセット',
-    set04: '全ての設定をリセットしますが？',
-    set06: '閲覧記録',
-    set07: ' 枚写真',
-    set08: ' 枚写真',
-    set09: 'クリア',
-    set10: '閉じる',
-    set11: '一般',
-    set12: 'ショートカット',
-    set13: 'その他',
-    set14: '遅れ：',
-    set15: 'ミリセカンド (ms)',
-    set16: '不透明度：',
-    set17: '最大幅：',
-    set18: 'px (0：限制無し)',
-    set19: 'ダウンロードボタンを有効にする',
-    set20: '閲覧記録を有効にする、最大記録数：',
-    set21: '、段数：',
-    set22: '(0: 限制無し)',
-    set23: 'トリガー：',
-    set24: '無',
-    set25: 'コメント欄内の画像リンクを表示、最大幅：',
-    set26: '画像解像度を表示',
-    set27: 'フルスクリーンモード：',
-    set28: 'ダウンロードショートカット：',
-    set31: 'ショートカットを表示',
-    set32: 'アルバムダウンロードを有効にする',
-    set33: 'コメント欄内の Youtube リンクを表示、長さと幅の比：',
-    set34: '，最大幅：',
-    set35: '言語：',
-    set36: '有効にする：',
-    set37: 'コンテンツ',
-    set38: 'プロフィールアイコン',
-    set39: 'リンク',
-    set40: 'バッチダウンロードを有効にする',
-    set41: '自動的にアップデートチェック',
-    set42: '画像の下にダウンロードリンクを表示',
-    set43: 'ストリーム幅で画像表示',
-    set44: '全ての画像に適用する',
-    set45: 'アルバムの一つ目の画像に適用する',
-    set46: '画像にカーソルを重ねた時に画像を隠さない',
-    set47: 'ストリームの幅で動画表示、長さと幅の比：',
-    set48: '画像の直リンクをポストで表示、最大幅：',
-    set49: 'YouTube ダウンロード機能を有効にする',
-    set50: 'Download directly without opening in new tab'
-  },
-  'index': [['en-US', 'English'], ['zh-TW', '繁體中文'], ['zh-CN', '简体中文'], ['ja-JP', '日本語']]
-};
-
+// l10n
+var locale = {
+	'en-US': {
+		menu01: 'Off',
+		menu02: 'On',
+		fs01: 'Press fullscreen mode trigger or click here to exit fullscreen mode.',
+		fs03: 'Download',
+		fs04: 'Loading…',
+		fs06: 'Page Width',
+		fs07: 'Actual Size (100%)',
+		fs08: 'Fullscreen',
+		fs09: 'Window Size',
+		fs10: 'Prev (&larr; / Right-click)',
+		fs11: 'Next (&rarr; / Left-click)',
+		al01: 'Download Album',
+		al03: 'Open with Picasa',
+		al05: 'Copy Links',
+		al06: 'Open in New Tab',
+		al07: 'This album is private and can\'t be fetched. Please click "Open with Picasa" button to download this album.',
+		yt01: 'Remove',
+		allpic01: 'Batch Download',
+		piclink01: 'Download Photos:',
+		ytdl01: 'Download Video:',
+		ytdl02: 'Low',
+		ytdl03: 'Standard',
+		ytdl04: 'Original',
+		ytdl05: 'HD',
+		ytdl06: 'Full HD',
+		ytdl07: 'Connection Failed',
+		ytdl08: 'Incompatible',
+		ytdl09: 'Unknown Format',
+		maxpic01: 'Zoom',
+		update01: 'Update',
+		update05: 'Check Update',
+		update07: 'You\'re up to date!',
+		update08: 'Error!',
+		update09: 'Update check is not available in development version.',
+		update11: 'New version',
+		update12: 'is available!',
+		update13: 'Checking for update...',
+		update14: 'Retry',
+		update15: 'Please refresh the page manually after update is complete.',
+		his01: 'History',
+		his02: 'Clear',
+		his03: 'Are you sure to clear all records?',
+		set01: 'Settings',
+		set02: 'Save',
+		set03: 'Reset',
+		set04: 'Are you sure to reset all options?',
+		set07: 'photo',
+		set08: 'photos',
+		set10: 'Close',
+		set11: 'General',
+		set12: 'Shortcuts',
+		set13: 'Other',
+		set14: 'Delay:',
+		set15: 'ms',
+		set16: 'Opacity:',
+		set17: 'Max Width:',
+		set18: 'px (0: Unlimited)',
+		set19: 'Enable download button',
+		set20: 'Enable history, max records:',
+		set21: ', columns:',
+		set22: '(0: Unlimited)',
+		set23: 'Trigger:',
+		set24: 'None',
+		set25: 'Show photo links in comments directly, max width:',
+		set26: 'Show Resolution',
+		set27: 'Fullscreen',
+		set28: 'Download:',
+		set31: 'Show shortcuts when hovered',
+		set32: 'Enable album download',
+		set33: 'Show Youtube links in comments directly, video aspect:',
+		set34: ', max width:',
+		set35: 'Language:',
+		set36: 'Enable:',
+		set37: 'Contents',
+		set38: 'Profile Icon',
+		set39: 'Links',
+		set40: 'Enable batch download',
+		set41: 'Enable auto update',
+		set42: 'Display download links below pictures',
+		set43: 'Resize photos to stream width',
+		set44: 'Apply to all photos',
+		set45: 'Only apply to the first photo in album',
+		set46: 'Don\'t hide photo when hovered',
+		set47: 'Resize videos to stream width, video aspect:',
+		set48: 'Show photo links in posts directly, max width:',
+		set49: 'Enable Youtube Video Download',
+		set50: 'Download directly without opening in new tab'
+	},
+	'zh-TW': {
+		menu01: '關閉',
+		menu02: '開啟',
+		fs01: '輕按全螢幕觸發鍵，或點擊此處離開全螢幕模式。',
+		fs03: '下載',
+		fs04: '載入中…',
+		fs06: '頁面寬度',
+		fs07: '實際大小 (100%)',
+		fs08: '全螢幕',
+		fs09: '視窗大小',
+		fs10: '上一張 (&larr; / 右鍵)',
+		fs11: '下一張 (&rarr; / 左鍵)',
+		al01: '下載相簿',
+		al03: '以 Picasa 開啟',
+		al05: '複製網址',
+		al06: '開啟於新分頁',
+		al07: '此相簿為私密相簿，無法取得相簿內容，請點擊右上角的「以 Picasa 開啟」按鈕下載此相簿。',
+		yt01: '移除',
+		allpic01: '批次下載',
+		piclink01: '圖片下載：',
+		ytdl01: '影片下載：',
+		ytdl02: '低畫質',
+		ytdl03: '標準畫質',
+		ytdl04: '原始畫質',
+		ytdl05: 'HD',
+		ytdl06: 'Full HD',
+		ytdl07: '連接失敗',
+		ytdl08: '不相容',
+		ytdl09: '未知格式',
+		maxpic01: '縮放',
+		update01: '更新',
+		update05: '檢查更新',
+		update07: '您已更新至最新版本！',
+		update08: '錯誤！',
+		update09: '開發版本無法使用更新檢查功能。',
+		update11: '更新版本',
+		update12: '已發布！',
+		update13: '正在檢查更新...',
+		update14: '重試',
+		update15: '請在更新完成後手動重新整理頁面。',
+		his01: '記錄',
+		his02: '清除',
+		his03: '您確定要清除所有記錄嗎？',
+		set01: '設定',
+		set02: '儲存',
+		set03: '重設',
+		set04: '您確定要重設所有設定值嗎？',
+		set07: '張相片',
+		set08: '張相片',
+		set10: '關閉',
+		set11: '一般',
+		set12: '快捷鍵',
+		set13: '其它',
+		set14: '延遲：',
+		set15: '毫秒 (ms)',
+		set16: '透明度：',
+		set17: '最大寬度：',
+		set18: 'px (0: 無限制)',
+		set19: '啟用下載按鈕',
+		set20: '啟用記錄，最大記錄數：',
+		set21: '，直欄數：',
+		set22: '(0: 無限制)',
+		set23: '觸發鍵：',
+		set24: '無',
+		set25: '直接顯示留言內的圖片連結，最大寬度：',
+		set26: '顯示圖片解析度',
+		set27: '全螢幕：',
+		set28: '下載：',
+		set31: '滑鼠滑入時顯示快捷鍵',
+		set32: '啟用相簿下載',
+		set33: '直接顯示留言內的 Youtube 連結，影片長寬比例：',
+		set34: '，最大寬度：',
+		set35: '語言：',
+		set36: '啟用：',
+		set37: '內文',
+		set38: '個人資料相片',
+		set39: '連結',
+		set40: '啟用批次下載',
+		set41: '啟用自動更新',
+		set42: '在圖片下方顯示下載連結',
+		set43: '以訊息串寬度顯示圖片',
+		set44: '套用至所有圖片',
+		set45: '僅套用至相簿第一張圖片',
+		set46: '滑鼠移入大圖時不隱藏',
+		set47: '以訊息串寬度顯示影片，影片長寬比例：',
+		set48: '直接顯示文章內的圖片連結，最大寬度：',
+		set49: '啟用 Youtube 影片下載',
+		set50: '直接下載無須開啟新分頁'
+	},
+	'zh-CN': {
+		menu01: '关闭',
+		menu02: '开启',
+		fs01: '轻按全屏触发键，或点击此处离开全屏模式。',
+		fs03: '下载',
+		fs04: '加载中…',
+		fs06: '页面宽度',
+		fs07: '实际大小 (100%)',
+		fs08: '全屏',
+		fs09: '窗口大小',
+		fs10: '上一张 (&larr; / 右键)',
+		fs11: '下一张 (&rarr; / 左键)',
+		al01: '下载相簿',
+		al03: '以 Picasa 开启',
+		al05: '复制网址',
+		al06: '开启于新分页',
+		al07: '此相簿为私密相簿，无法取得相簿内容，请点击右上角的「以 Picasa 开启」按钮下载此相簿。',
+		yt01: '移除',
+		allpic01: '批量下载',
+		piclink01: '图片下载：',
+		ytdl01: '视频下载：',
+		ytdl02: '低品质',
+		ytdl03: '标清',
+		ytdl04: '原始',
+		ytdl05: '高清',
+		ytdl06: '全高清',
+		ytdl07: '连接失败',
+		ytdl08: '不相容',
+		ytdl09: '未知格式',
+		maxpic01: '缩放',
+		update01: '更新',
+		update05: '检查更新',
+		update07: '您已更新至最新版本！',
+		update08: '错误！',
+		update09: '开发版本无法使用更新检查功能。',
+		update11: '更新版本',
+		update12: '已发布！',
+		update13: '正在检查更新...',
+		update14: '重试',
+		update15: '请在更新完成后手动刷新页面。',
+		his01: '记录',
+		his02: '清除',
+		his03: '您确定要清除所有记录吗？',
+		set01: '设置',
+		set02: '保存',
+		set03: '重设',
+		set04: '您确定要重设所有设定值吗？',
+		set07: '张相片',
+		set08: '张相片',
+		set10: '关闭',
+		set11: '通用',
+		set12: '热键',
+		set13: '其它',
+		set14: '延迟：',
+		set15: '毫秒 (ms)',
+		set16: '透明度：',
+		set17: '最大宽度：',
+		set18: 'px (0: 无限制)',
+		set19: '启用下载按钮',
+		set20: '启用记录，最大记录数：',
+		set21: '，直栏数：',
+		set22: '(0: 无限制)',
+		set23: '触发键：',
+		set24: '无',
+		set25: '直接显示评论内的图片连结，最大宽度：',
+		set26: '显示图片分辨率',
+		set27: '全屏：',
+		set28: '下载：',
+		set31: '鼠标滑入时显示热键',
+		set32: '启用相簿下载',
+		set33: '直接显示留言内的 Youtube 连结，视频长宽比例：',
+		set34: '，最大宽度：',
+		set35: '语言：',
+		set36: '启用：',
+		set37: '內文',
+		set38: '个人资料相片',
+		set39: '链结',
+		set40: '启用批量下载',
+		set41: '启用自动更新',
+		set42: '在图片下方显示下载链结',
+		set43: '以讯息流宽度显示图片',
+		set44: '套用至所有图片',
+		set45: '仅套用至相簿第一张图片',
+		set46: '鼠标移入大图时不隐藏',
+		set47: '以讯息流宽度显示视频，视频长宽比例：',
+		set48: '直接显示文章内的图片链结，最大宽度：',
+		set49: '启用 Youtube 视频下载'
+	},
+	'ja-JP': {
+		menu01: 'オフ',
+		menu02: 'オン',
+		fs01: 'フルスクリーントリガーを押してください、まだはこちらをクリックしてフルスクリーンモードを終了します。',
+		fs03: 'ダウンロード',
+		fs04: '読み込み中…',
+		fs06: 'ページ幅',
+		fs07: 'オリジナルサイズ (100%)',
+		fs08: 'フルスクリーン',
+		fs09: 'ウィンドウサイズ',
+		fs10: '前の画像 (&larr; / 右クリック)',
+		fs11: '次の画像 (&rarr; / 左クリック)',
+		al01: 'アルバムダウンロード',
+		al03: 'Picasa で閲覧',
+		al05: 'リンクをコビー',
+		al06: '新しいタブで開け',
+		al07: 'プライベートアルバムの為、アルバムをアクセスできない。右上辺りの「Picasa で閲覧」ボタンを押して、アルバムをダウンロードして下さい。',
+		yt01: '削除',
+		allpic01: 'バッチダウンロード',
+		piclink01: '画像をダウンロード：',
+		ytdl01: '動画をダウンロード：',
+		ytdl02: '低画質',
+		ytdl03: '標準画質',
+		ytdl04: 'オリジナル画質',
+		ytdl05: 'HD 画質',
+		ytdl06: 'フル HD 画質',
+		ytdl07: '接続に失敗しました',
+		ytdl08: '非対応',
+		ytdl09: '未知の形式',
+		maxpic01: 'ズーム',
+		update01: 'アップデート',
+		update05: 'アップデートチェック',
+		// 日文翻譯
+		update07: 'You\'re up to date!',
+		update08: 'Error!',
+		update09: 'Update check is not available in developer version.',
+		update11: 'New version',
+		update12: 'is available!',
+		update13: 'Checking for update...',
+		update14: 'Retry',
+		update15: 'Please refresh the page manually after update is complete.',
+		his01: '閲覧記録',
+		his02: 'クリア',
+		// 日文翻譯
+		his03: 'Are you sure to clear all records?',
+		set01: '設定',
+		set02: '設定保存',
+		set03: 'リセット',
+		set04: '全ての設定をリセットしますが？',
+		set07: '枚写真',
+		set08: '枚写真',
+		set10: '閉じる',
+		set11: '一般',
+		set12: 'ショートカット',
+		set13: 'その他',
+		set14: '遅れ：',
+		set15: 'ミリセカンド (ms)',
+		set16: '不透明度：',
+		set17: '最大幅：',
+		set18: 'px (0：限制無し)',
+		set19: 'ダウンロードボタンを有効にする',
+		set20: '閲覧記録を有効にする、最大記録数：',
+		set21: '、段数：',
+		set22: '(0: 限制無し)',
+		set23: 'トリガー：',
+		set24: '無',
+		set25: 'コメント欄内の画像リンクを表示、最大幅：',
+		set26: '画像解像度を表示',
+		set27: 'フルスクリーン：',
+		set28: 'ダウンロード：',
+		// 日文翻譯
+		set31: 'Show shortcuts when hovered',
+		set32: 'アルバムダウンロードを有効にする',
+		set33: 'コメント欄内の Youtube リンクを表示、長さと幅の比：',
+		set34: '，最大幅：',
+		set35: '言語：',
+		set36: '有効にする：',
+		set37: 'コンテンツ',
+		set38: 'プロフィールアイコン',
+		set39: 'リンク',
+		set40: 'バッチダウンロードを有効にする',
+		set41: '自動的にアップデートチェック',
+		set42: '画像の下にダウンロードリンクを表示',
+		set43: 'ストリーム幅で画像表示',
+		set44: '全ての画像に適用する',
+		set45: 'アルバムの一つ目の画像に適用する',
+		set46: '画像にカーソルを重ねた時に画像を隠さない',
+		set47: 'ストリームの幅で動画表示、長さと幅の比：',
+		set48: '画像の直リンクをポストで表示、最大幅：',
+		set49: 'YouTube ダウンロード機能を有効にする'
+	},
+	'index': [
+		['en-US', 'English'],
+		['zh-TW', '正體中文'],
+		['zh-CN', '简体中文'],
+		['ja-JP', '日本語']
+	]
+},
 lang = locale[options.hz_language] || locale['en-US'];
 
-init = {
-  basic: function() {
-    var $set, i, keys, langTmp, _i, _len, _ref;
-    $set = $('#hz_set_page');
-    keys = "<option value='0'>" + lang.set24 + "</option><option value='16'>Shift</option><option value='17'>Ctrl</option>";
-    keys += navigator.appVersion.indexOf('Macintosh') > -1 ? "<option value='18'>Option</option><option value='13'>Return</option>" : "<option value='18'>Alt</option><option value='13'>Enter</option>";
-    for (i = 65; i <= 90; i++) {
-      keys += "<option value='" + i + "'>&#" + i + ";</option>";
-    }
-    $('#hz_trigger, #hz_fullscreen, #hz_dl_key').append(keys);
-    langTmp = '';
-    _ref = locale.index;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      i = _ref[_i];
-      langTmp += "<option value='" + i[0] + "'>" + i[1] + "</option>";
-    }
-    $('#hz_language').html(langTmp);
-    $('#hz_opts').on('click', '#disable_hz', function(e) {
-      if (!$(this).hasClass('off')) {
-        disable();
-        $(this).html(lang.menu01).addClass('off');
-      } else {
-        enable();
-        $(this).html(lang.menu02).removeClass('off');
-      }
-      return e.stopPropagation();
-    }).on('click', '#hz_set_open', setPage.open).on('click', '#hz_history_open', history.display).on('click', '#hz_allpic_dl', batch);
-    return $set.on('click', '.close, .back', setPage.close).on('click', '.save', setPage.save).on('click', '.reset', setPage.reset).find('.menu li').each(function(i) {
-      if (i === 0) $(this).addClass('current');
-      return $(this).attr('tabid', i).on('click', function() {
-        return setPage.tab(i);
-      });
-    });
-  },
-  history: function() {
-    var $page;
-    $page = $('#hz_history_page');
-    return $page.on('click', '.white', function() {
-      $page.find('.inner').empty().end().find('small').html("<strong>0</strong> / " + options.hz_his_max + lang.set07);
-      return history.clear();
-    });
-  },
-  copyarea: function() {
-    var $page;
-    $page = $('#hz_copyarea');
-    return $page.on('click', '.back, .close', function() {
-      return $page.fadeOut(300, function() {
-        return $(this).find('textarea').empty();
-      });
-    });
-  },
-  lightbox: function() {
-    return $('#hoverzoom_fs').on('click', '.back, .close', lightbox.close).on('click', '.prev', lightbox.prev).on('click', '.next, img', lightbox.next).on('contextmenu', 'img', lightbox.prev).on('scroll', function() {
-      return $(this).children('.ctrl').css({
-        top: this.scrollTop,
-        left: this.scrollLeft
-      });
-    }).find('li').each(function(i) {
-      return $(this).on('click', function() {
-        return lightbox.resize.type(i);
-      });
-    });
-  },
-  timer: function() {
-    return $content.on('click', '.closeYT', function() {
-      return $(this).prev().attr('style', '').end().next().remove().end().remove();
-    }).on('click', '.albumDownload, .in-albumDownload', albumDL).on('click', '.tubeStacks', function() {
-      var html, popup;
-      if (!$(this).next().hasClass('clickDetail')) {
-        html = "<div class='closeButton' title='" + lang.set10 + "'></div><strong>" + lang.ytdl01 + "</strong><div class='notify'>" + lang.fs04 + "</div>";
-        popup = $("<div class='clickDetail'>" + html + "</div>").on('click', '.closeButton', function() {
-          return $(this).parent().fadeOut(300);
-        }).on('click', 'a', function() {
-          openWindow(this.href, true);
-          return false;
-        });
-        $(this).after(popup).next().fadeIn(300).offset({
-          left: $(this).offset().left + 10,
-          top: $(this).offset().top + 25
-        });
-        return ytDL($(this).data('url'), popup);
-      } else {
-        if ($(this).next().is(':hidden')) {
-          return $(this).next().fadeIn(300).offset({
-            left: $(this).offset().left + 10,
-            top: $(this).offset().top + 25
-          });
-        } else {
-          return $(this).next().fadeOut(300);
-        }
-      }
-    });
-  },
-  directDL: function() {
-    $('#hoverzoom_db').on('click', function() {
-      if (this.href != null) openWindow(this.href);
-      return false;
-    });
-    $('#hoverzoom_fs a').on('click', function() {
-      openWindow(this.href);
-      return false;
-    });
-    $('#hoverzoom_sc a').on('click', function() {
-      openWindow(this.href);
-      return false;
-    });
-    return $('.hz_settings').on('click', '.masonry-brick', function() {
-      openWindow(this.href);
-      return false;
-    });
-  },
-  append: function() {
-    var body, bodyTmp, elements, menu, menuTmp;
-    elements = {
-      body: {
-        main: {
-          id: 'hoverzoom',
-          css: "opacity:" + (options.hz_opacity / 100)
-        },
-        loading: {
-          id: 'hz_loading'
-        },
-        downloadButton: {
-          id: 'hoverzoom_db',
-          type: 'a',
-          html: '<div></div>'
-        },
-        shortcuts: {
-          id: 'hoverzoom_sc',
-          className: 'hz_button white',
-          html: "<a>" + lang.fs03 + "</a><span>" + lang.fs08 + "</span>"
-        },
-        lightbox: {
-          id: 'hoverzoom_fs',
-          html: "<div class='back'></div><div class='main'></div><div class='ctrl'><div class='close' title='" + lang.fs01 + "'></div><div class='center'><div class='prev' title='" + lang.fs10 + "'></div><span></span><div class='next' title='" + lang.fs11 + "'></div></div><div class='right'><small></small><a>" + lang.fs03 + "</a><div class='zoom'>" + lang.maxpic01 + "<ul><li>" + lang.fs09 + "</li><li>" + lang.fs06 + "</li><li>" + lang.fs07 + "</li></ul></div></div></div><div class='loading'></div>"
-        },
-        history: {
-          id: 'hz_history_page',
-          className: 'hz_settings',
-          html: "<div class='back'></div><div class='main'><h3>" + lang.set06 + "</h3><small></small><div class='close' title='" + lang.set10 + "'></div><div class='wrap'><div class='inner'></div></div><div class='functions top'><div class='cycle'></div><div class='hz_button white' title='" + lang.set09 + "'>" + lang.set09 + "</div><div class='hz_button blue' title='" + lang.al05 + "'>" + lang.al05 + "</div><div class='hz_button green' title='" + lang.al06 + "'>" + lang.al06 + "</div></div></div>"
-        },
-        album: {
-          id: 'hz_album_page',
-          className: 'hz_settings',
-          html: "<div class='back'></div><div class='main'><h3>" + lang.al01 + "</h3><small></small><div class='close' title='" + lang.set10 + "'></div><div class='wrap'><div class='inner'></div></div><div class='functions top'><div class='cycle'></div><div class='hz_button blue' title='" + lang.al05 + "'>" + lang.al05 + "</div><div class='hz_button green' title='" + lang.al06 + "'>" + lang.al06 + "</div><a class='hz_button orange' title='" + lang.al04 + "'>" + lang.al03 + "</a></div></div>"
-        },
-        batch: {
-          id: 'hz_batch_page',
-          className: 'hz_settings',
-          html: "<div class='back'></div><div class='main'><h3>" + lang.allpic01 + "</h3><small></small><div class='close' title='" + lang.set10 + "'></div><div class='wrap'><div class='inner'></div></div><div class='functions top'><div class='cycle'></div><div class='hz_button blue' title='" + lang.al05 + "'>" + lang.al05 + "</div><div class='hz_button green' title='" + lang.al06 + "'>" + lang.al06 + "</div></div></div>"
-        },
-        copyarea: {
-          id: 'hz_copyarea',
-          className: 'hz_settings',
-          html: "<div class='back'></div><div class='main'><h3>" + lang.al05 + "</h3><small></small><div class='close' title='" + lang.set10 + "'></div><textarea readonly wrap='off'></textarea></div>"
-        },
-        set: {
-          id: 'hz_set_page',
-          className: 'hz_settings',
-          html: "<div class='back'></div><div class='main'><h3>" + lang.set01 + "</h3><small>Ver. " + version + " by <a href='https://plus.google.com/105931860008509594725' target='_blank'>SkyArrow</a></small><div class='close' title='" + lang.set10 + "'></div><ul class='menu'><li>" + lang.set11 + "</li><li>" + lang.set12 + "</li><li>" + lang.fs03 + "</li><li>" + lang.set13 + "</li><li>" + lang.update01 + "</li></ul><div class='tabs'><div><label>" + lang.set36 + "</label><input id='hz_enable_main' type='checkbox'><label for='hz_enable_main'>" + lang.set37 + "</label><input id='hz_enable_icon' type='checkbox'><label for='hz_enable_icon'>" + lang.set38 + "</label><input id='hz_enable_link' type='checkbox'><label for='hz_enable_link'>" + lang.set39 + "</label><br><label for='hz_delay'>" + lang.set14 + "</label><input id='hz_delay' type='text' maxlength='4'><label for='hz_delay'>" + lang.set15 + "</label><br><label for='hz_opacity'>" + lang.set16 + "</label><input id='hz_opacity' type='text' maxlength='3'><label for='hz_opacity'>%</label><br><label for='hz_maxwidth'>" + lang.set17 + "</label><input id='hz_maxwidth' type='text' maxlength='4'><label for='hz_maxwidth'>" + lang.set18 + "</label><br><input id='hz_resolution' type='checkbox'><label for='hz_resolution'>" + lang.set26 + "</label><br><input id='hz_hovering' type='checkbox'><label for='hz_hovering'>" + lang.set46 + "</label><br></div><div><label for='hz_trigger'>" + lang.set23 + "</label><select id='hz_trigger'></select><br><label for='hz_dl_key'>" + lang.set28 + "</label><select id='hz_dl_key'></select><br><label for='hz_fullscreen'>" + lang.set27 + "</label><select id='hz_fullscreen'></select><br><input id='hz_download' type='checkbox'><label for='hz_download'>" + lang.set19 + "</label><br><input id='hz_shortcut' type='checkbox'><label for='hz_shortcut'>" + lang.set31 + "</label><br></div><div><input id='hz_dl_link' type='checkbox'><label for='hz_dl_link'>" + lang.set42 + "</label><br><input id='hz_album' type='checkbox'><label for='hz_album'>" + lang.set32 + "</label><br><input id='hz_allpics' type='checkbox'><label for='hz_allpics'>" + lang.set40 + "</label><br><input id='hz_ytdl' type='checkbox'><label for='hz_ytdl'>" + lang.set49 + "</label><br><input id='hz_iframedl' type='checkbox'><label for='hz_iframedl'>" + lang.set50 + "</label><br></div><div><label for='hz_language'>" + lang.set35 + "</label><select id='hz_language'></select><br><input id='hz_update' type='checkbox'><label for='hz_update'>" + lang.set41 + "</label><br><input id='hz_maxpic' type='checkbox'><label for='hz_maxpic'>" + lang.set43 + "</label><select id='hz_maxpic_option'><option value='0'>" + lang.set44 + "</option><option value='1'>" + lang.set45 + "</option></select><br><input id='hz_maxyt' type='checkbox'><label for='hz_maxyt'>" + lang.set47 + "</label><select id='hz_maxyt_aspect'><option value='1'>4:3</option><option value='2'>16:9</option><option value='3'>16:10</option></select><br><input id='hz_direct_post' type='checkbox'><label for='hz_direct_post'>" + lang.set48 + "</label><input id='hz_direct_post_max' type='text' maxlength='4'><label for='hz_direct_post_max'>" + lang.set18 + "</label><br><input id='hz_direct' type='checkbox'><label for='hz_direct'>" + lang.set25 + "</label><input id='hz_direct_max' type='text' maxlength='4'><label for='hz_direct_max'>" + lang.set18 + "</label><br><input id='hz_direct_yt' type='checkbox'><label for='hz_direct_yt'>" + lang.set33 + "</label><select id='hz_direct_ytaspect'><option value='1'>4:3</option><option value='2'>16:9</option><option value='3'>16:10</option></select><label for='hz_direct_ytaspect'>" + lang.set34 + "</label><input id='hz_direct_ytmaxwidth' type='text' maxlength='4'><label for='hz_direct_ytmaxwidth'>" + lang.set18 + "</label><br><input id='hz_his' type='checkbox'><label for='hz_his'>" + lang.set20 + "</label><input id='hz_his_max' type='text' maxlength='4'><label for='hz_his_columns'>" + lang.set21 + "</label><input id='hz_his_columns' type='text' maxlength='1'><br></div><div></div></div><div class='functions bottom'><div class='meta'><a id='hz_checkupdate' href='javascript:void(0)'>" + lang.update05 + "</a></div><div class='hz_button green save' title='" + lang.set02 + "'>" + lang.set02 + "</div><div class='hz_button white reset' title='" + lang.set03 + "'>" + lang.set03 + "</div><a class='hz_button blue update' href='http://userscripts.org/scripts/source/106681.user.js' title='" + lang.update01 + "'>" + lang.update01 + "</a></div></div>"
-        }
-      },
-      menu: {
-        setting: {
-          id: 'hz_set_open',
-          html: lang.set01
-        },
-        history: {
-          id: 'hz_history_open',
-          html: lang.set06
-        },
-        allPic: {
-          id: 'hz_allpic_dl',
-          html: lang.allpic01
-        }
-      }
-    };
-    bodyTmp = menuTmp = '';
-    body = function(arr) {
-      var _defaults;
-      _defaults = {
-        id: '',
-        type: 'div',
-        className: '',
-        html: '',
-        css: ''
-      };
-      arr = $.extend(_defaults, arr);
-      return bodyTmp += "<" + arr.type + " id='" + arr.id + "' class='" + arr.className + "' style='" + arr.css + "'>" + arr.html + "</" + arr.type + ">";
-    };
-    menu = function(arr) {
-      return menuTmp += "<li><a id='" + arr.id + "' class='gbmt'>" + arr.html + "</a></li>";
-    };
-    body(elements.body.main);
-    body(elements.body.loading);
-    if (options.hz_download === 'true') body(elements.body.downloadButton);
-    if (options.hz_shortcut === 'true') body(elements.body.shortcuts);
-    if (options.hz_fullscreen > 0 || options.hz_shortcut === 'true') {
-      body(elements.body.lightbox);
-    }
-    if (options.hz_his === 'true') body(elements.body.history);
-    if (options.hz_album === 'true') body(elements.body.album);
-    if (options.hz_allpics === 'true') body(elements.body.batch);
-    body(elements.body.copyarea);
-    body(elements.body.set);
-    body(elements.body.update);
-    $content.parent().append(bodyTmp);
-    menu(elements.menu.setting);
-    if (options.hz_his === 'true') menu(elements.menu.history);
-    if (options.hz_allpics === 'true') menu(elements.menu.allPic);
-    return $('#gbmpdv').append("<div id='hz_opts'><strong>Google+ Hover Zoom</strong><a id='disable_hz'>" + lang.menu02 + "</a><ul>" + menuTmp + "</ul></div>");
-  }
+// Initialize
+var init = {
+	basic: function(){
+		// Append options
+		var keys = '<option value="0">'+lang.set24+'</option><option value="16">Shift</option><option value="17">Ctrl</option>';
+		keys += navigator.appVersion.indexOf('Macintosh') > -1 ? '<option value="18">Option</option><option value="13">Return</option>' : '<<option value="18">Alt</option><option value="13">Enter</option>';
+		for (var i=65; i<91; i++){
+			keys += '<option value="'+i+'">&#'+i+';</option>';
+		}
+		$('#hz_trigger, #hz_fullscreen, #hz_dl_key').append(keys);
+
+		var langTmp = '';
+		for (var j=0, len=locale.index.length; j<len; j++){
+			var item = locale.index[j];
+			langTmp += '<option value="'+item[0]+'">'+item[1]+'</option>';
+		}
+		$('#hz_language').html(langTmp);
+
+		// Bind menu events
+		$('#hz_opts').on('click', '#disable_hz', function(){
+			if (!$(this).hasClass('off')){
+				disable();
+				$(this).html(lang.menu01).addClass('off');
+			} else {
+				enable();
+				$(this).html(lang.menu02).removeClass('off');
+			}
+		}).on('click', '#hz_set_open', setPage.open)
+		.on('click', '#hz_history_open', history.display)
+		.on('click', '#hz_allpic_dl', batch);
+
+		// Close settings page
+		$('#hz_set_page').on('click', '.close, .back', setPage.close)
+		// Save options
+		.on('click', '.save', setPage.save)
+		// Reset options
+		.on('click', '.reset', setPage.reset)
+		// Tab events
+		.find('.menu li').each(function(i){
+			if (i == 0) $(this).addClass('current');
+			$(this).attr('tabid', i).on('click', function(){
+				setPage.tab(i);
+			});
+		});
+	},
+	history: function(){
+		var $page = $('#hz_history_page');
+		$page.on('click', '.white', function(){
+			var sure = confirm(lang.his03);
+			if (sure){
+				$page.find('.inner').empty().end()
+				.find('small').html('<strong>0</strong> / '+options.hz_his_max+' '+lang.set07);
+				history.clear();
+			}
+		});
+	},
+	copyarea: function(){
+		var $page = $('#hz_copyarea');
+		$page.on('click', '.back, .close', function(){
+			$page.fadeOut(300, function(){
+				$(this).find('textarea').empty();
+			});
+		}).on('click', 'textarea', function(){
+			$(this).select();
+		});
+	},
+	lightbox: function(){
+		$('#hoverzoom_fs').on('click', '.back, .close', lightbox.close)
+		.on('click', '.prev', lightbox.prev)
+		.on('click', '.next, img', lightbox.next)
+		.on('contextmenu', 'img', lightbox.prev)
+		.on('scroll', function(){
+			$(this).children('.ctrl').css({top: this.scrollTop, left: this.scrollLeft})
+			.find('li').each(function(i){
+				$(this).on('click', function(){
+					lightbox.resize.type(i);
+				});
+			});
+		});
+	},
+	timer: function(){
+		// Show Youtube links in comments directly
+		$content.on('click', '.closeYT', function(){
+			$(this).prev().attr('style', '').end().next().remove().end().remove();
+		// Album download button
+		}).on('click', '.albumDownload, .in-albumDownload', albumDL)
+		// Youtube download button
+		.on('click', '.tubeStacks', function(){
+			if (!$(this).next().hasClass('clickDetail')){
+				var html = '<div class="closeButton" title="'+lang.set10+'"></div><strong>'+lang.ytdl01+'</strong><div class="notify">'+lang.fs04+'</div>',
+					popup = $('<div class="clickDetail">'+html+'</div>').on('click', '.closeButton', function(){
+						$(this).parent().fadeOut(300);
+					}).on('click', 'a', function(){
+						openWindow(this.href, true);
+						return false;
+					});
+
+				$(this).after(popup).next().fadeIn(300).offset({left: $(this).offset().left + 10, top: $(this).offset().top + 25});
+				ytDL($(this).data('url'), popup);
+			} else {
+				if ($(this).next().is(':hidden')){
+					$(this).next().fadeIn(300).offset({left: $(this).offset().left + 10, top: $(this).offset().top + 25});
+				} else {
+					$(this).next().fadeOut(300);
+				}
+			}
+		});
+	},
+	directDL: function(){
+		$('#hoverzoom_db').on('click', function(){
+			if (typeof this.href != 'undefined'){
+				openWindow(this.href);
+				return false;
+			}
+		});
+
+		$('#hoverzoom_fs a, #hoverzoom_sc a').on('click', function(){
+			openWindow(this.href);
+			return false;
+		});
+
+		$('.hz_settings').on('click', '.masonry-brick', function(){
+			openWindow(this.href);
+			return false;
+		});
+	},
+	append: function(){
+		var elements = {
+			body: {
+				main: {
+					id: 'hoverzoom',
+					css: 'opacity:'+options.hz_opacity / 100
+				},
+				loading: {
+					id: 'hz_loading'
+				},
+				downloadButton: {
+					id: 'hoverzoom_db',
+					type: 'a',
+					html: '<div></div>'
+				},
+				shortcut: {
+					id: 'hoverzoom_sc',
+					className: 'hz_button white',
+					html: '<a>'+lang.fs03+'</a><span>'+lang.fs08+'</span>'
+				},
+				lightbox: {
+					id: 'hoverzoom_fs',
+					html: '<div class="back"></div>'
+					+'<div class="main"></div>'
+					+'<div class="ctrl">'
+						+'<div class="close" title="'+lang.fs01+'"></div>'
+						+'<div class="center">'
+							+'<div class="prev" title="'+lang.fs10+'"></div>'
+							+'<span></span>'
+							+'<div class="next" title="'+lang.fs11+'"></div>'
+						+'</div>'
+						+'<div class="right">'
+							+'<small></small>'
+							+'<a>'+lang.fs03+'</a>'
+							+'<div class="zoom">'+lang.maxpic01
+								+'<ul>'
+									+'<li>'+lang.fs09+'</li>'
+									+'<li>'+lang.fs06+'</li>'
+									+'<li>'+lang.fs07+'</li>'
+								+'</ul>'
+							+'</div>'
+						+'</div>'
+					+'</div>'
+					+'<div class="loading"></div>'
+				},
+				history: {
+					id: 'hz_history_page',
+					className: 'hz_settings',
+					html: '<div class="back"></div>'
+					+'<div class="main">'
+						+'<h3>'+lang.his01+'</h3>'
+						+'<small></small>'
+						+'<div class="close" title='+lang.set10+'></div>'
+						+'<div class="wrap"><div class="inner"></div></div>'
+						+'<div class="functions top">'
+							+'<div class="cycle"></div>'
+							+'<div class="hz_button white">'+lang.his02+'</div>'
+							+'<div class="hz_button blue">'+lang.al05+'</div>'
+							+'<div class="hz_button green">'+lang.al06+'</div>'
+						+'</div>'
+					+'</div>'
+				},
+				album: {
+					id: 'hz_album_page',
+					className: 'hz_settings',
+					html: '<div class="back"></div>'
+					+'<div class="main">'
+						+'<h3>'+lang.al01+'</h3>'
+						+'<small></small>'
+						+'<div class="close" title='+lang.set10+'></div>'
+						+'<div class="wrap"><div class="inner"></div></div>'
+						+'<div class="functions top">'
+							+'<div class="cycle"></div>'
+							+'<div class="hz_button blue">'+lang.al05+'</div>'
+							+'<div class="hz_button green">'+lang.al06+'</div>'
+							+'<div class="hz_button orange">'+lang.al03+'</div>'
+						+'</div>'
+					+'</div>'
+				},
+				batch: {
+					id: 'hz_batch_page',
+					className: 'hz_settings',
+					html: '<div class="back"></div>'
+					+'<div class="main">'
+						+'<h3>'+lang.allpic01+'</h3>'
+						+'<small></small>'
+						+'<div class="close" title='+lang.set10+'></div>'
+						+'<div class="wrap"><div class="inner"></div></div>'
+						+'<div class="functions top">'
+							+'<div class="cycle"></div>'
+							+'<div class="hz_button blue">'+lang.al05+'</div>'
+							+'<div class="hz_button green">'+lang.al06+'</div>'
+						+'</div>'
+					+'</div>'
+				},
+				copyarea: {
+					id: 'hz_copyarea',
+					className: 'hz_settings',
+					html: '<div class="back"></div>'
+					+'<div class="main">'
+						+'<h3>'+lang.al05+'</h3>'
+						+'<small></small>'
+						+'<div class="close" title='+lang.set10+'></div>'
+						+'<textarea readonly wrap="off"></textarea>'
+					+'</div>'
+				},
+				set: {
+					id: 'hz_set_page',
+					className: 'hz_settings',
+					html: '<div class="back"></div>'
+					+'<div class="main">'
+						+'<h3>'+lang.set01+'</h3>'
+						+'<small>Ver. '+version+' by <a href="https://plus.google.com/105931860008509594725" target="_blank">SkyArrow</a></small>'
+						+'<div class="close" title='+lang.set10+'></div>'
+						+'<ul class="menu">'
+							+'<li>'+lang.set11+'</li>'
+							+'<li>'+lang.set12+'</li>'
+							+'<li>'+lang.fs03+'</li>'
+							+'<li>'+lang.set13+'</li>'
+							+'<li>'+lang.update01+'</li>'
+						+'</ul>'
+						+'<div class="tabs">'
+							// General
+							+'<div>'
+								+'<label>'+lang.set36+'</label>'
+								+'<input id="hz_enable_main" type="checkbox"><label for="hz_enable_main">'+lang.set37+'</label>'
+								+'<input id="hz_enable_icon" type="checkbox"><label for="hz_enable_icon">'+lang.set38+'</label>'
+								+'<input id="hz_enable_link" type="checkbox"><label for="hz_enable_link">'+lang.set39+'</label><br>'
+								+'<label for="hz_delay">'+lang.set14+'</label><input id="hz_delay" type="text" maxlength="4"><label for="hz_delay">'+lang.set15+'</label><br>'
+								+'<label for="hz_opacity">'+lang.set16+'</label><input id="hz_opacity" type="text" maxlength="3"><label for="hz_opacity">%</label><br>'
+								+'<label for="hz_maxwidth">'+lang.set17+'</label><input id="hz_maxwidth" type="text" maxlength="4"><label for="hz_maxwidth">'+lang.set18+'</label><br>'
+								+'<input id="hz_resolution" type="checkbox"><label for="hz_resolution">'+lang.set26+'</label><br>'
+								+'<input id="hz_hovering" type="checkbox"><label for="hz_hovering">'+lang.set46+'</label><br>'
+							// Shortcut
+							+'</div><div>'
+								+'<label for="hz_trigger">'+lang.set23+'</label><select id="hz_trigger"></select><br>'
+								+'<label for="hz_dl_key">'+lang.set28+'</label><select id="hz_dl_key"></select><br>'
+								+'<label for="hz_fullscreen">'+lang.set27+'</label><select id="hz_fullscreen"></select><br>'
+								+'<input id="hz_download" type="checkbox"><label for="hz_download">'+lang.set19+'</label><br>'
+								+'<input id="hz_shortcut" type="checkbox"><label for="hz_shortcut">'+lang.set31+'</label><br>'
+							// Download
+							+'</div><div>'
+								+'<input id="hz_dl_link" type="checkbox"><label for="hz_dl_link">'+lang.set42+'</label><br>'
+								+'<input id="hz_album" type="checkbox"><label for="hz_album">'+lang.set32+'</label><br>'
+								+'<input id="hz_allpics" type="checkbox"><label for="hz_allpics">'+lang.set40+'</label><br>'
+								+'<input id="hz_ytdl" type="checkbox"><label for="hz_ytdl">'+lang.set49+'</label><br>'
+								+'<input id="hz_iframedl" type="checkbox"><label for="hz_iframedl">'+lang.set50+'</label><br>'
+							// Other
+							+'</div><div>'
+								+'<label for="hz_language">'+lang.set35+'</label><select id="hz_language"></select><br>'
+								+'<input id="hz_update" type="checkbox"><label for="hz_update">'+lang.set41+'</label><br>'
+								+'<input id="hz_maxpic" type="checkbox"><label for="hz_maxpic">'+lang.set43+'</label>'
+								+'<select id="hz_maxpic_option">'
+									+'<option value="0">'+lang.set44+'</option>'
+									+'<option value="1">'+lang.set45+'</option>'
+								+'</select><br>'
+								+'<input id="hz_maxyt" type="checkbox"><label for="hz_maxyt">'+lang.set47+'</label>'
+								+'<select id="hz_maxyt_aspect">'
+									+'<option value="1">4:3</option>'
+									+'<option value="2">16:9</option>'
+									+'<option value="3">16:10</option>'
+								+'</select><br>'
+								+'<input id="hz_direct_post" type="checkbox"><label for="hz_direct_post">'+lang.set48+'</label>'
+								+'<input id="hz_direct_post_max" type="text" maxlength="4"><label for="hz_direct_post_max">'+lang.set18+'</label><br>'
+								+'<input id="hz_direct" type="checkbox"><label for="hz_direct">'+lang.set25+'</label>'
+								+'<input id="hz_direct_max" type="text" maxlength="4"><label for="hz_direct_max">'+lang.set18+'</label><br>'
+								+'<input id="hz_direct_yt" type="checkbox"><label for="hz_direct_yt">'+lang.set33+'</label>'
+								+'<select id="hz_direct_ytaspect">'
+									+'<option value="1">4:3</option>'
+									+'<option value="2">16:9</option>'
+									+'<option value="3">16:10</option>'
+								+'</select>'
+								+'<label for="hz_direct_ytaspect">'+lang.set34+'</label>'
+								+'<input id="hz_direct_ytmaxwidth" type="text" maxlength="4"><label for="hz_direct_ytmaxwidth">'+lang.set18+'</label><br>'
+								+'<input id="hz_his" type="checkbox"><label for="hz_his">'+lang.set20+'</label>'
+								+'<input id="hz_his_max" type="text" maxlength="4">'
+								+'<label for="hz_his_columns">'+lang.set21+'</label><input id="hz_his_columns" type="text" maxlength="1"><br>'
+							// Update
+							+'</div><div></div>'
+						+'</div>'
+						+'<div class="functions bottom">'
+							+'<div class="meta"><a id="hz_checkupdate" href="javascript:void(0)">'+lang.update05+'</a></div>'
+							+'<div class="hz_button green save">'+lang.set02+'</div>'
+							+'<div class="hz_button white reset">'+lang.set03+'</div>'
+							+'<a class="hz_button blue update" href="http://userscripts.org/scripts/source/106681.user.js">'+lang.update01+'</a>'
+						+'</div>'
+					+'</div>'
+				}
+			},
+			menu: {
+				setting: {
+					id: 'hz_set_open',
+					html: lang.set01
+				},
+				history: {
+					id: 'hz_history_open',
+					html: lang.his01
+				},
+				allPic: {
+					id: 'hz_allpic_dl',
+					html: lang.allpic01
+				}
+			}
+		};
+
+		var bodyTmp = menuTmp = '';
+		
+		var body = function(arr){
+			var _defaults = {
+				id: '',
+				type: 'div',
+				className: '',
+				html: '',
+				css: ''
+			};
+			var arr = $.extend(_defaults, arr);
+			bodyTmp += '<'+arr.type+' id="'+arr.id+'" class="'+arr.className+'" style="'+arr.css+'">'+arr.html+'</'+arr.type+'>';
+		};
+		
+		var menu = function(arr){
+			menuTmp += '<li><a id="'+arr.id+'" class="gbmt">'+arr.html+'</a></li>';
+		};
+
+		body(elements.body.main);
+		body(elements.body.loading);
+		if (options.hz_download === 'true') body(elements.body.downloadButton);
+		if (options.hz_shortcut === 'true') body(elements.body.shortcut);
+		if (options.hz_fullscreen > 0 || options.hz_shortcut === 'true') body(elements.body.lightbox);
+		if (options.hz_his === 'true') body(elements.body.history);
+		if (options.hz_album === 'true') body(elements.body.album);
+		if (options.hz_allpics === 'true') body(elements.body.batch);
+		body(elements.body.copyarea);
+		body(elements.body.set);
+		$content.parent().append(bodyTmp);
+
+		menu(elements.menu.setting);
+		if (options.hz_his === 'true') menu(elements.menu.history);
+		if (options.hz_allpics === 'true') menu(elements.menu.allPic);
+		$('#gbmpdv').append('<div id="hz_opts"><strong>Google+ Hover Zoom</strong><a id="disable_hz">'+lang.menu02+'</a><ul>'+menuTmp+'</ul></div>');
+	}
 };
 
 init.append();
 
-$(document).ready(function() {
-  init.basic();
-  if (options.hz_his === 'true') init.history();
-  init.copyarea();
-  if (options.hz_fullscreen > 0 || options.hz_shortcut === 'true') init.lightbox();
-  init.timer();
-  if (options.hz_iframedl === 'true') init.directDL();
-  enable();
-  if (options.hz_maxyt === 'true') maxYT();
-  if (options.hz_update === 'true' && !developer) return update.auto();
+// After page loaded completely
+$(document).ready(function(){
+	// Initialize
+	init.basic();
+	if (options.hz_his === 'true') init.history();
+	init.copyarea();
+	if (options.hz_fullscreen > 0 || options.hz_shortcut === 'true') init.lightbox();
+	init.timer();
+	if (options.hz_iframedl === 'true') init.directDL();
+
+	// Enable functions
+	enable();
+
+	// Resize Youtube videos to stream size
+	if (options.hz_maxyt === 'true') maxYT();
+
+	// Check for update automatically
+	if (options.hz_update === 'true' && !developer) update.auto();
 });
 
-document.addEventListener('mousemove', function(e) {
-  return mouse = {
-    x: e.pageX,
-    y: e.pageY
-  };
+// Detect cursor position
+document.addEventListener('mousemove', function(e){
+	mouse = {x: e.pageX, y:e.pageY};
 }, false);
 
-hoverzoom = function() {
-  var main, timer1, _this;
-  _this = this;
-  main = function() {
-    var $loading, $main, fullscreen, hide, keys, shortcut, show, tag, trigger, url;
-    tag = _this.tagName.toUpperCase();
-    if (tag === 'IMG') {
-      url = _this.src;
-      url = url.match(/\?sz|\/proxy/) ? url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : url.replace(picasaRegex, '/s0/$2');
-    } else if (tag === 'A') {
-      url = _this.href;
-      if (!url.match(picRegex)) return false;
-    }
-    $main = $('#hoverzoom');
-    $loading = $('#hz_loading');
-    trigger = true;
-    var timer2;
-    show = function() {
-      var resize;
-      $loading.show().offset({
-        top: mouse.y - 10,
-        left: mouse.x - 10
-      });
-      $("<img src='" + url + "'>").load(function() {
-        $loading.hide();
-        if (trigger) {
-          $main.append(this).fadeIn(300);
-          if (options.hz_resolution === 'true') {
-            $main.append("<small>" + this.naturalWidth + " x " + this.naturalHeight + "</small>");
-          }
-          resize(this);
-          if (options.hz_hovering === 'true') {
-            return $main.on({
-              mouseenter: function() {
-                return clearTimeout(timer2);
-              },
-              mouseleave: hide
-            });
-          }
-        }
-      });
-      return resize = function(img) {
-        var wHeight, wWidth, x, y;
-        x = mouse.x;
-        y = mouse.y;
-        wWidth = $(window).width();
-        wHeight = $(window).height();
-        if (mouse.x > wWidth / 2) {
-          img.style.maxWidth = options.hz_maxwidth > 0 ? options.hz_maxwidth + 'px' : x - 30 + 'px';
-          img.style.maxHeight = options.hz_resolution === 'true' ? wHeight - 45 + 'px' : wHeight - 35 + 'px';
-          $main.offset({
-            top: y + 20,
-            left: x - $main.width() - 20
-          });
-        } else {
-          img.style.maxWidth = options.hz_maxwidth > 0 ? options.hz_maxwidth + 'px' : wWidth - x - 40 + 'px';
-          img.style.maxHeight = options.hz_resolution === 'true' ? wHeight - 45 + 'px' : wHeight - 35 + 'px';
-          $main.offset({
-            top: y + 20,
-            left: x + 20
-          });
-        }
-        if (y + $main.height() + 20 > $(document).scrollTop() + wHeight - 20) {
-          return $main.offset({
-            top: $main.offset().top - $main.height() < $(document).scrollTop() + 20 ? $(document).scrollTop() + 10 : y - $main.height() - 20
-          });
-        }
-      };
-    };
-    fullscreen = function() {
-      var arr, i, links, num, _i, _len;
-      arr = $(_this).parent().parent().find('div[data-content-type^="image"] img, div[data-content-url*="picasa"] img');
-      if (arr.length > 0) {
-        num = $.inArray(_this, arr);
-        links = [];
-        for (_i = 0, _len = arr.length; _i < _len; _i++) {
-          i = arr[_i];
-          links.push(i.src.match(/\?sz|\/proxy/) ? i.src.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : i.src.replace(picasaRegex, '/s0/$2'));
-        }
-      } else {
-        num = 0;
-        links.push(_this.href || _this.src);
-      }
-      hide();
-      return lightbox.start(links, num);
-    };
-    keys = function(e) {
-      var code;
-      code = e.keyCode || e.which;
-      switch (code) {
-        case options.hz_trigger:
-          return show();
-        case options.hz_fullscreen:
-          return fullscreen();
-        case options.hz_dl_key:
-          return openWindow(url);
-      }
-    };
-    shortcut = new function() {
-      var $sc, close, timer3;
-      $sc = $('#hoverzoom_sc');
-      timer3 = '';
-      close = function() {
-        return timer3 = setTimeout(function() {
-          return $sc.hide().off();
-        }, options.hz_delay);
-      };
-      return {
-        show: function() {
-          return $sc.fadeIn(300).offset({
-            top: mouse.y + 10,
-            left: mouse.x + 10
-          }).on({
-            mouseenter: function() {
-              return clearTimeout(timer3);
-            },
-            mouseleave: close
-          }).on('click', 'span', fullscreen).children().eq(0).attr('href', url);
-        },
-        hide: close
-      };
-    };
-    hide = function() {
-      timer2 = setTimeout(function(){
+// Hover Zoom
+var hoverzoom = function(){
+	var _this = this;
+
+	var main = function(){
+		var tag = _this.tagName.toUpperCase();
+		if (tag == 'IMG'){
+			var url = _this.src;
+			url = url.match(/\?sz|\/proxy/) ? url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : url.replace(picasaRegex,'/s0/$2');
+		} else if (tag == 'A'){
+			var url = _this.href;
+			if (!url.match(picRegex)) return false;
+		}
+
+		var $main = $('#hoverzoom'),
+			$loading = $('#hz_loading'),
+			trigger = true,
+			trigger_keys = [true, true, true],
+			timer2;
+
+		var show = function(){
+			$loading.show().offset({top: mouse.y - 10, left: mouse.x - 10});
+			$('<img src="'+url+'">').load(function(){
+				if (trigger){
+					$loading.hide();
+					$main.append(this).fadeIn(300);
+					if (options.hz_resolution === 'true') $main.append('<small>'+this.naturalWidth+' x '+this.naturalHeight+'</small>');
+					resize(this);
+
+					if (options.hz_hovering === 'true'){
+						$main.on({
+							mouseenter: function(){clearTimeout(timer2);},
+							mouseleave: hide
+						});
+					}
+				}
+			});
+
+			var resize = function(img){
+				var x = mouse.x,
+					y = mouse.y,
+					wWidth = $(window).width(),
+					wHeight = $(window).height();
+
+				if (x > wWidth / 2){
+					img.style.maxWidth = options.hz_maxwidth > 0 ? options.hz_maxwidth + 'px' : x - 30 + 'px';
+					img.style.maxHeight = options.hz_resolution === 'true' ? wHeight - 45 + 'px' : wHeight - 35 + 'px';
+					$main.offset({top: y + 20, left: x - $main.width() - 20});
+				} else {
+					img.style.maxWidth = options.hz_maxwidth > 0 ? options.hz_maxwidth + 'px' : wWidth - x - 40 + 'px';
+					img.style.maxHeight = options.hz_resolution === 'true' ? wHeight - 45 + 'px' : wHeight - 35 + 'px';
+					$main.offset({top: y + 20, left: x + 20});
+				}
+
+				if (y + $main.height() + 20 > $(document).scrollTop() + wHeight - 20) $main.offset({top: $main.offset().top - $main.height() < $(document).scrollTop() + 20 ? $(document).scrollTop() + 10 : y - $main.height() - 20});
+			};
+		};
+
+		var fullscreen = function(){
+			var arr = $(_this).parent().parent().find('div[data-content-type^="image"] img, div[data-content-url*="picasa"] img'),
+				links = [];
+
+			if (arr.length > 0){
+				var num = $.inArray(_this, arr);
+
+				for (var i=0, len=arr.length; i<len; i++){
+					var item = arr[i];
+					links.push((item.src.match(/\?sz|\/proxy/) ? item.src.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : item.src.replace(picasaRegex,'/s0/$2')));
+				}
+			} else {
+				var num = 0;
+				links.push(_this.href || _this.src);
+			}
+
+			hide();
+			lightbox.start(links, num);
+		};
+
+		var keys = function(e){
+			var code = e.keyCode || e.which;
+
+			if (code == options.hz_trigger && trigger_keys[0]){
+				show();
+				trigger_keys[0] = false;
+			} else if (code == options.hz_fullscreen && trigger_keys[1]){
+				fullscreen();
+				trigger_keys[1] = false;
+			} else if (code == options.hz_dl_key && trigger_keys[2]){
+				openWindow(url);
+				trigger_keys[2] = false;
+			}
+
+			return false;
+		};
+
+		var shortcut = new function(){
+			var $sc = $('#hoverzoom_sc'),
+				timer3;
+
+			var close = function(){
+				timer3 = setTimeout(function(){
+					$sc.hide().off();
+				}, options.hz_delay);
+			};
+
+			return {
+				show: function(){
+					$sc.fadeIn(300).offset({top: mouse.y + 10, left: mouse.x + 10}).on({
+						mouseenter: function(){clearTimeout(timer3);},
+						mouseleave: close
+					}).on('click', 'span', fullscreen)
+					.children().eq(0).attr('href', url);
+				},
+				hide: close
+			}
+		};
+
+		var hide = function(){
+			timer2 = setTimeout(function(){
 				trigger = false;
 				$main.hide().empty().off();
 				$loading.hide();
 				$(_this).off('mouseleave');
 				$(document).off('keydown', keys);
 				clearTimeout(timer1);
-			}, 100);      if (options.hz_shortcut === 'true') return shortcut.hide();
-    };
-    if (options.hz_trigger === 0) show();
-    if (options.hz_shortcut === 'true') shortcut.show();
-    if (options.hz_download === 'true') $('#hoverzoom_db').attr('href', url);
-    history.create(url);
-    $(_this).on('mouseleave', hide);
-    return $(document).on('keydown', keys);
-  };
-  timer1 = setTimeout(main, options.hz_delay);
-  return $(_this).on('mouseleave', function() {
-    return clearTimeout(timer1);
-  });
+			}, 100);
+
+			if (options.hz_shortcut === 'true') shortcut.hide();
+		};
+
+		if (options.hz_trigger == 0) show();
+		if (options.hz_shortcut === 'true') shortcut.show();
+		if (options.hz_download === 'true') $('#hoverzoom_db').attr('href', url);
+		history.create(url);
+		$(_this).on('mouseleave', hide);
+		$(document).on('keydown', keys);
+	};
+
+	var timer1 = setTimeout(main, options.hz_delay);
+	$(this).on('mouseleave', function(){
+		clearTimeout(timer1);
+	});
 };
 
-enable = function() {
-  if (options.hz_enable_main === 'true') {
-    $content.on('mouseenter', 'div[data-content-type^="image"] img, div[data-content-url*="picasa"] img', hoverzoom);
-  }
-  if (options.hz_enable_icon === 'true') {
-    $content.on('mouseenter', '.oP img', hoverzoom);
-  }
-  if (options.hz_enable_link === 'true') {
-    $content.on('mouseenter', '.ot-anchor', hoverzoom);
-  }
-  $('#hoverzoom_db').addClass('enable');
-  return timer.start();
+// Enable functions
+var enable = function(){
+	if (options.hz_enable_main === 'true') $content.on('mouseenter', 'div[data-content-type^="image"] img, div[data-content-url*="picasa"] img', hoverzoom);
+	if (options.hz_enable_icon === 'true') $content.on('mouseenter', '.oP img', hoverzoom);
+	if (options.hz_enable_link === 'true') $content.on('mouseenter', '.ot-anchor', hoverzoom);
+
+	$('#hoverzoom_db').addClass('enable');
+	timer.start();
 };
 
-disable = function() {
-  if (options.hz_enable_main === 'true') {
-    $content.off('mouseenter', 'div[data-content-type^="image"] img, div[data-content-url*="picasa"] img', hoverzoom);
-  }
-  if (options.hz_enable_icon === 'true') {
-    $content.off('mouseenter', '.oP img', hoverzoom);
-  }
-  if (options.hz_enable_link === 'true') {
-    $content.off('mouseenter', '.ot-anchor', hoverzoom);
-  }
-  $('#hoverzoom_db').removeClass('enable');
-  return timer.stop();
+// Disable functions
+var disable = function(){
+	if (options.hz_enable_main === 'true') $content.off('mouseenter', 'div[data-content-type^="image"] img, div[data-content-url*="picasa"] img', hoverzoom);
+	if (options.hz_enable_icon === 'true') $content.off('mouseenter', '.oP img', hoverzoom);
+	if (options.hz_enable_link === 'true') $content.off('mouseenter', '.ot-anchor', hoverzoom);
+
+	$('#hoverzoom_db').removeClass('enable');
+	timer.stop();
 };
 
-lightbox = new function() {
-  var $fs, scroll, links, i, url, length;
-  var $fs, $main, close, insert, next, prev, resize, trigger;
-  $fs = $('#hoverzoom_fs');
-  $main = $fs.children('.main');
-  trigger = false;
-  insert = function(num) {
-    if (!trigger) {
-      if (num < 0) {
-        num = length - 1;
-      } else if (num === length) {
-        num = 0;
-      }
-      i = num;
-      url = links[i];
-      trigger = true;
-      $fs.addClass('load').find('a').attr('href', url);
-      return $("<img src='" + url + "'>").load(function() {
-        var img, others;
-        img = this;
-        others = $main.find('img');
-        if (others.length > 0) {
-          return others.fadeOut(300, function() {
-            $(this).remove();
-            return resize.start(img);
-          });
-        } else {
-          return resize.start(img);
-        }
-      });
-    }
-  };
-  resize = new function() {
-    var img, nWidth, nHeight, wWidth, wHeight;
-    var $ctrl, $meta, $navi, detect, getSize, main, type;
-    $ctrl = $fs.children('.ctrl');
-    $meta = $ctrl.find('small');
-    $navi = $ctrl.find('span');
-    main = function(top, left) {
-      $main.css({
-        top: top,
-        left: left
-      });
-      $meta.html("" + nWidth + " x " + nHeight + " (" + (parseInt($(img).width() / nWidth * 100)) + "%)");
-      if (length > 1) return $navi.html("" + (parseInt(i + 1)) + " / " + length);
-    };
-    getSize = function() {
-      wWidth = $fs[0].clientWidth;      return wHeight = $fs[0].clientHeight;
-    };
-    detect = function() {
-      var html;
-      if (wWidth > nWidth && wHeight > nHeight) {
-        return $fs.removeClass('zoom');
-      } else {
-        if (nWidth > wWidth) {
-          html = "" + lang.fs06 + " (" + (parseInt(wWidth / nWidth * 100)) + "%)";
-          $fs.addClass('actual');
-        } else {
-          html = "" + lang.fs06 + " (100%)";
-          $fs.removeClass('actual');
-        }
-        return $fs.addClass('zoom').find('li').eq(0).html("" + lang.fs09 + " (" + (parseInt($(img).width() / nWidth * 100)) + "%)").end().eq(1).html(html);
-      }
-    };
-    type = function(i) {
-      switch (i) {
-        case 0:
-          $(img).css({
-            maxWidth: wWidth - 50,
-            maxHeight: wHeight - 50
-          });
-          main((wHeight - $(img).height()) / 2, (wWidth - $(img).width()) / 2);
-          break;
-        case 1:
-          $(img).css('maxHeight', 'none');
-          getSize();
-          $(img).css('maxWidth', wWidth);
-          main(($(img).height() > wHeight ? 0 : (wHeight - $(img).height()) / 2), (wWidth - $(img).width()) / 2);
-          break;
-        case 2:
-          $(img).css({
-            maxWidth: 'none',
-            maxHeight: 'none'
-          });
-          main(($(img).height() > wHeight ? 0 : (wHeight - $(img).height()) / 2), 0);
-      }
-      return $ctrl.find('li').css('fontWeight', 'normal').eq(i).css('fontWeight', 'bold');
-    };
-    return {
-      start: function(obj) {
-        $main.append(obj);
-        $fs.removeClass('load');
-        trigger = false;
-        img = obj;
-        nWidth = obj.naturalWidth;
-        nHeight = obj.naturalHeight;
-        getSize();
-        type(0);
-        detect();
-        return $(obj).animate({
-          opacity: 1
-        }, 300);
-      },
-      type: type
-    };
-  };
-  prev = function() {
-    if (length > 1) return insert(i - 1);
-  };
-  next = function() {
-    if (length > 1) return insert(i + 1);
-  };
-  close = function() {
-    $fs.hide().attr('class', '').children('.main').empty().end().children('.ctrl').attr('style', '');
-    $('html').css('overflowY', 'auto');
-    return $(document).scrollTop(scroll).off('keyup').off('keydown');
-  };
-  return {
-    start: function(arr, i) {
-      scroll = $(document).scrollTop();
-      links = arr;
-      length = arr.length;      $('html, body').css('overflowY', 'hidden');
-      insert(i);
-      $fs.show();
-      if (length > 1) $fs.addClass('multi');
-      return $(document).on({
-        keyup: function(e) {
-          var code;
-          code = e.keyCode || e.which;
-          switch (code) {
-            case 39:
-              return next();
-            case 37:
-              return prev();
-          }
-        },
-        keydown: function(e) {
-          var code;
-          code = e.keyCode || e.which;
-          switch (code) {
-            case 27:
-              return close();
-            case options.hz_fullscreen:
-              return close();
-            case options.hz_dl_key:
-              return openWindow(url);
-          }
-        }
-      });
-    },
-    prev: prev,
-    next: next,
-    close: close,
-    resize: resize
-  };
+// Lightbox
+var lightbox = new function(){
+	var $fs = $('#hoverzoom_fs'),
+		$main = $fs.children('.main'),
+		trigger = false,
+		scroll, links, i, url, length;
+
+	var insert = function(num){
+		if (!trigger){
+			if (num < 0){
+				num = length - 1;
+			} else if (num == length){
+				num = 0;
+			}
+
+			i = num;
+			url = links[i];
+			trigger = false;
+			$fs.addClass('load').find('a').attr('href', url);
+			$('<img src="'+url+'">').load(function(){
+				var img = this,
+					others = $main.find('img');
+
+				if (others.length > 0){
+					others.fadeOut(300, function(){
+						$(this).remove();
+						resize.start(img);
+					});
+				} else {
+					resize.start(img);
+				}
+			});
+		}
+	};
+
+	var resize = new function(){
+		var $ctrl = $fs.children('.ctrl'),
+			$meta = $ctrl.find('small'),
+			$navi = $ctrl.find('span'),
+			img, nWidth, nHeight, wWidth, wHeight;
+
+		var main = function(top, left){
+			$main.css({top: top, left: left});
+			$meta.html(nWidth+' x '+nHeight+' ('+parseInt($(img).width() / nWidth * 100)+'%)');
+			if (length > 1) $navi.html(parseInt(i+1)+' / '+length);
+		};
+
+		var getSize = function(){
+			wWidth = $fs[0].clientWidth;
+			wHeight = $fs[0].clientHeight;
+		};
+
+		var detect = function(){
+			if (wWidth > nWidth && wHeight > nHeight){
+				$fs.removeClass('zoom');
+			} else {
+				if (nWidth > wWidth){
+					var html = lang.fs06+' ('+parseInt(wWidth/nWidth*100)+'%)';
+					$fs.addClass('actual');
+				} else {
+					html = lang.fs06+' (100%)';
+					$fs.removeClass('actual');
+				}
+
+				$fs.addClass('zoom').find('li').eq(0).html(lang.fs09+' ('+parseInt($(img).width() / nWidth * 100)+'%)').end().eq(1).html(html);
+			}
+		};
+
+		var type = function(i){
+			if (i == 0){
+				$(img).css({maxWidth: wWidth - 50, maxHeight: wHeight - 50});
+				main((wHeight - $(img).height()) / 2, (wWidth - $(img).width()) / 2);
+			} else if (i == 1){
+				$(img).css('maxHeight', 'none');
+				getSize();
+				$(img).css('maxWidth', wWidth);
+				main(($(img).height() > wHeight ? 0 : (wHeight - $(img).height() / 2)), (wWidth - $(img).width()) / 2);
+			} else if (i == 2){
+				$(img).css({maxWidth: 'none', maxHeight: 'none'});
+				main(($(img).height() > wHeight ? 0 : (wHeight - $(img).height() / 2)), 0);
+			}
+		};
+
+		return {
+			start: function(obj){
+				$main.append(obj);
+				$fs.removeClass('load');
+
+				trigger = false;
+				img = obj;
+				nWidth = obj.naturalWidth;
+				nHeight = obj.naturalHeight;
+
+				getSize();
+				type(0);
+				detect();
+
+				$(obj).animate({opacity: 1}, 300);
+			},
+			type: type
+		}
+	};
+
+	var prev = function(){
+		if (length > 1) insert(i - 1);
+	};
+
+	var next = function(){
+		if (length > 1) insert(i + 1);
+	};
+
+	var close = function(){
+		$fs.hide().attr('class', '').children('.main').empty().end().children('.ctrl').attr('style', '');
+		$('html').css('overflowY', 'auto');
+		$(document).scrollTop(scroll).off('keyup').off('keydown');
+	};
+
+	return {
+		start: function(arr, i){
+			scroll = $(document).scrollTop();
+			links = arr;
+			length = arr.length;
+
+			$('html, body').css('overflowY', 'hidden');
+			insert(i);
+			$fs.show();
+			if (length > 1) $fs.addClass('multi');
+
+			$(document).on({
+				keyup: function(e){
+					var code = e.keyCode || e.which;
+					if (code == 39){
+						next();
+					} else if (code == 37){
+						prev();
+					}
+				},
+				keydown: function(e){
+					var code = e.keyCode || e.which;
+					if (code == 27 || code == options.hz_fullscreen){
+						close();
+					} else if (code == options.hz_dl_key){
+						openWindow(url);
+					}
+				}
+			})
+		},
+		prev: prev,
+		next: next,
+		close: close,
+		resize: resize
+	}
 };
 
-openWindow = function(url, force) {
-  var time;
-  time = new Date();
-  if (force) {
-    return $content.append("<iframe src='" + (url.replace(/\/s0\//, '/s0-d/')) + "' id='hz_newtab" + (time.getTime()) + "' style='display:none'></iframe>");
-  } else {
-    if (options.hz_iframedl === 'true' && url.match(gcRegex)) {
-      return $content.append("<iframe src='" + (url.replace(/\/s0\//, '/s0-d/')) + "' id='hz_newtab" + (time.getTime()) + "' style='display:none'></iframe>");
-    } else {
-      return window.open(url, "hz_newtab" + (time.getTime()));
-    }
-  }
+// Open in new window
+var openWindow = function(url, force){
+	var time = new Date();
+
+	if (force){
+		$content.append('<iframe src="'+url.replace(/\/s0\//, '/s0-d/')+'" id="hz_newtab'+time.getTime()+'" style="display:none"></iframe>');
+	} else {
+		if (options.hz_iframedl === 'true' && url.match(gcRegex)){
+			$content.append('<iframe src="'+url.replace(/\/s0\//, '/s0-d/')+'" id="hz_newtab'+time.getTime()+'" style="display:none"></iframe>');
+		} else {
+			window.open(url, 'hz_newtab'+time.getTime());
+		}
+	}
 };
 
-sortPic = function(ele, arr, message) {
-  var $inner, $wrap, append, close, copyLink, counts, length, load, max, newTab, trigger, wHeight, wWidth;
-  wWidth = ele.width();
-  wHeight = ele.height();
-  $wrap = ele.find('.wrap');
-  $inner = $wrap.children('.inner');
-  length = arr.length;
-  counts = 0;
-  trigger = false;
-  append = function(start, end) {
-    var appends, i;
-    appends = '';
-    trigger = true;
-    counts++;
-    for (i = start; start <= end ? i <= end : i >= end; start <= end ? i++ : i--) {
-      appends += arr[i];
-    }
-    ele.addClass('loading');
-    return $inner.append(appends).imagesLoaded(function() {
-      if ($(this).hasClass('masonry')) {
-        $(this).masonry('reload');
-      } else {
-        $(this).masonry({
-          isFitWidth: true
-        });
-      }
-      ele.removeClass('loading');
-      return trigger = false;
-    });
-  };
-  load = function() {
-    var end, start;
-    if (this.scrollTop >= this.scrollHeight - this.offsetHeight - 200 && !trigger) {
-      start = 50 * counts;
-      if (length < 50 * (counts + 1)) {
-        end = length;
-        $wrap.off('scroll');
-      } else {
-        end = 50 * (counts + 1);
-      }
-      return append(start, end - 1);
-    }
-  };
-  copyLink = function() {
-    var appends, i, url, _i, _len;
-    appends = '';
-    for (_i = 0, _len = arr.length; _i < _len; _i++) {
-      i = arr[_i];
-      url = $(i).attr('href') + '\n';
-      appends += url.substring(0, 2) === '//' ? 'https:' + url : url;
-    }
-    return $('#hz_copyarea').fadeIn(300).find('textarea').html(appends);
-  };
-  newTab = function() {
-    var i, _i, _len, _results;
-    _results = [];
-    for (_i = 0, _len = arr.length; _i < _len; _i++) {
-      i = arr[_i];
-      _results.push(openWindow($(i).attr('href')));
-    }
-    return _results;
-  };
-  close = function() {
-    delete arr;
-    return ele.off('click').fadeOut(300, function() {
-      $inner.empty();
-      return ele.find('small').html('');
-    });
-  };
-  if (length > 0) {
-    max = length >= 50 ? 50 : length;
-    append(0, max - 1);
-    if (length > 50) $wrap.off('scroll').on('scroll', load);
-  }
-  return ele.fadeIn(300).on('click', '.blue', copyLink).on('click', '.green', newTab).on('click', '.back, .close', close).find('small').html(message).end().children('.main').css({
-    width: wWidth - 200,
-    height: wHeight - 140,
-    marginLeft: -(wWidth / 2) + 80,
-    marginTop: -(wHeight / 2) + 50
-  }).children('.wrap').scrollTop(0).css({
-    width: wWidth - 180,
-    height: wHeight - 190
-  }).children('.inner').css({
-    width: wWidth - 200
-  });
+// Process pictures and bind events for album download page
+var sortPic = function(ele, arr, message){
+	var wWidth = ele.width(),
+		wHeight = ele.height(),
+		$wrap = ele.find('.wrap'),
+		$inner = $wrap.children('.inner'),
+		length = arr.length,
+		counts = 0,
+		trigger = false;
+
+	var append = function(start, end){
+		var appends = '';
+		trigger = true;
+		counts++;
+
+		for (var i=start; i<end; i++){
+			appends += arr[i];
+		}
+
+		ele.addClass('loading');
+		$inner.append(appends).imagesLoaded(function(){
+			if ($(this).hasClass('masonry')){
+				$(this).masonry('reload');
+			} else {
+				$(this).masonry({isFitWidth: true});
+			}
+
+			ele.removeClass('loading');
+			trigger = false;
+		});
+	};
+
+	var load = function(){
+		if (this.scrollTop >= this.scrollHeight - this.offsetHeight - 200 && !trigger){
+			var start = 50 * counts;
+			if (length < 50 * (counts + 1)){
+				var end = length;
+				$wrap.off('scroll');
+			} else {
+				var end = 50 * (counts + 1);
+			}
+
+			append(start, end);
+		}
+	};
+
+	var copyLink = function(){
+		var textarea = $('#hz_copyarea').find('textarea');
+		if (textarea.is(':empty')){
+			var appends = '';
+			
+			for (var i=0; i<length; i++){
+				var url = $(arr[i]).attr('href') + '\n';
+				appends += url.substring(0, 2) == '//' ? 'https:' + url : url;
+			}
+
+			$('#hz_copyarea').fadeIn(300).find('textarea').html(appends);
+		}
+	};
+
+	var newTab = function(){
+		for (var i=0; i<length; i++){
+			window.open($(arr[i]).attr('href'), 'hz_newtab'+i);
+		}
+	};
+
+	var close = function(){
+		delete arr;
+		ele.off('click').fadeOut(300, function(){
+			$inner.empty();
+			ele.find('small').html('');
+		});
+	};
+
+	if (length > 0){
+		var max = length >= 50 ? 50 : length;
+		append(0, max);
+		if (length > 50) $wrap.off('scroll').on('scroll', load);
+	}
+
+	ele.fadeIn(300).on('click', '.blue', copyLink)
+	.on('click', '.green', newTab)
+	.on('click', '.back, .close', close)
+	.find('small').html(message).end()
+	.children('.main').css({width: wWidth - 200, height: wHeight - 140, marginLeft: -(wWidth / 2) + 80, marginTop: -(wHeight / 2) + 50})
+	.children('.wrap').scrollTop(0).css({width: wWidth - 180, height: wHeight - 190})
+	.children('.inner').css('width', wWidth - 200);
 };
 
-history = new function() {
-  var read, save;
-  read = function() {
-    var arr, length, max, storage;
-    storage = localStorage.hz_histories;
-    if (typeof storage === 'undefined' || storage === '') {
-      return [];
-    } else {
-      arr = storage.split('|||');
-      length = arr.length;
-      max = options.hz_his_max;
-      if (length > max) arr.splice(max, length - max);
-      return arr;
-    }
-  };
-  save = function(url, date) {
-    var i, item, storage, _i, _len;
-    storage = read();
-    if (storage.length > 0) {
-      for (_i = 0, _len = storage.length; _i < _len; _i++) {
-        i = storage[_i];
-        if (typeof i === 'undefined' || i === '') {
-          storage.splice(_i, 1);
-        } else {
-          item = i.split(';');
-          if (item[0] === url) storage.splice(_i, 1);
-        }
-      }
-      storage.push(url + ';' + date);
-      return localStorage.hz_histories = storage.join('|||');
-    } else {
-      return localStorage.hz_histories = url + ';' + date;
-    }
-  };
-  return {
-    create: function(url) {
-      var date, time;
-      time = new Date();
-      date = "" + (time.getMonth() + 1) + "/" + (time.getDate()) + " " + (time.getHours()) + ":" + (time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes()) + ":" + (time.getSeconds() < 10 ? '0' + time.getSeconds() : time.getSeconds());
-      return save(url, date);
-    },
-    display: function() {
-      var arr, i, item, length, storage, thumbnail, width, _i, _len;
-      width = parseInt(($(window).width() - 200) / options.hz_his_columns - 10);
-      storage = read().reverse();
-      length = storage.length;
-      arr = [];
-      for (_i = 0, _len = storage.length; _i < _len; _i++) {
-        i = storage[_i];
-        item = i.split(';');
-        thumbnail = item[0].match(gcRegex) && item[0].match(picasaRegex) ? item[0].replace(picasaRegex, "/w" + width + "/$2") : item[0];
-        arr.push("<a href='" + item[0] + "' title='" + item[1] + "'><img src='" + thumbnail + "' width='" + width + "'></a>");
-      }
-      return sortPic($('#hz_history_page'), arr, "<strong>" + length + "</strong> / " + options.hz_his_max + (length > 1 ? lang.set08 : lang.set07));
-    },
-    clear: function() {
-      return localStorage.hz_histories = '';
-    }
-  };
+// History
+var history = new function(){
+	var read = function(){
+		var storage = localStorage.hz_histories;
+
+		if (typeof storage == 'undefined' || storage == ''){
+			return [];
+		} else {
+			var arr = storage.split('|||'),
+				length = arr.length,
+				max = options.hz_his_max;
+
+			if (length > max) arr.splice(max, length - max);
+
+			return arr;
+		}
+	};
+
+	var save = function(url, date){
+		var storage = read(),
+			length = storage.length;
+
+		if (length > 0){
+			for (var i=0; i<length; i++){
+				var item = storage[i];
+
+				if (typeof item == 'undefined' || item == ''){
+					storage.splice(i, 1);
+				} else {
+					var obj = item.split(';');
+					if (obj[0] == url) storage.splice(i, 1);
+				}
+			}
+
+			storage.push(url+';'+date);
+			localStorage.hz_histories = storage.join('|||');
+		} else {
+			localStorage.hz_histories = url+';'+date;
+		}
+	};
+
+	return {
+		create: function(url){
+			var time = new Date(),
+				date = '/ ::';
+			save(url, date);
+		},
+		display: function(){
+			var width = parseInt(($(window).width() - 200) / options.hz_his_columns - 10),
+				storage = read().reverse(),
+				length = storage.length,
+				arr = [];
+
+			for (var i=0; i<length; i++){
+				var item = storage[i].split(';'),
+					thumbnail = item[0].match(gcRegex) && item[0].match(picasaRegex) ? item[0].replace(picasaRegex, '/w'+width+'/$2') : item[0];
+
+				arr.push('<a href="'+item[0]+'" title="'+item[1]+'"><img src="'+thumbnail+'"></a>');
+			}
+
+			sortPic($('#hz_history_page'), arr, '<strong>'+length+'</strong> / '+options.hz_his_max+' '+(length > 1 ? lang.set08 : lang.set07));
+		},
+		clear: function(){
+			localStorage.hz_histories = '';
+		}
+	}
 };
 
-albumDL = function() {
-  var $page, albumid, arr, data, userid, width;
-  $page = $('#hz_album_page');
-  data = $(this).data('url');
-  userid = data.replace(/(.*)\/photos\/(\d+)\/albums\/(\d+)/, '$2');
-  albumid = data.replace(/(.*)\/photos\/(\d+)\/albums\/(\d+)/, '$3');
-  width = parseInt(($(window).width() - 200) / options.hz_his_columns - 10);
-  arr = [];
-  $page.fadeIn(300).addClass('loading').find('.orange').attr('href', "picasa://downloadfeed/?url=https://picasaweb.google.com/data/feed/back_compat/user/" + userid + "/albumid/" + albumid + "?imgdl=1");
-  return GM_xmlhttpRequest({
-    method: 'GET',
-    url: "https://picasaweb.google.com/data/feed/api/user/" + userid + "/albumid/" + albumid + "?alt=json",
-    onerror: function() {
-      return sortPic($page, arr, lang.al07);
-    },
-    onload: function(data) {
-      var entry, feed;
-      feed = JSON.parse(data.responseText).feed;
-      entry = feed.entry;
-      $(entry).each(function(i, data) {
-        var a, original, thumbnail, url;
-        a = data.media$group;
-        url = a.media$content[0].url;
-        original = url.replace(/(.*)\//, '$1/s0/');
-        thumbnail = url.replace(/(.*)\//, "$1/w" + width + "/");
-        return arr.push("<a href='" + original + "' title='" + a.media$title.$t + "'><img src='" + thumbnail + "' width='" + width + "'></a>");
-      });
-      return sortPic($page, arr, "<a href='" + feed.author[0].uri.$t + "' target='_blank'>" + feed.author[0].name.$t + "</a> &raquo; <a href='" + feed.link[3].href + "' target='_blank'><strong>" + feed.title.$t + "</strong></a> (" + entry.length + " " + (entry.length > 1 ? lang.set08 : lang.set07) + ")");
-    }
-  });
+// Album download
+var albumDL = function(){
+	var $page = $('#hz_album_page'),
+		data = $(this).data('url'),
+		userid = data.replace(/(.*)\/photos\/(\d+)\/albums\/(\d+)/, '$2'),
+		albumid = data.replace(/(.*)\/photos\/(\d+)\/albums\/(\d+)/, '$3'),
+		width = parseInt(($(window).width() - 200) / options.hz_his_columns - 10),
+		arr = [];
+
+	$page.fadeIn(300).addClass('loading')
+	.find('orange').attr('href', 'picasa://downloadfeed/?url=https://picasaweb.google.com/data/feed/back_compat/user/'+userid+'/albumid/'+albumid+'?imgdl=1');
+
+	GM_xmlhttpRequest({
+		method: 'GET',
+		url: 'https://picasaweb.google.com/data/feed/api/user/'+userid+'/albumid/'+albumid+'?alt=json',
+		onerror: function(){
+			sortPic($page, arr, lang.al07);
+		},
+		onload: function(data){
+			var feed = JSON.parse(data.responseText).feed,
+				entry = feed.entry;
+
+			$(entry).each(function(i, data){
+				var a = data.media$group,
+					url = a.media$content[0].url,
+					original = url.replace(/(.*)\//, '$1/s0/'),
+					thumbnail = url.replace(/(.*)\//, '$1/w#{width}/');
+
+				arr.push('<a href="'+original+'" title="'+a.media$title.$t+'"><img src="'+thumbnail+'" width="'+width+'"></a>');
+			});
+
+			sortPic($page, arr, '<a href="'+feed.author[0].uri.$t+'" target="_blank">'+feed.author[0].name.$t+'</a> &raquo; <a href="'+feed.link[3].href+'" target="_blank"><strong>'+feed.title.$t+'</strong></a> ('+entry.length+' '+(entry.length > 1 ? lang.set08 : lang.set07)+')');
+		}
+	});
 };
 
-batch = function() {
-  var arr, width;
-  width = parseInt(($(window).width() - 200) / options.hz_his_columns - 10);
-  arr = [];
-  $('div[data-content-type^="image"] img, div[data-content-url*="picasa"] img, .ot-anchor, .s-W-Oh img').filter(':visible').each(function() {
-    var tag, thumbnail, url;
-    tag = this.tagName.toUpperCase();
-    if (tag === 'IMG') {
-      url = this.src;
-      thumbnail = url.match(gcRegex) && url.match(picasaRegex) ? url.replace(picasaRegex, "/w" + width + "/$2") : url;
-      return arr.push("<a href='" + url + "'><img src='" + thumbnail + "' width='" + width + "'></a>");
-    } else if (tag === 'A') {
-      url = this.href;
-      if (url.match(picRegex)) {
-        return arr.push("<a href='" + url + "'><img src='" + url + "' width='" + width + "'></a>");
-      }
-    }
-  });
-  return sortPic($('#hz_batch_page'), arr, "<strong>" + arr.length + "</strong>" + (arr.length > 1 ? lang.set08 : lang.set07));
+// Batch download
+var batch = function(){
+	var width = parseInt(($(window).width() - 200) / options.hz_his_columns - 10),
+		arr = [];
+
+	$('div[data-content-type^="image"] img, div[data-content-url*="picasa"] img, .ot-anchor, .s-W-Oh img').filter(':visible').each(function(){
+		var tag = this.tagName.toUpperCase();
+		if (tag == 'IMG'){
+			var url = this.src,
+				thumbnail = url;
+			if (url.match(gcRegex) && url.match(picasaRegex)){
+				url = url.replace(picasaRegex, '/s0/$2');
+				thumbnail = url.replace(picasaRegex, '/w'+width+'/$2');
+			} else if (url.match(/\/proxy\?url=/)){
+				url = url.split('&')[0].replace(/(.*)\?url=(.*)/, '$2');
+				thumbnail = url;
+			}
+
+			arr.push('<a href="'+url+'"><img src="'+thumbnail+'" width="'+width+'"></a>');
+		} else if (tag == 'A'){
+			var url = this.href;
+			if (url.match(picRegex)) arr.push('<a href="'+url+'"><img src="'+url+'" width="'+width+'"></a>');
+		}
+	});
+
+	sortPic($('#hz_batch_page'), arr, '<strong>'+arr.length+'</strong> '+(arr.length > 1 ? lang.set08 : lang.set07));
 };
 
-maxYT = function() {
-  var aspect;
-  switch (options.hz_maxyt_aspect) {
-    case 1:
-      aspect = 3 / 4;
-      break;
-    case 3:
-      aspect = 10 / 16;
-      break;
-    default:
-      aspect = 9 / 16;
-  }
-  return $content.on('click', 'div[data-content-type$="flash"]', function() {
-    var width;
-    width = $(this).parent().parent().width();
-    return $(this).addClass('maxyt_container').children('iframe').load(function() {
-      var button, iframe;
-      iframe = $(this);
-      button = $("<span class='c-C' title='" + lang.set10 + "'> - " + lang.set10 + "</span>").click(function() {
-        iframe.nextAll().show().parent().removeClass('maxyt_container').click(function() {
-          $(this).children().hide();
-          $(this).addClass('maxyt_container').prepend(iframe);
-          button.show();
-          return false;
-        });
-        iframe.remove();
-        return $(this).hide();
-      });
-      return iframe.attr({
-        width: width,
-        height: width * aspect
-      }).parentsUntil('.Te').find('.vo').append(button);
-    });
-  });
+// Resize videos as stream width
+var maxYT = function(){
+	if (options.hz_maxyt_aspect == 1){
+		var aspect = 3/4;
+	} else if (options.hz_maxyt_aspect == 3){
+		var aspect = 10/16;
+	} else {
+		var aspect = 9/16;
+	}
+
+	$content.on('click', 'div[data-content-type$="flash"]', function(){
+		var width = $(this).parent().parent().width();
+
+		$(this).addClass('maxyt_container').children('iframe').load(function(){
+			var iframe = $(this),
+				button = $('<span class="c-C"> - '+lang.set10+'</span>').click(function(){
+					iframe.nextAll().show().parent().removeClass('maxyt_container').click(function(){
+						$(this).children().hide();
+						$(this).addClass('maxyt_container').prepend(iframe);
+						button.show();
+						return false;
+					});
+
+					iframe.remove();
+					$(this).hide();
+				});
+
+				iframe.attr({width: width, height: width * aspect}).parentsUntil('.Te').find('.vo').append(button);
+		});
+	});
 };
 
-ytDL = function(url, ele) {
-  var $notify, encode, execHash, format;
-  $notify = ele.children('.notify');
-  format = {
-    5: {
-      format: 'FLV',
-      res: '224p',
-      desc: lang.ytdl02
-    },
-    6: {
-      format: 'FLV',
-      res: '270p',
-      desc: lang.ytdl02
-    },
-    34: {
-      format: 'FLV',
-      res: '360p',
-      desc: lang.ytdl02
-    },
-    35: {
-      format: 'FLV',
-      res: '480p',
-      desc: lang.ytdl03
-    },
-    18: {
-      format: 'MP4',
-      res: '360p',
-      desc: lang.ytdl02
-    },
-    22: {
-      format: 'MP4',
-      res: '720p',
-      desc: lang.ytdl05
-    },
-    37: {
-      format: 'MP4',
-      res: '1080p',
-      desc: lang.ytdl06
-    },
-    38: {
-      format: 'MP4',
-      res: '2304p',
-      desc: lang.ytdl06
-    },
-    83: {
-      format: 'MP4',
-      res: '240p',
-      desc: lang.ytdl02
-    },
-    82: {
-      format: 'MP4',
-      res: '360p',
-      desc: lang.ytdl02
-    },
-    85: {
-      format: 'MP4',
-      res: '520p',
-      desc: lang.ytdl03
-    },
-    84: {
-      format: 'MP4',
-      res: '720p',
-      desc: lang.ytdl05
-    },
-    43: {
-      format: 'WebM',
-      res: '360p',
-      desc: lang.ytdl02
-    },
-    44: {
-      format: 'WebM',
-      res: '480p',
-      desc: lang.ytdl03
-    },
-    45: {
-      format: 'WebM',
-      res: '720p',
-      desc: lang.ytdl05
-    },
-    46: {
-      format: 'WebM',
-      res: '1080p',
-      desc: lang.ytdl06
-    },
-    100: {
-      format: 'WebM',
-      res: '360p',
-      desc: lang.ytdl02
-    },
-    101: {
-      format: 'WebM',
-      res: '480p',
-      desc: lang.ytdl03
-    },
-    102: {
-      format: 'WebM',
-      res: '720p',
-      desc: lang.ytdl05
-    },
-    13: {
-      format: '3GP',
-      res: '176x144',
-      desc: lang.ytdl02
-    },
-    17: {
-      format: '3GP',
-      res: '176x144',
-      desc: lang.ytdl0
-    }
-  };
-  execHash = function(hash) {
-    var i, query, tmp, _i, _len, _ref;
-    query = [];
-    _ref = hash.split('&');
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      i = _ref[_i];
-      tmp = i.split('=');
-      query[tmp[0]] = tmp[1];
-    }
-    return query;
-  };
-  encode = function(text) {
-    return text.replace(/"/g, "-").replace(/%/g, "%25").replace(/=/g, "%3D").replace(/,/g, "%2C").replace(/&/g, "%26").replace(/#/g, "%23").replace(/\?/g, "%3F").replace(/\//g, "_").replace(/\\/g, "_").replace(/ /g, "+");
-  };
-  return GM_xmlhttpRequest({
-    method: 'GET',
-    url: url,
-    onerror: function() {
-      return $notify.html(lang.ytdl07);
-    },
-    onload: function(data) {
-      var appends, desc, i, itag, item, map, regexp_url, tag, title, _i, _len;
-      data = data.responseText;
-      title = encode($(data).find('#eow-title').attr('title'));
-      regexp_url = new RegExp('"url_encoded_fmt_stream_map": "([^"]*)"', 'i');
-      data.match(regexp_url);
-      map = RegExp.$1.split(',');
-      if (map.length > 0) {
-        appends = '';
-        for (_i = 0, _len = map.length; _i < _len; _i++) {
-          i = map[_i];
-          item = execHash(i);
-          if (item.url != null) {
-            url = decodeURIComponent(item.url).replace(/\\u0026quality/, '') + '&title=' + title;
-            itag = url.replace(/(.*)itag=(\d+)(.*)/, '$2');
-            tag = format[itag];
-            desc = tag != null ? "" + tag.desc + "<small>" + tag.format + " / " + tag.res + "</small>" : "" + lang.ytdl09 + "<small>itag=" + itag + "</small>";
-            appends += "<br><a class='c-C' href='" + url + "' target='_blank'>" + desc + "</a>";
-          }
-        }
-        return ele.addClass('loaded').append(appends);
-      } else {
-        return $notify.html(lang.ytdl08);
-      }
-    }
-  });
+// Youtube download
+var ytDL = function(url, ele){
+	var $notify = ele.children('.notify'),
+		format = {
+			// FLV
+			5: {format: 'FLV', res: '224p', desc: lang.ytdl02},
+			6: {format: 'FLV', res: '270p', desc: lang.ytdl02},
+			34: {format: 'FLV', res: '360p', desc: lang.ytdl02},
+			35: {format: 'FLV', res: '480p', desc: lang.ytdl03},
+			// MP4
+			18: {format: 'MP4', res: '360p', desc: lang.ytdl02},
+			22: {format: 'MP4', res: '720p', desc: lang.ytdl05},
+			37: {format: 'MP4', res: '1080p', desc: lang.ytdl06},
+			38: {format: 'MP4', res: '2304p', desc: lang.ytdl06},
+			// MP4.3D
+			83: {format: 'MP4', res: '240p', desc: lang.ytdl02},
+			82: {format: 'MP4', res: '360p', desc: lang.ytdl02},
+			85: {format: 'MP4', res: '520p', desc: lang.ytdl03},
+			84: {format: 'MP4', res: '720p', desc: lang.ytdl05},
+			// WebM
+			43: {format: 'WebM', res: '360p', desc: lang.ytdl02},
+			44: {format: 'WebM', res: '480p', desc: lang.ytdl03},
+			45: {format: 'WebM', res: '720p', desc: lang.ytdl05},
+			46: {format: 'WebM', res: '1080p', desc: lang.ytdl06},
+			// WebM.3D
+			100: {format: 'WebM', res: '360p', desc: lang.ytdl02},
+			101: {format: 'WebM', res: '480p', desc: lang.ytdl03},
+			102: {format: 'WebM', res: '720p', desc: lang.ytdl05},
+			// 3GP
+			13: {format: '3GP', res: '176x144', desc: lang.ytdl02},
+			17: {format: '3GP', res: '176x144', desc: lang.ytdl02}
+		};
+
+		var execHash = function(hash){
+			var value = hash.split('&'),
+				query = [];
+
+			for (var i=0, len=value.length; i<len; i++){
+				var tmp = value[i].split('=');
+				query[tmp[0]] = tmp[1];
+			};
+
+			return query;
+		};
+
+		var encode = function(text){
+			return text.replace(/"/g, "-").replace(/%/g, "%25").replace(/=/g, "%3D").replace(/,/g, "%2C").replace(/&/g, "%26").replace(/#/g, "%23").replace(/\?/g, "%3F").replace(/\//g, "_").replace(/\\/g, "_").replace(/ /g, "+");
+		};
+
+		GM_xmlhttpRequest({
+			method: 'GET',
+			url: url,
+			onerror: function(){
+				$notify.html(lang.ytdl07);
+			},
+			onload: function(data){
+				var data = data.responseText,
+					title = encode($(data).find('#eow-title').attr('title'));
+					
+				var regexp_url = new RegExp('"url_encoded_fmt_stream_map": "([^"]*)"', 'i');
+				data.match(regexp_url);
+				var map = RegExp.$1.split(',');
+
+				if (map.length > 0){
+					var appends = '';
+
+					for (var i=0, len=map.length; i<len; i++){
+						var item = execHash(map[i]);
+						if (typeof item.url != 'undefined'){
+							var url = decodeURIComponent(item.url).replace(/\\u0026quality/, '')+'&title='+title,
+								itag = url.replace(/(.*)itag=(\d+)(.*)/, '$2'),
+								tag = format[itag],
+								desc = typeof tag != 'undefined' ? tag.desc+'<small>'+tag.format+' / '+tag.res+'</small>' : lang.ytdl09+'<small>itag='+itag+'</small>';
+
+							appends += '<br><a class="c-C" href="'+url+'" target="_blank">'+desc+'</a>';
+						}
+					}
+
+					ele.addClass('loaded').append(appends);
+				} else {
+					$notify.html(lang.ytdl08);
+				}
+			}
+		});
 };
 
-timer = new function() {
-  var album, aspect, chain, comment, links, main, maxPic, post, timeout, tube;
-  switch (options.hz_direct_ytaspect) {
-    case 1:
-      aspect = 3 / 4;
-      break;
-    case 3:
-      aspect = 10 / 16;
-      break;
-    default:
-      aspect = 9 / 16;
-  }
-  comment = function() {
-    return $('.kH .ot-anchor').each(function() {
-      var maxWidth, url;
-      url = this.href;
-      if (options.hz_direct === 'true' && url.match(picRegex) && !$(this).hasClass('img-in-post')) {
-        return $(this).addClass('img-in-post').html("<img src='" + url + "' style='max-width: " + (options.hz_direct_max > 0 ? options.hz_direct_max : void 0) + "'>");
-      } else if (url.match(/youtube.com\/watch\?v=/) && !$(this).hasClass('yt-in-post') && options.hz_direct_yt === 'true') {
-        maxWidth = options.hz_direct_ytmaxwidth > 0 ? options.hz_direct_ytmaxwidth : $(this).parent().parent().width();
-        url = url.replace(/(https?:)(.*)\?v=(.*)/, 'https://www.youtube.com/v/$3?version=3&autohide=1&feature=player_embedded');
-        return $(this).after("<div class='closeYT' title='" + lang.ytdl01 + "'>X</div><object style='width: " + maxWidth + "; height: " + (maxWidth * aspect) + "'><param name='movie' value='" + url + "'><param name='allowFullScreen' value='true'><param name='allowScriptAccess' value='always'><embed src='" + url + "' type='application/x-shockwave-flash' allowfullscreen='true' allowScriptAccess='always' width='" + maxWidth + "' height='" + (maxWidth * aspect) + "'></object></object>").addClass('yt-in-post').css({
-          display: 'block',
-          fontWeight: 'bold',
-          marginRight: 11
-        });
-      }
-    });
-  };
-  album = function() {
-    var $main, button, page;
-    page = location.href.replace(/\?(.*)/, '');
-    if (page.match(/\/photos\/\w+\/albums\/\w+/)) {
-      $main = $('.aN8flf:visible');
-      if (!$main.data('class')) {
-        button = $("<div class='in-albumDownload hz_button blue' title='" + lang.al01 + "'>" + lang.al01 + "</div>").data('url', page);
-        if ($main.children().length > 2) {
-          $main.children().eq(1).after(button);
-        } else {
-          $main.children().eq(0).after(button);
-        }
-        return $main.data('class', true);
-      }
-    } else {
-      return $('.s-r-za').each(function() {
-        var url;
-        url = $(this).children().attr('href');
-        if (url.match(/\/photos\/\w+\/albums\/\w+/) && !$(this).data('class')) {
-          button = $("<span class='c-C albumDownload' title='" + lang.al01 + "'>" + lang.fs03 + "</span>").data('url', url);
-          return $(this).data('class', true).parentsUntil('.Te').find('.vo').append(button);
-        }
-      });
-    }
-  };
-  post = function() {
-    return $('.Vl .ot-anchor').each(function() {
-      var auto, url;
-      if (!$(this).data('class')) {
-        url = this.href;
-        if (url.match(picRegex)) {
-          auto = $(this).parentsUntil('.Ks').find('div[data-content-type^="image"]');
-          if (auto[0] != null) {
-            auto = auto.attr('data-content-url').match(picRegex) ? auto.attr('data-content-url') : auto.children('img').attr('src').replace(/(https?:)?(.*)/, 'https:$2').replace(picasaRegex, '/s0/$2');
-          }
-          if (url !== auto) {
-            $(this).html("<img src='" + url + "' style='max-width:" + (options.hz_direct_post_max > 0 ? options.hz_direct_post_max : void 0) + "'>").addClass('img-in-post');
-          }
-        }
-        return $(this).data('class', true);
-      }
-    });
-  };
-  tube = function() {
-    return $('div[data-content-type$="flash"]').each(function() {
-      var button;
-      if (!$(this).data('class')) {
-        button = $("<span class='c-C tubeStacks'>" + lang.fs03 + "</span>").data('url', $(this).attr('data-content-url').replace(/^http/, 'https'));
-        return $(this).data('class', true).parentsUntil('.Te').find('.vo').append(button);
-      }
-    });
-  };
-  links = function() {
-    return $('.Vl').each(function() {
-      var length, link, target, url;
-      if (!$(this).data('class')) {
-        target = $(this).find('div[data-content-type^="image"], div[data-content-url*="picasa"], .img-in-post');
-        length = target.length;
-        if (length > 1) {
-          link = $("<span class='c-C picStacks'>" + lang.fs03 + " (" + length + ")</span>").click(function() {
-            var html, i, popup, url, _i, _len;
-            if (!$(this).next().hasClass('clickDetail')) {
-              html = "<div class='closeButton' title='" + lang.set10 + "'></div><strong>" + lang.piclink01 + "</strong><br>";
-              for (_i = 0, _len = target.length; _i < _len; _i++) {
-                i = target[_i];
-                url = i.childNodes[0].src;
-                url = url.match(/\?sz|\/proxy/) ? url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : url.replace(picasaRegex, '/s0/$2');
-                html += _i === 0 ? "<a class='c-C' href='" + url + "'>" + (_i + 1) + "</a>" : " - <a class='c-C' href='" + url + "'>" + (_i + 1) + "</a>";
-              }
-              popup = $("<div class='clickDetail'>" + html + "</div>").on('click', '.closeButton', function() {
-                return $(this).parent().fadeOut(300);
-              }).on('click', 'a', function() {
-                openWindow(this.href);
-                return false;
-              });
-              return $(this).after(popup).next().fadeIn(300).offset({
-                left: $(this).offset().left + 10,
-                top: $(this).offset().top + 25
-              });
-            } else {
-              if ($(this).next().is(':hidden')) {
-                return $(this).next().fadeIn(300).offset({
-                  left: $(this).offset().left + 10,
-                  top: $(this).offset().top + 25
-                });
-              } else {
-                return $(this).next().fadeOut(300);
-              }
-            }
-          });
-        } else if (length === 1) {
-          url = target[0].childNodes[0].src;
-          url = url.match(/\?sz|\/proxy/) ? url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : url.replace(picasaRegex, '/s0/$2');
-          link = "<a class='c-C picStacks' href='" + url + "'>" + lang.fs03 + "</a>";
-        }
-        return $(this).data('class', true).parentsUntil('.Te').find('.vo').append(link);
-      }
-    });
-  };
-  maxPic = function() {
-    return $content.find('.s-r-fa:visible').each(function() {
-      var children, i, img, src, url, width, zoom, _i, _len;
-      if (!$(this).data('class')) {
-        children = $(this).children('div[data-content-type^="image"], div[data-content-url*="picasa"]');
-        width = $(this).width();
-        if (children.length > 0) {
-          if (options.hz_maxpic_option === '1') children = children.eq(0);
-          for (_i = 0, _len = children.length; _i < _len; _i++) {
-            i = children[_i];
-            img = i.childNodes[0];
-            src = img.src;
-            url = src.match(/\?sz|\/proxy/) ? src.replace(/resize_\D?=\d+/, 'resize_w=' + width) : src.replace(picasaRegex, "/w" + width + "/$2");
-            img.src = url;
-            $(i).data('original', src).addClass('maxpic_container');
-          }
-          zoom = $("<span class='c-C' title='" + lang.maxpic01 + "'> - " + lang.maxpic01 + "</span>").click(function() {
-            var data, j, _j, _len2;
-            for (_j = 0, _len2 = children.length; _j < _len2; _j++) {
-              j = children[_j];
-              data = $(j).data('original');
-              if (data != null) {
-                j.childNodes[0].src = data;
-                $(j).removeClass('maxpic_container');
-              }
-            }
-            $(document).scrollTop($(this).parent().parent().parent().parent().offset().top - 100);
-            return $(this).remove();
-          });
-          $(this).parentsUntil('.Te').find('.vo').append(zoom);
-        }
-        return $(this).data('class', true);
-      }
-    });
-  };
-  timeout = '';
-  chain = [comment];
-  if (options.hz_album === 'true') chain.push(album);
-  if (options.hz_direct_post === 'true') chain.push(post);
-  if (options.hz_ytdl === 'true') chain.push(tube);
-  if (options.hz_dl_link === 'true') chain.push(links);
-  if (options.hz_maxpic === 'true') chain.push(maxPic);
-  main = function() {
-    var i, _i, _len;
-    for (_i = 0, _len = chain.length; _i < _len; _i++) {
-      i = chain[_i];
-      i();
-    }
-    return timeout = setTimeout(main, 2500);
-  };
-  return {
-    start: function() {
-      return timeout = setTimeout(main, 2500);
-    },
-    stop: function() {
-      return clearTimeout(timeout);
-    }
-  };
+// Execute every 2.5s
+var timer = new function(){
+	if (options.hz_direct_ytaspect == 1){
+		var aspect = 3/4;
+	} else if (options.hz_direct_ytaspect == 3){
+		var aspect = 10/16;
+	} else {
+		var aspect = 9/16;
+	}
+
+	// Process links in comments
+	var comment = function(){
+		$('.kH .ot-anchor').each(function(){
+			var url = this.href;
+			// Show photo links in comments directly
+			if (options.hz_direct === 'true' && url.match(picRegex) && !$(this).hasClass('img-in-post')){
+				$(this).addClass('img-in-post').html('<img src="'+url+'" style="max-width:'+(options.hz_direct_max > 0 ? options.hz_direct_max : void 0)+'">');
+			// Show Youtube links in comments directly
+			} else if (url.match(/youtube.com\/watch\?v=/) && !$(this).hasClass('yt-in-post') && options.hz_direct_yt === 'true'){
+				var maxWidth = options.hz_direct_ytmaxwidth > 0 ? options.hz_direct_ytmaxwidth : $(this).parent().parent().width(),
+					url = url.replace(/(https?:)(.*)\?v=(.*)/, 'https://www.youtube.com/v/$3?version=3&autohide=1&feature=player_embedded');
+
+				$(this).after('<div class="closeYT" title="'+lang.ytdl01+'">X</div><object style="width:'+maxWidth+';height:'+(maxWidth * aspect)+'"><param name="movie" value="'+url+'"><param name="allowFullScreen" value="true"><param name="allowScriptAccess" value="always"><embed src="'+url+'" type="application/x-shockwave-flash" allowfullscreen="true" allowScriptAccess="always" width="'+maxWidth+'" height="'+(maxWidth * aspect)+'"></object>').addClass('yt-in-post').css({display: 'block', fontWeight: 'bold', marginRight: 11});
+			}
+		});
+	};
+
+	// Append album download button
+	var album = function(){
+		var page = location.href.replace(/\?(.*)/, '');
+
+		if (page.match(/\/photos\/\w+\/albums\/\w+/)){
+			var $main = $('.aN8flf:visible');
+
+			if (!$main.data('class')){
+				var button = $('<div class="in-albumDownload hz_button blue">'+lang.fs03+'</div>').data('url', page);
+				$main.children().length > 2 ? $main.children().eq(1).after(button) : $main.children().eq(0).after(button);
+				$main.data('class', true);
+			}
+		} else {
+			$('.s-r-za').each(function(){
+				if (!$(this).data('class')){
+					var url = $(this).children().attr('href');
+					if (url.match(/\/photos\/\w+\/albums\/\w+/)){
+						var button = $('<span class="c-C albumDownload">'+lang.fs03+'</span>').data('url', url);
+						$(this).parentsUntil('.Te').find('.vo').append(button);
+					}
+					$(this).data('class', true);
+				}
+			});
+		}
+	};
+
+	// Process links in posts
+	var post = function(){
+		$('.Vl .ot-anchor').each(function(){
+			if (!$(this).data('class')){
+				var url = this.href;
+
+				if (url.match(picRegex)){
+					var auto = $(this).parentsUntil('.Ks').find('div[data-content-type^="image"]');
+
+					if (typeof auto[0] != 'undefined') auto = auto.attr('data-content-url').match(picRegex) ? auto.attr('data-content-url') : auto.children('img').attr('src').replace(/(https?:)?(.*)/, 'https:$2').replace(picasaRegex, '/s0/$2');
+
+					if (url != auto) $(this).html('<img src="'+url+'" style="max-width:'+(options.hz_direct_post_max > 0 ? options.hz_direct_post_max : void 0)+'">').addClass('img-in-post');
+				}
+			}
+
+			$(this).data('class', true);
+		});
+	};
+
+	// Process Youtube video in posts
+	var tube = function(){
+		$('div[data-content-type$="flash"]').each(function(){
+			if (!$(this).data('class')){
+				var button = $('<span class="c-C tubeStacks">'+lang.fs03+'</span>').data('url', $(this).attr('data-content-url').replace(/^http/, 'https'));
+				$(this).data('class', true).parentsUntil('.Te').find('.vo').append(button);
+			}
+		});
+	};
+
+	// Display download links below pictures
+	var links = function(){
+		$('.Vl').each(function(){
+			if (!$(this).data('class')){
+				var target = $(this).find('div[data-content-type^="image"], div[data-content-url*="picasa"], .img-in-post'),
+					length = target.length;
+
+				if (length > 1){
+					var link = $('<span class="c-C picStacks">'+lang.fs03+' ('+length+')</span>').click(function(){
+						if (!$(this).next().hasClass('clickDetail')){
+							var html = '<div class="closeButton" title="'+lang.set10+'"></div><strong>'+lang.piclink01+'</strong><br>';
+
+							for (var i=0, len=target.length; i<len; i++){
+								var url = target[i].childNodes[0].src;
+								url = url.match(/\?sz|\/proxy/) ? url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : url.replace(picasaRegex,'/s0/$2');
+								html += i == 0 ? '<a class="c-C" href="'+url+'">'+(i+1)+'</a>' : ' - <a class="c-C" href="'+url+'">'+(i+1)+'</a>';
+							}
+
+							var popup = $('<div class="clickDetail">'+html+'</div>').on('click', '.closeButton', function(){
+								$(this).parent().fadeOut(300);
+							}).on('click', 'a', function(){
+								openWindow(this.href);
+								return false;
+							});
+
+							$(this).after(popup).next().fadeIn(300).offset({left: $(this).offset().left + 10, top: $(this).offset().top + 25});
+						} else {
+							if ($(this).next().is(':hidden')){
+								$(this).next().fadeIn(300).offset({left: $(this).offset().left + 10, top: $(this).offset().top + 25});
+							} else {
+								$(this).next().fadeOut(300);
+							}
+						}
+					});
+				} else if (length == 1){
+					var url = target[0].childNodes[0].src;
+					url = url.match(/\?sz|\/proxy/) ? url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : url.replace(picasaRegex,'/s0/$2');
+					var link = '<a class="c-C picStacks" href="'+url+'">'+lang.fs03+'</a>';
+				}
+
+				$(this).data('class', true).parentsUntil('.Te').find('.vo').append(link);
+			}
+		});
+	};
+
+	// Resize photos to stream width
+	var maxPic = function(){
+		$content.find('.s-r-fa:visible').each(function(){
+			if (!$(this).data('class')){
+				var children = $(this).find('div[data-content-type^="image"], div[data-content-url*="picasa"]'),
+					width = $(this).width();
+
+				if (children.length > 0){
+					if (options.hz_maxpic_option === '1') children = children.eq(0);
+
+					children.each(function(i){
+						var img = this.childNodes[0],
+							src = img.src,
+							url = src.match(/\?sz|\/proxy/) ? src.replace(/resize_\D?=\d+/, 'resize_w='+width) : src.replace(picasaRegex,'/w'+width+'/$2');
+						img.src = url;
+						$(this).data('original', src).addClass('maxpic_container');
+					});
+
+					var zoom = $('<span class="c-C"> - '+lang.maxpic01+'</span>').click(function(){
+						children.each(function(){
+							var data = $(this).data('original');
+							if (typeof data != 'undefined'){
+								$(this).removeClass('maxpic_container').children('img').attr('src', data);
+							}
+						});
+
+						$(document).scrollTop($(this).parent().parent().parent().parent().offset().top - 100);
+						$(this).remove();
+					});
+
+					$(this).parentsUntil('.Te').find('.vo').append(zoom);
+				}
+
+				$(this).data('class', true);
+			}
+		});
+	};
+
+	var chain = [comment],
+		timeout;
+
+	if (options.hz_album === 'true') chain.push(album);
+	if (options.hz_direct_post === 'true') chain.push(post);
+	if (options.hz_ytdl === 'true') chain.push(tube);
+	if (options.hz_dl_link === 'true') chain.push(links);
+	if (options.hz_maxpic === 'true') chain.push(maxPic);
+
+	var main = function(){
+		for (var i=0, len=chain.length; i<len; i++){
+			chain[i]();
+		}
+
+		timeout = setTimeout(main, 2500);
+	};
+
+	return {
+		start: function(){
+			timeout = setTimeout(main, 2500);
+		},
+		stop: function(){
+			clearTimeout(timeout);
+		}
+	}
 };
 
-setPage = new function() {
-  var $list, $set, $tab;
-  $set = $('#hz_set_page');
-  $list = $set.find('.menu li');
-  $tab = $set.find('.tabs div');
-  return {
-    open: function() {
-      return $set.fadeIn(300).find(':text').each(function() {
-        return $(this).val(options[$(this).attr('id')]);
-      }).end().find('select').each(function() {
-        return $(this).children("option[value='" + options[$(this).attr('id')] + "']").prop('selected', true);
-      }).end().find(':checkbox').each(function() {
-        if (options[$(this).attr('id')] === 'true') {
-          return $(this).prop('checked', true);
-        }
-      });
-    },
-    close: function() {
-      return $set.fadeOut(300);
-    },
-    save: function() {
-      $set.find(':text').each(function() {
-        return localStorage[$(this).attr('id')] = $(this).val();
-      }).end().find('select').each(function() {
-        return localStorage[$(this).attr('id')] = $(this).find(':selected').val();
-      }).end().find(':checkbox').each(function() {
-        return localStorage[$(this).attr('id')] = $(this).prop('checked').toString();
-      });
-      return location.reload();
-    },
-    reset: function() {
-      var sure;
-      sure = confirm(lang.set04);
-      if (sure) {
-        localStorage.clear();
-        return location.reload();
-      } else {
-        return false;
-      }
-    },
-    tab: function(i, teleport) {
-      var $current, gap, height;
-      $current = $list.parent().children('.current');
-      gap = 590 * (i - $current.attr('tabid'));
-      height = $tab.eq(i).height();
-      if (i === 4) {
-        $set.find('.hz_button').hide().filter('.update').show();
-      } else {
-        $set.find('.hz_button').show().filter('.update').hide();
-      }
-      $current.removeClass('current');
-      $list.eq(i).addClass('current');
-      if (teleport) {
-        return $set.children('.main').css('height', height + 140).find('.tabs').css('left', '-=' + gap);
-      } else {
-        return $set.children('.main').animate({
-          height: height + 140
-        }, 300).find('.tabs').animate({
-          left: '-=' + gap
-        }, 300);
-      }
-    }
-  };
+// Settings page events
+var setPage = new function(){
+	var $set = $('#hz_set_page'),
+		$list = $set.find('.menu li'),
+		$tab = $set.find('.tabs div');
+	return {
+		open: function(){
+			$set.fadeIn(300).find(':text').each(function(){
+				$(this).val(options[$(this).attr('id')]);
+			}).end()
+			.find('select').each(function(){
+				$(this).children('option[value="'+options[$(this).attr('id')]+'"]').prop('selected', true);
+			}).end()
+			.find(':checkbox').each(function(){
+				if (options[$(this).attr('id')] === 'true') $(this).prop('checked', true);
+			});
+		},
+		close: function(){
+			$set.fadeOut(300);
+		},
+		save: function(){
+			$set.find(':text').each(function(){
+				localStorage[$(this).attr('id')] = $(this).val();
+			});
+			$set.find('select').each(function(){
+				localStorage[$(this).attr('id')] = $(this).find(':selected').val();
+			});
+			$set.find(':checkbox').each(function(){
+				localStorage[$(this).attr('id')] = $(this).prop('checked').toString();
+			});
+			location.reload();
+		},
+		reset: function(){
+			var sure = confirm(lang.set04);
+			if (sure){
+				localStorage.clear();
+				location.reload();
+			}
+		},
+		tab: function(i, teleport){
+			var $current = $list.parent().children('.current'),
+				gap = 590 * (i - $current.attr('tabid')),
+				height = $tab.eq(i).height();
+
+			if (i == 4){
+				$set.find('.hz_button').hide().filter('.update').show();
+			} else {
+				$set.find('.hz_button').show().filter('.update').hide();
+			}
+
+			$current.removeClass('current');
+			$list.eq(i).addClass('current');
+
+			if (teleport){
+				$set.children('.main').css('height', height + 140)
+				.find('.tabs').css('left', '-='+gap);
+			} else {
+				$set.children('.main').animate({height: height + 140}, 300)
+				.find('.tabs').animate({left: '-='+gap}, 300);
+			}
+		}
+	}
 };
 
-update = new function() {
-  var $meta, $set, fetch, manual;
-  $set = $('#hz_set_page');
-  $meta = $('#hz_set_page').find('.meta');
-  if (developer) $meta.html(lang.update09);
-  $set.find('.update').on('click', function() {
-    openWindow(this.href, true);
-    $meta.html(lang.update15).attr('class', 'meta red');
-    return false;
-  });
-  fetch = function() {
-    return GM_xmlhttpRequest({
-      method: 'GET',
-      url: 'https://sites.google.com/site/hoverzoomplus/sources/version.json?attredirects=0&d=1',
-      onerror: function() {
-        return $meta.html("" + lang.update08 + " (<a id='hz_checkupdate' href='javascript:void(0)'>(" + lang.update13 + ")</a>)").addClass('red');
-      },
-      onload: function(data) {
-        var content, html, i, j, length, newVer, nowVer, _i, _len, _results;
-        data = JSON.parse(data.responseText);
-        nowVer = version.split('.');
-        newVer = data.version.split('.');
-        content = data.content[options.hz_language] || data.content['en-US'];
-        if (version === data.version) {
-          return $meta.html(lang.update07).addClass('green');
-        } else {
-          length = nowVer.length > newVer.length ? nowVer.length : newVer.length;
-          i = 0;
-          _results = [];
-          while (i < length) {
-            if (typeof nowVer[i] === 'undefined') nowVer[i] = 0;
-            if (typeof newVer[i] === 'undefined') newVer[i] = 0;
-            if (newVer[i] > nowVer[i]) {
-              html = "<strong>" + data.version + "</strong>:<br><ul>";
-              for (_i = 0, _len = content.length; _i < _len; _i++) {
-                j = content[_i];
-                html += "<li>" + j + "</li>";
-              }
-              $meta.html("" + lang.update11 + " <strong>" + data.version + "</strong> " + lang.update12).addClass('orange');
-              $set.find('.menu li').eq(4).css('display', 'inline-block');
-              $set.find('.tabs div').eq(4).html(html + '</ul>');
-              if ($set.is(':hidden')) setPage.open();
-              setPage.tab(4, true);
-              break;
-            } else if (nowVer[i] > newVer[i]) {
-              $meta.html(lang.update07).addClass('green');
-              break;
-            }
-            _results.push(i++);
-          }
-          return _results;
-        }
-      }
-    });
-  };
-  manual = function() {
-    $meta.html(lang.update13).attr('class', 'meta');
-    return fetch();
-  };
-  $('#hz_checkupdate').on('click', manual);
-  return {
-    auto: fetch,
-    manual: manual
-  };
+// Check for update
+var update = new function(){
+	var $set = $('#hz_set_page'),
+		$meta = $('#hz_set_page').find('.meta');
+
+	if (developer) $meta.html(lang.update09);
+
+	$set.find('.update').on('click', function(){
+		openWindow(this.href, true);
+		$meta.html(lang.update15).attr('class', 'meta red');
+		return false;
+	});
+
+	var fetch = function(){
+		GM_xmlhttpRequest({
+			method: 'GET',
+			url: 'https://sites.google.com/site/hoverzoomplus/sources/version.json?attredirects=0&d=1',
+			onerror: function(){
+				$meta.html(lang.update08+' (<a id="hz_checkupdate" href="javascript:void(0)">'+lang.update13+'</a>)').addClass('red');
+			},
+			onload: function(data){
+				var data = JSON.parse(data.responseText),
+					nowVer = version.split('.'),
+					newVer = data.version.split('.'),
+					content = data.content[options.hz_language] || data.content['en-US'];
+
+				if (version == data.version){
+					$meta.html(lang.update07).addClass('red');
+				} else {
+					var length = nowVer.length > newVer.length ? nowVer.length : newVer.length;
+					for (var i=0; i<length; i++){
+						if (typeof nowVer[i] == 'undefined') nowVer[i] = 0;
+						if (typeof newVer[i] == 'undefined') newVer[i] = 0;
+
+						if (newVer[i] > nowVer[i]){
+							var html = '<strong>'+data.version+'</strong>:<br><ul>';
+							for (var j=0, len=content.length; j<len; j++){
+								html += '<li>'+content[j]+'</li>';
+							}
+
+							$meta.html(lang.update11+' <strong>'+data.version+'</strong> '+lang.update12).addClass('orange');
+							$set.find('.menu li').eq(4).css('display', 'inline-block');
+							$set.find('.tabs div').eq(4).html(html+'</ul>');
+							if ($set.is(':hidden')) setPage.open();
+							setPage.tab(4, true);
+							break;
+						} else if (nowVer[i] > newVer[i]){
+							$meta.html(lang.update07).addClass('green');
+							break;
+						}
+					}
+				}
+			}
+		})
+	};
+
+	var manual = function(){
+		$meta.html(lang.update13).attr('class', 'meta');
+		fetch();
+	};
+
+	$('#hz_checkupdate').on('click', manual);
+	return {
+		auto: fetch,
+		manual: manual
+	}
 };
 
-GM_addStyle("#hoverzoom{position:fixed;box-shadow:0 4px 16px rgba(0,0,0,0.2);z-index:10002;display:none;background:rgba(255,255,255,0.5)}#hoverzoom img{display:block;margin:5px}#hoverzoom small{display:block;text-align:center;line-height:1;margin:0 5px 5px}#hz_loading{width:20px;height:20px;box-shadow:0 -2px 1px 1px #dd4839;position:fixed;pointer-events:none;z-index:10000;display:none;-webkit-border-radius:50%;-moz-border-radius:50%;border-radius:50%;animation:loading infinite 0.8s linear;-moz-animation:loading infinite 0.8s linear;-webkit-animation:loading infinite 0.8s linear}#hoverzoom_db{position:fixed;top:45%;right:-40px;background:#f5f5f5;border:1px solid #d2d2d2;border-right:none;box-shadow:0 0 5px rgba(0,0,0,0.1);width:37px;height:37px;-webkit-border-radius:2px 0 0 2px;-moz-border-radius:2px 0 0 2px;border-radius:2px 0 0 2px;-webkit-transition:0.3s;-moz-transition:0.3s;transition:0.3s}#hoverzoom_db:hover div{background:#666}#hoverzoom_db.enable{right:0}#hoverzoom_db div{margin:6px;width:25px;height:25px;background:#aaa;-webkit-border-radius:50%;-moz-border-radius:50%;border-radius:50%;-webkit-transition:0.3s;-moz-transition:0.3s;transition:0.3s}#hoverzoom_db div:before,#hoverzoom_db div:after{position:absolute;content:''}#hoverzoom_db div:before{width:6px;height:8px;background:#f5f5f5;top:12px;left:15px}#hoverzoom_db div:after{border-style:solid;border-width:7px 8px;border-color:#f5f5f5 transparent transparent;top:19px;left:10px}#hoverzoom_sc{position:absolute;z-index:10005;box-shadow:0 4px 16px rgba(0,0,0,0.2);display:none}#hoverzoom_sc a,#hoverzoom_sc span{outline:none;cursor:pointer;color:#3366CC}#hoverzoom_sc a{border-right:1px solid #eee;padding-right:5px}#hoverzoom_sc span{border-left:1px solid #eee;padding-left:5px}#hoverzoom_sc span:hover{text-decoration:underline}.albumDownload,.picStacks,.tubeStacks{padding-left:15px;margin-left:20px}.albumDownload:before,.picStacks:before,.tubeStacks:before{content:'-';cursor:default;left:-27px;position:relative;display:inline-block;border-bottom:1px solid transparent}.albumDownload{background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACl0lEQVQ4jX1TX2iOcRR+zvm97++d720R1mxlLlg2EjWlFhe0tkUW1tRnSGFpUlJu9blgWUmKsmRo2lbaxcpopklq0tCKopRCjWWabeb73j+/33Fh1sbHU6fOxfM853SeDiELMp5XrJSqE+CwuKQ4xiVLdNf7/v1VNv4MWup71lzb13d8an5BmU3Mey++L7Hvi/i+RAn/43hV3oqR5qXLZ2v4d9Oa7N2iSfflsHehbUdnw9cFxZUQ+1wBsAAgUGYhlsCaB6NNhRVzDFqSvSVQ6CRQfjqagi+2oavi4rl3RTV7ROyT6Ski1sQQKiRCx5dzhSsBgAVCikyTyzovttHMam6cyTlT0/mJfqRrDPAQgD/tE3ouLbYWTQIQX6+/V0rgrWEcgEDQykMYBzfGo8mdrc00ScCo0nonWbnlhsoBgEwkYNC2z2eLStkKtrtKaxCglIPIhudzo4lDJ27vTv/ehsbGxlXw41hQ7H6BgEUAz4GGxNsdARqtGChSBsacPNhefSFbQgTISK6KAQMBEBoBkxxhEDRAabZxsjuM39bV9RX9N+s/4JClFCMc7g6pwAPdFBOu+xeZHCEACV8TtCKMpe0VAoC62runtNKnjQkDzuhV7T0V77IZSBnmx7vyG0HkhkxuALrqpFIpfv0SG5gdmDiKMssGF21qW3vAiJMggcw2KAfJBFFaeeSMRfTo496nHwgAkrW9JWB5LDFyv5X2b5so6bvDnpMzV/4L7BBM2kwJ88aB+sEhBoCOrqo3ZJEE0bAyjgOStA0s5lRoAQAmY0dEpGagfnAImPUL7V3VDzhIVAT+6DCEY9YMYgIxgTWDiDI2ki5j7eaB/S/6Zw7796VA5W3rV4OkEoKj06zLELo/sP/ZX+/8E1gaKlGc2T23AAAAAElFTkSuQmCC') no-repeat}.in-albumDownload{margin:25px 18px 25px 0;background:none}.picDownload{background:#bbb;-webkit-border-radius:10px;-moz-border-radius:10px;border-radius:10px;color:#fff !important;display:inline-block;font-size:12px;line-height:1em;height:1em;width:1em;margin:0 2px;padding:5px;text-align:center}.picStacks{background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA20lEQVQ4jbXRQUoDQRAF0DeTjhjExWwcdOVCxAu48/4X0EUUPYVgFonTLqYSmk7UDOKHhu6qrvq/fvFHNLjCDdqJtQNeGzwgRWAKWmwS5tjgEZ+RzJXKEhlnuMM8RSDjvWjQo8PLD8oycjqQuMQtZnGeQ2GJnaq6QR/FbTD3EV9iEbGPsiBV9+tg3coecGH0aREjPik8Kle3lVUauH13OMW5ceW7P/UIjX3Xa5x8N0LG6oCCmmDPg6ZILo9QkI3jQJOwjkb3v7DXSlqsZ8Ydd0b32wlnwNuRhP+IL+1ZLCIrPZQEAAAAAElFTkSuQmCC') no-repeat}.tubeStacks{background:url(https://s.ytimg.com/yt/favicon-refresh-vfldLzJxy.ico) no-repeat}.hz_button{position:relative;cursor:pointer;font-size:11px;font-weight:bold;height:27px;line-height:27px;margin-right:16px;min-width:54px;outline:none;padding:0 8px;text-align:center;float:left;text-decoration:none !important;-webkit-border-radius:2px;-moz-border-radius:2px;border-radius:2px;user-select:none;-moz-user-select:none;-webkit-user-select:none}.hz_button.green{background-color:#3D9400;border:1px solid #29691D;color:#fff;text-shadow:0 1px rgba(0,0,0,0.1);background:-webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #3d9400), color-stop(100%, #398a00));background:-webkit-linear-gradient(left top, #3d9400,#398a00);background:-moz-linear-gradient(left top, #3d9400,#398a00);background:linear-gradient(left top, #3d9400,#398a00)}.hz_button.green:hover{background-color:#368200;border:1px solid #2D6200;text-shadow:0 1px rgba(0,0,0,0.3);background:-webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #3d9400), color-stop(100%, #368200));background:-webkit-linear-gradient(left top, #3d9400,#368200);background:-moz-linear-gradient(left top, #3d9400,#368200);background:linear-gradient(left top, #3d9400,#368200)}.hz_button.green:focus,.hz_button.green:active{box-shadow:0 0 0 1px #fff inset}.hz_button.blue{background-color:#4D90FE;border:1px solid #3079ed;color:#fff;background:-webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #4d90fe), color-stop(100%, #4787ed));background:-webkit-linear-gradient(left top, #4d90fe,#4787ed);background:-moz-linear-gradient(left top, #4d90fe,#4787ed);background:linear-gradient(left top, #4d90fe,#4787ed)}.hz_button.blue:hover{background-color:#357AE8;border:1px solid #2F5BB7;background:-webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #4d90fe), color-stop(100%, #357ae8));background:-webkit-linear-gradient(left top, #4d90fe,#357ae8);background:-moz-linear-gradient(left top, #4d90fe,#357ae8);background:linear-gradient(left top, #4d90fe,#357ae8)}.hz_button.blue:focus,.hz_button.blue:active{box-shadow:0 0 0 1px #fff inset}.hz_button.white{background-color:#F5F5F5;border:1px solid rgba(0,0,0,0.1);color:#444;background:-webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #f5f5f5), color-stop(100%, #f1f1f1));background:-webkit-linear-gradient(left top, #f5f5f5,#f1f1f1);background:-moz-linear-gradient(left top, #f5f5f5,#f1f1f1);background:linear-gradient(left top, #f5f5f5,#f1f1f1)}.hz_button.white:hover{background-color:#F8F8F8;border:1px solid #c6c6c6;color:#333;background:-webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #f8f8f8), color-stop(100%, #f1f1f1));background:-webkit-linear-gradient(left top, #f8f8f8,#f1f1f1);background:-moz-linear-gradient(left top, #f8f8f8,#f1f1f1);background:linear-gradient(left top, #f8f8f8,#f1f1f1)}.hz_button.white:focus,.hz_button.white:active{box-shadow:0 1px 2px rgba(0,0,0,0.1) inset}.hz_button.orange{background-color:#D14836;color:#fff;text-shadow:0 1px rgba(0,0,0,0.1);border:1px solid transparent;background:-webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #dd4b39), color-stop(100%, #d14836));background:-webkit-linear-gradient(left top, #dd4b39,#d14836);background:-moz-linear-gradient(left top, #dd4b39,#d14836);background:linear-gradient(left top, #dd4b39,#d14836)}.hz_button.orange:hover{background-color:#C53727;border:1px solid #B0281A;box-shadow:0 1px 1px rgba(0,0,0,0.2);background:-webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #dd4b39), color-stop(100%, #c53727));background:-webkit-linear-gradient(left top, #dd4b39,#c53727);background:-moz-linear-gradient(left top, #dd4b39,#c53727);background:linear-gradient(left top, #dd4b39,#c53727)}.hz_button.orange:focus,.hz_button.orange:active{box-shadow:0 0 0 1px #fff inset}#hoverzoom_fs{position:fixed;top:0;left:0;height:100%;width:100%;z-index:10010;display:none;background:rgba(0,0,0,0.8);color:#ccc;text-shadow:1px 1px 2px #000;overflow:auto}#hoverzoom_fs.zoom .ctrl .right .zoom{display:inline-block}#hoverzoom_fs.load .loading{opacity:0.8}#hoverzoom_fs.multi .ctrl .center{display:block}#hoverzoom_fs.actual .ctrl .right .zoom ul li:last-of-type{display:block}#hoverzoom_fs .back{position:absolute;top:0;left:0;width:100%;height:100%}#hoverzoom_fs .main{position:absolute}#hoverzoom_fs .main img{opacity:0;box-shadow:0 4px 16px rgba(0,0,0,0.2);max-width:0;max-height:0;display:block}#hoverzoom_fs .ctrl{position:absolute;top:0;width:100%;height:100px;margin-top:-50px;opacity:0;-webkit-transition:opacity 0.5s,margin 0.5s;-moz-transition:opacity 0.5s,margin 0.5s;transition:opacity 0.5s,margin 0.5s;background:-webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(0,0,0,0.8)), color-stop(50%, rgba(0,0,0,0)));background:-webkit-linear-gradient(top, rgba(0,0,0,0.8) 0%,rgba(0,0,0,0) 50%);background:-moz-linear-gradient(top, rgba(0,0,0,0.8) 0%,rgba(0,0,0,0) 50%);background:linear-gradient(top, rgba(0,0,0,0.8) 0%,rgba(0,0,0,0) 50%)}#hoverzoom_fs .ctrl:hover{margin-top:0;opacity:1}#hoverzoom_fs .ctrl div{-webkit-transition:0.3s;-moz-transition:0.3s;transition:0.3s}#hoverzoom_fs .ctrl div:before,#hoverzoom_fs .ctrl div:after{content:'';position:absolute}#hoverzoom_fs .ctrl .close{position:absolute;left:23px;opacity:0.3;height:50px;cursor:pointer}#hoverzoom_fs .ctrl .close:hover{opacity:1}#hoverzoom_fs .ctrl .close:before,#hoverzoom_fs .ctrl .close:after{background:#fff;height:32px;bottom:10px;width:5px}#hoverzoom_fs .ctrl .close:before{-webkit-transform:rotate(-45deg);-moz-transform:rotate(-45deg);transform:rotate(-45deg)}#hoverzoom_fs .ctrl .close:after{-webkit-transform:rotate(45deg);-moz-transform:rotate(45deg);transform:rotate(45deg)}#hoverzoom_fs .ctrl .center{position:absolute;left:50%;top:15px;width:200px;margin-left:-100px;text-align:center;display:none}#hoverzoom_fs .ctrl .center .prev,#hoverzoom_fs .ctrl .center .next{position:absolute;top:5px;cursor:pointer;opacity:0.3}#hoverzoom_fs .ctrl .center .prev:hover,#hoverzoom_fs .ctrl .center .next:hover{opacity:1}#hoverzoom_fs .ctrl .center .prev:before,#hoverzoom_fs .ctrl .center .next:before{top:50%;border-top:5px solid #fff;border-left:5px solid #fff;width:10px;height:10px}#hoverzoom_fs .ctrl .center .prev{left:0}#hoverzoom_fs .ctrl .center .prev:before{left:0;-webkit-transform:rotate(-45deg);-moz-transform:rotate(-45deg);transform:rotate(-45deg)}#hoverzoom_fs .ctrl .center .next{right:0}#hoverzoom_fs .ctrl .center .next:before{right:0;-webkit-transform:rotate(135deg);-moz-transform:rotate(135deg);transform:rotate(135deg)}#hoverzoom_fs .ctrl .center span{font-size:20px}#hoverzoom_fs .ctrl .right{float:right;margin:15px 25px;position:relative}#hoverzoom_fs .ctrl .right a{color:#ccc;margin-left:20px;-webkit-transition:0.3s;-moz-transition:0.3s;transition:0.3s}#hoverzoom_fs .ctrl .right a:hover{color:#fff;text-decoration:none}#hoverzoom_fs .ctrl .right small{font-size:13px}#hoverzoom_fs .ctrl .right .zoom{margin-left:20px;padding-right:15px;display:none;position:relative;cursor:pointer}#hoverzoom_fs .ctrl .right .zoom:after{border-style:solid;border-color:#ccc transparent transparent;border-width:5px;top:6px;right:0}#hoverzoom_fs .ctrl .right .zoom:hover{color:#fff;border-top-color:#fff}#hoverzoom_fs .ctrl .right .zoom:hover ul{display:block}#hoverzoom_fs .ctrl .right .zoom ul{position:absolute;top:100%;right:0;list-style:none;color:#ccc;margin:0;padding:5px 0 0;white-space:nowrap;font-size:12px;z-index:10020;display:none}#hoverzoom_fs .ctrl .right .zoom ul li{padding:5px 10px;background:rgba(0,0,0,0.8)}#hoverzoom_fs .ctrl .right .zoom ul li:hover{background:#000;color:#fff}#hoverzoom_fs .ctrl .right .zoom ul li:last-of-type{display:none}#hoverzoom_fs .loading{background:#000;border-radius:50%;width:50px;height:50px;overflow:hidden;position:absolute;top:50%;left:50%;margin-top:-25px;margin-left:-25px;opacity:0;-webkit-transition:0.3s;-moz-transition:0.3s;transition:0.3s;animation:loading 2s infinite linear;-moz-animation:loading 2s infinite linear;-webkit-animation:loading 2s infinite linear}#hoverzoom_fs .loading:before,#hoverzoom_fs .loading:after{position:absolute;content:''}#hoverzoom_fs .loading:before{border:5px solid #fff;border-radius:50%;height:24px;width:24px;top:8px;left:8px}#hoverzoom_fs .loading:after{background:#000;content:'';height:12px;width:36px;top:30px;left:7px}.hz_settings{position:fixed;top:0;left:0;width:100%;height:100%;display:none;z-index:10000}.hz_settings.loading .cycle{opacity:1 !important;animation:loading infinite 0.8s linear;-moz-animation:loading infinite 0.8s linear;-webkit-animation:loading infinite 0.8s linear}.hz_settings .back{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(255,255,255,0.75);z-index:10000}.hz_settings .wrap{display:inline-block;overflow-x:hidden;overflow-y:auto;margin:10px 0}.hz_settings .wrap img{margin-right:10px;margin-top:5px}.hz_settings .main{position:absolute;top:50%;left:50%;width:550px;height:296px;margin-top:-250px;margin-left:-285px;background:#fff;border:1px solid #acacac;border-bottom:1px solid #999;box-shadow:0 4px 16px rgba(0,0,0,0.2);z-index:10001;border-radius:2px;padding:20px;overflow:hidden}.hz_settings .main h3{font-size:20px;font-weight:normal;margin:0}.hz_settings .main small{color:#666}.hz_settings .main .close{background:url(https://ssl.gstatic.com/s2/oz/images/dialogx.png) no-repeat;cursor:pointer;height:15px;width:15px;position:absolute;right:16px;top:16px}.hz_settings .main .menu{background:#f5f5f5;border-bottom:1px solid #ebebeb;border-top:1px solid #ebebeb;padding:0 5px 0 10px;margin:15px -20px 0}.hz_settings .main .menu li{display:inline-block;padding:7px 12px;color:#666;cursor:pointer}.hz_settings .main .menu li.current{font-weight:bold;color:#dd4839}.hz_settings .main .menu li:hover{color:#dd4839}.hz_settings .main .menu li:last-of-type{display:none}.hz_settings .main .tabs{border-top:1px solid #ddd;position:absolute;left:0;width:2950px;line-height:2}.hz_settings .main .tabs div{float:left;width:550px;padding:15px 20px 0}.hz_settings .main .tabs ul{padding-left:15px;margin:0}.hz_settings .main input[type='text']{border:1px solid #d9d9d9;padding:2px 5px;margin-right:5px;width:50px}.hz_settings .main input[type='checkbox']{margin:0 5px 0 0}.hz_settings .main label{margin-right:5px;display:inline-block;min-width:120px}.hz_settings .main input+label,.hz_settings .main select+label{min-width:0}.hz_settings .main textarea{border:1px solid #ccc;font:12px 'Consolas', Monaco, Courier New, Courier, monospace !important;height:265px;width:540px;padding:10px 0 0 10px;margin-top:10px;resize:none}.hz_settings .main .functions{position:absolute}.hz_settings .main .functions.top{top:20px;right:50px}.hz_settings .main .functions.bottom{bottom:20px;left:20px;width:550px}.hz_settings .main .functions.bottom .hz_button{float:right;margin-right:0;margin-left:16px}.hz_settings .main .functions.bottom .hz_button.update{display:none}.hz_settings .main .functions.bottom .meta{position:absolute;bottom:5px;padding-left:15px;color:#666}.hz_settings .main .functions.bottom .meta:empty{display:none}.hz_settings .main .functions.bottom .meta:before{content:'';background:#666;width:5px;height:5px;position:absolute;top:5px;left:0;-webkit-border-radius:50%;-moz-border-radius:50%;border-radius:50%;-webkit-box-shadow:0 0 3px #666;-moz-box-shadow:0 0 3px #666;box-shadow:0 0 3px #666}.hz_settings .main .functions.bottom .meta.green:before{background:#3D9400;-webkit-box-shadow:0 0 3px #3d9400;-moz-box-shadow:0 0 3px #3d9400;box-shadow:0 0 3px #3d9400}.hz_settings .main .functions.bottom .meta.red:before{background:red;-webkit-box-shadow:0 0 3px red;-moz-box-shadow:0 0 3px red;box-shadow:0 0 3px red}.hz_settings .main .functions.bottom .meta.orange:before{background:orange;-webkit-box-shadow:0 0 3px orange;-moz-box-shadow:0 0 3px orange;box-shadow:0 0 3px orange}.hz_settings .main .functions :last-child{margin-right:0}.hz_settings .main .functions .cycle{float:left;border:3px solid #ccc;border-radius:50%;height:16px;width:16px;margin-right:10px;position:relative;top:4px;opacity:0;-webkit-transition:opacity 0.3s;-moz-transition:opacity 0.3s;transition:opacity 0.3s}.hz_settings .main .functions .cycle:before{content:'';position:absolute;bottom:-3px;right:-3px;width:12px;height:12px;background:#fff}#hz_copyarea .back{z-index:10001}#hz_opts{border-top:1px solid #e5e5e5;margin-top:10px;padding:10px 20px 0}#hz_opts strong{float:left}#hz_opts a{padding:0 10px;display:inline-block}#hz_opts a:hover{background:#eff3fb;text-decoration:none}#hz_opts #disable_hz{margin-right:-10px;float:right;position:relative}#hz_opts #disable_hz:before{content:'';position:absolute;top:10px;left:-5px;width:5px;height:5px;border-radius:50%;box-shadow:0 0 3px #3d9400;background:#3d9400}#hz_opts #disable_hz.off:before{box-shadow:0 0 3px #666;background:#666}#hz_opts ul{list-style:none;clear:both;padding:0;margin-left:-10px}.closeButton{background:url(https://ssl.gstatic.com/ui/v1/icons/common/x_8px.png) no-repeat;cursor:pointer;height:21px;width:21px;position:absolute;right:2px;top:2px;opacity:0.4;border:1px solid transparent}.closeButton:active,.closeButton:focus{opacity:1;border:1px solid #71a7ff}.detailButton{display:inline-block;border-color:#eee transparent transparent;border-style:solid;border-width:5px;height:0;margin:0 0 -4px 5px;top:3px;width:0}.img-in-post img{max-width:100%;height:auto;margin:5px 0;display:block}.img-in-post+br{display:none}.yt-in-post{margin:3px 0}.closeYT{cursor:pointer;float:right;margin-top:-22px;font-weight:bold}.clickDetail{position:absolute;top:25px;left:0;background:#fff;border:1px solid #ccc;box-shadow:0 2px 4px rgba(0,0,0,0.2);padding:16px 32px 16px 16px;position:absolute;z-index:1201;display:none;min-width:150px;-webkit-border-radius:2px;-moz-border-radius:2px;border-radius:2px}.clickDetail strong{color:#000 !important}.clickDetail a:hover{text-decoration:none;border-bottom:1px solid #36c}.clickDetail small{color:#999;position:absolute;right:16px}.clickDetail .notify{color:#999;margin-right:-16px;padding:10px 0 5px;text-align:center}.clickDetail.loaded .notify{display:none}.clickDetail:before{position:absolute;top:-9px;left:20px;border-left:9px solid transparent;border-right:9px solid transparent;border-bottom:9px dashed #ccc;content:''}.clickDetail:after{position:absolute;top:-7px;left:20px;border-left:9px solid transparent;border-right:9px solid transparent;border-bottom:9px dashed #fff;content:''}.maxpic_container{height:auto !important;max-width:none !important;max-height:none !important;margin-bottom:5px !important}.maxpic_container img{max-width:100% !important;height:auto !important}.maxyt_container{max-width:none !important;width:100% !important;height:auto !important}@keyframes loading{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}@-webkit-keyframes loading{0%{-webkit-transform:rotate(0deg)}100%{-webkit-transform:rotate(360deg)}}@-moz-keyframes loading{0%{-moz-transform:rotate(0deg)}100%{-moz-transform:rotate(360deg)}}");
+// CSS
+GM_addStyle("#hoverzoom{position:fixed;box-shadow:0 4px 16px rgba(0,0,0,0.2);z-index:10002;display:none;background:rgba(255,255,255,0.5)}#hoverzoom img{display:block;margin:5px}#hoverzoom small{display:block;text-align:center;line-height:1;margin:0 5px 5px}#hz_loading{width:20px;height:20px;box-shadow:0 -2px 1px 1px #dd4839;position:fixed;pointer-events:none;z-index:10000;display:none;-webkit-border-radius:50%;-moz-border-radius:50%;border-radius:50%;animation:loading infinite 0.8s linear;-moz-animation:loading infinite 0.8s linear;-webkit-animation:loading infinite 0.8s linear}#hoverzoom_db{position:fixed;top:45%;right:-40px;background:#f5f5f5;border:1px solid #d2d2d2;border-right:none;box-shadow:0 0 5px rgba(0,0,0,0.1);width:37px;height:37px;-webkit-border-radius:2px 0 0 2px;-moz-border-radius:2px 0 0 2px;border-radius:2px 0 0 2px;-webkit-transition:0.3s;-moz-transition:0.3s;transition:0.3s}#hoverzoom_db:hover div{background:#666}#hoverzoom_db.enable{right:0}#hoverzoom_db div{margin:6px;width:25px;height:25px;background:#aaa;-webkit-border-radius:50%;-moz-border-radius:50%;border-radius:50%;-webkit-transition:0.3s;-moz-transition:0.3s;transition:0.3s}#hoverzoom_db div:before,#hoverzoom_db div:after{position:absolute;content:''}#hoverzoom_db div:before{width:6px;height:8px;background:#f5f5f5;top:12px;left:15px}#hoverzoom_db div:after{border-style:solid;border-width:7px 8px;border-color:#f5f5f5 transparent transparent;top:19px;left:10px}#hoverzoom_sc{position:absolute;z-index:10005;box-shadow:0 4px 16px rgba(0,0,0,0.2);display:none}#hoverzoom_sc a,#hoverzoom_sc span{outline:none;cursor:pointer;color:#3366CC}#hoverzoom_sc a{border-right:1px solid #eee;padding-right:5px}#hoverzoom_sc span{border-left:1px solid #eee;padding-left:5px}#hoverzoom_sc span:hover{text-decoration:underline}.albumDownload,.picStacks,.tubeStacks{padding-left:15px;margin-left:20px}.albumDownload:before,.picStacks:before,.tubeStacks:before{content:'-';cursor:default;left:-27px;position:relative;display:inline-block;border-bottom:1px solid transparent}.albumDownload{background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACl0lEQVQ4jX1TX2iOcRR+zvm97++d720R1mxlLlg2EjWlFhe0tkUW1tRnSGFpUlJu9blgWUmKsmRo2lbaxcpopklq0tCKopRCjWWabeb73j+/33Fh1sbHU6fOxfM853SeDiELMp5XrJSqE+CwuKQ4xiVLdNf7/v1VNv4MWup71lzb13d8an5BmU3Mey++L7Hvi/i+RAn/43hV3oqR5qXLZ2v4d9Oa7N2iSfflsHehbUdnw9cFxZUQ+1wBsAAgUGYhlsCaB6NNhRVzDFqSvSVQ6CRQfjqagi+2oavi4rl3RTV7ROyT6Ski1sQQKiRCx5dzhSsBgAVCikyTyzovttHMam6cyTlT0/mJfqRrDPAQgD/tE3ouLbYWTQIQX6+/V0rgrWEcgEDQykMYBzfGo8mdrc00ScCo0nonWbnlhsoBgEwkYNC2z2eLStkKtrtKaxCglIPIhudzo4lDJ27vTv/ehsbGxlXw41hQ7H6BgEUAz4GGxNsdARqtGChSBsacPNhefSFbQgTISK6KAQMBEBoBkxxhEDRAabZxsjuM39bV9RX9N+s/4JClFCMc7g6pwAPdFBOu+xeZHCEACV8TtCKMpe0VAoC62runtNKnjQkDzuhV7T0V77IZSBnmx7vyG0HkhkxuALrqpFIpfv0SG5gdmDiKMssGF21qW3vAiJMggcw2KAfJBFFaeeSMRfTo496nHwgAkrW9JWB5LDFyv5X2b5so6bvDnpMzV/4L7BBM2kwJ88aB+sEhBoCOrqo3ZJEE0bAyjgOStA0s5lRoAQAmY0dEpGagfnAImPUL7V3VDzhIVAT+6DCEY9YMYgIxgTWDiDI2ki5j7eaB/S/6Zw7796VA5W3rV4OkEoKj06zLELo/sP/ZX+/8E1gaKlGc2T23AAAAAElFTkSuQmCC') no-repeat}.in-albumDownload{margin:25px 18px 25px 0;background:none}.picDownload{background:#bbb;-webkit-border-radius:10px;-moz-border-radius:10px;border-radius:10px;color:#fff !important;display:inline-block;font-size:12px;line-height:1em;height:1em;width:1em;margin:0 2px;padding:5px;text-align:center}.picStacks{background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA20lEQVQ4jbXRQUoDQRAF0DeTjhjExWwcdOVCxAu48/4X0EUUPYVgFonTLqYSmk7UDOKHhu6qrvq/fvFHNLjCDdqJtQNeGzwgRWAKWmwS5tjgEZ+RzJXKEhlnuMM8RSDjvWjQo8PLD8oycjqQuMQtZnGeQ2GJnaq6QR/FbTD3EV9iEbGPsiBV9+tg3coecGH0aREjPik8Kle3lVUauH13OMW5ceW7P/UIjX3Xa5x8N0LG6oCCmmDPg6ZILo9QkI3jQJOwjkb3v7DXSlqsZ8Ydd0b32wlnwNuRhP+IL+1ZLCIrPZQEAAAAAElFTkSuQmCC') no-repeat}.tubeStacks{background:url(https://s.ytimg.com/yt/favicon-refresh-vfldLzJxy.ico) no-repeat}.hz_button{position:relative;cursor:pointer;font-size:11px;font-weight:bold;height:27px;line-height:27px;margin-right:16px;min-width:54px;outline:none;padding:0 8px;text-align:center;float:left;text-decoration:none !important;-webkit-border-radius:2px;-moz-border-radius:2px;border-radius:2px;user-select:none;-moz-user-select:none;-webkit-user-select:none}.hz_button.green{background-color:#3D9400;border:1px solid #29691D;color:#fff;text-shadow:0 1px rgba(0,0,0,0.1);background:-webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #3d9400), color-stop(100%, #398a00));background:-webkit-linear-gradient(left top, #3d9400,#398a00);background:-moz-linear-gradient(left top, #3d9400,#398a00);background:linear-gradient(left top, #3d9400,#398a00)}.hz_button.green:hover{background-color:#368200;border:1px solid #2D6200;text-shadow:0 1px rgba(0,0,0,0.3);background:-webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #3d9400), color-stop(100%, #368200));background:-webkit-linear-gradient(left top, #3d9400,#368200);background:-moz-linear-gradient(left top, #3d9400,#368200);background:linear-gradient(left top, #3d9400,#368200)}.hz_button.green:focus,.hz_button.green:active{box-shadow:0 0 0 1px #fff inset}.hz_button.blue{background-color:#4D90FE;border:1px solid #3079ed;color:#fff;background:-webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #4d90fe), color-stop(100%, #4787ed));background:-webkit-linear-gradient(left top, #4d90fe,#4787ed);background:-moz-linear-gradient(left top, #4d90fe,#4787ed);background:linear-gradient(left top, #4d90fe,#4787ed)}.hz_button.blue:hover{background-color:#357AE8;border:1px solid #2F5BB7;background:-webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #4d90fe), color-stop(100%, #357ae8));background:-webkit-linear-gradient(left top, #4d90fe,#357ae8);background:-moz-linear-gradient(left top, #4d90fe,#357ae8);background:linear-gradient(left top, #4d90fe,#357ae8)}.hz_button.blue:focus,.hz_button.blue:active{box-shadow:0 0 0 1px #fff inset}.hz_button.white{background-color:#F5F5F5;border:1px solid rgba(0,0,0,0.1);color:#444;background:-webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #f5f5f5), color-stop(100%, #f1f1f1));background:-webkit-linear-gradient(left top, #f5f5f5,#f1f1f1);background:-moz-linear-gradient(left top, #f5f5f5,#f1f1f1);background:linear-gradient(left top, #f5f5f5,#f1f1f1)}.hz_button.white:hover{background-color:#F8F8F8;border:1px solid #c6c6c6;color:#333;background:-webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #f8f8f8), color-stop(100%, #f1f1f1));background:-webkit-linear-gradient(left top, #f8f8f8,#f1f1f1);background:-moz-linear-gradient(left top, #f8f8f8,#f1f1f1);background:linear-gradient(left top, #f8f8f8,#f1f1f1)}.hz_button.white:focus,.hz_button.white:active{box-shadow:0 1px 2px rgba(0,0,0,0.1) inset}.hz_button.orange{background-color:#D14836;color:#fff;text-shadow:0 1px rgba(0,0,0,0.1);border:1px solid transparent;background:-webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #dd4b39), color-stop(100%, #d14836));background:-webkit-linear-gradient(left top, #dd4b39,#d14836);background:-moz-linear-gradient(left top, #dd4b39,#d14836);background:linear-gradient(left top, #dd4b39,#d14836)}.hz_button.orange:hover{background-color:#C53727;border:1px solid #B0281A;box-shadow:0 1px 1px rgba(0,0,0,0.2);background:-webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0%, #dd4b39), color-stop(100%, #c53727));background:-webkit-linear-gradient(left top, #dd4b39,#c53727);background:-moz-linear-gradient(left top, #dd4b39,#c53727);background:linear-gradient(left top, #dd4b39,#c53727)}.hz_button.orange:focus,.hz_button.orange:active{box-shadow:0 0 0 1px #fff inset}#hoverzoom_fs{position:fixed;top:0;left:0;height:100%;width:100%;z-index:10010;display:none;background:rgba(0,0,0,0.8);color:#ccc;text-shadow:1px 1px 2px #000;overflow:auto}#hoverzoom_fs.zoom .ctrl .right .zoom{display:inline-block}#hoverzoom_fs.load .loading{opacity:0.8}#hoverzoom_fs.multi .ctrl .center{display:block}#hoverzoom_fs.actual .ctrl .right .zoom ul li:last-of-type{display:block}#hoverzoom_fs .back{position:absolute;top:0;left:0;width:100%;height:100%}#hoverzoom_fs .main{position:absolute}#hoverzoom_fs .main img{opacity:0;box-shadow:0 4px 16px rgba(0,0,0,0.2);max-width:0;max-height:0;display:block}#hoverzoom_fs .ctrl{position:absolute;top:0;width:100%;height:100px;margin-top:-50px;opacity:0;-webkit-transition:opacity 0.5s,margin 0.5s;-moz-transition:opacity 0.5s,margin 0.5s;transition:opacity 0.5s,margin 0.5s;background:-webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(0,0,0,0.8)), color-stop(50%, rgba(0,0,0,0)));background:-webkit-linear-gradient(top, rgba(0,0,0,0.8) 0%,rgba(0,0,0,0) 50%);background:-moz-linear-gradient(top, rgba(0,0,0,0.8) 0%,rgba(0,0,0,0) 50%);background:linear-gradient(top, rgba(0,0,0,0.8) 0%,rgba(0,0,0,0) 50%)}#hoverzoom_fs .ctrl:hover{margin-top:0;opacity:1}#hoverzoom_fs .ctrl div{-webkit-transition:0.3s;-moz-transition:0.3s;transition:0.3s}#hoverzoom_fs .ctrl div:before,#hoverzoom_fs .ctrl div:after{content:'';position:absolute}#hoverzoom_fs .ctrl .close{position:absolute;left:23px;opacity:0.3;height:50px;cursor:pointer}#hoverzoom_fs .ctrl .close:hover{opacity:1}#hoverzoom_fs .ctrl .close:before,#hoverzoom_fs .ctrl .close:after{background:#fff;height:32px;bottom:10px;width:5px}#hoverzoom_fs .ctrl .close:before{-webkit-transform:rotate(-45deg);-moz-transform:rotate(-45deg);transform:rotate(-45deg)}#hoverzoom_fs .ctrl .close:after{-webkit-transform:rotate(45deg);-moz-transform:rotate(45deg);transform:rotate(45deg)}#hoverzoom_fs .ctrl .center{position:absolute;left:50%;top:15px;width:200px;margin-left:-100px;text-align:center;display:none}#hoverzoom_fs .ctrl .center .prev,#hoverzoom_fs .ctrl .center .next{position:absolute;top:5px;cursor:pointer;opacity:0.3}#hoverzoom_fs .ctrl .center .prev:hover,#hoverzoom_fs .ctrl .center .next:hover{opacity:1}#hoverzoom_fs .ctrl .center .prev:before,#hoverzoom_fs .ctrl .center .next:before{top:50%;border-top:5px solid #fff;border-left:5px solid #fff;width:10px;height:10px}#hoverzoom_fs .ctrl .center .prev{left:0}#hoverzoom_fs .ctrl .center .prev:before{left:0;-webkit-transform:rotate(-45deg);-moz-transform:rotate(-45deg);transform:rotate(-45deg)}#hoverzoom_fs .ctrl .center .next{right:0}#hoverzoom_fs .ctrl .center .next:before{right:0;-webkit-transform:rotate(135deg);-moz-transform:rotate(135deg);transform:rotate(135deg)}#hoverzoom_fs .ctrl .center span{font-size:20px}#hoverzoom_fs .ctrl .right{float:right;margin:15px 25px;position:relative}#hoverzoom_fs .ctrl .right a{color:#ccc;margin-left:20px;-webkit-transition:0.3s;-moz-transition:0.3s;transition:0.3s}#hoverzoom_fs .ctrl .right a:hover{color:#fff;text-decoration:none}#hoverzoom_fs .ctrl .right small{font-size:13px}#hoverzoom_fs .ctrl .right .zoom{margin-left:20px;padding-right:15px;display:none;position:relative;cursor:pointer}#hoverzoom_fs .ctrl .right .zoom:after{border-style:solid;border-color:#ccc transparent transparent;border-width:5px;top:6px;right:0}#hoverzoom_fs .ctrl .right .zoom:hover{color:#fff;border-top-color:#fff}#hoverzoom_fs .ctrl .right .zoom:hover ul{display:block}#hoverzoom_fs .ctrl .right .zoom ul{position:absolute;top:100%;right:0;list-style:none;color:#ccc;margin:0;padding:5px 0 0;white-space:nowrap;font-size:12px;z-index:10020;display:none}#hoverzoom_fs .ctrl .right .zoom ul li{padding:5px 10px;background:rgba(0,0,0,0.8)}#hoverzoom_fs .ctrl .right .zoom ul li:hover{background:#000;color:#fff}#hoverzoom_fs .ctrl .right .zoom ul li:last-of-type{display:none}#hoverzoom_fs .loading{background:#000;border-radius:50%;width:50px;height:50px;overflow:hidden;position:absolute;top:50%;left:50%;margin-top:-25px;margin-left:-25px;opacity:0;-webkit-transition:0.3s;-moz-transition:0.3s;transition:0.3s;animation:loading 2s infinite linear;-moz-animation:loading 2s infinite linear;-webkit-animation:loading 2s infinite linear}#hoverzoom_fs .loading:before,#hoverzoom_fs .loading:after{position:absolute;content:''}#hoverzoom_fs .loading:before{border:5px solid #fff;border-radius:50%;height:24px;width:24px;top:8px;left:8px}#hoverzoom_fs .loading:after{background:#000;content:'';height:12px;width:36px;top:30px;left:7px}.hz_settings{position:fixed;top:0;left:0;width:100%;height:100%;display:none;z-index:10000}.hz_settings.loading .cycle{opacity:1 !important;animation:loading infinite 0.8s linear;-moz-animation:loading infinite 0.8s linear;-webkit-animation:loading infinite 0.8s linear}.hz_settings .back{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(255,255,255,0.75);z-index:10000}.hz_settings .wrap{display:inline-block;overflow-x:hidden;overflow-y:auto;margin:10px 0}.hz_settings .wrap img{margin-right:10px;margin-top:5px}.hz_settings .main{position:absolute;top:50%;left:50%;width:550px;height:296px;margin-top:-250px;margin-left:-285px;background:#fff;border:1px solid #acacac;border-bottom:1px solid #999;box-shadow:0 4px 16px rgba(0,0,0,0.2);z-index:10001;border-radius:2px;padding:20px;overflow:hidden}.hz_settings .main h3{font-size:20px;font-weight:normal;margin:0}.hz_settings .main small{color:#666}.hz_settings .main .close{background:url(https://ssl.gstatic.com/s2/oz/images/dialogx.png) no-repeat;cursor:pointer;height:15px;width:15px;position:absolute;right:16px;top:16px}.hz_settings .main .menu{background:#f5f5f5;border-bottom:1px solid #ebebeb;border-top:1px solid #ebebeb;padding:0 5px 0 10px;margin:15px -20px 0}.hz_settings .main .menu li{display:inline-block;padding:7px 12px;color:#666;cursor:pointer}.hz_settings .main .menu li.current{font-weight:bold;color:#dd4839}.hz_settings .main .menu li:hover{color:#dd4839}.hz_settings .main .menu li:last-of-type{display:none}.hz_settings .main .tabs{border-top:1px solid #ddd;position:absolute;left:0;width:2950px;line-height:2}.hz_settings .main .tabs div{float:left;width:550px;padding:15px 20px 0}.hz_settings .main .tabs ul{padding-left:15px;margin:0}.hz_settings .main input[type='text']{border:1px solid #d9d9d9;padding:2px 5px;margin-right:5px;width:50px}.hz_settings .main input[type='checkbox']{margin:0 5px 0 0}.hz_settings .main label{margin-right:5px;display:inline-block;min-width:120px}.hz_settings .main input+label,.hz_settings .main select+label{min-width:0}.hz_settings .main textarea{border:1px solid #ccc;font:12px 'Consolas', Monaco, Courier New, Courier, monospace !important;height:251px;width:540px;padding:10px 0 0 10px;margin-top:10px;resize:none}.hz_settings .main .functions{position:absolute}.hz_settings .main .functions.top{top:20px;right:50px}.hz_settings .main .functions.bottom{bottom:20px;left:20px;width:550px}.hz_settings .main .functions.bottom .hz_button{float:right;margin-right:0;margin-left:16px}.hz_settings .main .functions.bottom .hz_button.update{display:none}.hz_settings .main .functions.bottom .meta{position:absolute;bottom:5px;padding-left:15px;color:#666}.hz_settings .main .functions.bottom .meta:empty{display:none}.hz_settings .main .functions.bottom .meta:before{content:'';background:#666;width:5px;height:5px;position:absolute;top:5px;left:0;-webkit-border-radius:50%;-moz-border-radius:50%;border-radius:50%;-webkit-box-shadow:0 0 3px #666;-moz-box-shadow:0 0 3px #666;box-shadow:0 0 3px #666}.hz_settings .main .functions.bottom .meta.green:before{background:#3D9400;-webkit-box-shadow:0 0 3px #3d9400;-moz-box-shadow:0 0 3px #3d9400;box-shadow:0 0 3px #3d9400}.hz_settings .main .functions.bottom .meta.red:before{background:red;-webkit-box-shadow:0 0 3px red;-moz-box-shadow:0 0 3px red;box-shadow:0 0 3px red}.hz_settings .main .functions.bottom .meta.orange:before{background:orange;-webkit-box-shadow:0 0 3px orange;-moz-box-shadow:0 0 3px orange;box-shadow:0 0 3px orange}.hz_settings .main .functions :last-child{margin-right:0}.hz_settings .main .functions .cycle{float:left;border:3px solid #ccc;border-radius:50%;height:16px;width:16px;margin-right:10px;position:relative;top:4px;opacity:0;-webkit-transition:opacity 0.3s;-moz-transition:opacity 0.3s;transition:opacity 0.3s}.hz_settings .main .functions .cycle:before{content:'';position:absolute;bottom:-3px;right:-3px;width:12px;height:12px;background:#fff}#hz_copyarea .back{z-index:10001}#hz_opts{border-top:1px solid #e5e5e5;margin-top:10px;padding:10px 20px 0}#hz_opts strong{float:left}#hz_opts a{padding:0 10px;display:inline-block}#hz_opts a:hover{background:#eff3fb;text-decoration:none}#hz_opts #disable_hz{margin-right:-10px;float:right;position:relative}#hz_opts #disable_hz:before{content:'';position:absolute;top:10px;left:-5px;width:5px;height:5px;border-radius:50%;box-shadow:0 0 3px #3d9400;background:#3d9400}#hz_opts #disable_hz.off:before{box-shadow:0 0 3px #666;background:#666}#hz_opts ul{list-style:none;clear:both;padding:0;margin-left:-10px}.closeButton{background:url(https://ssl.gstatic.com/ui/v1/icons/common/x_8px.png) no-repeat;cursor:pointer;height:21px;width:21px;position:absolute;right:2px;top:2px;opacity:0.4;border:1px solid transparent}.closeButton:active,.closeButton:focus{opacity:1;border:1px solid #71a7ff}.detailButton{display:inline-block;border-color:#eee transparent transparent;border-style:solid;border-width:5px;height:0;margin:0 0 -4px 5px;top:3px;width:0}.img-in-post img{max-width:100%;height:auto;margin:5px 0;display:block}.img-in-post+br{display:none}.yt-in-post{margin:3px 0}.closeYT{cursor:pointer;float:right;margin-top:-22px;font-weight:bold}.clickDetail{position:absolute;top:25px;left:0;background:#fff;border:1px solid #ccc;box-shadow:0 2px 4px rgba(0,0,0,0.2);padding:16px 32px 16px 16px;position:absolute;z-index:1201;display:none;min-width:150px;-webkit-border-radius:2px;-moz-border-radius:2px;border-radius:2px}.clickDetail strong{color:#000 !important}.clickDetail a:hover{text-decoration:none;border-bottom:1px solid #36c}.clickDetail small{color:#999;position:absolute;right:16px}.clickDetail .notify{color:#999;margin-right:-16px;padding:10px 0 5px;text-align:center}.clickDetail.loaded .notify{display:none}.clickDetail:before{position:absolute;top:-9px;left:20px;border-left:9px solid transparent;border-right:9px solid transparent;border-bottom:9px dashed #ccc;content:''}.clickDetail:after{position:absolute;top:-7px;left:20px;border-left:9px solid transparent;border-right:9px solid transparent;border-bottom:9px dashed #fff;content:''}.maxpic_container{height:auto !important;max-width:none !important;max-height:none !important;margin-bottom:5px !important}.maxpic_container img{max-width:100% !important;height:auto !important}.maxyt_container{max-width:none !important;width:100% !important;height:auto !important}@keyframes loading{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}@-webkit-keyframes loading{0%{-webkit-transform:rotate(0deg)}100%{-webkit-transform:rotate(360deg)}}@-moz-keyframes loading{0%{-moz-transform:rotate(0deg)}100%{-moz-transform:rotate(360deg)}}");
