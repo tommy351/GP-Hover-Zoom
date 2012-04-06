@@ -141,7 +141,7 @@ var locale = {
 		set24: 'None',
 		set25: 'Show photo links in comments directly, max width:',
 		set26: 'Show Resolution',
-		set27: 'Fullscreen',
+		set27: 'Fullscreen:',
 		set28: 'Download:',
 		set31: 'Show shortcuts when hovered',
 		set32: 'Enable album download',
@@ -161,7 +161,7 @@ var locale = {
 		set46: 'Don\'t hide photo when hovered',
 		set47: 'Resize videos to stream width, video aspect:',
 		set48: 'Show photo links in posts directly, max width:',
-		set49: 'Enable Youtube Video Download',
+		set49: 'Enable Youtube video download',
 		set50: 'Download directly without opening in new tab'
 	},
 	'zh-TW': {
@@ -232,7 +232,7 @@ var locale = {
 		set26: '顯示圖片解析度',
 		set27: '全螢幕：',
 		set28: '下載：',
-		set31: '滑鼠滑入時顯示快捷鍵',
+		set31: '滑鼠移入時顯示快捷鍵',
 		set32: '啟用相簿下載',
 		set33: '直接顯示留言內的 Youtube 連結，影片長寬比例：',
 		set34: '，最大寬度：',
@@ -321,7 +321,7 @@ var locale = {
 		set26: '显示图片分辨率',
 		set27: '全屏：',
 		set28: '下载：',
-		set31: '鼠标滑入时显示热键',
+		set31: '鼠标移入时显示热键',
 		set32: '启用相簿下载',
 		set33: '直接显示留言内的 Youtube 连结，视频长宽比例：',
 		set34: '，最大宽度：',
@@ -339,7 +339,8 @@ var locale = {
 		set46: '鼠标移入大图时不隐藏',
 		set47: '以讯息流宽度显示视频，视频长宽比例：',
 		set48: '直接显示文章内的图片链结，最大宽度：',
-		set49: '启用 Youtube 视频下载'
+		set49: '启用 Youtube 视频下载',
+		set50: '直接下载无须开启新页签'
 	},
 	'ja-JP': {
 		menu01: 'オフ',
@@ -430,7 +431,9 @@ var locale = {
 		set46: '画像にカーソルを重ねた時に画像を隠さない',
 		set47: 'ストリームの幅で動画表示、長さと幅の比：',
 		set48: '画像の直リンクをポストで表示、最大幅：',
-		set49: 'YouTube ダウンロード機能を有効にする'
+		set49: 'YouTube ダウンロード機能を有効にする',
+		// 日文翻譯
+		set50: 'Download directly without opening in new tab'
 	},
 	'index': [
 		['en-US', 'English'],
