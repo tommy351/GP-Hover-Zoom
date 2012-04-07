@@ -640,7 +640,7 @@ var init = {
 							+'<div class="cycle"></div>'
 							+'<div class="hz_button blue">'+lang.al05+'</div>'
 							+'<div class="hz_button green">'+lang.al06+'</div>'
-							+'<div class="hz_button orange">'+lang.al03+'</div>'
+							+'<a class="hz_button orange">'+lang.al03+'</a>'
 						+'</div>'
 					+'</div>'
 				},
@@ -1335,7 +1335,7 @@ var albumDL = function(){
 		arr = [];
 
 	$page.fadeIn(300).addClass('loading')
-	.find('orange').attr('href', 'picasa://downloadfeed/?url=https://picasaweb.google.com/data/feed/back_compat/user/'+userid+'/albumid/'+albumid+'?imgdl=1');
+	.find('.orange').attr('href', 'picasa://downloadfeed/?url=https://picasaweb.google.com/data/feed/back_compat/user/'+userid+'/albumid/'+albumid+'?imgdl=1');
 
 	GM_xmlhttpRequest({
 		method: 'GET',
