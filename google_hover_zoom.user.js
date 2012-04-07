@@ -1790,7 +1790,7 @@ var update = new function(){
 					content = data.content[options.hz_language] || data.content['en-US'];
 
 				if (version == data.version){
-					$meta.html(lang.update07).addClass('red');
+					$meta.html(lang.update07).addClass('green');
 				} else {
 					var length = nowVer.length > newVer.length ? nowVer.length : newVer.length;
 					for (var i=0; i<length; i++){
