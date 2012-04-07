@@ -512,11 +512,10 @@ var init = {
 		.on('click', '.next, img', lightbox.next)
 		.on('contextmenu', 'img', lightbox.prev)
 		.on('scroll', function(){
-			$(this).children('.ctrl').css({top: this.scrollTop, left: this.scrollLeft})
-			.find('li').each(function(i){
-				$(this).on('click', function(){
-					lightbox.resize.type(i);
-				});
+			$(this).children('.ctrl').css({top: this.scrollTop, left: this.scrollLeft});
+		}).find('li').each(function(i){
+			$(this).on('click', function(){
+				lightbox.resize.type(i);
 			});
 		});
 	},
@@ -1079,6 +1078,8 @@ var lightbox = new function(){
 				$(img).css({maxWidth: 'none', maxHeight: 'none'});
 				main(($(img).height() > wHeight ? 0 : (wHeight - $(img).height() / 2)), 0);
 			}
+
+			$ctrl.find('li').css('fontWeight', 'normal').eq(i).css('fontWeight', 'bold');
 		};
 
 		return {
