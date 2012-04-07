@@ -560,7 +560,7 @@ var init = {
 			return false;
 		});
 
-		$('.hz_settings').on('click', '.masonry-brick', function(){
+		$content.parent().on('click', '.masonry-brick', function(){
 			openWindow(this.href);
 			return false;
 		});
@@ -1626,7 +1626,10 @@ var timer = new function(){
 				} else if (length == 1){
 					var url = target[0].childNodes[0].src;
 					url = url.match(/\?sz|\/proxy/) ? url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : url.replace(picasaRegex,'/s0/$2');
-					var link = '<a class="c-C picStacks" href="'+url+'">'+lang.fs03+'</a>';
+					var link = $('<a class="c-C picStacks" href="'+url+'">'+lang.fs03+'</a>').on('click', function(){
+						openWindow(url);
+						return false;
+					});
 				}
 
 				$(this).data('class', true).parentsUntil('.Te').find('.vo').append(link);
