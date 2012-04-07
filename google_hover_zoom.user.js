@@ -374,19 +374,17 @@ var locale = {
 		maxpic01: 'ズーム',
 		update01: 'アップデート',
 		update05: 'アップデートチェック',
-		// 日文翻譯
-		update07: 'You\'re up to date!',
-		update08: 'Error!',
-		update09: 'Update check is not available in developer version.',
-		update11: 'New version',
-		update12: 'is available!',
-		update13: 'Checking for update...',
-		update14: 'Retry',
-		update15: 'Please refresh the page manually after update is complete.',
+		update07: '最新版に更新しました！',
+		update08: 'エラー！',
+		update09: '開発版では、更新チェック機能は使用できません。',
+		update11: '新バージョン',
+		update12: 'が発表されました！',
+		update13: '更新チェック中…',
+		update14: 'リトライ',
+		update15: '更新したあとで、ページを再表示してください。',
 		his01: '閲覧記録',
 		his02: 'クリア',
-		// 日文翻譯
-		his03: 'Are you sure to clear all records?',
+		his03: 'すべての記録をクリアしますか？',
 		set01: '設定',
 		set02: '設定保存',
 		set03: 'リセット',
@@ -412,8 +410,7 @@ var locale = {
 		set26: '画像解像度を表示',
 		set27: 'フルスクリーン：',
 		set28: 'ダウンロード：',
-		// 日文翻譯
-		set31: 'Show shortcuts when hovered',
+		set31: 'マウスが図像にオーバーしたら、ショートカットを表示します',
 		set32: 'アルバムダウンロードを有効にする',
 		set33: 'コメント欄内の Youtube リンクを表示、長さと幅の比：',
 		set34: '，最大幅：',
@@ -432,8 +429,7 @@ var locale = {
 		set47: 'ストリームの幅で動画表示、長さと幅の比：',
 		set48: '画像の直リンクをポストで表示、最大幅：',
 		set49: 'YouTube ダウンロード機能を有効にする',
-		// 日文翻譯
-		set50: 'Download directly without opening in new tab'
+		set50: 'タブを開かずに直ちに画像をダウンロードします'
 	},
 	'index': [
 		['en-US', 'English'],
