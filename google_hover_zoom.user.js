@@ -1581,7 +1581,7 @@ var timer = new function(){
 
 	// Process Youtube video in posts
 	var tube = function(){
-		$('div[data-content-type$="flash"]').each(function(){
+		$('div[id^="update-"] div[data-content-type$="flash"]').each(function(){
 			if (!$(this).data('class')){
 				var button = $('<span class="c-C tubeStacks">'+lang.fs03+'</span>').data('url', $(this).attr('data-content-url').replace(/^http/, 'https'));
 				$(this).data('class', true).parentsUntil('.Te').find('.vo').append(button);
