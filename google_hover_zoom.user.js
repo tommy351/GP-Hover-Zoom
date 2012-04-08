@@ -1667,7 +1667,7 @@ var timer = new function(){
 							}
 						});
 
-						$(document).scrollTop($(this).parent().parent().parent().parent().offset().top - 100);
+						$(document).scrollTop($(this).parent().parent().parent().offset().top - 100);
 						$(this).remove();
 					});
 
