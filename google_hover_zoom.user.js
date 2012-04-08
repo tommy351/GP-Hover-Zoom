@@ -1305,7 +1305,7 @@ var history = new function(){
 	return {
 		create: function(url){
 			var time = new Date(),
-				date = '/ ::';
+				date = (time.getMonth() + 1)+'/'+time.getDate()+' '+time.getHours()+':'+(time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes())+':'+(time.getSeconds() < 10 ? '0' + time.getSeconds() : time.getSeconds());
 			save(url, date);
 		},
 		display: function(){
