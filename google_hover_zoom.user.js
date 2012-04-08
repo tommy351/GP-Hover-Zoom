@@ -1318,7 +1318,7 @@ var history = new function(){
 				var item = storage[i].split(';'),
 					thumbnail = item[0].match(gcRegex) && item[0].match(picasaRegex) ? item[0].replace(picasaRegex, '/w'+width+'/$2') : item[0];
 
-				arr.push('<a href="'+item[0]+'" title="'+item[1]+'"><img src="'+thumbnail+'"></a>');
+				arr.push('<a href="'+item[0]+'" title="'+item[1]+'"><img src="'+thumbnail+'" width="'+width+'"></a>');
 			}
 
 			sortPic($('#hz_history_page'), arr, '<strong>'+length+'</strong> / '+options.hz_his_max+' '+(length > 1 ? lang.set08 : lang.set07));
