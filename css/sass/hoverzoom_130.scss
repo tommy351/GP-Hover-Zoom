@@ -841,12 +841,15 @@ $main: #dd4839;
 }
 .maxpic_container{
 	height: auto !important;
-	max-width: none !important;
-	max-height: none !important;
+	width: auto !important;
+	max-width: 100% !important;
+	max-height: 100% !important;
 	margin-bottom: 5px !important;
+	float: none !important;
 	img{
 		max-width: 100% !important;
 		height: auto !important;
+		width: auto !important;
 	}
 }
 .maxyt_container{

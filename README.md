@@ -6,10 +6,10 @@
 
 ##Features
 
-* Enlarge thumbnails & profile icons on hover.
-* Display photo and video links in comments directly.
-* Resize photos and videos to width of stream.
-* Download Picasa albums.
+* Enlarge thumbnails, picture links, profile icons on hover.
+* Display photo & video links in comments directly.
+* Resize photos & videos to width of stream.
+* Download Picasa albums & Youtube videos.
 * Batch download photos.
 * Record the photos you have browsed.
 
@@ -24,6 +24,8 @@ Help me translate? <http://goo.gl/4IyfO>
 
 ##Usages
 
+###Install
+
 * **Firefox**: Install [Greasemonkey] or [Scriptish] first, then install the script.
 * **Chrome**: Install the script directly.
 * **Safari**: Install [NinjaKit] first. then install the script.
@@ -31,6 +33,11 @@ Help me translate? <http://goo.gl/4IyfO>
 [Greasemonkey]: https://addons.mozilla.org/firefox/addon/greasemonkey/
 [Scriptish]: https://addons.mozilla.org/firefox/addon/scriptish/
 [NinjaKit]: http://d.hatena.ne.jp/os0x/20100612/1276330696
+
+###Configure
+
+1. Click profile icon on the upper right corner.
+2. Click "**Settings**" to configure Google+ Hover Zoom.
 
 ##Screenshots
 ![Enlarge thumbnails on hover](https://lh6.googleusercontent.com/-V4nm0sX5bz4/Tu11CsVux-I/AAAAAAAADkY/vhrjKHMb3QY/s0/%2525E8%25259E%2525A2%2525E5%2525B9%252595%2525E5%2525BF%2525AB%2525E7%252585%2525A7%2525202011-12-18%25252012.31.03.jpg)
