@@ -1262,16 +1262,20 @@ var history = new function(){
 	var read = function(){
 		var storage = localStorage.hz_histories;
 
-		if (typeof storage == 'undefined' || storage == ''){
-			return [];
+		if (typeof storage != 'undefined' && storage != null){
+			if (storage == ''){
+				return [];
+			} else {
+				var arr = storage.split('|||'),
+					length = arr.length,
+					max = options.hz_his_max;
+
+				if (length > max) arr.splice(max, length - max);
+
+				return arr;
+			}
 		} else {
-			var arr = storage.split('|||'),
-				length = arr.length,
-				max = options.hz_his_max;
-
-			if (length > max) arr.splice(max, length - max);
-
-			return arr;
+			return [];
 		}
 	};
 
