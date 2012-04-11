@@ -39,7 +39,7 @@ $main: #dd4839;
 	width: 20px;
 	height: 20px;
 	box-shadow: 0 -2px 1px 1px $main;
-	position: fixed;
+	position: absolute;
 	pointer-events: none;
 	z-index: 10000;
 	display: none;
