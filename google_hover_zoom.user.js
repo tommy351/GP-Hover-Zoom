@@ -1486,7 +1486,7 @@ var timer = new function(){
 				var maxWidth = options.hz_direct_ytmaxwidth > 0 ? options.hz_direct_ytmaxwidth : $(this).parent().parent().width(),
 					url = url.replace(/(https?:)(.*)\?v=(.*)/, 'https://www.youtube.com/v/$3?version=3&autohide=1&feature=player_embedded');
 
-				$(this).after('<div class="closeYT" title="'+lang.ytdl01+'">X</div><object style="width:'+maxWidth+';height:'+(maxWidth * aspect)+'"><param name="movie" value="'+url+'"><param name="allowFullScreen" value="true"><param name="allowScriptAccess" value="always"><embed src="'+url+'" type="application/x-shockwave-flash" allowfullscreen="true" allowScriptAccess="always" width="'+maxWidth+'" height="'+(maxWidth * aspect)+'"></object>').addClass('yt-in-post').css({display: 'block', fontWeight: 'bold', marginRight: 11});
+				$(this).after('<div class="closeYT" title="'+lang.set10+'">X</div><object style="width: '+maxWidth+'px; height: '+(maxWidth * aspect)+'px;"><param name="movie" value="'+url+'"><param name="allowFullScreen" value="true"><param name="allowScriptAccess" value="always"><embed src="'+url+'" type="application/x-shockwave-flash" allowfullscreen="true" allowScriptAccess="always" width="'+maxWidth+'" height="'+(maxWidth * aspect)+'"></object>').addClass('yt-in-post').css({display: 'block', fontWeight: 'bold', marginRight: 11});
 			}
 		});
 	};
