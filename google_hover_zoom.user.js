@@ -979,7 +979,7 @@ var hoverzoom = function(){
 
 // Enable functions
 var enable = function(){
-	if (options.hz_enable_main === 'true') $content.on('mouseenter', 'div[data-content-type^="image"] img, div[data-content-url*="picasa"] img', hoverzoom);
+	if (options.hz_enable_main === 'true') $content.on('mouseenter', '.uaGLLd img', hoverzoom);
 	if (options.hz_enable_icon === 'true') $content.on('mouseenter', '.oP img', hoverzoom);
 	if (options.hz_enable_link === 'true') $content.on('mouseenter', '.ot-anchor', hoverzoom);
 
@@ -989,7 +989,7 @@ var enable = function(){
 
 // Disable functions
 var disable = function(){
-	if (options.hz_enable_main === 'true') $content.off('mouseenter', 'div[data-content-type^="image"] img, div[data-content-url*="picasa"] img', hoverzoom);
+	if (options.hz_enable_main === 'true') $content.off('mouseenter', '.uaGLLd img', hoverzoom);
 	if (options.hz_enable_icon === 'true') $content.off('mouseenter', '.oP img', hoverzoom);
 	if (options.hz_enable_link === 'true') $content.off('mouseenter', '.ot-anchor', hoverzoom);
 
