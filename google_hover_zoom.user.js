@@ -892,7 +892,7 @@ var hoverzoom = function(){
 		};
 
 		var fullscreen = function(){
-			var arr = $(_this).parent().parent().find('div[data-content-type^="image"] img, div[data-content-url*="picasa"] img'),
+			var arr = $(_this).parentsUntil('.CEhkv').find('.uaGLLd').children('div').children('img'),
 				links = [];
 
 			if (arr.length > 0){
