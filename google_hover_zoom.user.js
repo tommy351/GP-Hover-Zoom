@@ -1370,7 +1370,7 @@ var batch = function(){
 	var width = parseInt(($(window).width() - 200) / options.hz_his_columns - 10),
 		arr = [];
 
-	$('div[data-content-type^="image"] img, div[data-content-url*="picasa"] img, .ot-anchor, .s-W-Oh img').filter(':visible').each(function(){
+	$('.uaGLLd div img, .ot-anchor').filter(':visible').each(function(){
 		var tag = this.tagName.toUpperCase();
 		if (tag == 'IMG'){
 			var url = this.src,
