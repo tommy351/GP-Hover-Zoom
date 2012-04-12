@@ -65,8 +65,6 @@ var options = {
 	hz_maxpic: localStorage.hz_maxpic || 'false',
 	hz_maxpic_option: localStorage.hz_maxpic_option || '0',
 	hz_hovering: localStorage.hz_hovering || 'false',
-	hz_maxyt: localStorage.hz_maxyt || 'false',
-	hz_maxyt_aspect: parseInt(localStorage.hz_maxyt_aspect) || 2,
 	hz_direct_post: localStorage.hz_direct_post || 'false',
 	hz_direct_post_max: parseInt(localStorage.hz_direct_post_max) || 0,
 	hz_ytdl: localStorage.hz_ytdl || 'true',
@@ -159,7 +157,6 @@ var locale = {
 		set44: 'Apply to all photos',
 		set45: 'Only apply to the first photo in album',
 		set46: 'Don\'t hide photo when hovered',
-		set47: 'Resize videos to stream width, video aspect:',
 		set48: 'Show photo links in posts directly, max width:',
 		set49: 'Enable Youtube video download',
 		set50: 'Download directly without opening in new tab'
@@ -248,7 +245,6 @@ var locale = {
 		set44: '套用至所有圖片',
 		set45: '僅套用至相簿第一張圖片',
 		set46: '滑鼠移入大圖時不隱藏',
-		set47: '以訊息串寬度顯示影片，影片長寬比例：',
 		set48: '直接顯示文章內的圖片連結，最大寬度：',
 		set49: '啟用 Youtube 影片下載',
 		set50: '直接下載無須開啟新分頁'
@@ -337,7 +333,6 @@ var locale = {
 		set44: '套用至所有图片',
 		set45: '仅套用至相簿第一张图片',
 		set46: '鼠标移入大图时不隐藏',
-		set47: '以讯息流宽度显示视频，视频长宽比例：',
 		set48: '直接显示文章内的图片链结，最大宽度：',
 		set49: '启用 Youtube 视频下载',
 		set50: '直接下载无须开启新页签'
@@ -426,7 +421,6 @@ var locale = {
 		set44: '全ての画像に適用する',
 		set45: 'アルバムの一つ目の画像に適用する',
 		set46: '画像にカーソルを重ねた時に画像を隠さない',
-		set47: 'ストリームの幅で動画表示、長さと幅の比：',
 		set48: '画像の直リンクをポストで表示、最大幅：',
 		set49: 'YouTube ダウンロード機能を有効にする',
 		set50: 'タブを開かずに直ちに画像をダウンロードします'
@@ -720,12 +714,6 @@ var init = {
 									+'<option value="0">'+lang.set44+'</option>'
 									+'<option value="1">'+lang.set45+'</option>'
 								+'</select><br>'
-								+'<input id="hz_maxyt" type="checkbox"><label for="hz_maxyt">'+lang.set47+'</label>'
-								+'<select id="hz_maxyt_aspect">'
-									+'<option value="1">4:3</option>'
-									+'<option value="2">16:9</option>'
-									+'<option value="3">16:10</option>'
-								+'</select><br>'
 								+'<input id="hz_direct_post" type="checkbox"><label for="hz_direct_post">'+lang.set48+'</label>'
 								+'<input id="hz_direct_post_max" type="text" maxlength="4"><label for="hz_direct_post_max">'+lang.set18+'</label><br>'
 								+'<input id="hz_direct" type="checkbox"><label for="hz_direct">'+lang.set25+'</label>'
@@ -820,9 +808,6 @@ $(document).ready(function(){
 
 	// Enable functions
 	enable();
-
-	// Resize Youtube videos to stream size
-	if (options.hz_maxyt === 'true') maxYT();
 
 	// Check for update automatically
 	if (options.hz_update === 'true' && !developer) update.auto();
@@ -1391,38 +1376,6 @@ var batch = function(){
 	});
 
 	sortPic($('#hz_batch_page'), arr, '<strong>'+arr.length+'</strong> '+(arr.length > 1 ? lang.set08 : lang.set07));
-};
-
-// Resize videos as stream width
-var maxYT = function(){
-	if (options.hz_maxyt_aspect == 1){
-		var aspect = 3/4;
-	} else if (options.hz_maxyt_aspect == 3){
-		var aspect = 10/16;
-	} else {
-		var aspect = 9/16;
-	}
-
-	$content.on('click', 'div[data-content-type$="flash"]', function(){
-		var width = $(this).parent().parent().width();
-
-		$(this).addClass('maxyt_container').children('iframe').load(function(){
-			var iframe = $(this),
-				button = $('<span class="c-C"> - '+lang.set10+'</span>').click(function(){
-					iframe.nextAll().show().parent().removeClass('maxyt_container').click(function(){
-						$(this).children().hide();
-						$(this).addClass('maxyt_container').prepend(iframe);
-						button.show();
-						return false;
-					});
-
-					iframe.remove();
-					$(this).hide();
-				});
-
-				iframe.attr({width: width, height: width * aspect}).parentsUntil('.Te').find('.vo').append(button);
-		});
-	});
 };
 
 // Youtube download
