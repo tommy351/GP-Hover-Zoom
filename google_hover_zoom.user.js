@@ -1550,7 +1550,7 @@ var timer = new function(){
 					length = target.length;
 
 				if (length > 1){
-					var link = $('<div class="hz_dlButton" aria-label="'+lang.piclink01+' ('+length+')" data-tooltip="'+lang.piclink01+' ('+length+')" role="button"><span></span><small>'+length+'</small></div>').click(function(){
+					var link = $('<div class="hz_dlButton" aria-label="'+lang.piclink01+' ('+length+' '+lang.set08+')" data-tooltip="'+lang.piclink01+' ('+length+' '+lang.set08+')" role="button"><span></span><small>'+length+'</small></div>').click(function(){
 						if (!$(this).next().hasClass('hz_stacksDetail')){
 							var html = '<div class="hz_closeButton"></div><strong>'+lang.piclink01+'</strong><br>';
 
