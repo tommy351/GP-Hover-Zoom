@@ -115,43 +115,44 @@ $main: #dd4839;
 		}
 	}
 }
-.albumDownload, .picStacks, .tubeStacks{
-	padding-left: 15px;
-	margin-left: 20px;
-	&:before{
-		content: '-';
-		cursor: default;
-		left: -27px;
-		position: relative;
-		display: inline-block;
-		border-bottom: 1px solid transparent;
+div[id^='update-']{
+	&:hover{
+		.hz_dlButton{
+			background-color: #fff;
+			border-color: #ddd;
+			@include background(linear-gradient(center bottom, rgba(0,0,0,0.05), rgba(0,0,0,0) 20px));
+			@include transition(border 0.218s);
+		}
 	}
 }
-.albumDownload{
-	background: inline-image("picasa.png") no-repeat;
+.hz_dlButton{
+	border: 1px solid #fff;
+	cursor: pointer;
+	float: left;
+	height: 22px;
+	width: 32px;
+	margin-left: 7px;
+	margin-top: 7px;
+	outline: none;
+	@include border-radius(2px);
+	&:hover{
+		border-color: #bbb !important;
+	}
+	&:active{
+		background-color: #eee;
+		@include background(linear-gradient(center top, rgba(0,0,0,0.1), rgba(0,0,0,0) 20px) !important);
+	}
+	span{
+		background: inline-image("download.png") center no-repeat;
+		display: block;
+		width: 32px;
+		height: 22px;
+	}
 }
-.in-albumDownload{
-	margin: 25px 18px 25px 0;
-	background: none;
-}
-.picDownload{
-	background: #bbb;
-	@include border-radius(10px);
-	color: #fff !important;
-	display: inline-block;
-	font-size: 12px;
-	line-height: 1em;
-	height: 1em;
-	width: 1em;
-	margin: 0 2px;
-	padding: 5px;
-	text-align: center;
-}
-.picStacks{
-	background: inline-image("stacks.png") no-repeat;
-}
-.tubeStacks{
-	background: url(https://s.ytimg.com/yt/favicon-refresh-vfldLzJxy.ico) no-repeat;
+.hz_in-albumDownload{
+	margin-left: 16px;
+	margin-right: 2px;
+	@include inline-block;
 }
 .hz_button{
 	position: relative;
@@ -160,12 +161,10 @@ $main: #dd4839;
 	font-weight: bold;
 	height: 27px;
 	line-height: 27px;
-	margin-right: 16px;
 	min-width: 54px;
 	outline: none;
 	padding: 0 8px;
 	text-align: center;
-	float: left;
 	text-decoration: none !important;
 	@include border-radius(2px);
 	@include user-select(none);
@@ -615,6 +614,13 @@ $main: #dd4839;
 			&.top{
 				top: 20px;
 				right: 50px;
+				.hz_button{
+					float: left;
+					margin-right: 16px;
+					&:last-child{
+						margin-right: 0;
+					}
+				}
 			}
 			&.bottom{
 				bottom: 20px;
@@ -622,7 +628,6 @@ $main: #dd4839;
 				width: 550px;
 				.hz_button{
 					float: right;
-					margin-right: 0;
 					margin-left: 16px;
 					&.update{
 						display: none;
@@ -660,9 +665,6 @@ $main: #dd4839;
 						@include box-shadow(0 0 3px orange);
 					}
 				}
-			}
-			:last-child{
-				margin-right: 0;
 			}
 			.cycle{
 				float: left;
@@ -751,16 +753,6 @@ $main: #dd4839;
 		opacity: 1;
 		border: 1px solid rgb(113,167,255);
 	}
-}
-.detailButton{
-	display: inline-block;
-	border-color: #eee transparent transparent;
-	border-style: solid;
-	border-width: 5px;
-	height: 0;
-	margin: 0 0 -4px 5px;
-	top: 3px;
-	width: 0;
 }
 .img-in-post {
 	img{
