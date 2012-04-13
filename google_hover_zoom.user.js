@@ -522,7 +522,7 @@ var init = {
 		// Youtube download button
 		.on('click', '.hz_tubeStacks', function(){
 			if (!$(this).next().hasClass('hz_stacksDetail')){
-				var html = '<div class="hz_closeButton" title="'+lang.set10+'"></div><strong>'+lang.ytdl01+'</strong><div class="notify">'+lang.fs04+'</div>',
+				var html = '<div class="hz_closeButton"></div><strong>'+lang.ytdl01+'</strong><div class="notify">'+lang.fs04+'</div>',
 					popup = $('<div class="hz_stacksDetail">'+html+'</div>').on('click', '.hz_closeButton', function(){
 						$(this).parent().fadeOut(300);
 					}).on('click', 'a', function(){
@@ -611,7 +611,7 @@ var init = {
 					+'<div class="main">'
 						+'<h3>'+lang.his01+'</h3>'
 						+'<small></small>'
-						+'<div class="close" title='+lang.set10+'></div>'
+						+'<div class="close"></div>'
 						+'<div class="wrap"><div class="inner"></div></div>'
 						+'<div class="functions top">'
 							+'<div class="cycle"></div>'
@@ -628,7 +628,7 @@ var init = {
 					+'<div class="main">'
 						+'<h3>'+lang.al01+'</h3>'
 						+'<small></small>'
-						+'<div class="close" title='+lang.set10+'></div>'
+						+'<div class="close"></div>'
 						+'<div class="wrap"><div class="inner"></div></div>'
 						+'<div class="functions top">'
 							+'<div class="cycle"></div>'
@@ -645,7 +645,7 @@ var init = {
 					+'<div class="main">'
 						+'<h3>'+lang.allpic01+'</h3>'
 						+'<small></small>'
-						+'<div class="close" title='+lang.set10+'></div>'
+						+'<div class="close"></div>'
 						+'<div class="wrap"><div class="inner"></div></div>'
 						+'<div class="functions top">'
 							+'<div class="cycle"></div>'
@@ -660,7 +660,7 @@ var init = {
 					html: '<div class="back"></div>'
 					+'<div class="main">'
 						+'<h3>'+lang.al05+'</h3>'
-						+'<div class="close" title='+lang.set10+'></div>'
+						+'<div class="close"></div>'
 						+'<textarea readonly wrap="off"></textarea>'
 					+'</div>'
 				},
@@ -671,7 +671,7 @@ var init = {
 					+'<div class="main">'
 						+'<h3>'+lang.set01+'</h3>'
 						+'<small>Ver. '+version+' by <a href="https://plus.google.com/105931860008509594725" target="_blank">SkyArrow</a></small>'
-						+'<div class="close" title='+lang.set10+'></div>'
+						+'<div class="close"></div>'
 						+'<ul class="menu">'
 							+'<li>'+lang.set11+'</li>'
 							+'<li>'+lang.set12+'</li>'
@@ -1486,7 +1486,7 @@ var timer = new function(){
 				var maxWidth = options.hz_direct_ytmaxwidth > 0 ? options.hz_direct_ytmaxwidth : $(this).parent().parent().width(),
 					url = url.replace(/(https?:)(.*)\?v=(.*)/, 'https://www.youtube.com/v/$3?version=3&autohide=1&feature=player_embedded');
 
-				$(this).after('<div class="hz_closeYT" aria-label="'+lang.set10+'" data-tooltip="'+lang.set10+'" role="button"></div><object style="width: '+maxWidth+'px; height: '+(maxWidth * aspect)+'px;"><param name="movie" value="'+url+'"><param name="allowFullScreen" value="true"><param name="allowScriptAccess" value="always"><embed src="'+url+'" type="application/x-shockwave-flash" allowfullscreen="true" allowScriptAccess="always" width="'+maxWidth+'" height="'+(maxWidth * aspect)+'"></object>').addClass('hz_yt-in-post').css({display: 'block', fontWeight: 'bold', marginRight: 11});
+				$(this).after('<div class="hz_closeYT"></div><object style="width: '+maxWidth+'px; height: '+(maxWidth * aspect)+'px;"><param name="movie" value="'+url+'"><param name="allowFullScreen" value="true"><param name="allowScriptAccess" value="always"><embed src="'+url+'" type="application/x-shockwave-flash" allowfullscreen="true" allowScriptAccess="always" width="'+maxWidth+'" height="'+(maxWidth * aspect)+'"></object>').addClass('hz_yt-in-post').css({display: 'block', fontWeight: 'bold', marginRight: 11});
 			}
 		});
 	};
