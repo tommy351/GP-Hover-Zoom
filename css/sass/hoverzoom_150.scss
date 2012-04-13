@@ -552,7 +552,7 @@ div[id^='update-']{
 			color: #666;
 		}
 		.close{
-			background: url(https://ssl.gstatic.com/s2/oz/images/dialogx.png) no-repeat;
+			background: url(//ssl.gstatic.com/s2/oz/images/dialogx.png) no-repeat;
 			cursor: pointer;
 			height: 15px;
 			width: 15px;
@@ -802,14 +802,14 @@ div[id^='update-']{
 	margin: 3px 0;
 }
 .hz_closeYT{
-	background: inline-image("close.png") no-repeat;
+	background: url(//ssl.gstatic.com/s2/oz/images/stars/x_off.png) no-repeat;
 	cursor: pointer;
 	float: right;
 	margin-top: -22px;
 	width: 10px;
 	height: 10px;
 	&:hover{
-		background-image: inline-image("close_alt.png");
+		background-image: url(//ssl.gstatic.com/s2/oz/images/stars/x_hover.png);
 	}
 }
 .hz_stacksDetail{
@@ -870,7 +870,7 @@ div[id^='update-']{
 	}
 }
 .hz_closeButton{
-	background: url(https://ssl.gstatic.com/ui/v1/icons/common/x_8px.png) no-repeat;
+	background: url(//ssl.gstatic.com/ui/v1/icons/common/x_8px.png) no-repeat;
 	cursor: pointer;
 	height: 21px;
 	width: 21px;
