@@ -1560,7 +1560,7 @@ var timer = new function(){
 								html += i == 0 ? '<a class="c-C" href="'+url+'">'+(i+1)+'</a>' : ' - <a class="c-C" href="'+url+'">'+(i+1)+'</a>';
 							}
 
-							var popup = $('<div class="hz_stacksDetail">'+html+'</div>').on('click', '.closeButton', function(){
+							var popup = $('<div class="hz_stacksDetail">'+html+'</div>').on('click', '.hz_closeButton', function(){
 								$(this).parent().fadeOut(300);
 							}).on('click', 'a', function(){
 								openWindow(this.href);
