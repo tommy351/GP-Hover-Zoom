@@ -149,6 +149,16 @@ div[id^='update-']{
 		height: 22px;
 	}
 }
+.hz_albumDownload{
+	span{
+		background-image: inline-image("picasa.png");
+	}
+}
+.hz_tubeStacks{
+	span{
+		background-image: inline-image("youtube.png");
+	}
+}
 .hz_in-albumDownload{
 	margin-left: 16px;
 	margin-right: 2px;
