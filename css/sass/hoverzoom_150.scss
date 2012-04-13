@@ -754,15 +754,47 @@ div[id^='update-']{
 		border: 1px solid rgb(113,167,255);
 	}
 }
-.img-in-post {
+.hz_img-in-comm, .hz_img-in-post{
+	display: block;
 	img{
 		max-width: 100%;
 		height: auto;
-		margin: 5px 0;
 		display: block;
+	}
+}
+.hz_img-in-comm{
+	img{
+		margin: 5px 0;
 	}
 	+br{
 		display: none;
+	}
+}
+.hz_img-in-post{
+	background: #fff;
+	margin: 12px -17px -1px;
+	position: relative;
+	&:before, &:after{
+		content: '';
+		height: 5px;
+		position: absolute;
+		width: 100%;
+	}
+	&:before{
+		top: 0;
+		@include background(linear-gradient(top, rgba(0,0,0,0.2), rgba(0,0,0,0)));
+	}
+	&:after{
+		bottom: 0;
+		@include background(linear-gradient(bottom, rgba(0,0,0,0.2), rgba(0,0,0,0)));
+	}
+	div{
+		border: 1px solid rgba(0,0,0,0.2);
+		border-bottom: none;
+		height: 100%;
+		position: absolute;
+		top: 0;
+		left: 0;
 	}
 }
 .hz_yt-in-post{
