@@ -739,21 +739,6 @@ div[id^='update-']{
 		margin-left: -10px;
 	}
 }
-.closeButton{
-	background: url(https://ssl.gstatic.com/ui/v1/icons/common/x_8px.png) no-repeat;
-	cursor: pointer;
-	height: 21px;
-	width: 21px;
-	position: absolute;
-	right: 2px;
-	top: 2px;
-	opacity: 0.4;
-	border: 1px solid transparent;
-	&:active, &:focus{
-		opacity: 1;
-		border: 1px solid rgb(113,167,255);
-	}
-}
 .hz_img-in-comm, .hz_img-in-post{
 	display: block;
 	img{
@@ -811,7 +796,7 @@ div[id^='update-']{
 		background-image: inline-image("close_alt.png");
 	}
 }
-.clickDetail{
+.hz_stacksDetail{
 	position: absolute;
 	top: 25px;
 	left: 0;
@@ -866,6 +851,21 @@ div[id^='update-']{
 		border-right: 9px solid transparent;
 		border-bottom: 9px dashed #fff;
 		content: ''; 
+	}
+}
+.hz_closeButton{
+	background: url(https://ssl.gstatic.com/ui/v1/icons/common/x_8px.png) no-repeat;
+	cursor: pointer;
+	height: 21px;
+	width: 21px;
+	position: absolute;
+	right: 2px;
+	top: 2px;
+	opacity: 0.4;
+	border: 1px solid transparent;
+	&:active, &:focus{
+		opacity: 1;
+		border: 1px solid rgb(113,167,255);
 	}
 }
 .maxpic_container{
