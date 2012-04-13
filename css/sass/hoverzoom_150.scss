@@ -130,7 +130,6 @@ div[id^='update-']{
 	cursor: pointer;
 	float: left;
 	height: 22px;
-	width: 32px;
 	margin-left: 7px;
 	margin-top: 7px;
 	outline: none;
@@ -144,9 +143,16 @@ div[id^='update-']{
 	}
 	span{
 		background: inline-image("download.png") center no-repeat;
-		display: block;
 		width: 32px;
 		height: 22px;
+		@include inline-block;
+	}
+	small{
+		color: #999;
+		display: block;
+		float: right;
+		line-height: 22px;
+		padding-right: 10px;
 	}
 }
 .hz_albumDownload{
