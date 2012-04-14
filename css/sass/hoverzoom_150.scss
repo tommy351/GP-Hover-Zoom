@@ -39,7 +39,7 @@ $main: #dd4839;
 	width: 20px;
 	height: 20px;
 	box-shadow: 0 -2px 1px 1px $main;
-	position: fixed;
+	position: absolute;
 	pointer-events: none;
 	z-index: 10000;
 	display: none;
@@ -115,43 +115,60 @@ $main: #dd4839;
 		}
 	}
 }
-.albumDownload, .picStacks, .tubeStacks{
-	padding-left: 15px;
-	margin-left: 20px;
-	&:before{
-		content: '-';
-		cursor: default;
-		left: -27px;
-		position: relative;
-		display: inline-block;
-		border-bottom: 1px solid transparent;
+div[id^='update-']{
+	&:hover{
+		.hz_dlButton{
+			background-color: #fff;
+			border-color: #ddd;
+			@include background(linear-gradient(center bottom, rgba(0,0,0,0.05), rgba(0,0,0,0) 20px));
+			@include transition(border 0.218s);
+		}
 	}
 }
-.albumDownload{
-	background: inline-image("picasa.png") no-repeat;
+.hz_dlButton{
+	border: 1px solid #fff;
+	cursor: pointer;
+	float: left;
+	height: 22px;
+	margin-left: 7px;
+	margin-top: 7px;
+	outline: none;
+	@include border-radius(2px);
+	&:hover{
+		border-color: #bbb !important;
+	}
+	&:active{
+		background-color: #eee;
+		@include background(linear-gradient(center top, rgba(0,0,0,0.1), rgba(0,0,0,0) 20px) !important);
+	}
+	span{
+		background: inline-image("download.png") center no-repeat;
+		width: 32px;
+		height: 22px;
+		@include inline-block;
+	}
+	small{
+		color: #999;
+		display: block;
+		float: right;
+		line-height: 22px;
+		padding-right: 10px;
+	}
 }
-.in-albumDownload{
-	margin: 25px 18px 25px 0;
-	background: none;
+.hz_albumDownload{
+	span{
+		background-image: inline-image("picasa.png");
+	}
 }
-.picDownload{
-	background: #bbb;
-	@include border-radius(10px);
-	color: #fff !important;
-	display: inline-block;
-	font-size: 12px;
-	line-height: 1em;
-	height: 1em;
-	width: 1em;
-	margin: 0 2px;
-	padding: 5px;
-	text-align: center;
+.hz_tubeStacks{
+	span{
+		background-image: inline-image("youtube.png");
+	}
 }
-.picStacks{
-	background: inline-image("stacks.png") no-repeat;
-}
-.tubeStacks{
-	background: url(https://s.ytimg.com/yt/favicon-refresh-vfldLzJxy.ico) no-repeat;
+.hz_in-albumDownload{
+	margin-left: 16px;
+	margin-right: 2px;
+	@include inline-block;
 }
 .hz_button{
 	position: relative;
@@ -160,12 +177,10 @@ $main: #dd4839;
 	font-weight: bold;
 	height: 27px;
 	line-height: 27px;
-	margin-right: 16px;
 	min-width: 54px;
 	outline: none;
 	padding: 0 8px;
 	text-align: center;
-	float: left;
 	text-decoration: none !important;
 	@include border-radius(2px);
 	@include user-select(none);
@@ -537,7 +552,7 @@ $main: #dd4839;
 			color: #666;
 		}
 		.close{
-			background: url(https://ssl.gstatic.com/s2/oz/images/dialogx.png) no-repeat;
+			background: url(//ssl.gstatic.com/s2/oz/images/dialogx.png) no-repeat;
 			cursor: pointer;
 			height: 15px;
 			width: 15px;
@@ -615,6 +630,13 @@ $main: #dd4839;
 			&.top{
 				top: 20px;
 				right: 50px;
+				.hz_button{
+					float: left;
+					margin-right: 16px;
+					&:last-child{
+						margin-right: 0;
+					}
+				}
 			}
 			&.bottom{
 				bottom: 20px;
@@ -622,7 +644,6 @@ $main: #dd4839;
 				width: 550px;
 				.hz_button{
 					float: right;
-					margin-right: 0;
 					margin-left: 16px;
 					&.update{
 						display: none;
@@ -661,9 +682,6 @@ $main: #dd4839;
 					}
 				}
 			}
-			:last-child{
-				margin-right: 0;
-			}
 			.cycle{
 				float: left;
 				border: 3px solid #ccc;
@@ -695,94 +713,93 @@ $main: #dd4839;
 }
 #hz_opts{
 	border-top: 1px solid #e5e5e5;
-	margin-top: 10px;
-	padding: 10px 20px 0;
-	strong{
-		float: left;
-	}
-	a{
-		padding: 0 10px;
-		display: inline-block;
-		&:hover{
-			background: #eff3fb;
-			text-decoration: none;
-		}
-	}
-	#disable_hz{
-		margin-right: -10px;
-		float: right;
-		position: relative;
-		&:before{
-			content: '';
-			position: absolute;
-			top: 10px;
-			left: -5px;
-			width: 5px;
-			height: 5px;
-			border-radius: 50%;
-			box-shadow: 0 0 3px #3d9400;
-			background: #3d9400;
-		}
-		&.off{
-			&:before{
-				box-shadow: 0 0 3px #666;
-				background: #666;
-			}
-		}
+	color: #333;
+	margin-top: 6px;
+	padding-top: 6px;
+	strong, li{
+		display: block;
+		padding: 6px 24px;
 	}
 	ul{
 		list-style: none;
-		clear: both;
+		margin: 0;
 		padding: 0;
-		margin-left: -10px;
+	}
+	li{
+		cursor: pointer;
+		&:hover{
+			background: #eee;
+		}
 	}
 }
-.closeButton{
-	background: url(https://ssl.gstatic.com/ui/v1/icons/common/x_8px.png) no-repeat;
-	cursor: pointer;
-	height: 21px;
-	width: 21px;
-	position: absolute;
-	right: 2px;
-	top: 2px;
-	opacity: 0.4;
-	border: 1px solid transparent;
-	&:active, &:focus{
-		opacity: 1;
-		border: 1px solid rgb(113,167,255);
+#disable_hz{
+	position: relative;
+	&:after{
+		content: '';
+		background: #3d9400;
+		position: absolute;
+		top: 10px;
+		left: 10px;
+		width: 5px;
+		height: 5px;
+		box-shadow: 0 0 3px #3d9400;
+		@include border-radius(50%);
+	}
+	&.off{
+		&:after{
+			box-shadow: 0 0 3px #666;
+			background: #666;
+		}
 	}
 }
-.detailButton{
-	display: inline-block;
-	border-color: #eee transparent transparent;
-	border-style: solid;
-	border-width: 5px;
-	height: 0;
-	margin: 0 0 -4px 5px;
-	top: 3px;
-	width: 0;
-}
-.img-in-post {
+.hz_img-in-comm, .hz_img-in-post{
+	display: block;
 	img{
 		max-width: 100%;
 		height: auto;
-		margin: 5px 0;
 		display: block;
+	}
+}
+.hz_img-in-comm{
+	img{
+		margin: 5px 0;
 	}
 	+br{
 		display: none;
 	}
 }
-.yt-in-post{
+.hz_img-in-post{
+	background: rgba(0,0,0,0.9);
+	margin: 12px -17px -1px;
+	position: relative;
+	img{
+		position: relative;
+	}
+	div{
+		border: 1px solid rgba(0,0,0,0.2);
+		border-bottom: none;
+		box-shadow: 0 0 5px rgba(0,0,0,0.2) inset;
+		height: 100%;
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+}
+.hz_yt-in-post{
 	margin: 3px 0;
 }
-.closeYT{
+.hz_closeYT{
+	background: url(//ssl.gstatic.com/s2/oz/images/stars/x_off.png) no-repeat;
 	cursor: pointer;
 	float: right;
 	margin-top: -22px;
-	font-weight: bold;
+	width: 10px;
+	height: 10px;
+	&:hover{
+		background-image: url(//ssl.gstatic.com/s2/oz/images/stars/x_hover.png);
+	}
 }
-.clickDetail{
+.hz_stacksDetail{
 	position: absolute;
 	top: 25px;
 	left: 0;
@@ -839,23 +856,20 @@ $main: #dd4839;
 		content: ''; 
 	}
 }
-.maxpic_container{
-	height: auto !important;
-	width: auto !important;
-	max-width: 100% !important;
-	max-height: 100% !important;
-	margin-bottom: 5px !important;
-	float: none !important;
-	img{
-		max-width: 100% !important;
-		height: auto !important;
-		width: auto !important;
+.hz_closeButton{
+	background: url(//ssl.gstatic.com/ui/v1/icons/common/x_8px.png) no-repeat;
+	cursor: pointer;
+	height: 21px;
+	width: 21px;
+	position: absolute;
+	right: 2px;
+	top: 2px;
+	opacity: 0.4;
+	border: 1px solid transparent;
+	&:active, &:focus{
+		opacity: 1;
+		border: 1px solid rgb(113,167,255);
 	}
-}
-.maxyt_container{
-	max-width: none !important;
-	width: 100% !important;
-	height: auto !important;
 }
 @keyframes loading{
 	0% {transform: rotate(0deg)}
