@@ -1488,12 +1488,11 @@ var timer = new function(){
 		var page = location.href.replace(/\?(.*)/, '');
 
 		if (page.match(/\/photos\/\w+\/albums\/\w+/)){
-			var $nav = $('nav');
+			var $nav = $('nav:visible');
 			if (!$nav.data('class')){
 				var button = $('<div class="hz_in-albumDownload hz_button blue" role="button">'+lang.fs03+'</div>').data('url', page);
 				$nav.data('class', true).next().find('.Z5yIHb').children().eq(1).before(button);
 			}
-
 		} else {
 			$('.eDP7tf').each(function(){
 				if (!$(this).data('class')){
