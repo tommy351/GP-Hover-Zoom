@@ -882,7 +882,7 @@ var hoverzoom = function(){
 		};
 
 		var fullscreen = function(){
-			var arr = $(_this).parentsUntil('.CEhkv').find('a[target="blank_"]').children('div').children('img'),
+			var arr = $(_this).parentsUntil('.CEhkv').find('a[target="_blank"]').children('div').children('img'),
 				links = [];
 
 			if (arr.length > 0){
@@ -969,7 +969,7 @@ var hoverzoom = function(){
 
 // Enable functions
 var enable = function(){
-	if (options.hz_enable_main === 'true') $content.on('mouseenter', 'a[target="blank_"] img', hoverzoom);
+	if (options.hz_enable_main === 'true') $content.on('mouseenter', 'a[target="_blank"] img', hoverzoom);
 	if (options.hz_enable_icon === 'true') $content.on('mouseenter', '.oP img', hoverzoom);
 	if (options.hz_enable_link === 'true') $content.on('mouseenter', '.ot-anchor', hoverzoom);
 
@@ -979,7 +979,7 @@ var enable = function(){
 
 // Disable functions
 var disable = function(){
-	if (options.hz_enable_main === 'true') $content.off('mouseenter', 'a[target="blank_"] img', hoverzoom);
+	if (options.hz_enable_main === 'true') $content.off('mouseenter', 'a[target="_blank"] img', hoverzoom);
 	if (options.hz_enable_icon === 'true') $content.off('mouseenter', '.oP img', hoverzoom);
 	if (options.hz_enable_link === 'true') $content.off('mouseenter', '.ot-anchor', hoverzoom);
 
@@ -1360,7 +1360,7 @@ var batch = function(){
 	var width = parseInt(($(window).width() - 200) / options.hz_his_columns - 10),
 		arr = [];
 
-	$('a[target="blank_"] div img, .ot-anchor').filter(':visible').each(function(){
+	$('a[target="_blank"] div img, .ot-anchor').filter(':visible').each(function(){
 		var tag = this.tagName.toUpperCase();
 		if (tag == 'IMG'){
 			var url = this.src,
