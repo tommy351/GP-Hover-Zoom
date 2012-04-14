@@ -713,46 +713,43 @@ div[id^='update-']{
 }
 #hz_opts{
 	border-top: 1px solid #e5e5e5;
-	margin-top: 10px;
-	padding: 10px 20px 0;
-	strong{
-		float: left;
-	}
-	a{
-		padding: 0 10px;
-		display: inline-block;
-		&:hover{
-			background: #eff3fb;
-			text-decoration: none;
-		}
-	}
-	#disable_hz{
-		margin-right: -10px;
-		float: right;
-		position: relative;
-		&:before{
-			content: '';
-			position: absolute;
-			top: 10px;
-			left: -5px;
-			width: 5px;
-			height: 5px;
-			border-radius: 50%;
-			box-shadow: 0 0 3px #3d9400;
-			background: #3d9400;
-		}
-		&.off{
-			&:before{
-				box-shadow: 0 0 3px #666;
-				background: #666;
-			}
-		}
+	color: #333;
+	margin-top: 6px;
+	padding-top: 6px;
+	strong, li{
+		display: block;
+		padding: 6px 24px;
 	}
 	ul{
 		list-style: none;
-		clear: both;
+		margin: 0;
 		padding: 0;
-		margin-left: -10px;
+	}
+	li{
+		cursor: pointer;
+		&:hover{
+			background: #eee;
+		}
+	}
+}
+#disable_hz{
+	position: relative;
+	&:after{
+		content: '';
+		background: #3d9400;
+		position: absolute;
+		top: 10px;
+		left: 10px;
+		width: 5px;
+		height: 5px;
+		box-shadow: 0 0 3px #3d9400;
+		@include border-radius(50%);
+	}
+	&.off{
+		&:after{
+			box-shadow: 0 0 3px #666;
+			background: #666;
+		}
 	}
 }
 .hz_img-in-comm, .hz_img-in-post{
