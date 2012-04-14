@@ -769,26 +769,16 @@ div[id^='update-']{
 	}
 }
 .hz_img-in-post{
-	background: #fff;
+	background: rgba(0,0,0,0.9);
 	margin: 12px -17px -1px;
 	position: relative;
-	&:before, &:after{
-		content: '';
-		height: 5px;
-		position: absolute;
-		width: 100%;
-	}
-	&:before{
-		top: 0;
-		@include background(linear-gradient(top, rgba(0,0,0,0.2), rgba(0,0,0,0)));
-	}
-	&:after{
-		bottom: 0;
-		@include background(linear-gradient(bottom, rgba(0,0,0,0.2), rgba(0,0,0,0)));
+	img{
+		position: relative;
 	}
 	div{
 		border: 1px solid rgba(0,0,0,0.2);
 		border-bottom: none;
+		box-shadow: 0 0 5px rgba(0,0,0,0.2) inset;
 		height: 100%;
 		position: absolute;
 		top: 0;
