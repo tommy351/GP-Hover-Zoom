@@ -36,7 +36,7 @@ Help me translate? <http://goo.gl/4IyfO>
 
 ###Configure
 
-1. Click profile icon on the upper right corner.
+1. Click setting icon on the upper right corner.
 2. Click "**Settings**" to configure Google+ Hover Zoom.
 
 ##Screenshots
