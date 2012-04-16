@@ -40,14 +40,14 @@ Help me translate? <http://goo.gl/4IyfO>
 2. Click "**Settings**" to configure Google+ Hover Zoom.
 
 ##Screenshots
-![Enlarge thumbnails on hover](https://lh6.googleusercontent.com/-V4nm0sX5bz4/Tu11CsVux-I/AAAAAAAADkY/vhrjKHMb3QY/s0/%2525E8%25259E%2525A2%2525E5%2525B9%252595%2525E5%2525BF%2525AB%2525E7%252585%2525A7%2525202011-12-18%25252012.31.03.jpg)
+![Enlarge thumbnails on hover](https://lh4.googleusercontent.com/-fFVaPzwhe6o/T4w826fcHRI/AAAAAAAAFsA/3n4YhAq9OWg/s0/zoom.jpg)
 
-![Settings](https://lh5.googleusercontent.com/-RpnLqvGBS04/Tu11DVEq1wI/AAAAAAAADkw/lvadwBD3mMs/s0/settings.jpg)
+![Settings](https://lh4.googleusercontent.com/-tlT0VlvfwF4/T4w82Zgu62I/AAAAAAAAFsI/DUFWAZmp_a4/s0/settings.jpg)
 
-![History](https://lh5.googleusercontent.com/-86_zo45XLOQ/Tu11DD5rxDI/AAAAAAAADko/8eBSHn4kbN4/s0/history.jpg)
+![History](https://lh3.googleusercontent.com/-ZtR9a0AoMpM/T4w81WJdLFI/AAAAAAAAFr4/nhiQa9ijSjE/s0/history.jpg)
 
-![Album Download](https://lh4.googleusercontent.com/-eoDI886EDjU/Tu11DzpDjII/AAAAAAAADk4/drUt_W5h0AE/s0/album.jpg)
+![Album Download](https://lh6.googleusercontent.com/-o0dqTa_Avjs/T4w81VccM4I/AAAAAAAAFrw/DwN_Ltxh2zM/s0/album.jpg)
 
-![Batch Download](https://lh5.googleusercontent.com/-mcfB0R466LU/Tu11CZpG5JI/AAAAAAAADkQ/RjnMS20OC8g/s0/batchdownload.jpg)
+![Batch Download](https://lh4.googleusercontent.com/-AcIsAcAcQNk/T4w81eWekEI/AAAAAAAAFr0/paZrz-ChD2s/s0/batch.jpg)
 
 ![Fullscreen Mode](https://lh6.googleusercontent.com/-K8qLgAtmq4g/Tu11C0pBycI/AAAAAAAADkg/WuKmlYarNC8/s0/Google%252520%2525202011-12-18%25252011-58-17.jpg)
