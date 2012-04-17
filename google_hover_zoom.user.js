@@ -1481,11 +1481,12 @@ var timer = new function(){
 			if (options.hz_direct === 'true' && url.match(picRegex) && !$(this).hasClass('hz_img-in-comm')){
 				$(this).addClass('hz_img-in-comm').html('<img src="'+url+'" style="max-width:'+(options.hz_direct_max > 0 ? options.hz_direct_max : '')+'">');
 			// Show Youtube links in comments directly
-			} else if (url.match(/youtube.com\/watch\?v=/) && !$(this).hasClass('hz_yt-in-post') && options.hz_direct_yt === 'true'){
-				var maxWidth = options.hz_direct_ytmaxwidth > 0 ? options.hz_direct_ytmaxwidth : $(this).parent().parent().width(),
-					url = url.replace(/(https?:)(.*)\?v=(.*)/, 'https://www.youtube.com/v/$3?version=3&autohide=1&feature=player_embedded');
-
-				$(this).after('<div class="hz_closeYT"></div><object style="width: '+maxWidth+'px; height: '+(maxWidth * aspect)+'px;"><param name="movie" value="'+url+'"><param name="allowFullScreen" value="true"><param name="allowScriptAccess" value="always"><embed src="'+url+'" type="application/x-shockwave-flash" allowfullscreen="true" allowScriptAccess="always" width="'+maxWidth+'" height="'+(maxWidth * aspect)+'"></object>').addClass('hz_yt-in-post').css({display: 'block', fontWeight: 'bold', marginRight: 11});
+			} else if (!$(this).hasClass('hz_yt-in-post') && options.hz_direct_yt === 'true'){
+				if (url.match(/youtube\.com\/watch\?v=/) || url.match(/youtu\.be/)){
+					var maxWidth = options.hz_direct_ytmaxwidth > 0 ? options.hz_direct_ytmaxwidth : $(this).parent().parent().width();
+					url = url.match(/youtube\.com\/watch\?v=/) ? url.replace(/.*\?v=(\w+)/, 'https://www.youtube.com/v/$1?version=3&autohide=1&feature=player_embedded') : url.replace(/.*\/(\w+)/, 'https://www.youtube.com/v/$1?version=3&autohide=1&feature=player_embedded');
+					$(this).after('<div class="hz_closeYT"></div><object style="width: '+maxWidth+'px; height: '+(maxWidth * aspect)+'px;"><param name="movie" value="'+url+'"><param name="allowFullScreen" value="true"><param name="allowScriptAccess" value="always"><embed src="'+url+'" type="application/x-shockwave-flash" allowfullscreen="true" allowScriptAccess="always" width="'+maxWidth+'" height="'+(maxWidth * aspect)+'"></object>').addClass('hz_yt-in-post').css({display: 'block', fontWeight: 'bold', marginRight: 11});
+				}
 			}
 		});
 	};
