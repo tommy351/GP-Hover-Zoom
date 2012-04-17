@@ -416,12 +416,12 @@ var locale = {
 		set49: 'YouTube ダウンロード機能を有効にする',
 		set50: 'タブを開かずに直ちに画像をダウンロードします'
 	},
-	'index': [
-		['en-US', 'English'],
-		['zh-TW', '正體中文'],
-		['zh-CN', '简体中文'],
-		['ja-JP', '日本語']
-	]
+	'index': {
+		'en-US': 'English',
+		'zh-TW': '正體中文',
+		'zh-CN': '简体中文',
+		'ja-JP': '日本語'
+	}
 },
 lang = locale[options.hz_language] || locale['en-US'];
 
@@ -437,9 +437,8 @@ var init = {
 		$('#hz_trigger, #hz_fullscreen, #hz_dl_key').append(keys);
 
 		var langTmp = '';
-		for (var j=0, len=locale.index.length; j<len; j++){
-			var item = locale.index[j];
-			langTmp += '<option value="'+item[0]+'">'+item[1]+'</option>';
+		for (var j in locale.index){
+			langTmp += '<option value="'+j+'">'+locale.index[j]+'</option>';
 		}
 		$('#hz_language').html(langTmp);
 
