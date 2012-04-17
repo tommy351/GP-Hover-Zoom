@@ -1332,7 +1332,7 @@ var albumDL = function(){
 				var a = data.media$group,
 					url = a.media$content[0].url,
 					original = url.replace(/(.*)\//, '$1/s0/'),
-					thumbnail = url.replace(/(.*)\//, '$1/w#{width}/');
+					thumbnail = url.replace(/(.*)\//, '$1/w'+width+'/');
 
 				arr.push('<a href="'+original+'" title="'+a.media$title.$t+'"><img src="'+thumbnail+'" width="'+width+'"></a>');
 			});
