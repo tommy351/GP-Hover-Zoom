@@ -1147,8 +1147,8 @@ var openWindow = function(url, force){
 
 // Process pictures and bind events for album download page
 var sortPic = function(ele, arr, message){
-	var wWidth = ele.width(),
-		wHeight = ele.height(),
+	var wWidth = $(window).width(),
+		wHeight = $(window).height(),
 		$wrap = ele.find('.wrap'),
 		$inner = $wrap.children('.inner'),
 		length = arr.length,
