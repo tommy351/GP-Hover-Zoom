@@ -1675,7 +1675,9 @@ var setPage = new function(){
 		reset: function(){
 			var sure = confirm(lang.set04);
 			if (sure){
-				localStorage.clear();
+				for (var opt in options){
+					localStorage.removeItem(opt);
+				}
 				location.reload();
 			}
 		},
