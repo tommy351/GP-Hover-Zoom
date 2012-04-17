@@ -5,7 +5,7 @@
 // @author         SkyArrow
 // @website        http://userscripts.org/scripts/show/106681
 // @namespace      http://zespia.tw
-// @version        1.5
+// @version        1.5.1
 // @license        MIT License
 // @include        https://plus.google.com/*
 // @exclude        https://plus.google.com/ripples/*
@@ -27,7 +27,7 @@ a){var b=F.exec(a);b&&(b[1]=(b[1]||"").toLowerCase(),b[3]=b[3]&&new RegExp("(?:^
  */
 (function(a,b,c){var d=b.event,e;d.special.smartresize={setup:function(){b(this).bind("resize",d.special.smartresize.handler)},teardown:function(){b(this).unbind("resize",d.special.smartresize.handler)},handler:function(a,b){var c=this,d=arguments;a.type="smartresize",e&&clearTimeout(e),e=setTimeout(function(){jQuery.event.handle.apply(c,d)},b==="execAsap"?0:100)}},b.fn.smartresize=function(a){return a?this.bind("smartresize",a):this.trigger("smartresize",["execAsap"])},b.Mason=function(a,c){this.element=b(c),this._create(a),this._init()};var f=["position","height"];b.Mason.settings={isResizable:!0,isAnimated:!1,animationOptions:{queue:!1,duration:500},gutterWidth:0,isRTL:!1,isFitWidth:!1},b.Mason.prototype={_filterFindBricks:function(a){var b=this.options.itemSelector;return b?a.filter(b).add(a.find(b)):a},_getBricks:function(a){var b=this._filterFindBricks(a).css({position:"absolute"}).addClass("masonry-brick");return b},_create:function(c){this.options=b.extend(!0,{},b.Mason.settings,c),this.styleQueue=[],this.reloadItems();var d=this.element[0].style;this.originalStyle={};for(var e=0,g=f.length;e<g;e++){var h=f[e];this.originalStyle[h]=d[h]||""}this.element.css({position:"relative"}),this.horizontalDirection=this.options.isRTL?"right":"left",this.offset={x:parseInt(this.element.css("padding-"+this.horizontalDirection),10),y:parseInt(this.element.css("padding-top"),10)},this.isFluid=this.options.columnWidth&&typeof this.options.columnWidth=="function";var i=this;setTimeout(function(){i.element.addClass("masonry")},0),this.options.isResizable&&b(a).bind("smartresize.masonry",function(){i.resize()})},_init:function(a){this._getColumns(),this._reLayout(a)},option:function(a,c){b.isPlainObject(a)&&(this.options=b.extend(!0,this.options,a))},layout:function(a,b){for(var c=0,d=a.length;c<d;c++)this._placeBrick(a[c]);var e={};e.height=Math.max.apply(Math,this.colYs);if(this.options.isFitWidth){var f=0,c=this.cols;while(--c){if(this.colYs[c]!==0)break;f++}e.width=(this.cols-f)*this.columnWidth-this.options.gutterWidth}this.styleQueue.push({$el:this.element,style:e});var g=this.isLaidOut?this.options.isAnimated?"animate":"css":"css",h=this.options.animationOptions,i;for(c=0,d=this.styleQueue.length;c<d;c++)i=this.styleQueue[c],i.$el[g](i.style,h);this.styleQueue=[],b&&b.call(a),this.isLaidOut=!0},_getColumns:function(){var a=this.options.isFitWidth?this.element.parent():this.element,b=a.width();this.columnWidth=this.isFluid?this.options.columnWidth(b):this.options.columnWidth||this.$bricks.outerWidth(!0)||b,this.columnWidth+=this.options.gutterWidth,this.cols=Math.floor((b+this.options.gutterWidth)/this.columnWidth),this.cols=Math.max(this.cols,1)},_placeBrick:function(a){var c=b(a),d,e,f,g,h;d=Math.ceil(c.outerWidth(!0)/(this.columnWidth+this.options.gutterWidth)),d=Math.min(d,this.cols);if(d===1)f=this.colYs;else{e=this.cols+1-d,f=[];for(h=0;h<e;h++)g=this.colYs.slice(h,h+d),f[h]=Math.max.apply(Math,g)}var i=Math.min.apply(Math,f),j=0;for(var k=0,l=f.length;k<l;k++)if(f[k]===i){j=k;break}var m={top:i+this.offset.y};m[this.horizontalDirection]=this.columnWidth*j+this.offset.x,this.styleQueue.push({$el:c,style:m});var n=i+c.outerHeight(!0),o=this.cols+1-l;for(k=0;k<o;k++)this.colYs[j+k]=n},resize:function(){var a=this.cols;this._getColumns(),(this.isFluid||this.cols!==a)&&this._reLayout()},_reLayout:function(a){var b=this.cols;this.colYs=[];while(b--)this.colYs.push(0);this.layout(this.$bricks,a)},reloadItems:function(){this.$bricks=this._getBricks(this.element.children())},reload:function(a){this.reloadItems(),this._init(a)},appended:function(a,b,c){if(b){this._filterFindBricks(a).css({top:this.element.height()});var d=this;setTimeout(function(){d._appended(a,c)},1)}else this._appended(a,c)},_appended:function(a,b){var c=this._getBricks(a);this.$bricks=this.$bricks.add(c),this.layout(c,b)},remove:function(a){this.$bricks=this.$bricks.not(a),a.remove()},destroy:function(){this.$bricks.removeClass("masonry-brick").each(function(){this.style.position="",this.style.top="",this.style.left=""});var c=this.element[0].style;for(var d=0,e=f.length;d<e;d++){var g=f[d];c[g]=this.originalStyle[g]}this.element.unbind(".masonry").removeClass("masonry").removeData("masonry"),b(a).unbind(".masonry")}},b.fn.imagesLoaded=function(a){function h(){--e<=0&&this.src!==f&&(setTimeout(g),d.unbind("load error",h))}function g(){a.call(b,d)}var b=this,d=b.find("img").add(b.filter("img")),e=d.length,f="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";e||g(),d.bind("load error",h).each(function(){if(this.complete||this.complete===c){var a=this.src;this.src=f,this.src=a}});return b};var g=function(a){this.console&&console.error(a)};b.fn.masonry=function(a){if(typeof a=="string"){var c=Array.prototype.slice.call(arguments,1);this.each(function(){var d=b.data(this,"masonry");if(!d)g("cannot call methods on masonry prior to initialization; attempted to call method '"+a+"'");else{if(!b.isFunction(d[a])||a.charAt(0)==="_"){g("no such method '"+a+"' for masonry instance");return}d[a].apply(d,c)}})}else this.each(function(){var c=b.data(this,"masonry");c?(c.option(a||{}),c._init()):b.data(this,"masonry",new b.Mason(a,this))});return this}})(window,jQuery);
 
-var version = '1.5',
+var version = '1.5.1',
 	developer = false,
 	picRegex = /.(jpg|jpeg|gif|bmp|png|tiff)/i,
 	picasaRegex = /\/\w\d+(-\w\d*)*\/([^\/]+)$/,
@@ -416,12 +416,12 @@ var locale = {
 		set49: 'YouTube ダウンロード機能を有効にする',
 		set50: 'タブを開かずに直ちに画像をダウンロードします'
 	},
-	'index': [
-		['en-US', 'English'],
-		['zh-TW', '正體中文'],
-		['zh-CN', '简体中文'],
-		['ja-JP', '日本語']
-	]
+	'index': {
+		'en-US': 'English',
+		'zh-TW': '正體中文',
+		'zh-CN': '简体中文',
+		'ja-JP': '日本語'
+	}
 },
 lang = locale[options.hz_language] || locale['en-US'];
 
@@ -437,9 +437,8 @@ var init = {
 		$('#hz_trigger, #hz_fullscreen, #hz_dl_key').append(keys);
 
 		var langTmp = '';
-		for (var j=0, len=locale.index.length; j<len; j++){
-			var item = locale.index[j];
-			langTmp += '<option value="'+item[0]+'">'+item[1]+'</option>';
+		for (var j in locale.index){
+			langTmp += '<option value="'+j+'">'+locale.index[j]+'</option>';
 		}
 		$('#hz_language').html(langTmp);
 
@@ -869,7 +868,7 @@ var hoverzoom = function(){
 		};
 
 		var fullscreen = function(){
-			var arr = $(_this).parentsUntil('.CEhkv').find('a[target="_blank"]').children('div').children('img'),
+			var arr = $(_this).parentsUntil('.CEhkv').find('img.yqrXXd'),
 				links = [];
 
 			if (arr.length > 0){
@@ -956,7 +955,7 @@ var hoverzoom = function(){
 
 // Enable functions
 var enable = function(){
-	if (options.hz_enable_main === 'true') $content.on('mouseenter', 'a[target="_blank"] img', hoverzoom);
+	if (options.hz_enable_main === 'true') $content.on('mouseenter', 'img.yqrXXd', hoverzoom);
 	if (options.hz_enable_icon === 'true') $content.on('mouseenter', '.oP img', hoverzoom);
 	if (options.hz_enable_link === 'true') $content.on('mouseenter', '.ot-anchor', hoverzoom);
 
@@ -966,7 +965,7 @@ var enable = function(){
 
 // Disable functions
 var disable = function(){
-	if (options.hz_enable_main === 'true') $content.off('mouseenter', 'a[target="_blank"] img', hoverzoom);
+	if (options.hz_enable_main === 'true') $content.off('mouseenter', 'img.yqrXXd', hoverzoom);
 	if (options.hz_enable_icon === 'true') $content.off('mouseenter', '.oP img', hoverzoom);
 	if (options.hz_enable_link === 'true') $content.off('mouseenter', '.ot-anchor', hoverzoom);
 
@@ -1147,8 +1146,8 @@ var openWindow = function(url, force){
 
 // Process pictures and bind events for album download page
 var sortPic = function(ele, arr, message){
-	var wWidth = ele.width(),
-		wHeight = ele.height(),
+	var wWidth = $(window).width(),
+		wHeight = $(window).height(),
 		$wrap = ele.find('.wrap'),
 		$inner = $wrap.children('.inner'),
 		length = arr.length,
@@ -1326,18 +1325,25 @@ var albumDL = function(){
 		},
 		onload: function(data){
 			var feed = JSON.parse(data.responseText).feed,
-				entry = feed.entry;
+				entry = feed.entry,
+				links = feed.link,
+				albumLink;
 
 			$(entry).each(function(i, data){
 				var a = data.media$group,
 					url = a.media$content[0].url,
 					original = url.replace(/(.*)\//, '$1/s0/'),
-					thumbnail = url.replace(/(.*)\//, '$1/w#{width}/');
+					thumbnail = url.replace(/(.*)\//, '$1/w'+width+'/');
 
 				arr.push('<a href="'+original+'" title="'+a.media$title.$t+'"><img src="'+thumbnail+'" width="'+width+'"></a>');
 			});
 
-			sortPic($page, arr, '<a href="'+feed.author[0].uri.$t+'" target="_blank">'+feed.author[0].name.$t+'</a> &raquo; <a href="'+feed.link[3].href+'" target="_blank"><strong>'+feed.title.$t+'</strong></a> ('+entry.length+' '+(entry.length > 1 ? lang.set08 : lang.set07)+')');
+			for (var j=0, len=links.length; j<len; j++){
+				var link = links[j];
+				if (link.rel == 'alternate') albumLink = link.href;
+			}
+
+			sortPic($page, arr, '<a href="'+feed.author[0].uri.$t+'" target="_blank">'+feed.author[0].name.$t+'</a> &raquo; <a href="'+albumLink+'" target="_blank"><strong>'+feed.title.$t+'</strong></a> ('+entry.length+' '+(entry.length > 1 ? lang.set08 : lang.set07)+')');
 		}
 	});
 };
@@ -1347,7 +1353,7 @@ var batch = function(){
 	var width = parseInt(($(window).width() - 200) / options.hz_his_columns - 10),
 		arr = [];
 
-	$('a[target="_blank"] div img, .ot-anchor').filter(':visible').each(function(){
+	$('img.yqrXXd, .ot-anchor').filter(':visible').each(function(){
 		var tag = this.tagName.toUpperCase();
 		if (tag == 'IMG'){
 			var url = this.src,
@@ -1474,11 +1480,12 @@ var timer = new function(){
 			if (options.hz_direct === 'true' && url.match(picRegex) && !$(this).hasClass('hz_img-in-comm')){
 				$(this).addClass('hz_img-in-comm').html('<img src="'+url+'" style="max-width:'+(options.hz_direct_max > 0 ? options.hz_direct_max : '')+'">');
 			// Show Youtube links in comments directly
-			} else if (url.match(/youtube.com\/watch\?v=/) && !$(this).hasClass('hz_yt-in-post') && options.hz_direct_yt === 'true'){
-				var maxWidth = options.hz_direct_ytmaxwidth > 0 ? options.hz_direct_ytmaxwidth : $(this).parent().parent().width(),
-					url = url.replace(/(https?:)(.*)\?v=(.*)/, 'https://www.youtube.com/v/$3?version=3&autohide=1&feature=player_embedded');
-
-				$(this).after('<div class="hz_closeYT"></div><object style="width: '+maxWidth+'px; height: '+(maxWidth * aspect)+'px;"><param name="movie" value="'+url+'"><param name="allowFullScreen" value="true"><param name="allowScriptAccess" value="always"><embed src="'+url+'" type="application/x-shockwave-flash" allowfullscreen="true" allowScriptAccess="always" width="'+maxWidth+'" height="'+(maxWidth * aspect)+'"></object>').addClass('hz_yt-in-post').css({display: 'block', fontWeight: 'bold', marginRight: 11});
+			} else if (!$(this).hasClass('hz_yt-in-post') && options.hz_direct_yt === 'true'){
+				if (url.match(/youtube\.com\/watch\?v=/) || url.match(/youtu\.be/)){
+					var maxWidth = options.hz_direct_ytmaxwidth > 0 ? options.hz_direct_ytmaxwidth : $(this).parent().parent().width();
+					url = url.match(/youtube\.com\/watch\?v=/) ? url.replace(/.*\?v=(\w+)/, 'https://www.youtube.com/v/$1?version=3&autohide=1&feature=player_embedded') : url.replace(/.*\/(\w+)/, 'https://www.youtube.com/v/$1?version=3&autohide=1&feature=player_embedded');
+					$(this).after('<div class="hz_closeYT"></div><object style="width: '+maxWidth+'px; height: '+(maxWidth * aspect)+'px;"><param name="movie" value="'+url+'"><param name="allowFullScreen" value="true"><param name="allowScriptAccess" value="always"><embed src="'+url+'" type="application/x-shockwave-flash" allowfullscreen="true" allowScriptAccess="always" width="'+maxWidth+'" height="'+(maxWidth * aspect)+'"></object>').addClass('hz_yt-in-post').css({display: 'block', fontWeight: 'bold', marginRight: 11});
+				}
 			}
 		});
 	};
@@ -1667,7 +1674,9 @@ var setPage = new function(){
 		reset: function(){
 			var sure = confirm(lang.set04);
 			if (sure){
-				localStorage.clear();
+				for (var opt in options){
+					localStorage.removeItem(opt);
+				}
 				location.reload();
 			}
 		},
