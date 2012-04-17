@@ -1326,7 +1326,9 @@ var albumDL = function(){
 		},
 		onload: function(data){
 			var feed = JSON.parse(data.responseText).feed,
-				entry = feed.entry;
+				entry = feed.entry,
+				links = feed.link,
+				albumLink;
 
 			$(entry).each(function(i, data){
 				var a = data.media$group,
@@ -1337,7 +1339,12 @@ var albumDL = function(){
 				arr.push('<a href="'+original+'" title="'+a.media$title.$t+'"><img src="'+thumbnail+'" width="'+width+'"></a>');
 			});
 
-			sortPic($page, arr, '<a href="'+feed.author[0].uri.$t+'" target="_blank">'+feed.author[0].name.$t+'</a> &raquo; <a href="'+feed.link[3].href+'" target="_blank"><strong>'+feed.title.$t+'</strong></a> ('+entry.length+' '+(entry.length > 1 ? lang.set08 : lang.set07)+')');
+			for (var j=0, len=links.length; j<len; j++){
+				var link = links[j];
+				if (link.rel == 'alternate') albumLink = link.href;
+			}
+
+			sortPic($page, arr, '<a href="'+feed.author[0].uri.$t+'" target="_blank">'+feed.author[0].name.$t+'</a> &raquo; <a href="'+albumLink+'" target="_blank"><strong>'+feed.title.$t+'</strong></a> ('+entry.length+' '+(entry.length > 1 ? lang.set08 : lang.set07)+')');
 		}
 	});
 };
