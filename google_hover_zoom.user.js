@@ -1594,16 +1594,13 @@ var timer = new function(){
 
 	// Resize photos to stream width
 	var maxPic = function(){
-		$('.VepHtd:visible').each(function(){
+		$('img.yqrXXd').filter(':visible').each(function(){
 			if (!$(this).data('class')){
-				var img = this.childNodes[0],
-					imgWidth = img.offsetWidth,
-					parentWidth = this.offsetWidth;
+				var parentWidth = $(this).parent().width();
 
-				if (imgWidth < parentWidth){
-					var parent = $(this).parent().parent().parent();
-					$(this).children('img').attr('src', img.src.replace(picasaRegex, '/w'+parentWidth+'/$2')).load(function(){
-						parent.css('height', $(this).height());
+				if ($(this).width() < parentWidth){
+					$(this).attr('src', this.src.replace(picasaRegex, '/w'+parentWidth+'/$2')).load(function(){
+						$(this).parent().parent().parent().parent().css('height', $(this).height());
 					});
 				}
 
