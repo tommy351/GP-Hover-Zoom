@@ -1450,7 +1450,7 @@ var ytDL = function(url, ele){
 								tag = format[itag],
 								desc = typeof tag != 'undefined' ? tag.desc+'<small>'+tag.format+' / '+tag.res+'</small>' : lang.ytdl09+'<small>itag='+itag+'</small>';
 
-							appends += '<br><a class="c-C" href="'+url+'" target="_blank">'+desc+'</a>';
+							appends += '<br><a href="'+url+'" target="_blank">'+desc+'</a>';
 						}
 					}
 
@@ -1558,10 +1558,9 @@ var timer = new function(){
 							var html = '<div class="hz_closeButton"></div><strong>'+lang.piclink01+'</strong><br>';
 
 							for (var i=0; i<length; i++){
-								var url = target[i].childNodes[0].src;
 								var url = target[i].src;
 								url = url.match(/\?sz|\/proxy/) ? url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : url.replace(picasaRegex,'/s0/$2');
-								html += i == 0 ? '<a class="c-C" href="'+url+'">'+(i+1)+'</a>' : ' - <a class="c-C" href="'+url+'">'+(i+1)+'</a>';
+								html += i == 0 ? '<a href="'+url+'">'+(i+1)+'</a>' : ' - <a href="'+url+'">'+(i+1)+'</a>';
 							}
 
 							var popup = $('<div class="hz_stacksDetail">'+html+'</div>').on('click', '.hz_closeButton', function(){
