@@ -1517,6 +1517,7 @@ var timer = new function(){
 	// Process links in posts
 	var post = function(){
 		$('.Vl .ot-anchor').each(function(){
+		$('.rXnUBd .ot-anchor').each(function(){
 			if (!$(this).data('class')){
 				var url = this.href;
 
@@ -1548,7 +1549,7 @@ var timer = new function(){
 	var links = function(){
 		$('.Vl').each(function(){
 			if (!$(this).data('class')){
-				var target = $(this).find('.VepHtd, .hz_img-in-post'),
+				var target = $(this).find('.hotFy, .hz_img-in-post img'),
 					length = target.length;
 
 				if (length > 1){
@@ -1558,6 +1559,7 @@ var timer = new function(){
 
 							for (var i=0; i<length; i++){
 								var url = target[i].childNodes[0].src;
+								var url = target[i].src;
 								url = url.match(/\?sz|\/proxy/) ? url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : url.replace(picasaRegex,'/s0/$2');
 								html += i == 0 ? '<a class="c-C" href="'+url+'">'+(i+1)+'</a>' : ' - <a class="c-C" href="'+url+'">'+(i+1)+'</a>';
 							}
@@ -1579,7 +1581,7 @@ var timer = new function(){
 						}
 					});
 				} else if (length == 1){
-					var url = target[0].childNodes[0].src;
+					var url = target[0].src;
 					url = url.match(/\?sz|\/proxy/) ? url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : url.replace(picasaRegex,'/s0/$2');
 					var link = $('<a class="hz_dlButton" href="'+url+'" aria-label="'+lang.piclink01+'" data-tooltip="'+lang.piclink01+'" role="button"><span></span></a>').on('click', function(){
 						openWindow(url);
@@ -1594,13 +1596,14 @@ var timer = new function(){
 
 	// Resize photos to stream width
 	var maxPic = function(){
-		$('img.yqrXXd').filter(':visible').each(function(){
+		$('.hotFy').filter(':visible').each(function(){
 			if (!$(this).data('class')){
-				var parentWidth = $(this).parent().width();
+				var parent = $(this).parent().parent(),
+					parentWidth = parent.width();
 
-				if ($(this).width() < parentWidth){
+				if (this.offsetWidth < parentWidth){
 					$(this).attr('src', this.src.replace(picasaRegex, '/w'+parentWidth+'/$2')).load(function(){
-						$(this).parent().parent().parent().parent().css('height', $(this).height());
+						parent.css({maxHeight: 'none', height: this.offsetHeight});
 					});
 				}
 
