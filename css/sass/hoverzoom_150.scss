@@ -760,29 +760,12 @@ div[id^='update-']{
 		display: block;
 	}
 }
-.hz_img-in-comm{
+.hz_img-in-post{
 	img{
 		margin: 5px 0;
 	}
 	+br{
 		display: none;
-	}
-}
-.hz_img-in-post{
-	background: rgba(0,0,0,0.9);
-	margin: 12px -17px -1px;
-	position: relative;
-	img{
-		position: relative;
-	}
-	div{
-		border: 1px solid rgba(0,0,0,0.2);
-		border-bottom: none;
-		box-shadow: 0 0 5px rgba(0,0,0,0.2) inset;
-		height: 100%;
-		position: absolute;
-		top: 0;
-		left: 0;
 	}
 }
 .hz_yt-in-post{
