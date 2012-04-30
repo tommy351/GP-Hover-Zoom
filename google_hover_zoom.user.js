@@ -832,7 +832,7 @@ var hoverzoom = function(){
 		var show = function(){
 			$loading.show().offset({top: mouse.y - 10, left: mouse.x - 10});
 			$('<img src="'+url+'">').load(function(){
-				if (trigger){
+				if (trigger && $main.html() == ''){
 					$loading.hide();
 					$main.append(this).fadeIn(300);
 					if (options.hz_resolution === 'true') $main.append('<small>'+this.naturalWidth+' x '+this.naturalHeight+'</small>');
