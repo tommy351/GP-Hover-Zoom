@@ -1600,9 +1600,9 @@ var timer = new function(){
 				var parent = $(this).parent().parent(),
 					parentWidth = parent.width();
 
-				if (this.offsetWidth < parentWidth){
+				if ($(this).width() < parentWidth){
 					$(this).attr('src', this.src.replace(picasaRegex, '/w'+parentWidth+'/$2')).load(function(){
-						parent.css({maxHeight: 'none', height: this.offsetHeight});
+						parent.css({maxHeight: 'none', height: $(this).height()});
 					});
 				}
 
