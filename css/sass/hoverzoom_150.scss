@@ -854,6 +854,17 @@ div[id^='update-']{
 		border: 1px solid rgb(113,167,255);
 	}
 }
+.hz_maxPic_container{
+	max-width: 100% !important;
+	max-height: none !important;
+	margin-bottom: 16px;
+	background: transparent !important;
+	float: none !important;
+	img{
+		position: static !important;
+		max-width: 100%;
+	}
+}
 @keyframes loading{
 	0% {transform: rotate(0deg)}
 	100% {transform: rotate(360deg)}
