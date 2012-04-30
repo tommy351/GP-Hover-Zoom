@@ -1454,7 +1454,7 @@ var ytDL = function(url, ele){
 						}
 					}
 
-					ele.addClass('loaded').append(appends);
+					ele.addClass('loaded').append(appends).parentsUntil('.lzqA1d').next().find('.Ye').attr('style', 'z-index:0!important');
 				} else {
 					$notify.html(lang.ytdl08);
 				}
