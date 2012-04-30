@@ -868,7 +868,7 @@ var hoverzoom = function(){
 		};
 
 		var fullscreen = function(){
-			var arr = $(_this).parentsUntil('.CEhkv').find('img.yqrXXd'),
+			var arr = $(_this).parentsUntil('.ICACWc').find('.hotFy'),
 				links = [];
 
 			if (arr.length > 0){
