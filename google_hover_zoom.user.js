@@ -1614,10 +1614,8 @@ var timer = new function(){
 
 						image.src = this.src.replace(picasaRegex, '/w'+parentWidth+'/$2');
 						image.onload = function(){
-							if (this.width > $(self).width()){
-								self.src = this.src;
-								parent.css({maxHeight: 'none', height: this.height});
-							}
+							self.src = this.src;
+							parent.css({maxHeight: 'none', height: this.height});
 						};
 
 						$(this).data('class', true);
