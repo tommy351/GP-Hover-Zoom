@@ -1602,18 +1602,27 @@ var timer = new function(){
 
 					$(this).attr('src', src.match(/\?sz|\/proxy/) ? src.replace(/resize_\D?=\d+/, 'resize_w='+width) : src.replace(picasaRegex,'/w'+width+'/$2')).prev().remove();
 					$(this).parent().parent().addClass('hz_maxPic_container');
+
+					$(this).data('class', true);
 				} else {
 					var parent = $(this).parent().parent(),
 						parentWidth = parent.width();
 
-					if ($(this).width() < parentWidth){
-						$(this).attr('src', this.src.replace(picasaRegex, '/w'+parentWidth+'/$2')).load(function(){
-							parent.css({maxHeight: 'none', height: $(this).height()});
-						});
+					if (typeof parentWidth != 'undefined' && $(this).width() < parentWidth){
+						var image = new Image(),
+							self = this;
+
+						image.src = this.src.replace(picasaRegex, '/w'+parentWidth+'/$2');
+						image.onload = function(){
+							if (this.width > $(self).width()){
+								self.src = this.src;
+								parent.css({maxHeight: 'none', height: this.height});
+							}
+						};
+
+						$(this).data('class', true);
 					}
 				}
-
-				$(this).data('class', true);
 			}
 		});
 	};
