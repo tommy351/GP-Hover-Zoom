@@ -857,12 +857,17 @@ div[id^='update-']{
 .hz_maxPic_container{
 	max-width: 100% !important;
 	max-height: none !important;
-	margin-bottom: 16px;
+	width: auto !important;
+	height: auto !important;
 	background: transparent !important;
 	float: none !important;
 	img{
 		position: static !important;
 		max-width: 100%;
+	}
+	.ot-anchor{
+		display: block;
+		margin-bottom: 10px;
 	}
 }
 @keyframes loading{
