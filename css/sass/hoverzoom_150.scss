@@ -791,7 +791,7 @@ div[id^='update-']{
 	box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 	padding: 16px 32px 16px 16px;
 	position: absolute;
-	z-index: 1201;
+	z-index: 980;
 	display: none;
 	min-width: 150px;
 	@include border-radius(2px);
@@ -857,12 +857,18 @@ div[id^='update-']{
 .hz_maxPic_container{
 	max-width: 100% !important;
 	max-height: none !important;
-	margin-bottom: 16px;
-	background: transparent !important;
+	width: auto !important;
+	height: auto !important;
+	background-image: none !important;
 	float: none !important;
 	img{
 		position: static !important;
 		max-width: 100%;
+		border-bottom: 1px solid #fff;
+	}
+	.ot-anchor{
+		display: block;
+		margin-bottom: 10px;
 	}
 }
 @keyframes loading{
