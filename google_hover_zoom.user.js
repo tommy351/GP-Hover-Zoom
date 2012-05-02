@@ -1523,7 +1523,6 @@ var timer = new function(){
 				if (url.match(picRegex)){
 					var auto = $(this).parentsUntil('.Vl').next().find('.uaGLLd').attr('href');
 
-					console.log(auto);
 					if (url != auto){
 						var width = $(this).parent().width();
 						$(this).addClass('hz_img-in-post').html('<img src="'+url+'"'+(options.hz_direct_post_max > 0 ? ' style="max-width:' + options.hz_direct_post_max + 'px"' : '')+'>');
