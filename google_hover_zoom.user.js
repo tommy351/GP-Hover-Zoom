@@ -1607,7 +1607,7 @@ var timer = new function(){
 
 	// Resize photos to stream width
 	var maxPic = function(){
-		$('.B9JpJ').filter(':visible').each(function(){
+		$('.CEhkv.B9JpJ').filter(':visible').each(function(){
 			if (!$(this).data('class')){
 				var children = $(this).find('.hotFy'),
 					parentWidth = $(this).width();
