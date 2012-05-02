@@ -63,6 +63,7 @@ var options = {
 	hz_update: localStorage.hz_update || 'true',
 	hz_dl_link: localStorage.hz_dl_link || 'true',
 	hz_maxpic: localStorage.hz_maxpic || 'false',
+	hz_maxpic_option: localStorage.hz_maxpic_option || '0',
 	hz_hovering: localStorage.hz_hovering || 'false',
 	hz_direct_post: localStorage.hz_direct_post || 'false',
 	hz_direct_post_max: parseInt(localStorage.hz_direct_post_max) || 0,
@@ -153,6 +154,8 @@ var locale = {
 		set41: 'Enable auto update',
 		set42: 'Display download links below pictures',
 		set43: 'Resize photos to stream width',
+		set44: 'Apply to all photos',
+		set45: 'Only apply to the first photo in album',
 		set46: 'Don\'t hide photo when hovered',
 		set48: 'Show photo links in posts directly, max width:',
 		set49: 'Enable Youtube video download',
@@ -239,6 +242,8 @@ var locale = {
 		set41: '啟用自動更新',
 		set42: '在圖片下方顯示下載連結',
 		set43: '以訊息串寬度顯示圖片',
+		set44: '套用至所有圖片',
+		set45: '僅套用至相簿第一張圖片',
 		set46: '滑鼠移入大圖時不隱藏',
 		set48: '直接顯示文章內的圖片連結，最大寬度：',
 		set49: '啟用 Youtube 影片下載',
@@ -325,6 +330,8 @@ var locale = {
 		set41: '启用自动更新',
 		set42: '在图片下方显示下载链结',
 		set43: '以讯息流宽度显示图片',
+		set44: '套用至所有图片',
+		set45: '仅套用至相簿第一张图片',
 		set46: '鼠标移入大图时不隐藏',
 		set48: '直接显示文章内的图片链结，最大宽度：',
 		set49: '启用 Youtube 视频下载',
@@ -411,6 +418,8 @@ var locale = {
 		set41: '自動的にアップデートチェック',
 		set42: '画像の下にダウンロードリンクを表示',
 		set43: 'ストリーム幅で画像表示',
+		set44: '全ての画像に適用する',
+		set45: 'アルバムの一つ目の画像に適用する',
 		set46: '画像にカーソルを重ねた時に画像を隠さない',
 		set48: '画像の直リンクをポストで表示、最大幅：',
 		set49: 'YouTube ダウンロード機能を有効にする',
@@ -699,7 +708,11 @@ var init = {
 							+'</div><div>'
 								+'<label for="hz_language">'+lang.set35+'</label><select id="hz_language"></select><br>'
 								+'<input id="hz_update" type="checkbox"><label for="hz_update">'+lang.set41+'</label><br>'
-								+'<input id="hz_maxpic" type="checkbox"><label for="hz_maxpic">'+lang.set43+'</label><br>'
+								+'<input id="hz_maxpic" type="checkbox"><label for="hz_maxpic">'+lang.set43+'</label>'
+								+'<select id="hz_maxpic_option">'
+									+'<option value="0">'+lang.set44+'</option>'
+									+'<option value="1">'+lang.set45+'</option>'
+								+'</select><br>'
 								+'<input id="hz_direct_post" type="checkbox"><label for="hz_direct_post">'+lang.set48+'</label>'
 								+'<input id="hz_direct_post_max" type="text" maxlength="4"><label for="hz_direct_post_max">'+lang.set18+'</label><br>'
 								+'<input id="hz_direct" type="checkbox"><label for="hz_direct">'+lang.set25+'</label>'
