@@ -1561,7 +1561,7 @@ var timer = new function(){
 	var links = function(){
 		$('.Vl').each(function(){
 			if (!$(this).data('class')){
-				var target = $(this).find('.uaGLLd img, .hz_img-in-post img'),
+				var target = $(this).find('.hotFy, .hz_img-in-post img'),
 					length = target.length;
 
 				if (length > 1){
