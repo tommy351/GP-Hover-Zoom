@@ -789,14 +789,15 @@ div[id^='update-']{
 	background: #fff;
 	border: 1px solid #ccc;
 	box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-	padding: 16px 32px 16px 16px;
+	padding: 16px;
 	position: absolute;
 	z-index: 980;
 	display: none;
 	min-width: 150px;
 	@include border-radius(2px);
 	strong{
-		color: #000 !important;
+		display: block;
+		margin-bottom: 8px;
 	}
 	a{
 		&:hover{
@@ -837,6 +838,45 @@ div[id^='update-']{
 		border-right: 9px solid transparent;
 		border-bottom: 9px dashed #fff;
 		content: ''; 
+	}
+	.hz_stackItem{
+		display: inline-block;
+		margin-top: 2px;
+		margin-right: 4px;
+		position: relative;
+		&:nth-of-type(6n){
+			margin-right: 0;
+		}
+		a{
+			border: none;
+		}
+		img{
+			width: 54px;
+			height: auto;
+		}
+		input{
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
+	}
+	nav{
+		border-top: 1px solid #ccc;
+		height: 18px;
+		margin-top: 16px;
+		padding-top: 16px;
+		a{
+			&:hover{
+				border: none;
+				text-decoration: underline;
+			}
+			&:first-child{
+				float: left;
+			}
+			&:last-child{
+				float: right;
+			}
+		}
 	}
 }
 .hz_closeButton{
