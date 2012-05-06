@@ -1609,19 +1609,22 @@ var timer = new function(){
 	var maxPic = function(){
 		$content.find('.CEhkv.B9JpJ').filter(':visible').each(function(){
 			if (!$(this).data('class')){
-				var children = $(this).find('.hotFy'),
+				var children = $(this).children('.r4gluf'),
+					length = children.length,
 					parentWidth = $(this).width();
 				
-				if (children.length > 3) children = children.eq(0);
-
 				children.each(function(i){
-					if (children.length == 3 && i > 0 && options.hz_maxpic_option === '1'){
-						var src = this.src.replace(picasaRegex, '/w'+parseInt(parentWidth/2)+'-h'+parseInt(parentWidth/2)+'-p/$2');
+					var children = this.childNodes[0].childNodes[0],
+						src = children.src;
+
+					if (length == 3 && i > 0 && options.hz_maxpic_option === '1'){
+						src = src.replace(picasaRegex, '/w'+parseInt(parentWidth/2)+'-h'+parseInt(parentWidth/2)+'-p/$2');
 					} else {
-						var src = this.src.replace(picasaRegex, '/w'+parentWidth+'/$2');
+						src = src.replace(picasaRegex, '/w'+parentWidth+'/$2');
 					}
 					
-					$(this).attr('src', src).parent().parent().addClass('hz_maxPic_container');
+					children.src = src;
+					$(this).addClass('hz_maxPic_container');
 				});
 
 				$(this).data('class', true);
