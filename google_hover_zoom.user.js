@@ -1366,7 +1366,7 @@ var batch = function(){
 	var width = parseInt(($(window).width() - 200) / options.hz_his_columns - 10),
 		arr = [];
 
-	$('img.yqrXXd, .ot-anchor').filter(':visible').each(function(){
+	$('.hotFy, .ot-anchor').filter(':visible').each(function(){
 		var tag = this.tagName.toUpperCase();
 		if (tag == 'IMG'){
 			var url = this.src,
