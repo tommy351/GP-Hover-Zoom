@@ -871,6 +871,7 @@ div[id^='update-']{
 				text-decoration: underline;
 			}
 			&:first-child{
+				display: none;
 				float: left;
 			}
 			&:last-child{
