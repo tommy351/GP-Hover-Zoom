@@ -1511,32 +1511,143 @@ var ytDL = function(url, ele){
 		});
 };
 
+// Data process
+var process = {
+	// Process links in comments
+	comment: function(){
+		if (options.hz_direct_ytaspect == 1){
+			var aspect = 3/4;
+		} else if (options.hz_direct_ytaspect == 3){
+			var aspect = 10/16;
+		} else {
+			var aspect = 9/16;
+		}
+
+		var url = this.href;
+		// Show photo links in comments directly
+		if (options.hz_direct === 'true' && url.match(picRegex) && !$(this).hasClass('hz_img-in-post')){
+			$(this).addClass('hz_img-in-comm').html('<img src="'+url+'" style="max-width:'+(options.hz_direct_max > 0 ? options.hz_direct_max : '')+'">');
+		// Show Youtube links in comments directly
+		} else if (!$(this).hasClass('hz_yt-in-post') && options.hz_direct_yt === 'true'){
+			if (url.match(/youtube\.com\/watch\?v=/) || url.match(/youtu\.be/)){
+				var maxWidth = options.hz_direct_ytmaxwidth > 0 ? options.hz_direct_ytmaxwidth : $(this).parent().parent().width();
+				url = url.match(/youtube\.com\/watch\?v=/) ? url.replace(/.*\?v=(\w+)/, 'https://www.youtube.com/v/$1?version=3&autohide=1&feature=player_embedded') : url.replace(/.*\/(\w+)/, 'https://www.youtube.com/v/$1?version=3&autohide=1&feature=player_embedded');
+				$(this).after('<div class="hz_closeYT"></div><object style="width: '+maxWidth+'px; height: '+(maxWidth * aspect)+'px;"><param name="movie" value="'+url+'"><param name="allowFullScreen" value="true"><param name="allowScriptAccess" value="always"><embed src="'+url+'" type="application/x-shockwave-flash" allowfullscreen="true" allowScriptAccess="always" width="'+maxWidth+'" height="'+(maxWidth * aspect)+'"></object>').addClass('hz_yt-in-post').css({display: 'block', fontWeight: 'bold', marginRight: 11});
+			}
+		}
+	},
+	// Append album download button to post
+	album_post: function(obj){
+		var url = obj.href;
+		if (url.match(/\/photos\/\w+\/albums\/\w+/)){
+			var button = $('<div class="hz_albumDownload hz_dlButton" aria-label="'+lang.al01+'" data-tooltip="'+lang.al01+'" role="button"><span></span></div>').data('url', url);
+			$(obj).parentsUntil('.Ye').next().children().eq(-1).before(button);
+		}
+	},
+	// Append album download button to album page
+	album_page: function(obj, url){
+		var button = $('<div class="hz_in-albumDownload hz_button blue" role="button">'+lang.fs03+'</div>').data('url', url);
+		obj.data('class', true).next().find('.Z5yIHb').children().eq(1).before(button);
+	},
+	// Process links in posts
+	post: function(obj){
+		var url = obj.href;
+
+		if (url.match(picRegex)){
+			var auto = $(obj).parentsUntil('.Vl').next().find('.uaGLLd').attr('href');
+
+			if (url != auto){
+				var width = $(obj).parent().width();
+				$(obj).addClass('hz_img-in-post').html('<img src="'+url+'"'+(options.hz_direct_post_max > 0 ? ' style="max-width:' + options.hz_direct_post_max + 'px"' : '')+'>');
+			}
+		}
+	},
+	// Process Youtube video in posts
+	tube: function(obj){
+		var button = $('<div class="hz_tubeStacks hz_dlButton" aria-label="'+lang.ytdl01+'" data-tooltip="'+lang.ytdl01+'" role="button"><span></span></div>').data('url', $(obj).find('.ot-anchor').attr('href'));
+		$(obj).parentsUntil('.Ye').next().children().eq(-1).before(button);
+	},
+	// Display download links below pictures
+	links: function(obj){
+		var target = $(obj).find('.hotFy, .hz_img-in-post img'),
+			length = target.length;
+
+		if (length > 1){
+			var postid = obj.parentNode.parentNode.parentNode.id;
+
+			var link = $('<div class="hz_dlButton" aria-label="'+lang.piclink01+' ('+length+' '+lang.set08+')" data-tooltip="'+lang.piclink01+' ('+length+' '+lang.set08+')" role="button"><span></span><small>'+length+'</small></div>').click(function(){
+				if (!$(this).next().hasClass('hz_stacksDetail')){
+					var html = '<div class="hz_closeButton"></div><strong>'+lang.piclink01+'</strong>';
+
+					for (var i=0; i<length; i++){
+						var url = target[i].src,
+							id = postid + '-' + i;
+
+						url = url.match(/\?sz|\/proxy/) ? url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : url.replace(picasaRegex,'/s0/$2');
+						html += '<div class="hz_stackItem" data-original="'+url+'"><label for="'+id+'"><img src="'+url.replace(/\/s0\//, '/w54-h54-p/')+'" width="54" height="54"></label><input id="'+id+'" type="checkbox"></div>'
+					}
+
+					var popup = $('<div class="hz_stacksDetail">'+html+'<nav><a class="hz_stacks_downloadSelected" href="javascript:void(0)">'+lang.fs03+'</a><a class="hz_stacks_selectAll" href="javascript:void(0)">'+lang.piclink03+'</a></nav></div>').on('click', '.hz_closeButton', function(){
+						$(this).parent().fadeOut(300);
+					});
+
+					$(this).after(popup).next().fadeIn(300).offset({left: $(this).offset().left - 13, top: $(this).offset().top + 31}).parentsUntil('.lzqA1d').next().find('.Ye').css('position', 'static');
+				} else {
+					if ($(this).next().is(':hidden')){
+						$(this).next().fadeIn(300).offset({left: $(this).offset().left - 13, top: $(this).offset().top + 31});
+					} else {
+						$(this).next().fadeOut(300);
+					}
+				}
+			});
+		} else if (length == 1){
+			var url = target[0].src;
+			url = url.match(/\?sz|\/proxy/) ? url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : url.replace(picasaRegex,'/s0/$2');
+			var link = $('<a class="hz_dlButton" href="'+url+'" aria-label="'+lang.piclink01+'" data-tooltip="'+lang.piclink01+'" role="button"><span></span></a>').on('click', function(){
+				openWindow(url);
+				return false;
+			});
+		}
+
+		$(obj).next().children().eq(-1).before(link);
+	},
+	// Resize photos in normal post to stream width
+	maxPic_normal: function(obj){
+		var children = $(obj).children('.r4gluf'),
+			length = children.length,
+			parentWidth = $(obj).width();
+		
+		children.each(function(i){
+			var children = this.childNodes[0].childNodes[0],
+				src = children.src;
+
+			if (length == 3 && i > 0 && options.hz_maxpic_option === '1'){
+				src = src.replace(picasaRegex, '/w'+parseInt(parentWidth/2)+'-h'+parseInt(parentWidth/2)+'-p/$2');
+			} else {
+				src = src.replace(picasaRegex, '/w'+parentWidth+'/$2');
+			}
+			
+			children.src = src;
+			$(this).addClass('hz_maxPic_container');
+		});
+	},
+	// Resize photos in shared post to stream width
+	maxPic_shared: function(obj){
+		var	parentWidth = $(obj).parent().width();
+
+		$(obj).addClass('hz_maxPic_container').find('.hotFy').each(function(){
+			$(this).attr('src', this.src.match(/\?sz|\/proxy/) ? this.src.replace(/resize_\D?=\d+/, 'resize_w='+parentWidth) : this.src.replace(picasaRegex,'/w'+parentWidth+'/$2')).prev().remove();
+		});
+	}
+};
+
 // Execute every 2.5s
 var timer = new function(){
-	if (options.hz_direct_ytaspect == 1){
-		var aspect = 3/4;
-	} else if (options.hz_direct_ytaspect == 3){
-		var aspect = 10/16;
-	} else {
-		var aspect = 9/16;
-	}
+	var P = process;
 
 	// Process links in comments
 	var comment = function(){
-		$('.kH .ot-anchor').each(function(){
-			var url = this.href;
-			// Show photo links in comments directly
-			if (options.hz_direct === 'true' && url.match(picRegex) && !$(this).hasClass('hz_img-in-post')){
-				$(this).addClass('hz_img-in-comm').html('<img src="'+url+'" style="max-width:'+(options.hz_direct_max > 0 ? options.hz_direct_max : '')+'">');
-			// Show Youtube links in comments directly
-			} else if (!$(this).hasClass('hz_yt-in-post') && options.hz_direct_yt === 'true'){
-				if (url.match(/youtube\.com\/watch\?v=/) || url.match(/youtu\.be/)){
-					var maxWidth = options.hz_direct_ytmaxwidth > 0 ? options.hz_direct_ytmaxwidth : $(this).parent().parent().width();
-					url = url.match(/youtube\.com\/watch\?v=/) ? url.replace(/.*\?v=(\w+)/, 'https://www.youtube.com/v/$1?version=3&autohide=1&feature=player_embedded') : url.replace(/.*\/(\w+)/, 'https://www.youtube.com/v/$1?version=3&autohide=1&feature=player_embedded');
-					$(this).after('<div class="hz_closeYT"></div><object style="width: '+maxWidth+'px; height: '+(maxWidth * aspect)+'px;"><param name="movie" value="'+url+'"><param name="allowFullScreen" value="true"><param name="allowScriptAccess" value="always"><embed src="'+url+'" type="application/x-shockwave-flash" allowfullscreen="true" allowScriptAccess="always" width="'+maxWidth+'" height="'+(maxWidth * aspect)+'"></object>').addClass('hz_yt-in-post').css({display: 'block', fontWeight: 'bold', marginRight: 11});
-				}
-			}
-		});
+		$('.kH .ot-anchor').each(P.comment);
 	};
 
 	// Append album download button
@@ -1546,17 +1657,12 @@ var timer = new function(){
 		if (page.match(/\/photos\/\w+\/albums\/\w+/)){
 			var $nav = $('nav:visible');
 			if (!$nav.data('class')){
-				var button = $('<div class="hz_in-albumDownload hz_button blue" role="button">'+lang.fs03+'</div>').data('url', page);
-				$nav.data('class', true).next().find('.Z5yIHb').children().eq(1).before(button);
+				P.album_page($nav, page);
 			}
 		} else {
 			$('.eDP7tf').each(function(){
 				if (!$(this).data('class')){
-					var url = this.href;
-					if (url.match(/\/photos\/\w+\/albums\/\w+/)){
-						var button = $('<div class="hz_albumDownload hz_dlButton" aria-label="'+lang.al01+'" data-tooltip="'+lang.al01+'" role="button"><span></span></div>').data('url', url);
-						$(this).parentsUntil('.Ye').next().children().eq(-1).before(button);
-					}
+					P.album_post(this);
 					$(this).data('class', true);
 				}
 			});
@@ -1567,19 +1673,9 @@ var timer = new function(){
 	var post = function(){
 		$('.rXnUBd .ot-anchor').each(function(){
 			if (!$(this).data('class')){
-				var url = this.href;
-
-				if (url.match(picRegex)){
-					var auto = $(this).parentsUntil('.Vl').next().find('.uaGLLd').attr('href');
-
-					if (url != auto){
-						var width = $(this).parent().width();
-						$(this).addClass('hz_img-in-post').html('<img src="'+url+'"'+(options.hz_direct_post_max > 0 ? ' style="max-width:' + options.hz_direct_post_max + 'px"' : '')+'>');
-					}
-				}
+				P.post(this);
+				$(this).data('class', true);
 			}
-
-			$(this).data('class', true);
 		});
 	};
 
@@ -1587,8 +1683,8 @@ var timer = new function(){
 	var tube = function(){
 		$('div[itemtype$="VideoObject"]').each(function(){
 			if (!$(this).data('class')){
-				var button = $('<div class="hz_tubeStacks hz_dlButton" aria-label="'+lang.ytdl01+'" data-tooltip="'+lang.ytdl01+'" role="button"><span></span></div>').data('url', $(this).find('.ot-anchor').attr('href'));
-				$(this).data('class', true).parentsUntil('.Ye').next().children().eq(-1).before(button);
+				P.tube(this);
+				$(this).data('class', true);
 			}
 		});
 	};
@@ -1597,47 +1693,8 @@ var timer = new function(){
 	var links = function(){
 		$('.Vl').each(function(){
 			if (!$(this).data('class')){
-				var target = $(this).find('.hotFy, .hz_img-in-post img'),
-					length = target.length;
-
-				if (length > 1){
-					var postid = this.parentNode.parentNode.parentNode.id;
-
-					var link = $('<div class="hz_dlButton" aria-label="'+lang.piclink01+' ('+length+' '+lang.set08+')" data-tooltip="'+lang.piclink01+' ('+length+' '+lang.set08+')" role="button"><span></span><small>'+length+'</small></div>').click(function(){
-						if (!$(this).next().hasClass('hz_stacksDetail')){
-							var html = '<div class="hz_closeButton"></div><strong>'+lang.piclink01+'</strong>';
-
-							for (var i=0; i<length; i++){
-								var url = target[i].src,
-									id = postid + '-' + i;
-
-								url = url.match(/\?sz|\/proxy/) ? url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : url.replace(picasaRegex,'/s0/$2');
-								html += '<div class="hz_stackItem" data-original="'+url+'"><label for="'+id+'"><img src="'+url.replace(/\/s0\//, '/w54-h54-p/')+'" width="54" height="54"></label><input id="'+id+'" type="checkbox"></div>'
-							}
-
-							var popup = $('<div class="hz_stacksDetail">'+html+'<nav><a class="hz_stacks_downloadSelected" href="javascript:void(0)">'+lang.fs03+'</a><a class="hz_stacks_selectAll" href="javascript:void(0)">'+lang.piclink03+'</a></nav></div>').on('click', '.hz_closeButton', function(){
-								$(this).parent().fadeOut(300);
-							});
-
-							$(this).after(popup).next().fadeIn(300).offset({left: $(this).offset().left - 13, top: $(this).offset().top + 31}).parentsUntil('.lzqA1d').next().find('.Ye').css('position', 'static');
-						} else {
-							if ($(this).next().is(':hidden')){
-								$(this).next().fadeIn(300).offset({left: $(this).offset().left - 13, top: $(this).offset().top + 31});
-							} else {
-								$(this).next().fadeOut(300);
-							}
-						}
-					});
-				} else if (length == 1){
-					var url = target[0].src;
-					url = url.match(/\?sz|\/proxy/) ? url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : url.replace(picasaRegex,'/s0/$2');
-					var link = $('<a class="hz_dlButton" href="'+url+'" aria-label="'+lang.piclink01+'" data-tooltip="'+lang.piclink01+'" role="button"><span></span></a>').on('click', function(){
-						openWindow(url);
-						return false;
-					});
-				}
-
-				$(this).data('class', true).next().children().eq(-1).before(link);
+				P.links(this);
+				$(this).data('class', true);
 			}
 		});
 	};
@@ -1646,35 +1703,15 @@ var timer = new function(){
 	var maxPic = function(){
 		$content.find('.CEhkv.B9JpJ').filter(':visible').each(function(){
 			if (!$(this).data('class')){
-				var children = $(this).children('.r4gluf'),
-					length = children.length,
-					parentWidth = $(this).width();
-				
-				children.each(function(i){
-					var children = this.childNodes[0].childNodes[0],
-						src = children.src;
-
-					if (length == 3 && i > 0 && options.hz_maxpic_option === '1'){
-						src = src.replace(picasaRegex, '/w'+parseInt(parentWidth/2)+'-h'+parseInt(parentWidth/2)+'-p/$2');
-					} else {
-						src = src.replace(picasaRegex, '/w'+parentWidth+'/$2');
-					}
-					
-					children.src = src;
-					$(this).addClass('hz_maxPic_container');
-				});
-
+				P.maxPic_normal(this);
 				$(this).data('class', true);
 			}
 		});
 
 		$content.find('.q7xY2b').filter(':visible').each(function(){
 			if (!$(this).data('class')){
-				var	parentWidth = $(this).parent().width();
-
-				$(this).addClass('hz_maxPic_container').data('class', true).find('.hotFy').each(function(){
-					$(this).attr('src', this.src.match(/\?sz|\/proxy/) ? this.src.replace(/resize_\D?=\d+/, 'resize_w='+parentWidth) : this.src.replace(picasaRegex,'/w'+parentWidth+'/$2')).prev().remove();
-				});
+				P.maxPic_shared(this);
+				$(this).data('class', true);
 			}
 		});
 	};
