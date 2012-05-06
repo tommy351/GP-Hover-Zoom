@@ -1607,7 +1607,7 @@ var timer = new function(){
 
 	// Resize photos to stream width
 	var maxPic = function(){
-		$('.CEhkv.B9JpJ').filter(':visible').each(function(){
+		$content.find('.CEhkv.B9JpJ').filter(':visible').each(function(){
 			if (!$(this).data('class')){
 				var children = $(this).find('.hotFy'),
 					parentWidth = $(this).width();
@@ -1628,7 +1628,7 @@ var timer = new function(){
 			}
 		});
 
-		$('.q7xY2b').filter(':visible').each(function(){
+		$content.find('.q7xY2b').filter(':visible').each(function(){
 			if (!$(this).data('class')){
 				var	parentWidth = $(this).parent().width();
 
