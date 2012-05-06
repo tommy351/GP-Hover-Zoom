@@ -1500,7 +1500,7 @@ var ytDL = function(url, ele){
 								tag = format[itag],
 								desc = typeof tag != 'undefined' ? tag.desc+'<small>'+tag.format+' / '+tag.res+'</small>' : lang.ytdl09+'<small>itag='+itag+'</small>';
 
-							appends += '<br><a href="'+url+'" target="_blank">'+desc+'</a>';
+							appends += i == 0 ? '<a href="'+url+'" target="_blank">'+desc+'</a>' : '<br><a href="'+url+'" target="_blank">'+desc+'</a>';
 						}
 					}
 
