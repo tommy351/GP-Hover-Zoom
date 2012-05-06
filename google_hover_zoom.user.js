@@ -93,9 +93,8 @@ var locale = {
 		yt01: 'Remove',
 		allpic01: 'Batch Download',
 		piclink01: 'Download Photos',
-		piclink02: 'Download selected',
 		piclink03: 'Select All',
-		piclink04: 'Cancel Select',
+		piclink04: 'Cancel select',
 		ytdl01: 'Download Video',
 		ytdl02: 'Low',
 		ytdl03: 'Standard',
@@ -184,7 +183,6 @@ var locale = {
 		yt01: '移除',
 		allpic01: '批次下載',
 		piclink01: '圖片下載',
-		piclink02: '下載所選項目',
 		piclink03: '全選',
 		piclink04: '取消選擇',
 		ytdl01: '影片下載',
@@ -275,7 +273,6 @@ var locale = {
 		yt01: '移除',
 		allpic01: '批量下载',
 		piclink01: '图片下载',
-		piclink02: '下载所选项目',
 		piclink03: '全选',
 		piclink04: '取消选择',
 		ytdl01: '视频下载',
@@ -366,10 +363,8 @@ var locale = {
 		yt01: '削除',
 		allpic01: 'バッチダウンロード',
 		piclink01: '画像をダウンロード',
-		// 待翻譯
-		piclink02: 'Download selected',
-		piclink03: 'Select All',
-		piclink04: 'Cancel Select',
+		piclink03: '全選択する',
+		piclink04: '選択をキャンセル',
 		ytdl01: '動画をダウンロード',
 		ytdl02: '低画質',
 		ytdl03: '標準画質',
@@ -1616,7 +1611,7 @@ var timer = new function(){
 								html += '<div class="hz_stackItem"><a href="'+url+'"><img src="'+url.replace(/\/s0\//, '/w54-h54-p/')+'"></a><input type="checkbox"></div>';
 							}
 
-							var popup = $('<div class="hz_stacksDetail">'+html+'<nav><a class="hz_stacks_downloadSelected">'+lang.piclink02+'</a><a class="hz_stacks_selectAll">'+lang.piclink03+'</a></nav></div>').on('click', '.hz_closeButton', function(){
+							var popup = $('<div class="hz_stacksDetail">'+html+'<nav><a class="hz_stacks_downloadSelected">'+lang.fs03+'</a><a class="hz_stacks_selectAll">'+lang.piclink03+'</a></nav></div>').on('click', '.hz_closeButton', function(){
 								$(this).parent().fadeOut(300);
 							}).on('click', '.hz_stackItem a', function(){
 								openWindow(this.href);
