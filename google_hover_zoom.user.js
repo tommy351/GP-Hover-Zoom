@@ -1743,6 +1743,66 @@ var timer = new function(){
 	}
 };
 
+// Eco-mode
+var ecomode = new function(){
+	var P = process;
+
+	var post = function(){
+		if (!$(this).data('class')){
+			if (options.hz_album === 'true'){
+				$(this).find('.eDP7tf').each(function(){
+					P.album_post(this);
+				});
+			}
+			if (options.hz_direct_post === 'true'){
+				$(this).find('.rXnUBd .ot-anchor').each(function(){
+					P.post(this);
+				});
+			}
+			if (options.hz_ytdl === 'true'){
+				$(this).find('div[itemtype$="VideoObject"]').each(function(){
+					P.tube(this);
+				})
+			}
+			if (options.hz_dl_link === 'true'){
+				$(this).find('.Vl').each(function(){
+					P.links(this);
+				});
+			}
+			if (options.hz_maxpic === 'true'){
+				$(this).find('.CEhkv.B9JpJ').filter(':visible').each(function(){
+					P.maxPic_normal(this);
+				});
+
+				$(this).find('.q7xY2b').filter(':visible').each(function(){
+					P.maxPic_shared(this);
+				});
+			}
+			$(this).data('class', true);
+		}
+	};
+
+	var comment = function(){
+		$(this).find('.kH .ot-anchor').each(P.comment);
+	};
+
+	var album = function(){
+		if (!$(this).data('class')){
+			P.album_page($('nav:visible'), location.href.replace(/\?(.*)/, ''));
+			$(this).data('class', true);
+		}
+	};
+
+	return {
+		start: function(){
+			$('body').on('mouseenter', '.Te', post).on('mouseenter', '.wd', comment).on('mouseenter', '.IFU6qd', album);
+		},
+		stop: function(){
+			$('body').off('mouseenter', '.Te', post).off('mouseenter', '.wd', comment).off('mouseenter', '.IFU6qd', album);
+		}
+	}
+};
+
 // Settings page events
 var setPage = new function(){
 	var $set = $('#hz_set_page'),
