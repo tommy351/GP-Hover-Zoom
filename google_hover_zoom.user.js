@@ -68,7 +68,8 @@ var options = {
 	hz_direct_post: localStorage.hz_direct_post || 'false',
 	hz_direct_post_max: parseInt(localStorage.hz_direct_post_max) || 0,
 	hz_ytdl: localStorage.hz_ytdl || 'true',
-	hz_iframedl: localStorage.hz_iframedl || 'false'
+	hz_iframedl: localStorage.hz_iframedl || 'false',
+	hz_ecomode: localStorage.hz_ecomode || 'false'
 };
 
 // l10n
@@ -161,7 +162,8 @@ var locale = {
 		set46: 'Don\'t hide photo when hovered',
 		set48: 'Show photo links in posts directly, max width:',
 		set49: 'Enable Youtube video download',
-		set50: 'Download directly without opening in new tab'
+		set50: 'Download directly without opening in new tab',
+		set51: 'Enable Eco-mode'
 	},
 	'zh-TW': {
 		menu01: '關閉',
@@ -251,7 +253,8 @@ var locale = {
 		set46: '滑鼠移入大圖時不隱藏',
 		set48: '直接顯示文章內的圖片連結，最大寬度：',
 		set49: '啟用 Youtube 影片下載',
-		set50: '直接下載無須開啟新分頁'
+		set50: '直接下載無須開啟新分頁',
+		set51: '啟用節能模式'
 	},
 	'zh-CN': {
 		menu01: '关闭',
@@ -341,7 +344,8 @@ var locale = {
 		set46: '鼠标移入大图时不隐藏',
 		set48: '直接显示文章内的图片链结，最大宽度：',
 		set49: '启用 Youtube 视频下载',
-		set50: '直接下载无须开启新页签'
+		set50: '直接下载无须开启新页签',
+		set51: '启用节能模式'
 	},
 	'ja-JP': {
 		menu01: 'オフ',
@@ -431,7 +435,8 @@ var locale = {
 		set46: '画像にカーソルを重ねた時に画像を隠さない',
 		set48: '画像の直リンクをポストで表示、最大幅：',
 		set49: 'YouTube ダウンロード機能を有効にする',
-		set50: 'タブを開かずに直ちに画像をダウンロードします'
+		set50: 'タブを開かずに直ちに画像をダウンロードします',
+		set51: 'エコモードを有効にする'
 	},
 	'index': {
 		'en-US': 'English',
@@ -743,6 +748,7 @@ var init = {
 							+'</div><div>'
 								+'<label for="hz_language">'+lang.set35+'</label><select id="hz_language"></select><br>'
 								+'<input id="hz_update" type="checkbox"><label for="hz_update">'+lang.set41+'</label><br>'
+								+'<input id="hz_ecomode" type="checkbox"><label for="hz_ecomode">'+lang.set51+'</label><br>'
 								+'<input id="hz_maxpic" type="checkbox"><label for="hz_maxpic">'+lang.set43+'</label>'
 								+'<select id="hz_maxpic_option">'
 									+'<option value="0">'+lang.set44+'</option>'
@@ -1009,7 +1015,11 @@ var enable = function(){
 	if (options.hz_enable_link === 'true') $content.on('mouseenter', '.ot-anchor', hoverzoom);
 
 	$('#hoverzoom_db').addClass('enable');
-	timer.start();
+	if (options.hz_ecomode === 'true'){
+		ecomode.start();
+	} else {
+		timer.start();
+	}
 };
 
 // Disable functions
@@ -1019,7 +1029,11 @@ var disable = function(){
 	if (options.hz_enable_link === 'true') $content.off('mouseenter', '.ot-anchor', hoverzoom);
 
 	$('#hoverzoom_db').removeClass('enable');
-	timer.stop();
+	if (options.hz_ecomode === 'true'){
+		ecomode.stop();
+	} else {
+		timer.stop();
+	}
 };
 
 // Lightbox
