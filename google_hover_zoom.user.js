@@ -1539,7 +1539,7 @@ var process = {
 
 		var url = this.href;
 		// Show photo links in comments directly
-		if (options.hz_direct === 'true' && url.match(picRegex) && !$(this).hasClass('hz_img-in-post')){
+		if (options.hz_direct === 'true' && url.match(picRegex) && !$(this).hasClass('hz_img-in-comm')){
 			$(this).addClass('hz_img-in-comm').html('<img src="'+url+'" style="max-width:'+(options.hz_direct_max > 0 ? options.hz_direct_max : '')+'">');
 		// Show Youtube links in comments directly
 		} else if (!$(this).hasClass('hz_yt-in-post') && options.hz_direct_yt === 'true'){
