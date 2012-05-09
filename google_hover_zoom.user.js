@@ -37,7 +37,8 @@ var version = '1.7.2',
 
 // Selectors
 var selectors = ['.Om', '.cF', '.Bo', '.ot-anchor', '.Gn', '.vja', '.Ag', '.Si', '.uc', '.gu',
-	'.Gm', '.Mi', '.oh', '.aw', '.Uga', '.cn', '.bZ', '.cA', '.lp', '.Gb', '.UN'];
+	'.Gm', '.Mi', '.oh', '.aw', '.Uga', '.cn', '.bZ', '.cA', '.lp', '.Gb',
+	'.UN', '.kA'];
 
 // Options
 var options = {
@@ -928,7 +929,7 @@ var hoverzoom = function(){
 
 		var fullscreen = function(){
 			// Selector update
-			var arr = $(_this).parentsUntil(selectors[0]).find(selectors[1]),
+			var arr = $(_this).parentsUntil(selectors[21]).find(selectors[1]),
 				links = [];
 
 			if (arr.length > 0){
