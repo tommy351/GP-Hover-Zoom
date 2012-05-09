@@ -35,6 +35,10 @@ var version = '1.7',
 	mouse = [],
 	$content = $('#content');
 
+// Selectors
+var selectors = ['.Om', '.cF', '.Bo', '.ot-anchor', '.Gn', '.vja', '.Ag', '.Si', '.uc', '.gu',
+	'.Gm', '.Mi', '.oh', '.aw', '.Uga', '.cn', '.bZ', '.cA', '.lp', '.Gb'. '.UN'];
+
 // Options
 var options = {
 	hz_delay: parseInt(localStorage.hz_delay) || 500,
@@ -465,7 +469,7 @@ var init = {
 		$('#hz_language').html(langTmp);
 
 		// Bind menu events
-		$('body').on('click', '#hz_opts #disable_hz', function(){
+		$('body').on('click', '#disable_hz', function(){
 			if (!$(this).hasClass('off')){
 				disable();
 				$(this).html(lang.menu01).addClass('off');
@@ -473,9 +477,9 @@ var init = {
 				enable();
 				$(this).html(lang.menu02).removeClass('off');
 			}
-		}).on('click', '#hz_opts #hz_set_open', setPage.open)
-		.on('click', '#hz_opts #hz_history_open', history.display)
-		.on('click', '#hz_opts #hz_allpic_dl', batch);
+		}).on('click', '#hz_set_open', setPage.open)
+		.on('click', '#hz_history_open', history.display)
+		.on('click', '#hz_allpic_dl', batch);
 
 		// Close settings page
 		$('#hz_set_page').on('click', '.close, .back', setPage.close)
@@ -830,9 +834,9 @@ var init = {
 		menu(elements.menu.setting);
 		if (options.hz_his === 'true') menu(elements.menu.history);
 		if (options.hz_allpics === 'true') menu(elements.menu.allPic);
-		$content.on('click', '.SGwbqf', function(){
+		$content.on('click', selectors[16], function(){
 			if (!$(this).data('class')){
-				$('.urrzYd').append('<div id="hz_opts"><strong>Google+ Hover Zoom</strong><ul><li id="disable_hz">'+lang.menu02+'</li>'+menuTmp+'</ul></div>');
+				$(selectors[17]).append('<div id="hz_opts"><strong>Google+ Hover Zoom</strong><ul><li id="disable_hz">'+lang.menu02+'</li>'+menuTmp+'</ul></div>');
 				$(this).data('class', true);
 			}
 		});
@@ -923,7 +927,8 @@ var hoverzoom = function(){
 		};
 
 		var fullscreen = function(){
-			var arr = $(_this).parentsUntil('.ICACWc').find('.hotFy'),
+			// Selector update
+			var arr = $(_this).parentsUntil(selectors[0]).find(selectors[1]),
 				links = [];
 
 			if (arr.length > 0){
@@ -1010,9 +1015,9 @@ var hoverzoom = function(){
 
 // Enable functions
 var enable = function(){
-	if (options.hz_enable_main === 'true') $content.on('mouseenter', '.uaGLLd img', hoverzoom);
-	if (options.hz_enable_icon === 'true') $('body').on('mouseenter', '.FN51Rd', hoverzoom);
-	if (options.hz_enable_link === 'true') $content.on('mouseenter', '.ot-anchor', hoverzoom);
+	if (options.hz_enable_main === 'true') $content.on('mouseenter', selectors[15]+' img', hoverzoom);
+	if (options.hz_enable_icon === 'true') $('body').on('mouseenter', selectors[2], hoverzoom);
+	if (options.hz_enable_link === 'true') $content.on('mouseenter', selectors[3], hoverzoom);
 
 	$('#hoverzoom_db').addClass('enable');
 	if (options.hz_ecomode === 'true'){
@@ -1024,9 +1029,9 @@ var enable = function(){
 
 // Disable functions
 var disable = function(){
-	if (options.hz_enable_main === 'true') $content.off('mouseenter', '.uaGLLd img', hoverzoom);
-	if (options.hz_enable_icon === 'true') $('body').off('mouseenter', '.FN51Rd', hoverzoom);
-	if (options.hz_enable_link === 'true') $content.off('mouseenter', '.ot-anchor', hoverzoom);
+	if (options.hz_enable_main === 'true') $content.off('mouseenter', selectors[15]+' img', hoverzoom);
+	if (options.hz_enable_icon === 'true') $('body').off('mouseenter', selectors[2], hoverzoom);
+	if (options.hz_enable_link === 'true') $content.off('mouseenter', selectors[3], hoverzoom);
 
 	$('#hoverzoom_db').removeClass('enable');
 	if (options.hz_ecomode === 'true'){
@@ -1255,7 +1260,7 @@ var sortPic = function(ele, arr, message){
 
 	var copyLink = function(){
 		var textarea = $('#hz_copyarea').find('textarea');
-		if (textarea.is(':empty')){
+		if (textarea.html == ''){
 			var appends = '';
 			
 			for (var i=0; i<length; i++){
@@ -1416,7 +1421,7 @@ var batch = function(){
 	var width = parseInt(($(window).width() - 200) / options.hz_his_columns - 10),
 		arr = [];
 
-	$('.hotFy, .ot-anchor').filter(':visible').each(function(){
+	$(selectors[1]+','+selectors[3]).filter(':visible').each(function(){
 		var tag = this.tagName.toUpperCase();
 		if (tag == 'IMG'){
 			var url = this.src,
@@ -1517,7 +1522,7 @@ var ytDL = function(url, ele){
 						}
 					}
 
-					ele.addClass('loaded').append(appends).parentsUntil('.lzqA1d').next().find('.Ye').css('position', 'static');
+					ele.addClass('loaded').append(appends).parentsUntil(selectors[13]).next().find(selectors[4]).css('position', 'static');
 				} else {
 					$notify.html(lang.ytdl08);
 				}
@@ -1555,20 +1560,20 @@ var process = {
 		var url = obj.href;
 		if (url.match(/\/photos\/\w+\/albums\/\w+/)){
 			var button = $('<div class="hz_albumDownload hz_dlButton" aria-label="'+lang.al01+'" data-tooltip="'+lang.al01+'" role="button"><span></span></div>').data('url', url);
-			$(obj).parentsUntil('.Ye').next().children().eq(-1).before(button);
+			$(obj).parentsUntil(selectors[4]).next().children().eq(-1).before(button);
 		}
 	},
 	// Append album download button to album page
 	album_page: function(obj, url){
 		var button = $('<div class="hz_in-albumDownload hz_button blue" role="button">'+lang.fs03+'</div>').data('url', url);
-		obj.data('class', true).next().find('.Z5yIHb').children().eq(1).before(button);
+		obj.data('class', true).next().find(selectors[5]).children().eq(1).before(button);
 	},
 	// Process links in posts
 	post: function(obj){
 		var url = obj.href;
 
 		if (url.match(picRegex)){
-			var auto = $(obj).parentsUntil('.Vl').next().find('.uaGLLd').attr('href');
+			var auto = $(obj).parentsUntil(selectors[10]).next().find(selectors[3]).attr('href');
 
 			if (url != auto){
 				var width = $(obj).parent().width();
@@ -1578,12 +1583,12 @@ var process = {
 	},
 	// Process Youtube video in posts
 	tube: function(obj){
-		var button = $('<div class="hz_tubeStacks hz_dlButton" aria-label="'+lang.ytdl01+'" data-tooltip="'+lang.ytdl01+'" role="button"><span></span></div>').data('url', $(obj).find('.ot-anchor').attr('href'));
-		$(obj).parentsUntil('.Ye').next().children().eq(-1).before(button);
+		var button = $('<div class="hz_tubeStacks hz_dlButton" aria-label="'+lang.ytdl01+'" data-tooltip="'+lang.ytdl01+'" role="button"><span></span></div>').data('url', $(obj).find(selectors[3]).attr('href'));
+		$(obj).parentsUntil(selectors[4]).next().children().eq(-1).before(button);
 	},
 	// Display download links below pictures
 	links: function(obj){
-		var target = $(obj).find('.hotFy, .hz_img-in-post img'),
+		var target = $(obj).find(selectors[15]+' img, .hz_img-in-post img'),
 			length = target.length;
 
 		if (length > 1){
@@ -1605,7 +1610,7 @@ var process = {
 						$(this).parent().fadeOut(300);
 					});
 
-					$(this).after(popup).next().fadeIn(300).offset({left: $(this).offset().left - 13, top: $(this).offset().top + 31}).parentsUntil('.lzqA1d').next().find('.Ye').css('position', 'static');
+					$(this).after(popup).next().fadeIn(300).offset({left: $(this).offset().left - 13, top: $(this).offset().top + 31}).parentsUntil(selectors[13]).next().find(selectors[4]).css('position', 'static');
 				} else {
 					if ($(this).next().is(':hidden')){
 						$(this).next().fadeIn(300).offset({left: $(this).offset().left - 13, top: $(this).offset().top + 31});
@@ -1627,7 +1632,7 @@ var process = {
 	},
 	// Resize photos in normal post to stream width
 	maxPic_normal: function(obj){
-		var target = $(obj).children('.r4gluf'),
+		var target = $(obj).children(selectors[6]),
 			length = target.length,
 			parentWidth = $(obj).width(),
 			button = $('<div class="hz_dlButton hz_maxPicResize" aria-label="'+lang.maxpic01+'" data-tooltip="'+lang.maxpic01+'"><span></span></div>').click(function(){
@@ -1654,35 +1659,32 @@ var process = {
 			$(this).addClass('hz_maxPic_container').data('modified', src);
 		});
 
-		$(obj).parentsUntil('.Ye').next().children().eq(-1).before(button);
+		$(obj).parentsUntil(selectors[4]).next().children().eq(-1).before(button);
 	},
 	// Resize photos in shared post to stream width
 	maxPic_shared: function(obj){
-		var	parentWidth = $(obj).parent().width(),
-			target = $(obj).find('.hotFy'),
+		var parentWidth = $(obj).parent().parent().width(),
+			target = obj.childNodes[1],
+			original, modified,
 			button = $('<div class="hz_dlButton hz_maxPicResize" aria-label="'+lang.maxpic01+'" data-tooltip="'+lang.maxpic01+'"><span></span></div>').click(function(){
 				if ($(obj).hasClass('hz_maxPic_container')){
-					target.each(function(){
-						$(this).attr('src', $(this).data('original')).css('position', 'static');
-						$(obj).removeClass('hz_maxPic_container');
-					});
+					target.src = original;
+					$(obj).parent().removeClass('hz_maxPic_container');
 				} else {
-					target.each(function(){
-						$(this).attr('src', $(this).data('modified'));
-						$(obj).addClass('hz_maxPic_container');
-					});
+					target.src = modified;
+					$(obj).parent().addClass('hz_maxPic_container');
 				}
 
 				$(document).scrollTop(this.parentNode.parentNode.parentNode.parentNode.offsetTop);
 			});
 
-		target.each(function(){
-			var src = this.src;
-			$(this).data('original', src);
-			src = src.match(/\?sz|\/proxy/) ? src.replace(/resize_\D?=\d+/, 'resize_w='+parentWidth) : src.replace(picasaRegex,'/w'+parentWidth+'/$2');
-			$(this).attr('src', src).data('modified', src).prev().remove();
-		});
-		$(obj).addClass('hz_maxPic_container').parentsUntil('.Ye').next().children().eq(-1).before(button);
+		var src = target.src;
+		original = src;
+		src = src.match(/\?sz|\/proxy/) ? src.replace(/resize_\D?=\d+/, 'resize_w='+parentWidth) : src.replace(picasaRegex,'/w'+parentWidth+'/$2');
+		modified = src;
+		target.src = src;
+		obj.removeChild(obj.childNodes[0]);
+		$(obj).parent().addClass('hz_maxPic_container').parentsUntil(selectors[4]).next().children().eq(-1).before(button);
 	}
 };
 
@@ -1692,7 +1694,7 @@ var timer = new function(){
 
 	// Process links in comments
 	var comment = function(){
-		$('.kH .ot-anchor').each(P.comment);
+		$(selectors[7]+' '+selectors[3]).each(P.comment);
 	};
 
 	// Append album download button
@@ -1705,7 +1707,7 @@ var timer = new function(){
 				P.album_page($nav, page);
 			}
 		} else {
-			$('.eDP7tf').each(function(){
+			$(selectors[8]).each(function(){
 				if (!$(this).data('class')){
 					P.album_post(this);
 					$(this).data('class', true);
@@ -1716,7 +1718,7 @@ var timer = new function(){
 
 	// Process links in posts
 	var post = function(){
-		$('.rXnUBd .ot-anchor').each(function(){
+		$(selectors[9]+' '+selectors[3]).each(function(){
 			if (!$(this).data('class')){
 				P.post(this);
 				$(this).data('class', true);
@@ -1726,7 +1728,7 @@ var timer = new function(){
 
 	// Process Youtube video in posts
 	var tube = function(){
-		$('div[itemtype$="VideoObject"]').each(function(){
+		$(selectors[14]).each(function(){
 			if (!$(this).data('class')){
 				P.tube(this);
 				$(this).data('class', true);
@@ -1736,7 +1738,7 @@ var timer = new function(){
 
 	// Display download links below pictures
 	var links = function(){
-		$('.Vl').each(function(){
+		$(selectors[10]).each(function(){
 			if (!$(this).data('class')){
 				P.links(this);
 				$(this).data('class', true);
@@ -1746,14 +1748,14 @@ var timer = new function(){
 
 	// Resize photos to stream width
 	var maxPic = function(){
-		$content.find('.CEhkv.B9JpJ').filter(':visible').each(function(){
+		$content.find(selectors[0]+selectors[11]).filter(':visible').each(function(){
 			if (!$(this).data('class')){
 				P.maxPic_normal(this);
 				$(this).data('class', true);
 			}
 		});
 
-		$content.find('.q7xY2b').filter(':visible').each(function(){
+		$content.find(selectors[15]+selectors[3]).filter(':visible').each(function(){
 			if (!$(this).data('class')){
 				P.maxPic_shared(this);
 				$(this).data('class', true);
@@ -1795,31 +1797,31 @@ var ecomode = new function(){
 	var post = function(){
 		if (!$(this).data('class')){
 			if (options.hz_album === 'true'){
-				$(this).find('.eDP7tf').each(function(){
+				$(this).find(selectors[8]).each(function(){
 					P.album_post(this);
 				});
 			}
 			if (options.hz_direct_post === 'true'){
-				$(this).find('.rXnUBd .ot-anchor').each(function(){
+				$(this).find(selectors[9]+' '+selectors[3]).each(function(){
 					P.post(this);
 				});
 			}
 			if (options.hz_ytdl === 'true'){
-				$(this).find('div[itemtype$="VideoObject"]').each(function(){
+				$(this).find(selectors[14]).each(function(){
 					P.tube(this);
 				})
 			}
 			if (options.hz_dl_link === 'true'){
-				$(this).find('.Vl').each(function(){
+				$(this).find(selectors[10]).each(function(){
 					P.links(this);
 				});
 			}
 			if (options.hz_maxpic === 'true'){
-				$(this).find('.CEhkv.B9JpJ').filter(':visible').each(function(){
+				$(this).find(selectors[0]+selectors[11]).filter(':visible').each(function(){
 					P.maxPic_normal(this);
 				});
 
-				$(this).find('.q7xY2b').filter(':visible').each(function(){
+				$(this).find(selectors[15]+selectors[3]).filter(':visible').each(function(){
 					P.maxPic_shared(this);
 				});
 			}
@@ -1828,7 +1830,7 @@ var ecomode = new function(){
 	};
 
 	var comment = function(){
-		$(this).find('.kH .ot-anchor').each(P.comment);
+		$(this).find(selectors[7]+' '+selectors[3]).each(P.comment);
 	};
 
 	var album = function(){
@@ -1840,10 +1842,10 @@ var ecomode = new function(){
 
 	return {
 		start: function(){
-			$('body').on('mouseenter', '.Te', post).on('mouseenter', '.wd', comment).on('mouseenter', '.IFU6qd', album);
+			$('body').on('mouseenter', selectors[19], post).on('mouseenter', selectors[18], comment).on('mouseenter', selectors[20], album);
 		},
 		stop: function(){
-			$('body').off('mouseenter', '.Te', post).off('mouseenter', '.wd', comment).off('mouseenter', '.IFU6qd', album);
+			$('body').off('mouseenter', selectors[19], post).off('mouseenter', selectors[18], comment).off('mouseenter', selectors[20], album);
 		}
 	}
 };
