@@ -1034,6 +1034,7 @@ var hoverzoom = function(){
 	var timer1 = setTimeout(main, options.hz_delay);
 	$(this).on('mouseleave', function(){
 		clearTimeout(timer1);
+		$(this).off('mouseleave');
 	});
 };
 
