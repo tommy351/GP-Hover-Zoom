@@ -1284,7 +1284,7 @@ var sortPic = function(ele, arr, message){
 
 	var copyLink = function(){
 		var textarea = $('#hz_copyarea').find('textarea');
-		if (textarea.html == ''){
+		if (textarea.html() == ''){
 			var appends = '';
 			
 			for (var i=0; i<length; i++){
