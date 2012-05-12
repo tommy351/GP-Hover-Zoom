@@ -1610,7 +1610,7 @@ var process = {
 	},
 	// Display download links below pictures
 	links: function(obj){
-		var target = $(obj).find(selectors[15]+' img, .hz_img-in-post img'),
+		var target = $(obj).find(selectors[1]+', .hz_img-in-post img'),
 			length = target.length;
 
 		if (length > 1){
