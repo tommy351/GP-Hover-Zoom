@@ -68,7 +68,7 @@ var options = {
 	hz_update: localStorage.hz_update || 'true',
 	hz_dl_link: localStorage.hz_dl_link || 'true',
 	hz_maxpic: localStorage.hz_maxpic || 'false',
-	hz_maxpic_option: localStorage.hz_maxpic_option || '0',
+	hz_maxpic_option: localStorage.hz_maxpic_option || '1',
 	hz_hovering: localStorage.hz_hovering || 'false',
 	hz_direct_post: localStorage.hz_direct_post || 'false',
 	hz_direct_post_max: parseInt(localStorage.hz_direct_post_max) || 0,
