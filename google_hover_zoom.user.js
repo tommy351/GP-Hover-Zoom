@@ -74,7 +74,8 @@ var options = {
 	hz_direct_post_max: parseInt(localStorage.hz_direct_post_max) || 0,
 	hz_ytdl: localStorage.hz_ytdl || 'true',
 	hz_iframedl: localStorage.hz_iframedl || 'false',
-	hz_ecomode: localStorage.hz_ecomode || 'false'
+	hz_ecomode: localStorage.hz_ecomode || 'false',
+	hz_dl_link_option: localStorage.hz_dl_link_option || '0'
 };
 
 // l10n
@@ -168,7 +169,10 @@ var locale = {
 		set48: 'Show photo links in posts directly, max width:',
 		set49: 'Enable Youtube video download',
 		set50: 'Download directly without opening in new tab',
-		set51: 'Enable Eco-mode'
+		set51: 'Enable Eco-mode',
+		set52: 'Thumbnail list (New UI)',
+		set53: 'Link list (Old UI)',
+		set54: 'Download directly'
 	},
 	'zh-TW': {
 		menu01: '關閉',
@@ -259,7 +263,10 @@ var locale = {
 		set48: '直接顯示文章內的圖片連結，最大寬度：',
 		set49: '啟用 Youtube 影片下載',
 		set50: '直接下載無須開啟新分頁',
-		set51: '啟用節能模式'
+		set51: '啟用節能模式',
+		set52: '縮圖列表 (新介面)',
+		set53: '連結列表 (舊介面)',
+		set54: '直接下載'
 	},
 	'zh-CN': {
 		menu01: '关闭',
@@ -350,7 +357,10 @@ var locale = {
 		set48: '直接显示文章内的图片链结，最大宽度：',
 		set49: '启用 Youtube 视频下载',
 		set50: '直接下载无须开启新页签',
-		set51: '启用节能模式'
+		set51: '启用节能模式',
+		set52: '缩图列表 (新介面)',
+		set53: '链结列表 (旧介面)',
+		set54: '直接下载'
 	},
 	'ja-JP': {
 		menu01: 'オフ',
@@ -441,7 +451,11 @@ var locale = {
 		set48: '画像の直リンクをポストで表示、最大幅：',
 		set49: 'YouTube ダウンロード機能を有効にする',
 		set50: 'タブを開かずに直ちに画像をダウンロードします',
-		set51: 'エコモードを有効にする'
+		set51: 'エコモードを有効にする',
+		// 待翻譯
+		set52: 'Thumbnail list (New UI)',
+		set53: 'Link list (Old UI)',
+		set54: 'Download directly'
 	},
 	'index': {
 		'en-US': 'English',
@@ -559,31 +573,33 @@ var init = {
 		});
 	},
 	links: function(){
-		$('body').on('click', '.hz_stacks_downloadSelected', function(){
-			$(this).parent().parent().find('input').filter(':checked').each(function(){
-				openWindow(this.parentNode.dataset.original);
-			});
-		}).on('click', '.hz_stacks_selectAll', function(){
-			var target = $(this).parent().parent().find('input');
-			if (target.length == target.filter(':checked').length){
-				target.prop('checked', false);
-				$(this).html(lang.piclink03).prev().hide();
-			} else {
-				target.prop('checked', true);
-				$(this).html(lang.piclink04).prev().show();
-			}
-		}).on('change', '.hz_stackItem input', function(){
-			var target = $(this).parent().parent().find('input'),
-				checked = target.filter(':checked');
+		if (options.hz_dl_link_option === '0'){
+			$('body').on('click', '.hz_stacks_downloadSelected', function(){
+				$(this).parent().parent().find('input').filter(':checked').each(function(){
+					openWindow(this.parentNode.dataset.original);
+				});
+			}).on('click', '.hz_stacks_selectAll', function(){
+				var target = $(this).parent().parent().find('input');
+				if (target.length == target.filter(':checked').length){
+					target.prop('checked', false);
+					$(this).html(lang.piclink03).prev().hide();
+				} else {
+					target.prop('checked', true);
+					$(this).html(lang.piclink04).prev().show();
+				}
+			}).on('change', '.hz_stackItem input', function(){
+				var target = $(this).parent().parent().find('input'),
+					checked = target.filter(':checked');
 
-			if (checked.length == target.length){
-				$(this).parent().parent().children('nav').children().eq(0).show().end().eq(1).html(lang.piclink04);
-			} else if (checked.length == 0) {
-				$(this).parent().parent().children('nav').children().eq(0).hide();
-			} else {
-				$(this).parent().parent().children('nav').children().eq(0).show().end().eq(1).html(lang.piclink03);
-			}
-		});
+				if (checked.length == target.length){
+					$(this).parent().parent().children('nav').children().eq(0).show().end().eq(1).html(lang.piclink04);
+				} else if (checked.length == 0) {
+					$(this).parent().parent().children('nav').children().eq(0).hide();
+				} else {
+					$(this).parent().parent().children('nav').children().eq(0).show().end().eq(1).html(lang.piclink03);
+				}
+			});
+		}
 	},
 	directDL: function(){
 		$('#hoverzoom_db').on('click', function(){
@@ -744,7 +760,12 @@ var init = {
 								+'<input id="hz_shortcut" type="checkbox"><label for="hz_shortcut">'+lang.set31+'</label><br>'
 							// Download
 							+'</div><div>'
-								+'<input id="hz_dl_link" type="checkbox"><label for="hz_dl_link">'+lang.set42+'</label><br>'
+								+'<input id="hz_dl_link" type="checkbox"><label for="hz_dl_link">'+lang.set42+'</label>'
+								+'<select id="hz_dl_link_option">'
+									+'<option value="0">'+lang.set52+'</option>'
+									+'<option value="1">'+lang.set53+'</option>'
+									+'<option value="2">'+lang.set54+'</option>'
+								+'</select><br>'
 								+'<input id="hz_album" type="checkbox"><label for="hz_album">'+lang.set32+'</label><br>'
 								+'<input id="hz_allpics" type="checkbox"><label for="hz_allpics">'+lang.set40+'</label><br>'
 								+'<input id="hz_ytdl" type="checkbox"><label for="hz_ytdl">'+lang.set49+'</label><br>'
@@ -1596,27 +1617,48 @@ var process = {
 			var postid = obj.parentNode.parentNode.parentNode.id;
 
 			var link = $('<div class="hz_dlButton" aria-label="'+lang.piclink01+' ('+length+' '+lang.set08+')" data-tooltip="'+lang.piclink01+' ('+length+' '+lang.set08+')" role="button"><span></span><small>'+length+'</small></div>').click(function(){
-				if (!$(this).next().hasClass('hz_stacksDetail')){
-					var html = '<div class="hz_closeButton"></div><strong>'+lang.piclink01+'</strong>';
-
+				if (options.hz_dl_link_option === '2'){
 					for (var i=0; i<length; i++){
-						var url = target[i].src,
-							id = postid + '-' + i;
-
+						var url = target[i].src;
 						url = url.match(/\?sz|\/proxy/) ? url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : url.replace(picasaRegex,'/s0/$2');
-						html += '<div class="hz_stackItem" data-original="'+url+'"><label for="'+id+'"><img src="'+url.replace(/\/s0\//, '/w54-h54-p/')+'" width="54" height="54"></label><input id="'+id+'" type="checkbox"></div>'
+						openWindow(url);
 					}
-
-					var popup = $('<div class="hz_stacksDetail">'+html+'<nav><a class="hz_stacks_downloadSelected" href="javascript:void(0)">'+lang.fs03+'</a><a class="hz_stacks_selectAll" href="javascript:void(0)">'+lang.piclink03+'</a></nav></div>').on('click', '.hz_closeButton', function(){
-						$(this).parent().fadeOut(300);
-					});
-
-					$(this).after(popup).next().fadeIn(300).offset({left: $(this).offset().left - 13, top: $(this).offset().top + 31}).parentsUntil(selectors[13]).next().find(selectors[4]).css('position', 'static');
 				} else {
-					if ($(this).next().is(':hidden')){
-						$(this).next().fadeIn(300).offset({left: $(this).offset().left - 13, top: $(this).offset().top + 31});
+					if (!$(this).next().hasClass('hz_stacksDetail')){
+						var html = '<div class="hz_closeButton"></div><strong>'+lang.piclink01+'</strong>';
+
+						for (var i=0; i<length; i++){
+							var url = target[i].src,
+								id = postid + '-' + i;
+
+							url = url.match(/\?sz|\/proxy/) ? url.replace(/(.*)url=|&(.*)|\?sz=\d{2,3}/g, '') : url.replace(picasaRegex,'/s0/$2');
+							if (options.hz_dl_link_option === '0'){
+								html += '<div class="hz_stackItem" data-original="'+url+'"><label for="'+id+'"><img src="'+url.replace(/\/s0\//, '/w54-h54-p/')+'" width="54" height="54"></label><input id="'+id+'" type="checkbox"></div>';
+							} else {
+								html += i == 0 ? '<a href="'+url+'">'+(i+1)+'</a>' : ' - <a href="'+url+'">'+(i+1)+'</a>';
+							}
+						}
+
+						if (options.hz_dl_link_option === '0') html += '<nav><a class="hz_stacks_downloadSelected" href="javascript:void(0)">'+lang.fs03+'</a><a class="hz_stacks_selectAll" href="javascript:void(0)">'+lang.piclink03+'</a></nav>';
+
+						var popup = $('<div class="hz_stacksDetail">'+html+'</div>').on('click', '.hz_closeButton', function(){
+							$(this).parent().fadeOut(300);
+						});
+
+						if (options.hz_dl_link_option === '1'){
+							popup.on('click', 'a', function(){
+								openWindow(this.href);
+								return false;
+							});
+						}
+
+						$(this).after(popup).next().fadeIn(300).offset({left: $(this).offset().left - 13, top: $(this).offset().top + 31}).parentsUntil(selectors[13]).next().find(selectors[4]).css('position', 'static');
 					} else {
-						$(this).next().fadeOut(300);
+						if ($(this).next().is(':hidden')){
+							$(this).next().fadeIn(300).offset({left: $(this).offset().left - 13, top: $(this).offset().top + 31});
+						} else {
+							$(this).next().fadeOut(300);
+						}
 					}
 				}
 			});
