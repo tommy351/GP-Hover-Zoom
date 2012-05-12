@@ -912,7 +912,9 @@ var hoverzoom = function(){
 
 		var show = function(){
 			$loading.show().offset({top: mouse.y - 10, left: mouse.x - 10});
-			$('<img src="'+url+'">').load(function(){
+			var img = new Image();
+			img.src = url;
+			img.onload = function(){
 				if (trigger && $main.html() == ''){
 					$loading.hide();
 					$main.append(this).fadeIn(300);
@@ -926,7 +928,7 @@ var hoverzoom = function(){
 						});
 					}
 				}
-			});
+			};
 
 			var resize = function(img){
 				var x = mouse.x,
