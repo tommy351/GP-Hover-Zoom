@@ -951,7 +951,6 @@ var hoverzoom = function(){
 		};
 
 		var fullscreen = function(){
-			// Selector update
 			var arr = $(_this).parentsUntil(selectors[21]).find(selectors[1]),
 				links = [];
 
