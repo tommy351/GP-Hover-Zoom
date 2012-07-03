@@ -37,7 +37,7 @@ var version = '1.8',
 
 // Selectors
 var selectors = ['.Om', '.cF', '.Bo', '.ot-anchor', '.Gn', '.vja', '.Ag', '.Si', '.uc', '.gu',
-	'.Gm', '.Mi', '.oh', '.aw', '.Uga', '.cn', '.bZ', '.cA', '.lp', '.Gb',
+	'.Gm', '.Mi', '.oh', '.aw', '.Uga', '.cn', '.Pp', '.a-q-pd', '.lp', '.Gb',
 	'.UN', '.kA'];
 
 // Options
