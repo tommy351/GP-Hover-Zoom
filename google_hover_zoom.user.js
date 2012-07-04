@@ -36,8 +36,8 @@ var version = '1.8',
 	$content = $('#content');
 
 // Selectors
-var selectors = ['.Om', '.cF', '.Bo', '.ot-anchor', '.Gn', '.vja', '.Ag', '.Si', '.uc', '.gu',
-	'.Gm', '.Mi', '.oh', '.aw', '.Uga', '.cn', '.Pp', '.a-q-pd', '.lp', '.Gb',
+var selectors = ['.Om', '.cF', '.Ut', '.ot-anchor', '.Gn', '.vja', '.Ag', '.Si', '.uc', '.gu',
+	'.Gm', '.Mi', '.oh', '.aw', '.Uga', '.Mn', '.Pp', '.a-q-pd', '.lp', '.Gb',
 	'.UN', '.kA'];
 
 // Options
