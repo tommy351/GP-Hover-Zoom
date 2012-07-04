@@ -5,7 +5,7 @@
 // @author         SkyArrow
 // @website        http://userscripts.org/scripts/show/106681
 // @namespace      http://zespia.tw
-// @version        1.8
+// @version        1.8.1
 // @license        MIT License
 // @include        https://plus.google.com/*
 // @exclude        https://plus.google.com/ripples/*
@@ -27,18 +27,13 @@ a){var b=F.exec(a);b&&(b[1]=(b[1]||"").toLowerCase(),b[3]=b[3]&&new RegExp("(?:^
  */
 (function(a,b,c){"use strict";var d=b.event,e;d.special.smartresize={setup:function(){b(this).bind("resize",d.special.smartresize.handler)},teardown:function(){b(this).unbind("resize",d.special.smartresize.handler)},handler:function(a,c){var d=this,f=arguments;a.type="smartresize",e&&clearTimeout(e),e=setTimeout(function(){b.event.handle.apply(d,f)},c==="execAsap"?0:100)}},b.fn.smartresize=function(a){return a?this.bind("smartresize",a):this.trigger("smartresize",["execAsap"])},b.Mason=function(a,c){this.element=b(c),this._create(a),this._init()},b.Mason.settings={isResizable:!0,isAnimated:!1,animationOptions:{queue:!1,duration:500},gutterWidth:0,isRTL:!1,isFitWidth:!1,containerStyle:{position:"relative"}},b.Mason.prototype={_filterFindBricks:function(a){var b=this.options.itemSelector;return b?a.filter(b).add(a.find(b)):a},_getBricks:function(a){var b=this._filterFindBricks(a).css({position:"absolute"}).addClass("masonry-brick");return b},_create:function(c){this.options=b.extend(!0,{},b.Mason.settings,c),this.styleQueue=[];var d=this.element[0].style;this.originalStyle={height:d.height||""};var e=this.options.containerStyle;for(var f in e)this.originalStyle[f]=d[f]||"";this.element.css(e),this.horizontalDirection=this.options.isRTL?"right":"left",this.offset={x:parseInt(this.element.css("padding-"+this.horizontalDirection),10),y:parseInt(this.element.css("padding-top"),10)},this.isFluid=this.options.columnWidth&&typeof this.options.columnWidth=="function";var g=this;setTimeout(function(){g.element.addClass("masonry")},0),this.options.isResizable&&b(a).bind("smartresize.masonry",function(){g.resize()}),this.reloadItems()},_init:function(a){this._getColumns(),this._reLayout(a)},option:function(a,c){b.isPlainObject(a)&&(this.options=b.extend(!0,this.options,a))},layout:function(a,b){for(var c=0,d=a.length;c<d;c++)this._placeBrick(a[c]);var e={};e.height=Math.max.apply(Math,this.colYs);if(this.options.isFitWidth){var f=0;c=this.cols;while(--c){if(this.colYs[c]!==0)break;f++}e.width=(this.cols-f)*this.columnWidth-this.options.gutterWidth}this.styleQueue.push({$el:this.element,style:e});var g=this.isLaidOut?this.options.isAnimated?"animate":"css":"css",h=this.options.animationOptions,i;for(c=0,d=this.styleQueue.length;c<d;c++)i=this.styleQueue[c],i.$el[g](i.style,h);this.styleQueue=[],b&&b.call(a),this.isLaidOut=!0},_getColumns:function(){var a=this.options.isFitWidth?this.element.parent():this.element,b=a.width();this.columnWidth=this.isFluid?this.options.columnWidth(b):this.options.columnWidth||this.$bricks.outerWidth(!0)||b,this.columnWidth+=this.options.gutterWidth,this.cols=Math.floor((b+this.options.gutterWidth)/this.columnWidth),this.cols=Math.max(this.cols,1)},_placeBrick:function(a){var c=b(a),d,e,f,g,h;d=Math.ceil(c.outerWidth(!0)/this.columnWidth),d=Math.min(d,this.cols);if(d===1)f=this.colYs;else{e=this.cols+1-d,f=[];for(h=0;h<e;h++)g=this.colYs.slice(h,h+d),f[h]=Math.max.apply(Math,g)}var i=Math.min.apply(Math,f),j=0;for(var k=0,l=f.length;k<l;k++)if(f[k]===i){j=k;break}var m={top:i+this.offset.y};m[this.horizontalDirection]=this.columnWidth*j+this.offset.x,this.styleQueue.push({$el:c,style:m});var n=i+c.outerHeight(!0),o=this.cols+1-l;for(k=0;k<o;k++)this.colYs[j+k]=n},resize:function(){var a=this.cols;this._getColumns(),(this.isFluid||this.cols!==a)&&this._reLayout()},_reLayout:function(a){var b=this.cols;this.colYs=[];while(b--)this.colYs.push(0);this.layout(this.$bricks,a)},reloadItems:function(){this.$bricks=this._getBricks(this.element.children())},reload:function(a){this.reloadItems(),this._init(a)},appended:function(a,b,c){if(b){this._filterFindBricks(a).css({top:this.element.height()});var d=this;setTimeout(function(){d._appended(a,c)},1)}else this._appended(a,c)},_appended:function(a,b){var c=this._getBricks(a);this.$bricks=this.$bricks.add(c),this.layout(c,b)},remove:function(a){this.$bricks=this.$bricks.not(a),a.remove()},destroy:function(){this.$bricks.removeClass("masonry-brick").each(function(){this.style.position="",this.style.top="",this.style.left=""});var c=this.element[0].style;for(var d in this.originalStyle)c[d]=this.originalStyle[d];this.element.unbind(".masonry").removeClass("masonry").removeData("masonry"),b(a).unbind(".masonry")}},b.fn.imagesLoaded=function(a){function h(){a.call(c,d)}function i(a){var c=a.target;c.src!==f&&b.inArray(c,g)===-1&&(g.push(c),--e<=0&&(setTimeout(h),d.unbind(".imagesLoaded",i)))}var c=this,d=c.find("img").add(c.filter("img")),e=d.length,f="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==",g=[];return e||h(),d.bind("load.imagesLoaded error.imagesLoaded",i).each(function(){var a=this.src;this.src=f,this.src=a}),c};var f=function(b){a.console&&a.console.error(b)};b.fn.masonry=function(a){if(typeof a=="string"){var c=Array.prototype.slice.call(arguments,1);this.each(function(){var d=b.data(this,"masonry");if(!d){f("cannot call methods on masonry prior to initialization; attempted to call method '"+a+"'");return}if(!b.isFunction(d[a])||a.charAt(0)==="_"){f("no such method '"+a+"' for masonry instance");return}d[a].apply(d,c)})}else this.each(function(){var c=b.data(this,"masonry");c?(c.option(a||{}),c._init()):b.data(this,"masonry",new b.Mason(a,this))});return this}})(window,jQuery);
 
-var version = '1.8',
+var version = '1.8.1',
 	developer = false,
 	picRegex = /.(jpg|jpeg|gif|bmp|png|tiff)/i,
 	picasaRegex = /\/\w\d+(-\w\d*)*\/([^\/]+)$/,
 	gcRegex = /googleusercontent.com/,
 	mouse = [],
 	$content = $('#content');
-
-// Selectors
-var selectors = ['.Om', '.cF', '.Bo', '.ot-anchor', '.Gn', '.vja', '.Ag', '.Si', '.uc', '.gu',
-	'.Gm', '.Mi', '.oh', '.aw', '.Uga', '.cn', '.bZ', '.cA', '.lp', '.Gb',
-	'.UN', '.kA'];
 
 // Options
 var options = {
@@ -856,9 +851,9 @@ var init = {
 		menu(elements.menu.setting);
 		if (options.hz_his === 'true') menu(elements.menu.history);
 		if (options.hz_allpics === 'true') menu(elements.menu.allPic);
-		$content.on('click', selectors[16], function(){
+		$content.on('click', '.Pp', function(){
 			if (!$(this).data('class')){
-				$(selectors[17]).append('<div id="hz_opts"><strong>Google+ Hover Zoom</strong><ul><li id="disable_hz">'+lang.menu02+'</li>'+menuTmp+'</ul></div>');
+				$('.a-q-pd').append('<div id="hz_opts"><strong>Google+ Hover Zoom</strong><ul><li id="disable_hz">'+lang.menu02+'</li>'+menuTmp+'</ul></div>');
 				$(this).data('class', true);
 			}
 		});
@@ -951,7 +946,7 @@ var hoverzoom = function(){
 		};
 
 		var fullscreen = function(){
-			var arr = $(_this).parentsUntil(selectors[21]).find(selectors[1]),
+			var arr = $(_this).parentsUntil('.Ry').find('.aG'),
 				links = [];
 
 			if (arr.length > 0){
@@ -1039,9 +1034,9 @@ var hoverzoom = function(){
 
 // Enable functions
 var enable = function(){
-	if (options.hz_enable_main === 'true') $content.on('mouseenter', selectors[15]+' img', hoverzoom);
-	if (options.hz_enable_icon === 'true') $('body').on('mouseenter', selectors[2], hoverzoom);
-	if (options.hz_enable_link === 'true') $content.on('mouseenter', selectors[3], hoverzoom);
+	if (options.hz_enable_main === 'true') $content.on('mouseenter', '.Mn img', hoverzoom);
+	if (options.hz_enable_icon === 'true') $('body').on('mouseenter', '.Ut', hoverzoom);
+	if (options.hz_enable_link === 'true') $content.on('mouseenter', '.ot-anchor', hoverzoom);
 
 	$('#hoverzoom_db').addClass('enable');
 	if (options.hz_ecomode === 'true'){
@@ -1053,9 +1048,9 @@ var enable = function(){
 
 // Disable functions
 var disable = function(){
-	if (options.hz_enable_main === 'true') $content.off('mouseenter', selectors[15]+' img', hoverzoom);
-	if (options.hz_enable_icon === 'true') $('body').off('mouseenter', selectors[2], hoverzoom);
-	if (options.hz_enable_link === 'true') $content.off('mouseenter', selectors[3], hoverzoom);
+	if (options.hz_enable_main === 'true') $content.off('mouseenter', '.Mn img', hoverzoom);
+	if (options.hz_enable_icon === 'true') $('body').off('mouseenter', '.Ut', hoverzoom);
+	if (options.hz_enable_link === 'true') $content.off('mouseenter', '.ot-anchor', hoverzoom);
 
 	$('#hoverzoom_db').removeClass('enable');
 	if (options.hz_ecomode === 'true'){
@@ -1445,7 +1440,7 @@ var batch = function(){
 	var width = parseInt(($(window).width() - 200) / options.hz_his_columns - 10),
 		arr = [];
 
-	$(selectors[1]+','+selectors[3]).filter(':visible').each(function(){
+	$('.aG, .ot-anchor').filter(':visible').each(function(){
 		var tag = this.tagName.toUpperCase();
 		if (tag == 'IMG'){
 			var url = this.src,
@@ -1546,7 +1541,7 @@ var ytDL = function(url, ele){
 						}
 					}
 
-					ele.addClass('loaded').append(appends).parentsUntil(selectors[13]).next().find(selectors[4]).css('position', 'static');
+					ele.addClass('loaded').append(appends).parentsUntil('.ow').next().find('.ii').css('position', 'static');
 				} else {
 					$notify.html(lang.ytdl08);
 				}
@@ -1584,20 +1579,20 @@ var process = {
 		var url = obj.href;
 		if (url.match(/\/photos\/\w+\/albums\/\w+/)){
 			var button = $('<div class="hz_albumDownload hz_dlButton" aria-label="'+lang.al01+'" data-tooltip="'+lang.al01+'" role="button"><span></span></div>').data('url', url);
-			$(obj).parentsUntil(selectors[4]).next().children().eq(-1).before(button);
+			$(obj).parentsUntil('.ii').next().children().eq(-1).before(button);
 		}
 	},
 	// Append album download button to album page
 	album_page: function(obj, url){
 		var button = $('<div class="hz_in-albumDownload hz_button blue" role="button">'+lang.fs03+'</div>').data('url', url);
-		obj.data('class', true).next().find(selectors[5]).children().eq(1).before(button);
+		obj.data('class', true).next().find('.Rqa').children().eq(1).before(button);
 	},
 	// Process links in posts
 	post: function(obj){
 		var url = obj.href;
 
 		if (url.match(picRegex)){
-			var auto = $(obj).parentsUntil(selectors[10]).next().find(selectors[3]).attr('href');
+			var auto = $(obj).parentsUntil('.ci').next().find('.ot-anchor').attr('href');
 
 			if (url != auto){
 				var width = $(obj).parent().width();
@@ -1607,12 +1602,12 @@ var process = {
 	},
 	// Process Youtube video in posts
 	tube: function(obj){
-		var button = $('<div class="hz_tubeStacks hz_dlButton" aria-label="'+lang.ytdl01+'" data-tooltip="'+lang.ytdl01+'" role="button"><span></span></div>').data('url', $(obj).find(selectors[3]).attr('href'));
-		$(obj).parentsUntil(selectors[4]).next().children().eq(-1).before(button);
+		var button = $('<div class="hz_tubeStacks hz_dlButton" aria-label="'+lang.ytdl01+'" data-tooltip="'+lang.ytdl01+'" role="button"><span></span></div>').data('url', $(obj).find('.ot-anchor').attr('href'));
+		$(obj).parentsUntil('.ii').next().children().eq(-1).before(button);
 	},
 	// Display download links below pictures
 	links: function(obj){
-		var target = $(obj).find(selectors[15]+' '+selectors[1]+', .hz_img-in-post img'),
+		var target = $(obj).find('.aG, .hz_img-in-post img'),
 			length = target.length;
 
 		if (length > 1){
@@ -1654,7 +1649,7 @@ var process = {
 							});
 						}
 
-						$(this).after(popup).next().fadeIn(300).offset({left: $(this).offset().left - 13, top: $(this).offset().top + 31}).parentsUntil(selectors[13]).next().find(selectors[4]).css('position', 'static');
+						$(this).after(popup).next().fadeIn(300).offset({left: $(this).offset().left - 13, top: $(this).offset().top + 31}).parentsUntil('.ow').next().find('.ii').css('position', 'static');
 					} else {
 						if ($(this).next().is(':hidden')){
 							$(this).next().fadeIn(300).offset({left: $(this).offset().left - 13, top: $(this).offset().top + 31});
@@ -1677,7 +1672,7 @@ var process = {
 	},
 	// Resize photos in normal post to stream width
 	maxPic_normal: function(obj){
-		var target = $(obj).children(selectors[6]),
+		var target = $(obj).children('.Yj'),
 			length = target.length,
 			parentWidth = $(obj).width(),
 			original = [],
@@ -1707,7 +1702,7 @@ var process = {
 			$(this).addClass('hz_maxPic_container');
 		});
 
-		$(obj).parentsUntil(selectors[4]).next().children().eq(-1).before(button);
+		$(obj).parentsUntil('.ii').next().children().eq(-1).before(button);
 	},
 	// Resize photos in shared post to stream width
 	maxPic_shared: function(obj){
@@ -1732,7 +1727,7 @@ var process = {
 		modified = src;
 		target.src = src;
 		obj.removeChild(obj.childNodes[0]);
-		$(obj).parent().addClass('hz_maxPic_container').parentsUntil(selectors[4]).next().children().eq(-1).before(button);
+		$(obj).parent().addClass('hz_maxPic_container').parentsUntil('.ii').next().children().eq(-1).before(button);
 	}
 };
 
@@ -1742,7 +1737,7 @@ var timer = new function(){
 
 	// Process links in comments
 	var comment = function(){
-		$(selectors[7]+' '+selectors[3]).each(P.comment);
+		$('.Mi .ot-anchor').each(P.comment);
 	};
 
 	// Append album download button
@@ -1750,12 +1745,12 @@ var timer = new function(){
 		var page = location.href.replace(/\?(.*)/, '');
 
 		if (page.match(/\/photos\/\w+\/albums\/\w+/)){
-			var $nav = $('nav:visible');
+			var $nav = $('.kI:visible');
 			if (!$nav.data('class')){
 				P.album_page($nav, page);
 			}
 		} else {
-			$(selectors[8]).each(function(){
+			$('.pc').each(function(){
 				if (!$(this).data('class')){
 					P.album_post(this);
 					$(this).data('class', true);
@@ -1766,7 +1761,7 @@ var timer = new function(){
 
 	// Process links in posts
 	var post = function(){
-		$(selectors[9]+' '+selectors[3]).each(function(){
+		$('.VC .ot-anchor').each(function(){
 			if (!$(this).data('class')){
 				P.post(this);
 				$(this).data('class', true);
@@ -1776,7 +1771,7 @@ var timer = new function(){
 
 	// Process Youtube video in posts
 	var tube = function(){
-		$(selectors[14]).each(function(){
+		$('.oi').each(function(){
 			if (!$(this).data('class')){
 				P.tube(this);
 				$(this).data('class', true);
@@ -1786,7 +1781,7 @@ var timer = new function(){
 
 	// Display download links below pictures
 	var links = function(){
-		$(selectors[10]).each(function(){
+		$('.ci').each(function(){
 			if (!$(this).data('class')){
 				P.links(this);
 				$(this).data('class', true);
@@ -1796,14 +1791,14 @@ var timer = new function(){
 
 	// Resize photos to stream width
 	var maxPic = function(){
-		$content.find(selectors[0]+selectors[11]).filter(':visible').each(function(){
+		$content.find('.dv').filter(':visible').each(function(){
 			if (!$(this).data('class')){
 				P.maxPic_normal(this);
 				$(this).data('class', true);
 			}
 		});
 
-		$content.find(selectors[15]+selectors[3]).filter(':visible').each(function(){
+		$content.find('.Mn.ot-anchor').filter(':visible').each(function(){
 			if (!$(this).data('class')){
 				P.maxPic_shared(this);
 				$(this).data('class', true);
@@ -1845,31 +1840,31 @@ var ecomode = new function(){
 	var post = function(){
 		if (!$(this).data('class')){
 			if (options.hz_album === 'true'){
-				$(this).find(selectors[8]).each(function(){
+				$(this).find('.pc').each(function(){
 					P.album_post(this);
 				});
 			}
 			if (options.hz_direct_post === 'true'){
-				$(this).find(selectors[9]+' '+selectors[3]).each(function(){
+				$(this).find('.VC .ot-anchor').each(function(){
 					P.post(this);
 				});
 			}
 			if (options.hz_ytdl === 'true'){
-				$(this).find(selectors[14]).each(function(){
+				$(this).find('.oi').each(function(){
 					P.tube(this);
 				})
 			}
 			if (options.hz_dl_link === 'true'){
-				$(this).find(selectors[10]).each(function(){
+				$(this).find('.ci').each(function(){
 					P.links(this);
 				});
 			}
 			if (options.hz_maxpic === 'true'){
-				$(this).find(selectors[0]+selectors[11]).filter(':visible').each(function(){
+				$(this).find('.dv').filter(':visible').each(function(){
 					P.maxPic_normal(this);
 				});
 
-				$(this).find(selectors[15]+selectors[3]).filter(':visible').each(function(){
+				$(this).find('.Mn.ot-anchor').filter(':visible').each(function(){
 					P.maxPic_shared(this);
 				});
 			}
@@ -1878,22 +1873,22 @@ var ecomode = new function(){
 	};
 
 	var comment = function(){
-		$(this).find(selectors[7]+' '+selectors[3]).each(P.comment);
+		$(this).find('.Mi .ot-anchor').each(P.comment);
 	};
 
 	var album = function(){
 		if (!$(this).data('class')){
-			P.album_page($('nav:visible'), location.href.replace(/\?(.*)/, ''));
+			P.album_page($('.kI:visible'), location.href.replace(/\?(.*)/, ''));
 			$(this).data('class', true);
 		}
 	};
 
 	return {
 		start: function(){
-			$('body').on('mouseenter', selectors[19], post).on('mouseenter', selectors[18], comment).on('mouseenter', selectors[20], album);
+			$('body').on('mouseenter', '.ii', post).on('mouseenter', '.Ho', comment).on('mouseenter', '.UW', album);
 		},
 		stop: function(){
-			$('body').off('mouseenter', selectors[19], post).off('mouseenter', selectors[18], comment).off('mouseenter', selectors[20], album);
+			$('body').off('mouseenter', '.ii', post).off('mouseenter', '.Ho', comment).off('mouseenter', '.UW', album);
 		}
 	}
 };
